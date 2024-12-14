@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import chalk from 'chalk';
 
 import databaseConnection from "./db/databaseConnection.js";
+import serviceRoutes from './routes/serviceRoutes.js';
 
 // Declaration
 dotenv.config();
@@ -27,7 +28,7 @@ app.use(express.static("images"));
 
 
 // Routes / APIs
-
+app.use("/services", serviceRoutes);
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
