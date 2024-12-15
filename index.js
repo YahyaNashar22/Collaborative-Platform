@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import bodyParser from 'body-parser';
 import chalk from 'chalk';
+import { countries } from "./utils/countries.js"
 
 import databaseConnection from "./db/databaseConnection.js";
 import serviceRoutes from './routes/serviceRoutes.js';
@@ -26,9 +27,9 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("images"));
 
-
 // Routes / APIs
 app.use("/services", serviceRoutes);
+app.get("/utils", (req, res) => res.json(countries))
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
