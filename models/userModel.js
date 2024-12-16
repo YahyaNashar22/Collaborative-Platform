@@ -102,6 +102,7 @@ const userSchema = new Schema({
             return this.role == "provider";
         }
     },
+    // aka - Area of expertise
     services: [{
         type: Schema.Types.ObjectId,
         ref: 'Service',
