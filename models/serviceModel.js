@@ -11,7 +11,11 @@ const serviceSchema = new Schema({
         type: String,
         required: false
     }
-});
+},
+    {
+        timestamps: true,
+    }
+);
 
 const Service = model("Service", serviceSchema);
 export default Service;

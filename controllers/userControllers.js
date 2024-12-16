@@ -1,5 +1,9 @@
 import chalk from "chalk";
+import bcrypt from 'bcryptjs';
+
 import User from "../models/userModel.js";
+import { createToken, verifyToken } from "../utils/token.js";
+import { getUserByEmailService } from "../services/userServices.js";
 
 // Register New Admin
 export const registerAdmin = async (req, res) => {
@@ -13,26 +17,39 @@ export const registerAdmin = async (req, res) => {
             phone,
             company,
             address,
+            country,
             language,
         } = req.body;
+
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // Check if email already exists
+        const existingUser = await getUserByEmailService(email);
+        if (existingUser) return res.status(401).json({ message: "email already exists" });
+        // TODO: Add profile picture upload
 
         const newAdmin = new User({
             firstName,
             lastName,
             email,
-            password,
+            password: hashedPassword,
             phone,
             company,
             address,
+            country,
             language,
             role: "super"
         });
         await newAdmin.save();
         console.log(chalk.green.bold(`Admin ${firstName} ${lastName} has been registered successfully`));
 
+        const token = createToken(newAdmin);
+        const decoded = verifyToken(token);
+
         return res.status(201).json({
             message: `Admin ${firstName} ${lastName} Registered Successfully`,
-            payload: newAdmin
+            payload: decoded
         })
     } catch (error) {
         res.status(500).json({

@@ -27,7 +27,11 @@ const projectSchema = new Schema({
         enum: ["in_progress", "completed"],
         required: false
     },
-});
+},
+    {
+        timestamps: true,
+    }
+);
 
 const Project = model("Project", projectSchema);
 export default Project;
