@@ -8,6 +8,7 @@ import { countries } from "./utils/countries.js"
 
 import databaseConnection from "./db/databaseConnection.js";
 import serviceRoutes from './routes/serviceRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 // Declaration
 dotenv.config();
@@ -29,7 +30,7 @@ app.use(express.static("images"));
 
 // Routes / APIs
 app.use("/services", serviceRoutes);
-app.get("/utils", (req, res) => res.json(countries))
+app.use("/users", userRoutes);
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
