@@ -61,6 +61,7 @@ export const registerAdmin = async (req, res) => {
     }
 }
 
+// Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
         const users = await User.find({});
@@ -76,6 +77,7 @@ export const getAllUsers = async (req, res) => {
     }
 }
 
+// Fetch a Single User By Id
 export const getUserById = async (req, res) => {
     try {
         const id = req.params.id;
@@ -92,6 +94,7 @@ export const getUserById = async (req, res) => {
     }
 }
 
+// Delete User
 export const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
