@@ -58,8 +58,7 @@ const userSchema = new Schema({
     // * ------ Attributes for role == client Block ------
     howSoonServices: {
         type: String,
-        enum: ["", "immediately", "within a month", "in the next 2-3 months", "in the next 4-6 months", "in the next 6-12 months", "others"],
-        default: "",
+        enum: ["immediately", "within a month", "in the next 2-3 months", "in the next 4-6 months", "in the next 6-12 months", "others"],
         required: function () {
             return this.role == "client";
         }

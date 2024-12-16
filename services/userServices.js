@@ -12,3 +12,15 @@ export const getUserByEmailService = async (email) => {
         return null;
     }
 }
+
+export const getUserByIdService = async (id) => {
+    try {
+        const user = await User.findById(id);
+        console.log(chalk.yellow.bold(`User Fetched By Id --> ${user}`));
+        return user;
+    } catch (error) {
+        console.log(chalk.red.bold("Problem Fetching User By Id"));
+        console.error(error);
+        return null;
+    }
+}
