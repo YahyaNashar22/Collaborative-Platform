@@ -76,6 +76,24 @@ export const getAllProjects = async (req, res) => {
     }
 }
 
+// Get Single Project By Id
+export const getProjectById = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const project = await getProjectByIdService(id);
+
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        return res.status(200).json({ message: "Project Fetched Successfully", payload: project });
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Fetching Project",
+            error: error.message
+        });
+    }
+}
+
 // Delete Project
 export const deleteProject = async (req, res) => {
     try {

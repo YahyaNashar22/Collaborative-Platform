@@ -9,6 +9,7 @@ import databaseConnection from "./db/databaseConnection.js";
 import serviceRoutes from './routes/serviceRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import projectRouter from './routes/projectRoutes.js';
+import transactionRouter from './routes/transactionRoutes.js';
 
 // Declaration
 dotenv.config();
@@ -32,6 +33,7 @@ app.use(express.static("images"));
 app.use("/services", serviceRoutes);
 app.use("/users", userRoutes);
 app.use("/projects", projectRouter);
+app.use("/transactions", transactionRouter);
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
