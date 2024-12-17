@@ -76,3 +76,25 @@ export const getAllProjects = async (req, res) => {
     }
 }
 
+// Delete Project
+export const deleteProject = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const project = await getProjectByIdService(id);
+
+        if (!project) return res.status(404).json({ message: "Project does not exist" });
+
+        const deletedProject = await Project.findByIdAndDelete(id);
+
+        return res.status(200).json({
+            message: "Project Deleted Successfully",
+            payload: deletedProject
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Deleting Project",
+            error: error.message
+        });
+    }
+}

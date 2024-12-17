@@ -47,7 +47,7 @@ export const deleteServiceService = async (serviceId) => {
 // Get All Services
 export const getAllServicesService = async () => {
     try {
-        const services = await Service.find({});
+        const services = await Service.find({}).sort({ createdAt: -1 });
         console.log(chalk.green.bold("All Services Retrieved Successfully!"));
         return services;
     } catch (error) {

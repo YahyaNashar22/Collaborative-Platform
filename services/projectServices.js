@@ -23,7 +23,7 @@ export const getAllProjectsService = async ({ clientId, providerId, status }) =>
         if (clientId) query.clientId = clientId;
         if (providerId) query.providerId = providerId;
 
-        const projects = await Project.find(query);
+        const projects = await Project.find(query).sort({ createdAt: -1 });
         console.log(chalk.yellow.bold(`projects fetched successfully`));
         return projects;
     } catch (error) {

@@ -64,7 +64,7 @@ export const registerSuper = async (req, res) => {
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({});
+        const users = await User.find({}).sort({ createdAt: -1 });
 
         if (users.length === 0) return res.status(404).json({ message: "No users found!", payload: users });
         return res.status(200).json({ message: "Users found!", payload: users });
