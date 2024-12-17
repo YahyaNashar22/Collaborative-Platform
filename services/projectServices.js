@@ -15,9 +15,15 @@ export const getProjectByIdService = async (id) => {
     }
 }
 
-export const getAllProjectsService = async () => {
+export const getAllProjectsService = async ({ clientId, providerId, status }) => {
     try {
-        const projects = await Project.find({});
+        const query = {};
+
+        if (status) query.status = status;
+        if (clientId) query.clientId = clientId;
+        if (providerId) query.providerId = providerId;
+
+        const projects = await Project.find(query);
         console.log(chalk.yellow.bold(`projects fetched successfully`));
         return projects;
     } catch (error) {
@@ -26,6 +32,3 @@ export const getAllProjectsService = async () => {
         return [];
     }
 }
-
-// TODO: Add get all completed Projects
-// TODO: Add get all in_progress Projects

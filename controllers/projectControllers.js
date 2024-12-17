@@ -55,9 +55,13 @@ export const markProjectAsCompleted = async (req, res) => {
 }
 
 // Fetch All Projects
+// ? can filter to select only client or provider projects
+// ? can filter to select only completed or in_progress projects
 export const getAllProjects = async (req, res) => {
     try {
-        const projects = await getAllProjectsService();
+        const { clientId, providerId, status } = req.body;
+        const projects = await getAllProjectsService({ clientId, providerId, status });
+
         if (!projects) return res.status(404).json({ message: "No Projects Found!" });
 
         return res.status(200).json({
@@ -71,3 +75,4 @@ export const getAllProjects = async (req, res) => {
         });
     }
 }
+

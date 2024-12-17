@@ -5,6 +5,6 @@ const projectRouter = express.Router();
 
 projectRouter.post("/start", startProject);
 projectRouter.put("/mark-as-complete/:id", markProjectAsCompleted);
-projectRouter.get("/get-all", getAllProjects);
+projectRouter.post("/get-all", getAllProjects);
 
 export default projectRouter;

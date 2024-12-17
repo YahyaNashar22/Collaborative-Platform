@@ -6,7 +6,7 @@ import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 
 // Register New Admin
-export const registerAdmin = async (req, res) => {
+export const registerSuper = async (req, res) => {
     // TODO: Find a way to store files on a cloud storage
     try {
         const {
@@ -44,13 +44,13 @@ export const registerAdmin = async (req, res) => {
             role: "super"
         });
         await newAdmin.save();
-        console.log(chalk.green.bold(`Admin ${firstName} ${lastName} has been registered successfully`));
+        console.log(chalk.green.bold(`Super Admin ${firstName} ${lastName} has been registered successfully`));
 
         const token = createToken(newAdmin);
         const decoded = verifyToken(token);
 
         return res.status(201).json({
-            message: `Admin ${firstName} ${lastName} Registered Successfully`,
+            message: `Super Admin ${firstName} ${lastName} Registered Successfully`,
             payload: decoded
         })
     } catch (error) {
