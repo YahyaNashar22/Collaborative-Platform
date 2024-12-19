@@ -1,12 +1,12 @@
 import express from "express";
 import { deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, startProject } from "../controllers/projectControllers.js";
 
-const projectRouter = express.Router();
+const projectRoutes = express.Router();
 
-projectRouter.post("/start", startProject);
-projectRouter.put("/mark-as-complete/:id", markProjectAsCompleted);
-projectRouter.post("/get-all", getAllProjects);
-projectRouter.get("/get-single/:id", getProjectById);
-projectRouter.delete("/delete/:id", deleteProject);
+projectRoutes.post("/start", startProject);
+projectRoutes.put("/mark-as-complete/:id", markProjectAsCompleted);
+projectRoutes.post("/get-all", getAllProjects);
+projectRoutes.get("/get-single/:id", getProjectById);
+projectRoutes.delete("/delete/:id", deleteProject);
 
-export default projectRouter;
+export default projectRoutes;

@@ -2,11 +2,11 @@ import express from "express";
 
 import { createTransaction, getAllTransactions, getSingleTransactionById, deleteTransaction } from "../controllers/transactionControllers.js";
 
-const transactionRouter = express.Router();
+const transactionRoutes = express.Router();
 
-transactionRouter.post("/create", createTransaction);
-transactionRouter.post("/get-all", getAllTransactions);
-transactionRouter.get("/get-single/:id", getSingleTransactionById);
-transactionRouter.delete("/delete/:id", deleteTransaction);
+transactionRoutes.post("/create", createTransaction);
+transactionRoutes.post("/get-all", getAllTransactions);
+transactionRoutes.get("/get-single/:id", getSingleTransactionById);
+transactionRoutes.delete("/delete/:id", deleteTransaction);
 
-export default transactionRouter;
+export default transactionRoutes;

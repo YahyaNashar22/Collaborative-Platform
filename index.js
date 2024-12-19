@@ -8,8 +8,9 @@ import chalk from 'chalk';
 import databaseConnection from "./db/databaseConnection.js";
 import serviceRoutes from './routes/serviceRoutes.js';
 import userRoutes from './routes/userRoutes.js';
-import projectRouter from './routes/projectRoutes.js';
-import transactionRouter from './routes/transactionRoutes.js';
+import projectRoutes from './routes/projectRoutes.js';
+import transactionRoutes from './routes/transactionRoutes.js';
+import feedbackRoutes from './routes/feedbackRoutes.js';
 
 // Declaration
 dotenv.config();
@@ -32,8 +33,9 @@ app.use(express.static("images"));
 // Routes / APIs
 app.use("/services", serviceRoutes);
 app.use("/users", userRoutes);
-app.use("/projects", projectRouter);
-app.use("/transactions", transactionRouter);
+app.use("/projects", projectRoutes);
+app.use("/transactions", transactionRoutes);
+app.use("/feedbacks", feedbackRoutes);
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {

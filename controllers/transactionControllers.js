@@ -31,7 +31,7 @@ export const getAllTransactions = async (req, res) => {
         const { from, to } = req.body;
         const transactions = await getAllTransactionsService({ from, to });
 
-        if (!transactions) return res.status(404).json({ message: "No Transactions found" });
+        if (!transactions || transactions.length == 0) return res.status(404).json({ message: "No Transactions found" });
 
         return res.status(200).json({ message: "Transactions Found Successfully", payload: transactions });
     } catch (error) {

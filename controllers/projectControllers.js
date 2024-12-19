@@ -62,7 +62,7 @@ export const getAllProjects = async (req, res) => {
         const { clientId, providerId, status } = req.body;
         const projects = await getAllProjectsService({ clientId, providerId, status });
 
-        if (!projects) return res.status(404).json({ message: "No Projects Found!" });
+        if (!projects || projects.length == 0) return res.status(404).json({ message: "No Projects Found!" });
 
         return res.status(200).json({
             message: "Projects fetched successfully",
