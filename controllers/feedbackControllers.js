@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import Feedback from "../models/FeedbackModel.js";
+import Feedback from "../models/feedbackModel.js";
 import { getAllFeedbacksService, getSingleFeedbackService } from "../services/feedbackServices.js";
 
 // Send Feedback form
