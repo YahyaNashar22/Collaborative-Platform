@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//TODO: ADD IMAGE FIELD
+
 const { Schema, model } = mongoose;
 
 const serviceSchema = new Schema({

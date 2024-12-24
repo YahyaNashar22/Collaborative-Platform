@@ -1,5 +1,6 @@
 import { createServiceService, editServiceService, deleteServiceService, getAllServicesService, getSingleServiceByIdService } from "../services/serviceServices.js";
 
+//TODO: ADD IMAGE FUNCTIONALITY
 // Create Service Controller
 export const createServiceController = async (req, res) => {
     try {

@@ -1,6 +1,8 @@
 import chalk from "chalk";
 import Service from "../models/serviceModel.js";
 
+//TODO: ADD IMAGE FUNCTIONALITY
+
 // Create Service
 export const createServiceService = async ({ name, description }) => {
     try {

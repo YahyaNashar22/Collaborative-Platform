@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+//TODO: ADD STAGE FIELD => 4 OR 5 DIFFERENT STAGES ( INCLUDING FEEDBACK)
+
 const { Schema, model } = mongoose;
 
 const projectSchema = new Schema({

@@ -3,6 +3,7 @@ import chalk from "chalk";
 import Project from "../models/projectModel.js";
 import { getAllProjectsService, getProjectByIdService } from "../services/projectServices.js";
 
+//TODO: ADD PROJECT STAGE FUNCTIONALITY
 
 // Start a project
 export const startProject = async (req, res) => {

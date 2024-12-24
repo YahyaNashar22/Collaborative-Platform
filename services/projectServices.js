@@ -2,6 +2,8 @@ import chalk from "chalk";
 
 import Project from "../models/projectModel.js";
 
+//TODO: ADD PROJECT STAGE FUNCTIONALITY
+
 
 export const getProjectByIdService = async (id) => {
     try {
