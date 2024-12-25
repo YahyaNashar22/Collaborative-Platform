@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-//TODO: ADD APPROVED QUOTATIONS FIELD ( APPROVED BY ADMIN )
-
 const requestSchema = new Schema(
     {
         clientId: {
@@ -27,17 +25,16 @@ const requestSchema = new Schema(
             required: true
         },
         // active on stage 2
-        //TODO: CHANGE THIS TO BE REF OF QUOTATION MODEL
-        offers: [{
-            providerId: {
-                type: Schema.Types.ObjectId,
-                ref: "Provider",
-                required: false
-            },
-            quotation: {
-                type: String,
-                required: false
-            }
+        quotations: [{
+            type: Schema.Types.ObjectId,
+            ref: "Quotation",
+            required: false
+        }],
+        // active on stage 2
+        approvedQuotations: [{
+            type: Schema.Types.ObjectId,
+            ref: "Quotation",
+            required: false
         }]
     },
     {

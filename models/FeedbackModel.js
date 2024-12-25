@@ -11,6 +11,7 @@ const feedbackSchema = new Schema({
         required: true
     },
     userId: {
+        // client or provider id
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true
