@@ -35,16 +35,6 @@ const projectSchema = new Schema({
         default: "phase 1",
         required: true
     },
-    clientFeedback: {
-        type: Schema.Types.ObjectId,
-        ref: "Feedback",
-        required: false
-    },
-    providerFeedback: {
-        type: Schema.Types.ObjectId,
-        ref: "Feedback",
-        required: false
-    }
 },
     {
         timestamps: true,

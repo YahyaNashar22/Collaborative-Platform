@@ -56,6 +56,31 @@ export const markProjectAsCompleted = async (req, res) => {
     }
 }
 
+// Change Project Stage
+export const changeProjectStage = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { stage } = req.body;
+
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        const updatedProject = await Project.findByIdAndUpdate(id, { stage }, { new: true, runValidators: true });
+
+        console.log(chalk.yellow.bold(`Project ${project} Stage Change to ${stage}`));
+
+        return res.status(200).json({
+            message: `Project Stage Changed To ${stage} Successfully`,
+            payload: updatedProject
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Changing Project Stage",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Projects
 // ? can filter to select only client or provider projects
 // ? can filter to select only completed or in_progress projects
