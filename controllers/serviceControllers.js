@@ -5,7 +5,7 @@ import removeImage from "../utils/removeImage.js";
 export const createServiceController = async (req, res) => {
     try {
         const { name, description } = req.body;
-        const { image } = req.file?.filename;
+        const image = req.file?.filename;
 
         const service = await createServiceService({ name, description, image });
 
@@ -26,7 +26,7 @@ export const editServiceController = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, description } = req.body;
-        const { image } = req.file?.filename;
+        const image = req.file?.filename;
 
         const service = await getSingleServiceByIdService(id);
 
