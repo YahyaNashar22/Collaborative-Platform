@@ -1,13 +1,11 @@
 import chalk from "chalk";
 import Service from "../models/serviceModel.js";
 
-//TODO: ADD IMAGE FUNCTIONALITY
-
 // Create Service
-export const createServiceService = async ({ name, description }) => {
+export const createServiceService = async ({ name, description, image }) => {
     try {
         const newService = new Service({
-            name, description
+            name, description, image
         });
         await newService.save();
         console.log(chalk.green.bold(`${newService.name} Service Created Successfully!`));
@@ -20,11 +18,11 @@ export const createServiceService = async ({ name, description }) => {
 
 // Edit Service
 export const editServiceService = async (serviceId, {
-    name, description
+    name, description, image
 }) => {
     try {
         const editedService = await Service.findByIdAndUpdate(serviceId, {
-            name, description
+            name, description, image
         }, { new: true });
         console.log(chalk.green.bold(`${editedService.name} Service Edited Successfully!`));
         return editedService;

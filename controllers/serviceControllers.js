@@ -1,12 +1,13 @@
 import { createServiceService, editServiceService, deleteServiceService, getAllServicesService, getSingleServiceByIdService } from "../services/serviceServices.js";
+import removeImage from "../utils/removeImage.js";
 
-//TODO: ADD IMAGE FUNCTIONALITY
 // Create Service Controller
 export const createServiceController = async (req, res) => {
     try {
         const { name, description } = req.body;
+        const { image } = req.file?.filename;
 
-        const service = await createServiceService({ name, description });
+        const service = await createServiceService({ name, description, image });
 
         return res.status(201).json({
             message: "Service Created Successfully",
@@ -25,6 +26,7 @@ export const editServiceController = async (req, res) => {
     try {
         const { id } = req.params;
         const { name, description } = req.body;
+        const { image } = req.file?.filename;
 
         const service = await getSingleServiceByIdService(id);
 
@@ -32,7 +34,9 @@ export const editServiceController = async (req, res) => {
             message: "Service Does Not Exist!"
         });
 
-        const editedService = await editServiceService(id, { name, description });
+        if (image && service.image) removeImage(service.image);
+
+        const editedService = await editServiceService(id, { name, description, image });
 
         return res.status(200).json({
             message: `${editedService.name} Edited Successfully`,
@@ -103,6 +107,9 @@ export const deleteServiceController = async (req, res) => {
             return res.status(404).json({
                 message: "Service Does Not Exist!"
             });
+
+        if (service.image) removeImage(service.image);
+
 
         const deletedService = await deleteServiceService(id);
 

@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-//TODO: ADD IMAGE FIELD
-
 const { Schema, model } = mongoose;
 
 const serviceSchema = new Schema({
@@ -10,6 +8,10 @@ const serviceSchema = new Schema({
         required: true
     },
     description: {
+        type: String,
+        required: false
+    },
+    image: {
         type: String,
         required: false
     }
