@@ -11,6 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 import projectRoutes from './routes/projectRoutes.js';
 import transactionRoutes from './routes/transactionRoutes.js';
 import feedbackRoutes from './routes/feedbackRoutes.js';
+import quotationRoutes from './routes/quotationRoutes.js';
 
 // Declaration
 dotenv.config();
@@ -36,6 +37,7 @@ app.use("/users", userRoutes);
 app.use("/projects", projectRoutes);
 app.use("/transactions", transactionRoutes);
 app.use("/feedbacks", feedbackRoutes);
+app.use("/quotations", quotationRoutes);
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
