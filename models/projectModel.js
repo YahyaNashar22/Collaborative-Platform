@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-//TODO: ADD STAGE FIELD => 4 OR 5 DIFFERENT STAGES ( INCLUDING FEEDBACK)
 
 const { Schema, model } = mongoose;
 
@@ -29,6 +28,23 @@ const projectSchema = new Schema({
         enum: ["in_progress", "completed"],
         required: false
     },
+    stage: {
+        type: String,
+        // including phase 5 --> feedback
+        enum: ["phase 1", "phase 2", "phase 3", "phase 4", "phase 5"],
+        default: "phase 1",
+        required: true
+    },
+    clientFeedback: {
+        type: Schema.Types.ObjectId,
+        ref: "Feedback",
+        required: false
+    },
+    providerFeedback: {
+        type: Schema.Types.ObjectId,
+        ref: "Feedback",
+        required: false
+    }
 },
     {
         timestamps: true,

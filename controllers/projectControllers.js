@@ -4,6 +4,7 @@ import Project from "../models/projectModel.js";
 import { getAllProjectsService, getProjectByIdService } from "../services/projectServices.js";
 
 //TODO: ADD PROJECT STAGE FUNCTIONALITY
+//TODO: ADD FEEDBACK FOR CLIENT AND PROVIDER CONTROLLER
 
 // Start a project
 export const startProject = async (req, res) => {

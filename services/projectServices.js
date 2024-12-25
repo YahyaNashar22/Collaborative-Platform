@@ -3,6 +3,7 @@ import chalk from "chalk";
 import Project from "../models/projectModel.js";
 
 //TODO: ADD PROJECT STAGE FUNCTIONALITY
+//TODO: ADD FEEDBACK FOR CLIENT AND PROVIDER
 
 
 export const getProjectByIdService = async (id) => {
