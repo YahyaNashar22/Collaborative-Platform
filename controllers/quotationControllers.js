@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import Quotation from "../models/quotationModel.js";
 import { createQuotationService, getSingleQuotationService } from "../services/quotationServices.js";
 
@@ -9,10 +10,10 @@ export const addQuotationToRequest = async (req, res) => {
 
         const quotation = await createQuotationService({ providerId, amount, message, availableHours });
 
-        if (!quotation) return res.status(403).json({ message: "Quotation was not created!" });
-
-        // TODO: Call request update service to add the quotation to it
-
+        return res.status(201).json({
+            message: "Quotation Created Successfully",
+            quotation: quotation
+        })
 
     } catch (error) {
         res.status(500).json({
@@ -28,7 +29,7 @@ export const getAllQuotations = async (req, res) => {
     try {
         const quotations = await Quotation.find({});
 
-        if (!quotations) return res.status(404).json({ message: "There are no current quotations available", payload: [] });
+        if (!quotations || quotations.length == 0) return res.status(404).json({ message: "There are no current quotations available", payload: [] });
 
         return res.status(200).json({
             message: "Quotations fetched successfully",

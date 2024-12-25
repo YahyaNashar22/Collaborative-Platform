@@ -4,7 +4,7 @@ import { addQuotationToRequest, deleteQuotation, getAllQuotations, getSingleQuot
 
 const quotationRoutes = express.Router();
 
-quotationRoutes.post("/add-quotation", addQuotationToRequest);
+quotationRoutes.post("/create", addQuotationToRequest);
 quotationRoutes.get("/get-all", getAllQuotations);
 quotationRoutes.get("/get-single/:id", getSingleQuotation);
 quotationRoutes.delete("/delete/:id", deleteQuotation);

@@ -6,9 +6,15 @@ const requestSchema = new Schema(
     {
         clientId: {
             type: Schema.Types.ObjectId,
-            ref: "Request",
+            ref: "User",
             required: true
         },
+        // List of providers that will receive the request
+        providerId: [{
+            type: Schema.Types.ObjectId,
+            ref: "User",
+            required: false
+        }],
         serviceId: {
             type: Schema.Types.ObjectId,
             ref: "Service",
@@ -24,18 +30,24 @@ const requestSchema = new Schema(
             enum: ["awaiting admin approval", "awaiting providers quotations", "awaiting admin to review quotations", "awaiting client to choose quotation", "accepted", "canceled"],
             required: true
         },
-        // active on stage 2
+        // active on stage 3
         quotations: [{
             type: Schema.Types.ObjectId,
             ref: "Quotation",
             required: false
         }],
-        // active on stage 2
+        // active on stage 3
         approvedQuotations: [{
             type: Schema.Types.ObjectId,
             ref: "Quotation",
             required: false
-        }]
+        }],
+        // active on stage 4s
+        selectedQuotation: {
+            type: Schema.Types.ObjectId,
+            ref: "Quotation",
+            required: false
+        }
     },
     {
         timestamps: true

@@ -4,6 +4,8 @@ const { Schema, model } = mongoose;
 
 const ratingEnum = [1, 2, 3, 4, 5]
 
+// TODO: ADD FEEDBACK VERSION FOR PROVIDER
+
 const feedbackSchema = new Schema({
     projectId: {
         type: Schema.Types.ObjectId,
