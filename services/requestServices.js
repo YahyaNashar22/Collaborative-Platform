@@ -24,7 +24,7 @@ export const createRequestService = async ({ clientId, serviceId }) => {
 // Get All Requests
 export const getAllRequestsService = async () => {
     try {
-        const requests = await Request.find({});
+        const requests = await Request.find({}).sort({ createdAt: -1 });
 
         if (!requests) {
             console.log(chalk.yellow.bold("No requests found"));

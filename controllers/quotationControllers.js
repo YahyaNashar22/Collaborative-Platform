@@ -27,7 +27,7 @@ export const addQuotationToRequest = async (req, res) => {
 // Get all quotations -- ( for dev only )
 export const getAllQuotations = async (req, res) => {
     try {
-        const quotations = await Quotation.find({});
+        const quotations = await Quotation.find({}).sort({ createdAt: -1 });
 
         if (!quotations || quotations.length == 0) return res.status(404).json({ message: "There are no current quotations available", payload: [] });
 
