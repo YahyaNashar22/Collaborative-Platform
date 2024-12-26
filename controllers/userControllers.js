@@ -6,9 +6,12 @@ import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 import removeImage from "../utils/removeImage.js";
 
+
+// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
+
+
 // Register New Super
 export const registerSuper = async (req, res) => {
-    // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
     try {
         const {
             firstName,
