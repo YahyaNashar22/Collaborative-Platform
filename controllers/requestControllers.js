@@ -1,4 +1,7 @@
+import chalk from "chalk";
+
 import Request from "../models/requestModel.js";
+import { createRequestService } from "../services/requestServices.js";
 
 // TODO: COMPLETE THE LOGIC
 
@@ -7,9 +10,21 @@ import Request from "../models/requestModel.js";
 // * When Client requests a server ( Stage 1)
 export const createRequest = async (req, res) => {
     try {
+        const { clientId, serviceId } = req.body;
 
+        const request = await createRequestService({ clientId, serviceId });
+
+        if (!request) return res.status(403).json({ message: "Failed to create request" });
+
+        return res.status(201).json({
+            message: "request created successfully",
+            payload: request
+        })
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Creating Request",
+            error: error.message
+        });
     }
 }
 

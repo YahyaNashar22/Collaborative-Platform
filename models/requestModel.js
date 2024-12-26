@@ -9,11 +9,12 @@ const requestSchema = new Schema(
             ref: "User",
             required: true
         },
-        // List of providers that will receive the request
+        // List of providers that will receive the request -- active on stage 2
         providerId: [{
             type: Schema.Types.ObjectId,
             ref: "User",
-            required: false
+            required: true,
+            default: []
         }],
         serviceId: {
             type: Schema.Types.ObjectId,
@@ -23,26 +24,30 @@ const requestSchema = new Schema(
         stage: {
             type: Number,
             enum: [1, 2, 3, 4, 5],
+            default: 1,
             required: true
         },
         status: {
             type: String,
             enum: ["awaiting admin approval", "awaiting providers quotations", "awaiting admin to review quotations", "awaiting client to choose quotation", "accepted", "canceled"],
+            default: "awaiting admin approval",
             required: true
         },
         // active on stage 3
         quotations: [{
             type: Schema.Types.ObjectId,
             ref: "Quotation",
-            required: false
+            required: true,
+            default: []
         }],
         // active on stage 3
         approvedQuotations: [{
             type: Schema.Types.ObjectId,
             ref: "Quotation",
-            required: false
+            required: true,
+            default: []
         }],
-        // active on stage 4s
+        // active on stage 4
         selectedQuotation: {
             type: Schema.Types.ObjectId,
             ref: "Quotation",
@@ -56,3 +61,11 @@ const requestSchema = new Schema(
 
 const Request = model("Request", requestSchema);
 export default Request;
+
+
+// ------------------------Request Stages--------------------------------
+// 1. client sends request.
+// 2. admin adds providerIds to request.
+// 3. providers add quotations and admin approves them.
+// 4. client chooses a quotation and start project or cancels the request.
+// ------------------------Request Stages--------------------------------
