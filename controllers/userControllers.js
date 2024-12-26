@@ -4,10 +4,11 @@ import bcrypt from 'bcryptjs';
 import User from "../models/userModel.js";
 import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
+import removeImage from "../utils/removeImage.js";
 
-// Register New Admin
+// Register New Super
 export const registerSuper = async (req, res) => {
-    // TODO: Find a way to store files on a cloud storage
+    // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
     try {
         const {
             firstName,
@@ -21,15 +22,14 @@ export const registerSuper = async (req, res) => {
             language,
         } = req.body;
 
+        const image = req.file?.filename;
+
         const salt = bcrypt.genSaltSync(10);
         const hashedPassword = bcrypt.hashSync(password, salt);
 
         // Check if email already exists
         const existingUser = await getUserByEmailService(email);
         if (existingUser) return res.status(401).json({ message: "email already exists" });
-
-
-        // TODO: Add profile picture upload
 
         const newAdmin = new User({
             firstName,
@@ -41,6 +41,7 @@ export const registerSuper = async (req, res) => {
             address,
             country,
             language,
+            profilePicture: image,
             role: "super"
         });
         await newAdmin.save();
@@ -54,8 +55,9 @@ export const registerSuper = async (req, res) => {
             payload: decoded
         })
     } catch (error) {
+        console.error(error)
         res.status(500).json({
-            message: "Problem Registering Admin",
+            message: "Problem Registering Super",
             error: error.message
         });
     }
@@ -101,6 +103,8 @@ export const deleteUser = async (req, res) => {
 
         const user = await getUserByIdService(id);
         if (!user) return res.status(404).json({ message: "User not found!" });
+
+        if (user && user.profilePicture && user.profilePicture !== "/images/profile.png") removeImage(user.profilePicture);
 
         await User.findByIdAndDelete(id);
 

@@ -55,7 +55,7 @@ const userSchema = new Schema({
         default: "english",
         required: true
     },
-    // * ------ Attributes for role == client Block ------
+    // ------ Attributes for role == client Block ------
     howSoonServices: {
         type: String,
         enum: ["immediately", "within a month", "in the next 2-3 months", "in the next 4-6 months", "in the next 6-12 months", "others"],
@@ -76,7 +76,7 @@ const userSchema = new Schema({
         }
     },
 
-    // * ------ Attributes for role == provider block ------
+    // ------ Attributes for role == provider block ------
     experience: {
         type: String,
         required: function () {
