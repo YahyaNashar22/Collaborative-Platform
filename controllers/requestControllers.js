@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import Request from "../models/requestModel.js";
-import { createRequestService } from "../services/requestServices.js";
+import { createRequestService, getAllRequestsService } from "../services/requestServices.js";
 
 // TODO: COMPLETE THE LOGIC
 
@@ -71,9 +71,16 @@ export const selectQuotation = async (req, res) => {
 // Get all requests -- for admin
 export const getAllRequests = async (req, res) => {
     try {
+        const requests = await getAllRequestsService();
 
+        if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
+
+        return res.status(200).json({ message: "requests found successfully", payload: requests }); s
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Fetching Requests",
+            error: error.message
+        });
     }
 }
 
@@ -98,6 +105,7 @@ export const getAllProviderRequests = async (req, res) => {
 // Get single request by id
 export const getSingleRequest = async (req, res) => {
     try {
+
 
     } catch (error) {
 
