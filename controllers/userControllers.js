@@ -5,6 +5,7 @@ import User from "../models/userModel.js";
 import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 import removeImage from "../utils/removeImage.js";
+import transporter from "../utils/nodemailerTransporter.js";
 
 
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
@@ -126,4 +127,24 @@ export const deleteUser = async (req, res) => {
 // TODO: Add profile edits
 // TODO: Add forget password
 // TODO: Add change role --> super can change provider to admin
+export const sendEmail = () => {
+    try {
+        transporter.sendMail(
+            {
+                from: process.env.SENDER_EMAIL,
+                to: "2silentninja2@gmail.com", // Recipient's email address
+                subject: "Hello from Nodemailer", // Subject line
+                html: "<p>This is an <b>HTML</b> message</p>", // HTML body
+            }
+            , (error, info) => {
+                if (error) {
+                    console.log("Error sending email:", error);
+                } else {
+                    console.log("Email sent successfully:", info.response);
+                }
+            });
+    } catch (error) {
+        console.error(error)
+    }
 
+}

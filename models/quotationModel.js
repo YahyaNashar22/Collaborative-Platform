@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
+// TODO: ADD FILE FIELD
 
 const quotationSchema = new Schema({
     providerId: {
