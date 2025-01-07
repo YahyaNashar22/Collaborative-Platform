@@ -5,7 +5,7 @@ import User from "../models/userModel.js";
 import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 import removeImage from "../utils/removeImage.js";
-import transporter from "../utils/nodemailerTransporter.js";
+import { otpTemplate } from "../utils/emailTemplates.js";
 
 
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
@@ -133,24 +133,14 @@ export const deleteUser = async (req, res) => {
 // TODO: Add upload Files
 // TODO: Add change availability ( for providers )
 // TODO: Add create admin --> admin should have his own customers and only the super as provider -- admin can only view
-export const sendEmail = () => {
+// TEST EMAIL CONTROLLER
+export const sendEmail = (req, res) => {
     try {
-        transporter.sendMail(
-            {
-                from: process.env.SENDER_EMAIL,
-                to: "2silentninja2@gmail.com", // Recipient's email address
-                subject: "Hello from Nodemailer", // Subject line
-                html: "<p>This is an <b>HTML</b> message</p>", // HTML body
-            }
-            , (error, info) => {
-                if (error) {
-                    console.log("Error sending email:", error);
-                } else {
-                    console.log("Email sent successfully:", info.response);
-                }
-            });
+        otpTemplate("2silentninja2@gmail.com", "124232");
+        res.status(201).json({message: "Email Sent Successfully"});
     } catch (error) {
         console.error(error)
+        res.status(500).json({message: "Something Went Wrong"});
     }
 
 }
