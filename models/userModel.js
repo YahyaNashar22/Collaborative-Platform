@@ -55,6 +55,11 @@ const userSchema = new Schema({
         default: "english",
         required: true
     },
+    banned: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     // ------ Attributes for role == client Block ------
     howSoonServices: {
         type: String,
@@ -70,6 +75,7 @@ const userSchema = new Schema({
         }
     },
     scopeOfWork: {
+        // File
         type: String,
         required: function () {
             return this.role == "client";
@@ -78,24 +84,20 @@ const userSchema = new Schema({
 
     // ------ Attributes for role == provider block ------
     experience: {
+        // Text Field
         type: String,
         required: function () {
             return this.role == "provider";
         }
     },
     cvOrCompanyProfile: {
+        // File
         type: String,
         required: function () {
             return this.role == "provider";
         }
     },
     availability: {
-        type: Boolean,
-        required: function () {
-            return this.role == "provider";
-        }
-    },
-    banned: {
         type: Boolean,
         required: function () {
             return this.role == "provider";
@@ -109,7 +111,6 @@ const userSchema = new Schema({
             return this.role == "provider";
         }
     }]
-
 },
     {
         timestamps: true,

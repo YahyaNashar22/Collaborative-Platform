@@ -126,7 +126,13 @@ export const deleteUser = async (req, res) => {
 
 // TODO: Add profile edits
 // TODO: Add forget password
-// TODO: Add change role --> super can change provider to admin
+// TODO: Add ban user
+// TODO: Add login
+// TODO: Add OTP email
+// TODO: Add OTP phone number
+// TODO: Add upload Files
+// TODO: Add change availability ( for providers )
+// TODO: Add create admin --> admin should have his own customers and only the super as provider -- admin can only view
 export const sendEmail = () => {
     try {
         transporter.sendMail(
