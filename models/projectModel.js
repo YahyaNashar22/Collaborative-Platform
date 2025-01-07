@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-// TODO: ADD PROJECT TIMELINE || REQUESTED FILE
+// TODO: ADD PROJECT TIMELINE || REQUESTED FILE || Time Line Status
 
 const projectSchema = new Schema({
     clientId: {
