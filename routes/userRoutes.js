@@ -1,7 +1,7 @@
 import express from "express";
 
 import upload from "../middlewares/multer.js";
-import { deleteUser, getAllUsers, getUserById, registerSuper, sendEmail } from "../controllers/userControllers.js";
+import { deleteUser, getAllUsers, getUserById, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 // TODO: Continue after finding a cloud storage
@@ -12,6 +12,8 @@ userRoutes.get("/get-single/:id", getUserById);
 userRoutes.delete("/delete/:id", deleteUser);
 
 
-userRoutes.post("/test-email", sendEmail)
+userRoutes.post("/test-email", sendEmail);
+userRoutes.post("/test-sms", sendSMS);
+
 
 export default userRoutes;

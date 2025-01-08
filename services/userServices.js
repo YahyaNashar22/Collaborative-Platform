@@ -1,6 +1,5 @@
 import chalk from "chalk";
 import User from "../models/userModel.js";
-import { generateExpiryDate, generateOtp } from "../utils/otp.js";
 
 export const getUserByEmailService = async (email) => {
     try {
