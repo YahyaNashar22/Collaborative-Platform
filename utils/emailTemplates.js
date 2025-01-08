@@ -35,6 +35,13 @@ export const otpTemplate = (receiverEmail, otp) => {
           </p>
         </td>
       </tr>
+       <tr>
+        <td style="text-align: start; padding: 10px 20px">
+          <p>
+            This code will expire in 5 minutes
+          </p>
+        </td>
+      </tr>
       <tr>
         <td style="padding: 10px 20px">
           <p>Best wishes,</p>

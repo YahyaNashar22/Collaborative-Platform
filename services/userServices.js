@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import User from "../models/userModel.js";
+import { generateExpiryDate, generateOtp } from "../utils/otp.js";
 
 export const getUserByEmailService = async (email) => {
     try {
@@ -23,4 +24,14 @@ export const getUserByIdService = async (id) => {
         console.error(error);
         return null;
     }
+}
+
+
+// Generate OTP For email
+export const generateAndSendEmailOtp = async (email) => {
+    const otp = generateOtp();
+    const expiryDate = generateExpiryDate();
+
+    // update the user with the new email otp and expiry time
+    await User.findOneAndUpdate({ email }, { emailOtp: otp, emailOtpExpiredAt: emailOtpExpiredAt });
 }

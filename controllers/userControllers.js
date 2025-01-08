@@ -35,6 +35,13 @@ export const registerSuper = async (req, res) => {
         const existingUser = await getUserByEmailService(email);
         if (existingUser) return res.status(401).json({ message: "email already exists" });
 
+        // verify email - otp
+
+
+
+        // verify phone number - otp
+
+
         const newAdmin = new User({
             firstName,
             lastName,
