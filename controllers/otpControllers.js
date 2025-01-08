@@ -1,4 +1,5 @@
-import { createEmailOtpService, deleteOtpByIdService, findOtpByEmailService } from "../services/otpServices.js";
+import { response } from "express";
+import { createEmailOtpService, deleteOtpByIdService, findOtpByEmailService, getAllOtpService } from "../services/otpServices.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
 import { generateExpiryDate, generateOtp } from "../utils/otp.js";
 
@@ -57,6 +58,26 @@ export const verifyEmailOtp = async (req, res) => {
         console.error(error)
         res.status(500).json({
             message: "Problem Verifying Email Otp",
+            error: error.message
+        });
+    }
+}
+
+// TEST GET ALL OTP
+export const getAllOtp = async (req, res) => {
+    try {
+        const otp = await getAllOtpService();
+
+        if (!otp || otp.length === 0) return res.status(404).json({ message: "no current otp" });
+
+        return res.status(200).json({
+            message: "current otp found",
+            payload: otp
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Problem Fetching Otp",
             error: error.message
         });
     }

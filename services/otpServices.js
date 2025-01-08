@@ -37,11 +37,25 @@ export const findOtpByEmailService = async (email) => {
 // delete otp by id
 export const deleteOtpByIdService = async (id) => {
     try {
-        Otp.findByIdAndDelete(id);
+        await Otp.findByIdAndDelete(id);
         console.log(chalk.yellow.bold(`otp ${id} deleted successfully`));
     } catch (error) {
         console.log(chalk.red.bold(`cannot delete otp for id: ${id}!`));
         console.error(error);
+    }
+}
+
+// TEST FOR FETCHING OTP
+export const getAllOtpService = async () => {
+    try {
+        const otp = await Otp.find({});
+        console.log(chalk.yellow.bold("otp found successfully"));
+
+        return otp;
+    } catch (error) {
+        console.log(chalk.red.bold("Cannot fetch otp"));
+        console.error(error);
+        return [];
     }
 }
 
