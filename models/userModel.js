@@ -55,11 +55,16 @@ const userSchema = new Schema({
         default: "english",
         required: true
     },
+
+    // ------ Attributes for role == client || role == provider Block ------
     banned: {
         type: Boolean,
-        required: true,
+        required: function () {
+            return this.role == "client" || this.role == "provider";
+        },
         default: false
     },
+
     // ------ Attributes for role == client Block ------
     howSoonServices: {
         type: String,

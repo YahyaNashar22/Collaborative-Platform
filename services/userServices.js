@@ -25,13 +25,3 @@ export const getUserByIdService = async (id) => {
         return null;
     }
 }
-
-
-// Generate OTP For email
-export const generateAndSendEmailOtp = async (email) => {
-    const otp = generateOtp();
-    const expiryDate = generateExpiryDate();
-
-    // update the user with the new email otp and expiry time
-    await User.findOneAndUpdate({ email }, { emailOtp: otp, emailOtpExpiredAt: emailOtpExpiredAt });
-}

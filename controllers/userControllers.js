@@ -8,9 +8,6 @@ import removeImage from "../utils/removeImage.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
 
 
-// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
-
-
 // Register New Super
 export const registerSuper = async (req, res) => {
     try {
@@ -51,6 +48,7 @@ export const registerSuper = async (req, res) => {
         await newSuper.save();
         console.log(chalk.green.bold(`Super Admin ${firstName} ${lastName} has been registered successfully`));
 
+        // sign in after registration
         const token = createToken(newSuper);
         const decoded = verifyToken(token);
 
@@ -135,6 +133,8 @@ export const deleteUser = async (req, res) => {
 // TODO: Add provider sign up
 // TODO: Add client sign up
 // TODO: Add create admin --> admin should have his own customers and only the super as provider -- admin can only view
+// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
+
 
 
 
