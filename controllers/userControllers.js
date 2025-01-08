@@ -35,14 +35,7 @@ export const registerSuper = async (req, res) => {
         const existingUser = await getUserByEmailService(email);
         if (existingUser) return res.status(401).json({ message: "email already exists" });
 
-        // verify email - otp
-
-
-
-        // verify phone number - otp
-
-
-        const newAdmin = new User({
+        const newSuper = new User({
             firstName,
             lastName,
             email,
@@ -55,10 +48,10 @@ export const registerSuper = async (req, res) => {
             profilePicture: image,
             role: "super"
         });
-        await newAdmin.save();
+        await newSuper.save();
         console.log(chalk.green.bold(`Super Admin ${firstName} ${lastName} has been registered successfully`));
 
-        const token = createToken(newAdmin);
+        const token = createToken(newSuper);
         const decoded = verifyToken(token);
 
         return res.status(201).json({
@@ -139,15 +132,25 @@ export const deleteUser = async (req, res) => {
 // TODO: Add OTP phone number
 // TODO: Add upload Files
 // TODO: Add change availability ( for providers )
+// TODO: Add provider sign up
+// TODO: Add client sign up
 // TODO: Add create admin --> admin should have his own customers and only the super as provider -- admin can only view
+
+
+
+
+
+// ----------------------------------------------------------------------
 // TEST EMAIL CONTROLLER
+// ----------------------------------------------------------------------
 export const sendEmail = (req, res) => {
     try {
         otpTemplate("2silentninja2@gmail.com", "124232");
-        res.status(201).json({message: "Email Sent Successfully"});
+        res.status(201).json({ message: "Email Sent Successfully" });
     } catch (error) {
         console.error(error)
-        res.status(500).json({message: "Something Went Wrong"});
+        res.status(500).json({ message: "Something Went Wrong" });
     }
 
 }
+// ----------------------------------------------------------------------

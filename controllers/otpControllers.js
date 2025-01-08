@@ -49,9 +49,9 @@ export const verifyEmailOtp = async (req, res) => {
         // delete otp after verification
         await deleteOtpByIdService(otp._id);
 
-        // OTP is valid, proceed with user registration
+        // if OTP is valid, proceed
         return res.status(200).json({
-            message: 'OTP verified successfully. Proceed with registration.'
+            message: 'OTP verified successfully. Proceed.'
         });
 
     } catch (error) {
