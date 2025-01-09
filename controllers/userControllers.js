@@ -201,11 +201,16 @@ export const deleteUser = async (req, res) => {
     try {
         const id = req.params.id;
 
+        // check if user exists
         const user = await getUserByIdService(id);
         if (!user) return res.status(404).json({ message: "User not found!" });
 
+        // delete user files
         if (user && user.profilePicture && user.profilePicture !== "/uploads/profile.png") removeFile(user.profilePicture);
+        if (user && user.scopeOfWork) removeFile(user.scopeOfWork);
+        if (user && user.cvOrCompanyProfile) removeFile(user.cvOrCompanyProfile);
 
+        // delete user from db
         await User.findByIdAndDelete(id);
 
         res.status(200).json({
