@@ -88,9 +88,6 @@ export const registerClient = async (req, res) => {
         const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : null;
         const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].filename : null;
 
-        console.log(profilePicture);
-        console.log(scopeOfWork);
-
         // Check if email already exists
         const existingUser = await getUserByEmailService(email);
         if (existingUser) return res.status(401).json({ message: "email already exists" });
@@ -125,7 +122,7 @@ export const registerClient = async (req, res) => {
         return res.status(201).json({
             message: `Client ${firstName} ${lastName} Registered Successfully`,
             payload: decoded
-        })
+        });
 
     } catch (error) {
         console.error(error)
@@ -153,7 +150,45 @@ export const registerProvider = async (req, res) => {
             services
         } = req.body;
 
-        // profilePicture, cvOrCompanyProfiles
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : null;
+        const cvOrCompanyProfile = req.files.cvOrCompanyProfile ? req.files.cvOrCompanyProfile[0].filename : null;
+
+        // Check if email already exists
+        const existingUser = await getUserByEmailService(email);
+        if (existingUser) return res.status(401).json({ message: "email already exists" });
+
+        // hash password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // add user to db
+        const newProvider = new User({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            profilePicture,
+            cvOrCompanyProfile,
+            experience,
+            services,
+            role: "provider"
+        });
+        await newProvider.save();
+
+        // sign in after registration
+        const token = createToken(newProvider);
+        const decoded = verifyToken(token);
+
+        return res.status(201).json({
+            message: `Provider ${firstName} ${lastName} Registered Successfully`,
+            payload: decoded
+        });
+
     } catch (error) {
         console.error(error)
         res.status(500).json({
