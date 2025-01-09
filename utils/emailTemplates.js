@@ -3,7 +3,7 @@ import transporter from "./nodemailerTransporter.js";
 
 export const otpTemplate = (receiverEmail, otp) => {
 
-    const htmlBody = `
+  const htmlBody = `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -53,22 +53,22 @@ export const otpTemplate = (receiverEmail, otp) => {
 </html>
 `;
 
-    transporter.sendMail(
-        {
-            from: process.env.SENDER_EMAIL,
-            to: receiverEmail, // Recipient's email address
-            subject: "Collaborative Platform OTP", // Subject line
-            html: htmlBody, // HTML body
-        }
-        , (error, info) => {
-            if (error) {
-                console.log(chalk.bold.red("Error sending email:"));
-                console.error(error);
-            } else {
-                console.log(chalk.bold.green("Email sent successfully:"));
-                console.log(chalk.bold.yellow(info.response));
-            }
-        });
+  transporter.sendMail(
+    {
+      from: process.env.SENDER_EMAIL,
+      to: receiverEmail, // Recipient's email address
+      subject: "Collaborative Platform OTP", // Subject line
+      html: htmlBody, // HTML body
+    }
+    , (error, info) => {
+      if (error) {
+        console.log(chalk.bold.red("Error sending email:"));
+        console.error(error);
+      } else {
+        console.log(chalk.bold.green("Email sent successfully:"));
+        console.log(chalk.bold.yellow(info.response));
+      }
+    });
 }
 
 

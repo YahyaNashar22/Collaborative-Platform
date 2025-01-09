@@ -34,6 +34,37 @@ export const findOtpByEmailService = async (email) => {
     }
 }
 
+// create phone otp record
+export const createPhoneOtpService = async (phone, phoneOtp, phoneOtpExpiresAt) => {
+    try {
+        const otp = new Otp({ phone, phoneOtp, phoneOtpExpiresAt });
+        await otp.save();
+
+        console.log(chalk.yellow.bold("phone otp created successfully"));
+
+        return otp;
+    } catch (error) {
+        console.log(chalk.red.bold("problem creating phone otp"));
+        console.error(error);
+        return null;
+    }
+}
+
+// find otp by phone
+export const findOtpByPhoneService = async (phone) => {
+    try {
+        const otp = await Otp.findOne({ phone });
+
+        console.log(chalk.yellow.bold(`otp for email: ${phone} found successfully`));
+
+        return otp;
+    } catch (error) {
+        console.log(chalk.red.bold("cannot find phone otp!"));
+        console.error(error);
+        return null;
+    }
+}
+
 // delete otp by id
 export const deleteOtpByIdService = async (id) => {
     try {

@@ -6,7 +6,7 @@ import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 import removeImage from "../utils/removeImage.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
-import { sendSMSTwilio } from "../utils/twilioClient.js";
+import { sendPhoneOtp } from "../utils/twilioClient.js";
 
 
 // Register New Super
@@ -160,9 +160,9 @@ export const sendEmail = (req, res) => {
 // ----------------------------------------------------------------------
 // TEST SMS CONTROLLER
 // ----------------------------------------------------------------------
-export const sendSMS = (req, res) => {
+export const sendSMS = async (req, res) => {
     try {
-        sendSMSTwilio();
+        await sendPhoneOtp("+96176153425", "123456");
         res.status(200).json({ message: "sms sent successfully" });
     } catch (error) {
         console.error(error);
