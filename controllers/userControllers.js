@@ -107,7 +107,7 @@ export const deleteUser = async (req, res) => {
         const user = await getUserByIdService(id);
         if (!user) return res.status(404).json({ message: "User not found!" });
 
-        if (user && user.profilePicture && user.profilePicture !== "/images/profile.png") removeImage(user.profilePicture);
+        if (user && user.profilePicture && user.profilePicture !== "/uploads/profile.png") removeImage(user.profilePicture);
 
         await User.findByIdAndDelete(id);
 
@@ -127,8 +127,6 @@ export const deleteUser = async (req, res) => {
 // TODO: Add forget password
 // TODO: Add ban user
 // TODO: Add login
-// TODO: Add OTP email
-// TODO: Add OTP phone number
 // TODO: Add upload Files
 // TODO: Add change availability ( for providers )
 // TODO: Add provider sign up

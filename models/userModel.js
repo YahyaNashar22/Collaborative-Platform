@@ -26,7 +26,7 @@ const userSchema = new Schema({
     },
     profilePicture: {
         type: String,
-        default: '/images/profile.png',
+        default: '/uploads/profile.png',
         required: false,
     },
     company: {
