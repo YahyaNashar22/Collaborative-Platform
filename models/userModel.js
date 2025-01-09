@@ -106,7 +106,8 @@ const userSchema = new Schema({
         type: Boolean,
         required: function () {
             return this.role == "provider";
-        }
+        },
+        default: true,
     },
     // aka - Area of expertise
     services: [{

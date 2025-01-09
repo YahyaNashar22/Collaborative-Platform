@@ -1,7 +1,7 @@
 import express from "express";
 
 import { createServiceController, deleteServiceController, editServiceController, getAllServicesController, getSingleServiceByIdController } from "../controllers/serviceControllers.js";
-import upload from "../middlewares/multer.js";
+import { upload } from "../middlewares/multer.js";
 
 const serviceRoutes = express.Router();
 

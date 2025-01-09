@@ -66,6 +66,60 @@ export const registerSuper = async (req, res) => {
     }
 }
 
+// Register client
+export const registerClient = async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget,
+        } = req.body;
+
+        // profilePicture, scopeOfWork
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Registering Client",
+            error: error.message
+        });
+    }
+}
+
+// Register Provider
+export const registerProvider = async (req, res) => {
+    try {
+        const { 
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            experience,
+            services
+        } = req.body;
+
+        // profilePicture, cvOrCompanyProfiles
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Registering Provider",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
