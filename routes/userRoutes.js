@@ -1,13 +1,16 @@
 import express from "express";
 
 import { upload, uploadClientFiles, uploadProviderFiles } from "../middlewares/multer.js";
-import { deleteUser, getAllUsers, getUserById, registerClient, registerProvider, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
+import { deleteUser, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 
 userRoutes.post("/new-super", upload.single("image"), registerSuper);
 userRoutes.post("/new-client", uploadClientFiles, registerClient);
 userRoutes.post("/new-provider", uploadProviderFiles, registerProvider);
+
+userRoutes.post("/log-in", login);
+
 
 
 userRoutes.get("/get-all", getAllUsers);

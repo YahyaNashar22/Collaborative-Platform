@@ -55,6 +55,14 @@ export const registerSuper = async (req, res) => {
         const token = createToken(newSuper);
         const decoded = verifyToken(token);
 
+        // Set cookie with the token
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000  // expires in one day
+        });
+
+
         return res.status(201).json({
             message: `Super Admin ${firstName} ${lastName} Registered Successfully`,
             payload: decoded
@@ -118,6 +126,14 @@ export const registerClient = async (req, res) => {
         // sign in after registration
         const token = createToken(newClient);
         const decoded = verifyToken(token);
+
+        // Set cookie with the token
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000  // expires in one day
+        });
+
 
         return res.status(201).json({
             message: `Client ${firstName} ${lastName} Registered Successfully`,
@@ -184,6 +200,14 @@ export const registerProvider = async (req, res) => {
         const token = createToken(newProvider);
         const decoded = verifyToken(token);
 
+        // Set cookie with the token
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000  // expires in one day
+        });
+
+
         return res.status(201).json({
             message: `Provider ${firstName} ${lastName} Registered Successfully`,
             payload: decoded
@@ -193,6 +217,45 @@ export const registerProvider = async (req, res) => {
         console.error(error)
         res.status(500).json({
             message: "Problem Registering Provider",
+            error: error.message
+        });
+    }
+}
+
+// User Log in
+export const login = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // check if email exists
+        const existingUser = await getUserByEmailService(email);
+        if (!existingUser) return res.status(404).json({ message: "email does not exist" });
+
+        // check if password match
+        const isValidPassword = await bcrypt.compareSync(password, existingUser.password);
+        if (!isValidPassword) return res.status(401).json({ message: "Wrong  Password" });
+
+        // sign in
+        const token = createToken(existingUser);
+        const decoded = verifyToken(token);
+
+        // Set cookie with the token
+        res.cookie('authToken', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000  // expires in one day
+        });
+
+
+        return res.status(200).json({
+            message: `${existingUser.firstName} ${existingUser.lastName} Logged in Successfully`,
+            payload: decoded
+        });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Logging in",
             error: error.message
         });
     }
