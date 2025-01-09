@@ -85,8 +85,8 @@ export const registerClient = async (req, res) => {
             estimatedBudget,
         } = req.body;
 
-        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].path : null;
-        const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].path : null;
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : null;
+        const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].filename : null;
 
         console.log(profilePicture);
         console.log(scopeOfWork);
