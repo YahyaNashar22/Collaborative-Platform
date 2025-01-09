@@ -3,8 +3,6 @@ import { otpTemplate } from "../utils/emailTemplates.js";
 import { generateExpiryDate, generateOtp } from "../utils/otp.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
-// TODO: Add the correct twilio and nodeMailer credentials
-
 // Create and send email OTP
 export const createAndSendEmailOtp = async (req, res) => {
     try {

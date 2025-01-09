@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// TODO: Add the correct twilio credentials
+
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const messagingServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
