@@ -326,7 +326,6 @@ export const deleteUser = async (req, res) => {
 // TODO: Add profile edits
 // TODO: Add forget password
 // TODO: Add ban user
-// TODO: Add login
 // TODO: Add change availability ( for providers )
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
