@@ -232,7 +232,7 @@ export const login = async (req, res) => {
         if (!existingUser) return res.status(404).json({ message: "email does not exist" });
 
         // check if password match
-        const isValidPassword = await bcrypt.compareSync(password, existingUser.password);
+        const isValidPassword = await bcrypt.compare(password, existingUser.password);
         if (!isValidPassword) return res.status(401).json({ message: "Wrong  Password" });
 
         // sign in
@@ -261,6 +261,7 @@ export const login = async (req, res) => {
     }
 }
 
+// Change Password
 export const changePassword = async (req, res) => {
     try {
         const id = req.params.id;
@@ -283,6 +284,30 @@ export const changePassword = async (req, res) => {
         console.error(error)
         res.status(500).json({
             message: "Problem Changing Password",
+            error: error.message
+        });
+    }
+}
+
+// Verify Password
+export const verifyPassword = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { password } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // check if password match
+        const isValidPassword = await bcrypt.compare(password, user.password);
+        if (!isValidPassword) return res.status(401).json({ message: "Wrong  Password" });
+
+        return res.status(200).json({ message: "Password Match" });
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Verifying Password",
             error: error.message
         });
     }

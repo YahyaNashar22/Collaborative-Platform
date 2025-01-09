@@ -1,7 +1,7 @@
 import express from "express";
 
 import { upload, uploadClientFiles, uploadProviderFiles } from "../middlewares/multer.js";
-import { changePassword, deleteUser, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
+import { changePassword, deleteUser, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 
@@ -10,6 +10,8 @@ userRoutes.post("/new-client", uploadClientFiles, registerClient);
 userRoutes.post("/new-provider", uploadProviderFiles, registerProvider);
 
 userRoutes.post("/log-in", login);
+
+userRoutes.post("/verify-password/:id", verifyPassword);
 
 userRoutes.put("/change-password/:id", changePassword);
 
