@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import User from "../models/userModel.js";
 import { createToken, verifyToken } from "../utils/token.js";
 import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
-import removeImage from "../utils/removeImage.js";
+import removeFile from "../utils/removeFile.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
@@ -204,7 +204,7 @@ export const deleteUser = async (req, res) => {
         const user = await getUserByIdService(id);
         if (!user) return res.status(404).json({ message: "User not found!" });
 
-        if (user && user.profilePicture && user.profilePicture !== "/uploads/profile.png") removeImage(user.profilePicture);
+        if (user && user.profilePicture && user.profilePicture !== "/uploads/profile.png") removeFile(user.profilePicture);
 
         await User.findByIdAndDelete(id);
 

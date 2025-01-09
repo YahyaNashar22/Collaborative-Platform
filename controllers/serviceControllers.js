@@ -1,5 +1,5 @@
 import { createServiceService, editServiceService, deleteServiceService, getAllServicesService, getSingleServiceByIdService } from "../services/serviceServices.js";
-import removeImage from "../utils/removeImage.js";
+import removeFile from "../utils/removeFile.js";
 
 // Create Service Controller
 export const createServiceController = async (req, res) => {
@@ -34,7 +34,7 @@ export const editServiceController = async (req, res) => {
             message: "Service Does Not Exist!"
         });
 
-        if (image && service.image) removeImage(service.image);
+        if (image && service.image) removeFile(service.image);
 
         const editedService = await editServiceService(id, { name, description, image });
 
@@ -108,7 +108,7 @@ export const deleteServiceController = async (req, res) => {
                 message: "Service Does Not Exist!"
             });
 
-        if (service.image) removeImage(service.image);
+        if (service.image) removeFile(service.image);
 
 
         const deletedService = await deleteServiceService(id);
