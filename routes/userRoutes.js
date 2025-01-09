@@ -1,12 +1,13 @@
 import express from "express";
 
-import { upload } from "../middlewares/multer.js";
-import { deleteUser, getAllUsers, getUserById, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
+import { upload, uploadClientFiles } from "../middlewares/multer.js";
+import { deleteUser, getAllUsers, getUserById, registerClient, registerSuper, sendEmail, sendSMS } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
-// TODO: Continue after finding a cloud storage
 
 userRoutes.post("/new-super", upload.single("image"), registerSuper);
+userRoutes.post("/new-client", uploadClientFiles, registerClient);
+
 userRoutes.get("/get-all", getAllUsers);
 userRoutes.get("/get-single/:id", getUserById);
 userRoutes.delete("/delete/:id", deleteUser);

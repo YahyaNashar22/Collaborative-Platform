@@ -26,13 +26,15 @@ export const registerSuper = async (req, res) => {
 
         const image = req.file?.filename;
 
-        const salt = bcrypt.genSaltSync(10);
-        const hashedPassword = bcrypt.hashSync(password, salt);
-
         // Check if email already exists
         const existingUser = await getUserByEmailService(email);
         if (existingUser) return res.status(401).json({ message: "email already exists" });
 
+        // hash password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // add user to db
         const newSuper = new User({
             firstName,
             lastName,
@@ -83,7 +85,48 @@ export const registerClient = async (req, res) => {
             estimatedBudget,
         } = req.body;
 
-        // profilePicture, scopeOfWork
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].path : null;
+        const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].path : null;
+
+        console.log(profilePicture);
+        console.log(scopeOfWork);
+
+        // Check if email already exists
+        const existingUser = await getUserByEmailService(email);
+        if (existingUser) return res.status(401).json({ message: "email already exists" });
+
+        // hash password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // add user to db
+        const newClient = new User({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget,
+            profilePicture,
+            scopeOfWork,
+            role: "client"
+        });
+        await newClient.save();
+
+        // sign in after registration
+        const token = createToken(newClient);
+        const decoded = verifyToken(token);
+
+        return res.status(201).json({
+            message: `Client ${firstName} ${lastName} Registered Successfully`,
+            payload: decoded
+        })
+
     } catch (error) {
         console.error(error)
         res.status(500).json({
@@ -96,7 +139,7 @@ export const registerClient = async (req, res) => {
 // Register Provider
 export const registerProvider = async (req, res) => {
     try {
-        const { 
+        const {
             firstName,
             lastName,
             email,
