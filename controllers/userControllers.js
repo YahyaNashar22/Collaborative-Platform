@@ -85,7 +85,7 @@ export const registerClient = async (req, res) => {
             estimatedBudget,
         } = req.body;
 
-        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : null;
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : "/uploads/profile.png";
         const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].filename : null;
 
         // Check if email already exists
@@ -150,7 +150,7 @@ export const registerProvider = async (req, res) => {
             services
         } = req.body;
 
-        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : null;
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : "/uploads/profile.png";
         const cvOrCompanyProfile = req.files.cvOrCompanyProfile ? req.files.cvOrCompanyProfile[0].filename : null;
 
         // Check if email already exists
