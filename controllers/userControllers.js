@@ -538,6 +538,34 @@ export const changeScopeOfWork = async (req, res) => {
     }
 }
 
+// Change cvOrCompanyProfile -- for provider only
+export const changeCvOrCompanyProfile = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const cvOrCompanyProfile = req.file?.filename;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // delete previous picture
+        if (user && user.cvOrCompanyProfile && cvOrCompanyProfile) {
+            removeFile(user.cvOrCompanyProfile);
+        }
+
+        // update cvOrCompanyProfile
+        await User.findByIdAndUpdate(id, { cvOrCompanyProfile }, { new: true });
+
+        res.status(200).json({ message: "CvOrCompanyProfile updated successfully" });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Changing CvOrCompanyProfile",
+            error: error.message
+        });
+    }
+}
 
 
 
@@ -608,7 +636,6 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-// TODO: Edit profile picture - scope of work - cv or company profile
 // TODO:  make get all users a post with filters
 // TODO: Change Phone number
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
