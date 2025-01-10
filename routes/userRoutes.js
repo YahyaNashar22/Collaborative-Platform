@@ -1,7 +1,7 @@
 import express from "express";
 
 import { upload, uploadClientFiles, uploadProviderFiles } from "../middlewares/multer.js";
-import { changeCvOrCompanyProfile, changePassword, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
+import { changeCvOrCompanyProfile, changePassword, changePhoneNumber, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 
@@ -24,6 +24,7 @@ userRoutes.patch("/edit-provider/:id", editProviderProfile);
 userRoutes.patch("/change-profile-picture/:id", upload.single("profilePicture"), changeProfilePicture);
 userRoutes.patch("/change-scope-of-work/:id", upload.single("scopeOfWork"), changeScopeOfWork);
 userRoutes.patch("/change-cv-or-company-profile/:id", upload.single("cvOrCompanyProfile"), changeCvOrCompanyProfile);
+userRoutes.patch("/change-phone-number/:id", changePhoneNumber);
 
 userRoutes.get("/get-all", getAllUsers);
 userRoutes.get("/get-single/:id", getUserById);

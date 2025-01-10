@@ -567,6 +567,29 @@ export const changeCvOrCompanyProfile = async (req, res) => {
     }
 }
 
+// Change phone number -- requires verify phone number
+export const changePhoneNumber = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { phone } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // update phone number
+        await User.findByIdAndUpdate(id, { phone }, { new: true });
+
+        res.status(200).json({ message: "phone number updated successfully" });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Changing Phone Number",
+            error: error.message
+        });
+    }
+}
 
 
 
