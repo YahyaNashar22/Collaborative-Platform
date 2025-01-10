@@ -480,6 +480,35 @@ export const editProviderProfile = async (req, res) => {
     }
 }
 
+// Change Profile Picture
+export const changeProfilePicture = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const profilePicture = req.file?.filename;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // delete previous picture
+        if (user && user.profilePicture && profilePicture && user.profilePicture !== "/uploads/profile.png") {
+            removeFile(user.profilePicture);
+        }
+
+        // update profile picture
+        await User.findByIdAndUpdate(id, { profilePicture }, { new: true });
+
+        res.status(200).json({ message: "profile picture updated successfully" });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Changing Profile Picture",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
@@ -542,8 +571,8 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-// TODO: Add profile edits client - provider - super
 // TODO: Edit profile picture - scope of work - cv or company profile
+// TODO:  make get all users a post with filters
 // TODO: Change Phone number
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
