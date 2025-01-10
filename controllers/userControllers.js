@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 
 import User from "../models/userModel.js";
 import { createToken, verifyToken } from "../utils/token.js";
-import { getUserByEmailService, getUserByIdService } from "../services/userServices.js";
+import { getAllUsersService, getUserByEmailService, getUserByIdService } from "../services/userServices.js";
 import removeFile from "../utils/removeFile.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
@@ -600,7 +600,27 @@ export const changePhoneNumber = async (req, res) => {
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({}).populate("services").sort({ createdAt: -1 });
+        const {
+            firstName,
+            lastName,
+            phone,
+            role,
+            email,
+            service,
+            banned,
+            availability
+        } = req.body;
+
+        const users = await getAllUsersService({
+            firstName,
+            lastName,
+            phone,
+            role,
+            email,
+            service,
+            banned,
+            availability
+        });
 
         if (users.length === 0) return res.status(404).json({ message: "No users found!", payload: users });
         return res.status(200).json({ message: "Users found!", payload: users });
@@ -659,8 +679,6 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-// TODO:  make get all users a post with filters
-// TODO: Change Phone number
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
 

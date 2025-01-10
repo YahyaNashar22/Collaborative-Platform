@@ -26,7 +26,7 @@ userRoutes.patch("/change-scope-of-work/:id", upload.single("scopeOfWork"), chan
 userRoutes.patch("/change-cv-or-company-profile/:id", upload.single("cvOrCompanyProfile"), changeCvOrCompanyProfile);
 userRoutes.patch("/change-phone-number/:id", changePhoneNumber);
 
-userRoutes.get("/get-all", getAllUsers);
+userRoutes.post("/get-all", getAllUsers);
 userRoutes.get("/get-single/:id", getUserById);
 userRoutes.delete("/delete/:id", deleteUser);
 

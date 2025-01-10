@@ -24,3 +24,42 @@ export const getUserByIdService = async (id) => {
         return null;
     }
 }
+
+export const getAllUsersService = async ({
+    firstName,
+    lastName,
+    phone,
+    role,
+    email,
+    service,
+    banned,
+    availability }) => {
+    try {
+
+        const query = {};
+
+        if (firstName) query.firstName = firstName;
+        if (lastName) query.lastName = lastName;
+        if (phone) query.phone = phone;
+        if (role) query.role = role;
+        if (email) query.email = email;
+        if (service) query.services = { $in: [service] };
+        if (banned) query.banned = banned;
+        if (availability) query.availability = availability;
+
+
+        const users = await User.find(query).populate("services").sort({ createdAt: -1 });
+
+        if (!users) {
+            console.log(chalk.yellow.bold("No Users Found"));
+            return [];
+        }
+
+        console.log(chalk.yellow.bold("Users Found"));
+        return users;
+    } catch (error) {
+        console.log(chalk.red.bold("Problem Fetching Users"));
+        console.error(error);
+        return null; s
+    }
+}
