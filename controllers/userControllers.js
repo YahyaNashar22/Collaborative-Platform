@@ -439,6 +439,47 @@ export const editClientProfile = async (req, res) => {
     }
 }
 
+// Edit Provider Profile
+export const editProviderProfile = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language,
+            experience,
+            services
+        } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // update user
+        await User.findByIdAndUpdate(id, {
+            firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language,
+            experience,
+            services
+        }, { new: true, runValidators: true });
+
+        res.status(200).json({ message: `provider ${id} edited successfully` });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Doing Profile Edits",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
