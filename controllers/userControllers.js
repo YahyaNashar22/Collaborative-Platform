@@ -371,7 +371,7 @@ export const editSuperProfile = async (req, res) => {
             company,
             address,
             country,
-            language } = req.boy;
+            language } = req.body;
 
         // get user
         const user = await getUserByIdService(id);
@@ -388,6 +388,47 @@ export const editSuperProfile = async (req, res) => {
         }, { new: true });
 
         res.status(200).json({ message: `super ${id} edited successfully` });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Doing Profile Edits",
+            error: error.message
+        });
+    }
+}
+
+// Edit Client Profile
+export const editClientProfile = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget
+        } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // update user
+        await User.findByIdAndUpdate(id, {
+            firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget
+        }, { new: true, runValidators: true });
+
+        res.status(200).json({ message: `client ${id} edited successfully` });
 
     } catch (error) {
         console.error(error)
