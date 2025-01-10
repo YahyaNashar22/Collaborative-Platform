@@ -509,6 +509,43 @@ export const changeProfilePicture = async (req, res) => {
     }
 }
 
+// Change Scope Of Work -- for client only
+export const changeScopeOfWork = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const scopeOfWork = req.file?.filename;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // delete previous picture
+        if (user && user.scopeOfWork && scopeOfWork) {
+            removeFile(user.scopeOfWork);
+        }
+
+        // update scope of work
+        await User.findByIdAndUpdate(id, { scopeOfWork }, { new: true });
+
+        res.status(200).json({ message: "Scope Of Work updated successfully" });
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Changing Scope Of Work",
+            error: error.message
+        });
+    }
+}
+
+
+
+
+
+
+
+
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
