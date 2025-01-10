@@ -2,8 +2,6 @@ import chalk from "chalk";
 
 import Request from "../models/requestModel.js";
 
-// TODO: ADD NECESSARY SERVICES
-
 // Create request
 export const createRequestService = async ({ clientId, serviceId }) => {
     try {

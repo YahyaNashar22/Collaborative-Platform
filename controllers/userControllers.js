@@ -362,6 +362,19 @@ export const changeProviderAvailability = async (req, res) => {
     }
 }
 
+// Edit Profile
+export const editProfile = async (req, res) => {
+    try {
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Doing Profile Edits",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
