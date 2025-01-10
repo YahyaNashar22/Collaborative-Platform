@@ -362,9 +362,32 @@ export const changeProviderAvailability = async (req, res) => {
     }
 }
 
-// Edit Profile
-export const editProfile = async (req, res) => {
+// Edit Super Profile
+export const editSuperProfile = async (req, res) => {
     try {
+        const id = req.params.id;
+        const { firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language } = req.boy;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // update user
+        await User.findByIdAndUpdate(id, {
+            firstName,
+            lastName,
+            company,
+            address,
+            country,
+            language
+        }, { new: true });
+
+        res.status(200).json({ message: `super ${id} edited successfully` });
 
     } catch (error) {
         console.error(error)
@@ -437,7 +460,9 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-// TODO: Add profile edits
+// TODO: Add profile edits client - provider - super
+// TODO: Edit profile picture - scope of work - cv or company profile
+// TODO: Change Phone number
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
 
