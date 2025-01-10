@@ -89,6 +89,3 @@ export const getAllOtpService = async () => {
         return [];
     }
 }
-
-// TODO: ADD create phone otp
-// TODO: ADD find otp by phone
