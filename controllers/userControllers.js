@@ -331,7 +331,32 @@ export const changeUserBannedStatus = async (req, res) => {
     } catch (error) {
         console.error(error)
         res.status(500).json({
-            message: "Problem Banning Password",
+            message: "Problem Banning User",
+            error: error.message
+        });
+    }
+}
+
+// Provider change availability
+export const changeProviderAvailability = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { availability } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // update user
+        await User.findByIdAndUpdate(id, { availability }, { new: true });
+
+        res.status(200).json({ message: "changed provider availability successfully" });
+
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Changing Availability",
             error: error.message
         });
     }
@@ -400,7 +425,6 @@ export const deleteUser = async (req, res) => {
 }
 
 // TODO: Add profile edits
-// TODO: Add ban user
 // TODO: Add change availability ( for providers )
 // TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
