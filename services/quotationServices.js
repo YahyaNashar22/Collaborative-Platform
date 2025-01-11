@@ -39,3 +39,26 @@ export const getSingleQuotationService = async (id) => {
         console.error(error);
     }
 }
+
+// Delete all quotations for a specific request
+export const deleteAllRequestQuotations = async (requestId) => {
+    try {
+        // Find all quotations for the given requestId
+        const quotations = await Quotation.find({ requestId });
+
+        // Remove files associated with each quotation
+        for (const quotation of quotations) {
+            if (quotation.uploadedFile) {
+                removeFile(quotation.uploadedFile);
+            }
+        }
+
+        // Delete all quotations from the database
+        await Quotation.deleteMany({ requestId });
+
+        console.log(chalk.green.bold("Quotations and associated files deleted successfully."));
+    } catch (error) {
+        console.log(chalk.red.bold("Failed To Delete Quotations!"));
+        console.error(error);
+    }
+}
