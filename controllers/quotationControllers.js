@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import Quotation from "../models/quotationModel.js";
 import { createQuotationService, getSingleQuotationService } from "../services/quotationServices.js";
+import removeFile from "../utils/removeFile.js";
 
 
 // Add Quotation to request
@@ -74,6 +75,8 @@ export const deleteQuotation = async (req, res) => {
         const quotation = await getSingleQuotationService(id);
 
         if (!quotation) return res.status(404).json({ message: "Quotation does not exist" });
+
+        if (quotation && quotation.uploadedFile) removeFile(quotation.uploadedFile);
 
         const deletedQuotation = await Quotation.findByIdAndDelete(id);
 
