@@ -1,4 +1,5 @@
 import Request from "../models/requestModel.js";
+import { getSingleQuotationService } from "../services/quotationServices.js";
 import { changeRequestStageService, createRequestService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
 
 
@@ -75,8 +76,12 @@ export const approveQuotation = async (req, res) => {
 
         // check if request exists
         const request = await getRequestByIdService(requestId);
-
         if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        // check if quotation exists
+        const quotation = await getSingleQuotationService(quotationId);
+        if (!quotation) return res.status(404).json({ message: "Quotation Does Not Exist" });
+
 
         // Approve Quotation
         let updateOperation;
@@ -113,7 +118,6 @@ export const sendBackToClient = async (req, res) => {
 
         // check if request exists
         const request = await getRequestByIdService(requestId);
-
         if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
 
         await changeRequestStageService(requestId, 3);
@@ -130,12 +134,33 @@ export const sendBackToClient = async (req, res) => {
 }
 
 // Client Select Quotation
-// * When client selects quotation and moves to payment gateway( Stage 4 )
+// * When client selects quotation and moves to payment gateway or start project( Stage 4 )
 export const selectQuotation = async (req, res) => {
     try {
+        const { requestId, quotationId } = req.body;
+
+        // check if request exists
+        const request = await getRequestByIdService(requestId);
+        if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        // check if quotation exists
+        const quotation = await getSingleQuotationService(quotationId);
+        if (!quotation) return res.status(404).json({ message: "Quotation Does Not Exist" });
+
+        // mark quotation as selected
+        await Request.findByIdAndUpdate(requestId, { $set: { selectedQuotation: quotationId } }, { new: true });
+
+        await changeRequestStageService(requestId, 4);
+
+        res.status(200).json({
+            message: "Selected Quotation Successfully",
+        })
 
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Selecting Quotation",
+            error: error.message
+        });
     }
 }
 

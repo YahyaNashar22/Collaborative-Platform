@@ -69,3 +69,8 @@ export default Request;
 // 3. providers add quotations and admin approves them.
 // 4. client chooses a quotation and start project or cancels the request.
 // ------------------------Request Stages--------------------------------
+
+
+//-----------------------Remarks For Front End------------------------------
+// at Stage 4 it should only be visible to the selected quotation's provider
+//-----------------------Remarks For Front End------------------------------

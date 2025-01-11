@@ -60,7 +60,7 @@ export const getRequestByIdService = async (id) => {
 // Get All Requests
 export const getAllRequestsService = async () => {
     try {
-        const requests = await Request.find({}).populate("providerId").populate("quotations").populate("approvedQuotations").sort({ createdAt: -1 });
+        const requests = await Request.find({}).populate("providerId").populate("quotations").populate("approvedQuotations").populate("selectedQuotation").sort({ createdAt: -1 });
 
         if (!requests) {
             console.log(chalk.yellow.bold("No requests found"));
