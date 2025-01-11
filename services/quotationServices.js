@@ -3,10 +3,10 @@ import chalk from "chalk";
 import Quotation from "../models/quotationModel.js";
 
 // Create Quotation
-export const createQuotationService = async ({ providerId, amount, message, availableHours }) => {
+export const createQuotationService = async ({ requestId, providerId, amount, message, availableHours, uploadedFile }) => {
     try {
 
-        const quotation = new Quotation({ providerId, amount, message, availableHours });
+        const quotation = new Quotation({ requestId, providerId, amount, message, availableHours, uploadedFile });
 
         await quotation.save();
 

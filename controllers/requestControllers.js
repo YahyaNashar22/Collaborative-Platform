@@ -1,13 +1,9 @@
-import chalk from "chalk";
-
 import Request from "../models/requestModel.js";
-import { createRequestService, getAllRequestsService } from "../services/requestServices.js";
-
-// TODO: COMPLETE THE LOGIC
+import { createRequestService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
 
 
 // Create request
-// * When Client requests a server ( Stage 1)
+// * When Client requests a service ( Stage 1)
 export const createRequest = async (req, res) => {
     try {
         const { clientId, serviceId } = req.body;
@@ -30,11 +26,29 @@ export const createRequest = async (req, res) => {
 
 // Pass request to providers
 // * When admin selects providers and transfers the request to them ( Stage 2 )
-export const passRequestToProviders = async (req, res) => {
+// * providers will be able to see the request only if they are on it
+export const passRequestToProvider = async (req, res) => {
     try {
+        const { requestId, providerId } = req.body;
+
+        // check if request exists
+        const request = await getRequestByIdService(requestId);
+
+        if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        // add provider to request
+        await Request.findByIdAndUpdate(requestId, { $push: { providerId: providerId } }, { new: true });
+
+        return res.status(200).json({
+            message: `provider ${providerId} added successfully to request ${requestId}`
+        });
+
 
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Passing Request To Provider",
+            error: error.message
+        });
     }
 }
 

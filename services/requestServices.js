@@ -18,11 +18,27 @@ export const createRequestService = async ({ clientId, serviceId }) => {
     }
 }
 
+// Get Request By id
+export const getRequestByIdService = async (id) => {
+    try {
+        const request = await Request.findById(id);
+
+        if (!request) {
+            console.log(chalk.red.bold("Request Not Found!"));
+            return null;
+        }
+        return request;
+    } catch (error) {
+        console.log(chalk.red.bold("Failed To Get Request!"));
+        console.error(error);
+    }
+}
+
 
 // Get All Requests
 export const getAllRequestsService = async () => {
     try {
-        const requests = await Request.find({}).sort({ createdAt: -1 });
+        const requests = await Request.find({}).populate("providerId").sort({ createdAt: -1 });
 
         if (!requests) {
             console.log(chalk.yellow.bold("No requests found"));
