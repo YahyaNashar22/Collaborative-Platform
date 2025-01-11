@@ -1,11 +1,12 @@
 import express from "express";
 
 import { upload, uploadClientFiles, uploadProviderFiles } from "../middlewares/multer.js";
-import { changeCvOrCompanyProfile, changePassword, changePhoneNumber, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
+import { changeCvOrCompanyProfile, changePassword, changePhoneNumber, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerAdmin, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 
 userRoutes.post("/new-super", upload.single("image"), registerSuper);
+userRoutes.post("/new-admin", upload.single("image"), registerAdmin);
 userRoutes.post("/new-client", uploadClientFiles, registerClient);
 userRoutes.post("/new-provider", uploadProviderFiles, registerProvider);
 

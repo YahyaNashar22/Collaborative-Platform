@@ -76,6 +76,62 @@ export const registerSuper = async (req, res) => {
     }
 }
 
+// Register New Admin
+export const registerAdmin = async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            company,
+            address,
+            country,
+            language,
+        } = req.body;
+
+        const image = req.file?.filename;
+
+        // Check if email already exists
+        const existingUser = await getUserByEmailService(email);
+        if (existingUser) return res.status(401).json({ message: "email already exists" });
+
+        // hash password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // add user to db
+        const newAdmin = new User({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            profilePicture: image,
+            clients: [],
+            role: "admin"
+        });
+        await newAdmin.save();
+        console.log(chalk.green.bold(`Admin ${firstName} ${lastName} has been registered successfully`));
+
+        return res.status(201).json({
+            message: `Admin ${firstName} ${lastName} Registered Successfully`,
+            payload: newAdmin
+        })
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Registering Admin",
+            error: error.message
+        });
+    }
+}
+
 // Register client
 export const registerClient = async (req, res) => {
     try {
@@ -592,11 +648,6 @@ export const changePhoneNumber = async (req, res) => {
 }
 
 
-
-
-
-
-
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
@@ -679,7 +730,6 @@ export const deleteUser = async (req, res) => {
     }
 }
 
-// TODO: Add register admin --> admin should have his own customers and only the super as provider -- admin can only view
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
 
 
