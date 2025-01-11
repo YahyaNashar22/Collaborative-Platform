@@ -1,6 +1,6 @@
 import Request from "../models/requestModel.js";
 import { getSingleQuotationService } from "../services/quotationServices.js";
-import { changeRequestStageService, createRequestService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
+import { changeRequestStageService, createRequestService, getAllClientRequestsService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
 
 
 // Create request
@@ -193,11 +193,11 @@ export const cancelRequest = async (req, res) => {
 export const getAllRequests = async (req, res) => {
     try {
         const { userId, serviceId, firstName, lastName, phone, name } = req.body;
-        const requests = await getAllRequestsService({  userId, serviceId, firstName, lastName, phone, name });
+        const requests = await getAllRequestsService({ userId, serviceId, firstName, lastName, phone, name });
 
         if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
 
-        return res.status(200).json({ message: "requests found successfully", payload: requests }); s
+        return res.status(200).json({ message: "requests found successfully", payload: requests });
     } catch (error) {
         res.status(500).json({
             message: "Problem Fetching Requests",
@@ -206,21 +206,23 @@ export const getAllRequests = async (req, res) => {
     }
 }
 
-// Get all clients requests -- for client dashboard ( by clientId )
-export const getAllClientRequests = async (req, res) => {
+// Get all client or provider requests -- for client/provider dashboard ( by clientId/providerId )
+// make sure to send the correct logged in userId from the front end
+export const getAllClientOrProviderRequests = async (req, res) => {
     try {
+        const { userId, firstName, lastName, phone, name } = req.body;
+
+        const requests = await getAllClientRequestsService({ userId, firstName, lastName, phone, name });
+
+        if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
+
+        return res.status(200).json({ message: "requests found successfully", payload: requests });
 
     } catch (error) {
-
-    }
-}
-
-// Get all provider requests -- for provider dashboard ( providerId includes id )
-export const getAllProviderRequests = async (req, res) => {
-    try {
-
-    } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Fetching Requests",
+            error: error.message
+        });
     }
 }
 

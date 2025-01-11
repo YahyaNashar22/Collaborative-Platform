@@ -1,6 +1,6 @@
 import express from "express";
 
-import { approveQuotation, cancelRequest, createRequest, getAllRequests, passRequestToProvider, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
+import { approveQuotation, cancelRequest, createRequest, getAllClientOrProviderRequests, getAllRequests, passRequestToProvider, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
 
 const requestRoutes = express.Router();
 
@@ -13,5 +13,6 @@ requestRoutes.patch("/select-quotation", selectQuotation);
 requestRoutes.patch("/cancel-request", cancelRequest);
 
 requestRoutes.post("/get-all", getAllRequests);
+requestRoutes.post("/get-all-client-or-provider", getAllClientOrProviderRequests);
 
 export default requestRoutes;
