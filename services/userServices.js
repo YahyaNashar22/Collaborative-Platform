@@ -33,7 +33,9 @@ export const getAllUsersService = async ({
     email,
     service,
     banned,
-    availability }) => {
+    availability,
+    admin,
+id}) => {
     try {
 
         const query = {};
@@ -46,6 +48,10 @@ export const getAllUsersService = async ({
         if (service) query.services = { $in: [service] };
         if (banned) query.banned = banned;
         if (availability) query.availability = availability;
+        if (admin) query.admin = admin;
+        if (id) query._id = id;
+
+
 
 
         const users = await User.find(query).populate("services").sort({ createdAt: -1 });

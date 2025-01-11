@@ -8,6 +8,8 @@ import removeFile from "../utils/removeFile.js";
 import { otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
+// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
+
 
 // Register New Super
 export const registerSuper = async (req, res) => {
@@ -113,7 +115,6 @@ export const registerAdmin = async (req, res) => {
             country,
             language,
             profilePicture: image,
-            clients: [],
             role: "admin"
         });
         await newAdmin.save();
@@ -648,6 +649,96 @@ export const changePhoneNumber = async (req, res) => {
 }
 
 
+// Add Admin Specific Client
+export const addAdminSpecificClient = async (req, res) => {
+    try {
+        const {
+            firstName,
+            lastName,
+            email,
+            password,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget,
+            admin
+        } = req.body;
+
+        const profilePicture = req.files.profilePicture ? req.files.profilePicture[0].filename : "/uploads/profile.png";
+        const scopeOfWork = req.files.scopeOfWork ? req.files.scopeOfWork[0].filename : null;
+
+        // Check if email already exists
+        const existingUser = await getUserByEmailService(email);
+        if (existingUser) return res.status(401).json({ message: "email already exists" });
+
+        // hash password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(password, salt);
+
+        // add user to db
+        const AdminSpecificClient = new User({
+            firstName,
+            lastName,
+            email,
+            password: hashedPassword,
+            phone,
+            company,
+            address,
+            country,
+            language,
+            howSoonServices,
+            estimatedBudget,
+            profilePicture,
+            scopeOfWork,
+            role: "client",
+            admin
+        });
+        await AdminSpecificClient.save();
+
+        res.status(201).json({
+            message: `Client ${firstName} ${lastName} Created For Admin ${admin}`,
+            payload: AdminSpecificClient
+        })
+
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Adding Admin Specific Client",
+            error: error.message
+        })
+    }
+}
+
+// Add Existing Client To Admin
+export const addExistingClientToAdmin = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { admin } = req.body;
+
+        // get user
+        const user = await getUserByIdService(id);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // add admin id to user
+        await User.findByIdAndUpdate(id, { admin }, { new: true });
+
+        res.status(200).json({
+            message: `Client ${id} added to admin ${admin} successfully`
+        })
+
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({
+            message: "Problem Adding Client to Admin",
+            error: error.messages
+        })
+    }
+}
+
 // Fetch All Users
 export const getAllUsers = async (req, res) => {
     try {
@@ -659,7 +750,9 @@ export const getAllUsers = async (req, res) => {
             email,
             service,
             banned,
-            availability
+            availability,
+            admin,
+            id
         } = req.body;
 
         const users = await getAllUsersService({
@@ -670,7 +763,9 @@ export const getAllUsers = async (req, res) => {
             email,
             service,
             banned,
-            availability
+            availability,
+            admin,
+            id
         });
 
         if (users.length === 0) return res.status(404).json({ message: "No users found!", payload: users });
@@ -729,8 +824,6 @@ export const deleteUser = async (req, res) => {
         });
     }
 }
-
-// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
 
 
 // ----------------------------------------------------------------------

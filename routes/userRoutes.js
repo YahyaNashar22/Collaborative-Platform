@@ -1,7 +1,7 @@
 import express from "express";
 
 import { upload, uploadClientFiles, uploadProviderFiles } from "../middlewares/multer.js";
-import { changeCvOrCompanyProfile, changePassword, changePhoneNumber, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerAdmin, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
+import { addAdminSpecificClient, addExistingClientToAdmin, changeCvOrCompanyProfile, changePassword, changePhoneNumber, changeProfilePicture, changeProviderAvailability, changeScopeOfWork, changeUserBannedStatus, deleteUser, editClientProfile, editProviderProfile, editSuperProfile, getAllUsers, getUserById, login, registerAdmin, registerClient, registerProvider, registerSuper, sendEmail, sendSMS, verifyPassword } from "../controllers/userControllers.js";
 
 const userRoutes = express.Router();
 
@@ -9,6 +9,7 @@ userRoutes.post("/new-super", upload.single("image"), registerSuper);
 userRoutes.post("/new-admin", upload.single("image"), registerAdmin);
 userRoutes.post("/new-client", uploadClientFiles, registerClient);
 userRoutes.post("/new-provider", uploadProviderFiles, registerProvider);
+userRoutes.post("/new-admin-specific-client", uploadClientFiles, addAdminSpecificClient);
 
 userRoutes.post("/log-in", login);
 
@@ -21,6 +22,7 @@ userRoutes.patch("/change-availability/:id", changeProviderAvailability);
 userRoutes.patch("/edit-super/:id", editSuperProfile);
 userRoutes.patch("/edit-client/:id", editClientProfile);
 userRoutes.patch("/edit-provider/:id", editProviderProfile);
+userRoutes.patch("/add-client-to-admin/:id", addExistingClientToAdmin);
 
 userRoutes.patch("/change-profile-picture/:id", upload.single("profilePicture"), changeProfilePicture);
 userRoutes.patch("/change-scope-of-work/:id", upload.single("scopeOfWork"), changeScopeOfWork);

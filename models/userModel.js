@@ -58,15 +58,12 @@ const userSchema = new Schema({
 
     // ------ Attributes for role == admin block ------
     // admin should have his own clients and only the super as provider -- admin can only view
-    clients: [
-        {
-            type: Schema.Types.ObjectId,
-            ref: "User",
-            required: function () {
-                return this.role === "admin";
-            }
-        }
-    ],
+    admin:
+    {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    }
+    ,
 
     // ------ Attributes for role == client || role == provider Block ------
     banned: {
