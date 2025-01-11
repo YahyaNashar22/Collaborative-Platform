@@ -18,6 +18,16 @@ export const createRequestService = async ({ clientId, serviceId }) => {
     }
 }
 
+// add quotation to request
+export const addQuotationToRequestService = async (requestId, quotationId) => {
+    try {
+        await Request.findByIdAndUpdate(requestId, { $addToSet: { quotations: quotationId } });
+    } catch (error) {
+        console.log(chalk.red.bold("Failed To Add Quotation To Request!"));
+        console.error(error);
+    }
+}
+
 // Get Request By id
 export const getRequestByIdService = async (id) => {
     try {

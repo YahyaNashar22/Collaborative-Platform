@@ -65,17 +65,7 @@ export const passRequestToProvider = async (req, res) => {
     }
 }
 
-// Add quotations
-// * When providers submit quotations ( Stage 3 )
-export const addQuotations = async (req, res) => {
-    try {
-
-    } catch (error) {
-
-    }
-}
-
-// Approve Quotations
+// Approve Quotations ( After quotations being created and added in addQuotationToRequest controller)
 // * When admin selects quotations and transfers the request to the client ( Stage 3 )
 export const approveQuotations = async (req, res) => {
     try {

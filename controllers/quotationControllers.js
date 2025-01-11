@@ -2,6 +2,7 @@ import chalk from "chalk";
 import Quotation from "../models/quotationModel.js";
 import { createQuotationService, getSingleQuotationService } from "../services/quotationServices.js";
 import removeFile from "../utils/removeFile.js";
+import { addQuotationToRequestService } from "../services/requestServices.js";
 
 
 // Add Quotation to request
@@ -10,12 +11,14 @@ export const addQuotationToRequest = async (req, res) => {
         const { providerId, amount, message, availableHours, requestId } = req.body;
         const uploadedFile = req.file?.filename;
 
-        // TODO: add the quotation to the request quotations array
-
+        // create quotation
         const quotation = await createQuotationService({ requestId, providerId, amount, message, availableHours, uploadedFile });
 
+        // add quotation to request
+        await addQuotationToRequestService(requestId, quotation._id);
+
         return res.status(201).json({
-            message: "Quotation Created Successfully",
+            message: "Quotation Created And Added To Request Successfully",
             quotation: quotation
         })
 
