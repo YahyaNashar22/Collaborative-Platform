@@ -164,6 +164,31 @@ export const selectQuotation = async (req, res) => {
     }
 }
 
+// Cancel Request -- for client
+export const cancelRequest = async (req, res) => {
+    try {
+        const { requestId } = req.body;
+
+        // check if request exists
+        const request = await getRequestByIdService(requestId);
+        if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        // mark request as canceled
+        await changeRequestStageService(requestId, 4, "canceled");
+
+        res.status(200).json({
+            message: "Canceled Request Successfully",
+        })
+
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Canceling Requests",
+            error: error.message
+        });
+    }
+}
+
 // Get all requests -- for admin
 export const getAllRequests = async (req, res) => {
     try {
@@ -210,7 +235,7 @@ export const getSingleRequest = async (req, res) => {
 
 
 
-// Cancel | Delete request
+//  Delete request
 export const deleteRequest = async (req, res) => {
     try {
 
