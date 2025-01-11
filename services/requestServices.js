@@ -29,6 +29,17 @@ export const addQuotationToRequestService = async (requestId, quotationId) => {
     }
 }
 
+// change request stage
+export const changeRequestStageService = async (requestId, stage) => {
+    try {
+        await Request.findByIdAndUpdate(requestId, { $set: { stage } });
+        console.log(chalk.yellow.bold(`Changed request ${requestId} stage to : ${stage}`));
+    } catch (error) {
+        console.log(chalk.red.bold("Failed To Change Request Stage!"));
+        console.error(error);
+    }
+}
+
 // Get Request By id
 export const getRequestByIdService = async (id) => {
     try {
