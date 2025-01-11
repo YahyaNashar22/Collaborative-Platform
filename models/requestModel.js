@@ -29,7 +29,7 @@ const requestSchema = new Schema(
         },
         status: {
             type: String,
-            enum: ["awaiting admin approval", "awaiting providers quotations", "awaiting admin to review quotations", "awaiting client to choose quotation", "accepted", "canceled"],
+            enum: ["awaiting admin approval", "awaiting providers quotations", "awaiting client to choose quotation", "accepted", "canceled"],
             default: "awaiting admin approval",
             required: true
         },

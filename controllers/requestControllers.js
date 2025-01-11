@@ -51,7 +51,7 @@ export const passRequestToProvider = async (req, res) => {
 
         await Request.findByIdAndUpdate(requestId, updateOperation, { new: true });
 
-        await changeRequestStageService(requestId, 2);
+        await changeRequestStageService(requestId, 2, "awaiting providers quotations");
 
         const action = updateOperation.$pull ? 'removed from' : 'added to';
 
@@ -120,7 +120,7 @@ export const sendBackToClient = async (req, res) => {
         const request = await getRequestByIdService(requestId);
         if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
 
-        await changeRequestStageService(requestId, 3);
+        await changeRequestStageService(requestId, 3, "awaiting client to choose quotation");
 
         res.status(200).json({
             message: "Request sent back to client successfully",
@@ -150,7 +150,7 @@ export const selectQuotation = async (req, res) => {
         // mark quotation as selected
         await Request.findByIdAndUpdate(requestId, { $set: { selectedQuotation: quotationId } }, { new: true });
 
-        await changeRequestStageService(requestId, 4);
+        await changeRequestStageService(requestId, 4, "accepted");
 
         res.status(200).json({
             message: "Selected Quotation Successfully",

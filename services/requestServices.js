@@ -30,9 +30,9 @@ export const addQuotationToRequestService = async (requestId, quotationId) => {
 }
 
 // change request stage
-export const changeRequestStageService = async (requestId, stage) => {
+export const changeRequestStageService = async (requestId, stage, status) => {
     try {
-        await Request.findByIdAndUpdate(requestId, { $set: { stage } });
+        await Request.findByIdAndUpdate(requestId, { $set: { stage, status } }, { runValidators: true });
         console.log(chalk.yellow.bold(`Changed request ${requestId} stage to : ${stage}`));
     } catch (error) {
         console.log(chalk.red.bold("Failed To Change Request Stage!"));
