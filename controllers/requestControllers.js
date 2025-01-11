@@ -192,7 +192,8 @@ export const cancelRequest = async (req, res) => {
 // Get all requests -- for admin
 export const getAllRequests = async (req, res) => {
     try {
-        const requests = await getAllRequestsService();
+        const { userId, serviceId, firstName, lastName, phone, name } = req.body;
+        const requests = await getAllRequestsService({  userId, serviceId, firstName, lastName, phone, name });
 
         if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
 

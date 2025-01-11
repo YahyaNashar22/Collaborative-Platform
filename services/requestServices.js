@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
 import Request from "../models/requestModel.js";
+import mongoose from "mongoose";
 
 // Create request
 export const createRequestService = async ({ clientId, serviceId }) => {
@@ -58,9 +59,78 @@ export const getRequestByIdService = async (id) => {
 
 
 // Get All Requests
-export const getAllRequestsService = async () => {
+export const getAllRequestsService = async ({ userId, serviceId, firstName, lastName, phone, name }) => {
     try {
-        const requests = await Request.find({}).populate("providerId").populate("quotations").populate("approvedQuotations").populate("selectedQuotation").sort({ createdAt: -1 });
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "clientId",
+                    foreignField: "_id",
+                    as: "client"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "providerId",
+                    foreignField: "_id",
+                    as: "provider"
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "serviceDetails"
+                }
+            },
+            {
+                $lookup: {
+                    from: "quotations",
+                    localField: "approvedQuotations",
+                    foreignField: "_id",
+                    as: "approvedQuotations"
+                }
+            },
+            {
+                $lookup: {
+                    from: "quotations",
+                    localField: "selectedQuotation",
+                    foreignField: "_id",
+                    as: "selectedQuotation"
+                }
+            },
+            {
+                $match: {
+
+                    $or: [
+                        userId ? { "client._id": new mongoose.Types.ObjectId(userId) } : {},
+                        userId ? { "provider._id": new mongoose.Types.ObjectId(userId) } : {},
+                        serviceId ? { "serviceDetails._id": new mongoose.Types.ObjectId(serviceId) } : {},
+                        firstName ? { "client.firstName": firstName } : {},
+                        lastName ? { "client.lastName": lastName } : {},
+                        phone ? { "client.phone": phone } : {},
+                        firstName ? { "provider.firstName": firstName } : {},
+                        lastName ? { "provider.lastName": lastName } : {},
+                        phone ? { "provider.phone": phone } : {},
+                        name ? { "service.name": name } : {}
+                    ]
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ];
+        const requests = await Request.aggregate(pipeline);
+        // .populate("clientId")
+        // .populate("providerId")
+        // .populate("serviceId")
+        // .populate("quotations")
+        // .populate("approvedQuotations")
+        // .populate("selectedQuotation")
+        // .sort({ createdAt: -1 });
 
         if (!requests) {
             console.log(chalk.yellow.bold("No requests found"));

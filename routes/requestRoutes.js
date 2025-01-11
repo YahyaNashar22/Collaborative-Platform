@@ -12,6 +12,6 @@ requestRoutes.patch("/send-back-to-client", sendBackToClient);
 requestRoutes.patch("/select-quotation", selectQuotation);
 requestRoutes.patch("/cancel-request", cancelRequest);
 
-requestRoutes.get("/get-all", getAllRequests);
+requestRoutes.post("/get-all", getAllRequests);
 
 export default requestRoutes;
