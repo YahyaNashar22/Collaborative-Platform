@@ -4,7 +4,6 @@ import { createRequest, getAllRequests } from "../controllers/requestControllers
 
 const requestRoutes = express.Router();
 
-// TODO: ADD ENDPOINTS
 requestRoutes.post("/create", createRequest);
 requestRoutes.get("/get-all", getAllRequests);
 

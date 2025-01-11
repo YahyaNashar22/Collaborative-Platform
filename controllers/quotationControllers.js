@@ -7,8 +7,11 @@ import { createQuotationService, getSingleQuotationService } from "../services/q
 export const addQuotationToRequest = async (req, res) => {
     try {
         const { providerId, amount, message, availableHours, requestId } = req.body;
+        const uploadedFile = req.file?.filename;
 
-        const quotation = await createQuotationService({ providerId, amount, message, availableHours });
+        // TODO: add the quotation to the request quotations array
+
+        const quotation = await createQuotationService({ requestId, providerId, amount, message, availableHours, uploadedFile });
 
         return res.status(201).json({
             message: "Quotation Created Successfully",
