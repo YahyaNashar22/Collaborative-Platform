@@ -37,10 +37,23 @@ export const passRequestToProvider = async (req, res) => {
         if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
 
         // add provider to request
-        await Request.findByIdAndUpdate(requestId, { $push: { providerId: providerId } }, { new: true });
+        let updateOperation;
+
+        // check if providerId already exists in the request
+        if (request.providerId.includes(providerId)) {
+            // remove providerId
+            updateOperation = { $pull: { providerId: providerId } };
+        } else {
+            // add providerId
+            updateOperation = { $addToSet: { providerId: providerId } };
+        }
+
+        await Request.findByIdAndUpdate(requestId, updateOperation, { new: true });
+
+        const action = updateOperation.$pull ? 'removed from' : 'added to';
 
         return res.status(200).json({
-            message: `provider ${providerId} added successfully to request ${requestId}`
+            message: `provider ${providerId} successfully ${action} to request ${requestId}`
         });
 
 
