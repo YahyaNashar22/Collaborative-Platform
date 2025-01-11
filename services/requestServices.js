@@ -22,6 +22,7 @@ export const createRequestService = async ({ clientId, serviceId }) => {
 export const addQuotationToRequestService = async (requestId, quotationId) => {
     try {
         await Request.findByIdAndUpdate(requestId, { $addToSet: { quotations: quotationId } });
+        console.log(chalk.green.bold(`Quotation ${quotationId} Added To Request ${requestId} Successfully`));
     } catch (error) {
         console.log(chalk.red.bold("Failed To Add Quotation To Request!"));
         console.error(error);
@@ -48,7 +49,7 @@ export const getRequestByIdService = async (id) => {
 // Get All Requests
 export const getAllRequestsService = async () => {
     try {
-        const requests = await Request.find({}).populate("providerId").sort({ createdAt: -1 });
+        const requests = await Request.find({}).populate("providerId").populate("quotations").sort({ createdAt: -1 });
 
         if (!requests) {
             console.log(chalk.yellow.bold("No requests found"));
