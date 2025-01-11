@@ -229,10 +229,22 @@ export const getAllClientOrProviderRequests = async (req, res) => {
 // Get single request by id
 export const getSingleRequest = async (req, res) => {
     try {
+        const id = req.params.id;
 
+        const request = await getRequestByIdService(id);
+
+        if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        res.status(200).json({
+            message: "request fetched successfully",
+            payload: request
+        })
 
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Fetching Request",
+            error: error.message
+        });
     }
 }
 
