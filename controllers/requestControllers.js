@@ -1,5 +1,5 @@
 import Request from "../models/requestModel.js";
-import { getSingleQuotationService } from "../services/quotationServices.js";
+import { deleteAllRequestQuotations, getSingleQuotationService } from "../services/quotationServices.js";
 import { changeRequestStageService, createRequestService, getAllClientRequestsService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
 
 
@@ -253,8 +253,20 @@ export const getSingleRequest = async (req, res) => {
 //  Delete request
 export const deleteRequest = async (req, res) => {
     try {
+        const id = req.params.id;
 
+        //check if request exist
+        const request = await getRequestByIdService(id);
+        if (!request) return res.status(404).json({ message: "Request Does Not Exist" });
+
+        await deleteAllRequestQuotations(id);
+        await Request.findByIdAndDelete(id);
+
+        res.status(200).json({ message: "Request and all related quotations deleted successfully" });
     } catch (error) {
-
+        res.status(500).json({
+            message: "Problem Deleting Request",
+            error: error.message
+        });
     }
 }

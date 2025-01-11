@@ -1,6 +1,6 @@
 import express from "express";
 
-import { approveQuotation, cancelRequest, createRequest, getAllClientOrProviderRequests, getAllRequests, getSingleRequest, passRequestToProvider, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
+import { approveQuotation, cancelRequest, createRequest, deleteRequest, getAllClientOrProviderRequests, getAllRequests, getSingleRequest, passRequestToProvider, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
 
 const requestRoutes = express.Router();
 
@@ -16,5 +16,7 @@ requestRoutes.patch("/cancel-request", cancelRequest);
 
 requestRoutes.post("/get-all", getAllRequests);
 requestRoutes.post("/get-all-client-or-provider", getAllClientOrProviderRequests);
+
+requestRoutes.delete("/delete/:id", deleteRequest);
 
 export default requestRoutes;
