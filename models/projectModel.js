@@ -65,12 +65,6 @@ const projectSchema = new Schema({
         default: function () {
             return this.stages[0];
         },
-        validate: {
-            validator: function (value) {
-                return this.stages.includes(value);
-            },
-            message: props => `${props.value} is not a valid stage.`
-        }
     },
 },
     {

@@ -39,7 +39,7 @@ export const markProjectAsCompleted = async (req, res) => {
         const project = await getProjectByIdService(id);
         if (!project) return res.status(404).json({ message: "Project Not Found!" });
 
-        const completedProject = await Project.findByIdAndUpdate(id, { status: "completed" }, { new: true });
+        const completedProject = await Project.findByIdAndUpdate(id, { status: "completed" }, { new: true, runValidators: true });
 
         console.log(chalk.yellow.bold(`Project ${project} Marked As Completed`));
 
@@ -64,7 +64,9 @@ export const changeProjectStage = async (req, res) => {
         const project = await getProjectByIdService(id);
         if (!project) return res.status(404).json({ message: "Project Not Found!" });
 
-        const updatedProject = await Project.findByIdAndUpdate(id, { stage }, { new: true });
+        if (!project.stages.includes(stage)) return res.status(401).json({ message: `${stage} is not part of the project stages!` });
+
+        const updatedProject = await Project.findByIdAndUpdate(id, { $set: { stage } }, { new: true });
 
         console.log(chalk.yellow.bold(`Project ${project} Stage Change to ${stage}`));
 
