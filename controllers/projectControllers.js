@@ -6,13 +6,15 @@ import { getAllProjectsService, getProjectByIdService } from "../services/projec
 // Start a project
 export const startProject = async (req, res) => {
     try {
-        const { clientId, providerId, serviceId, amount, status } = req.body;
+        const { clientId, providerId, serviceId, amount, stages, timelines } = req.body;
+
         const project = new Project({
             clientId,
             providerId,
             serviceId,
             amount,
-            status
+            stages,
+            timelines,
         });
         await project.save();
         console.log(chalk.green.bold(`Started new project between ${clientId} and ${providerId}`));
@@ -62,7 +64,7 @@ export const changeProjectStage = async (req, res) => {
         const project = await getProjectByIdService(id);
         if (!project) return res.status(404).json({ message: "Project Not Found!" });
 
-        const updatedProject = await Project.findByIdAndUpdate(id, { stage }, { new: true, runValidators: true });
+        const updatedProject = await Project.findByIdAndUpdate(id, { stage }, { new: true });
 
         console.log(chalk.yellow.bold(`Project ${project} Stage Change to ${stage}`));
 
