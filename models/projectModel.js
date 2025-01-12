@@ -3,8 +3,6 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-// TODO: ADD PROJECT TIMELINE || REQUESTED FILE || Time Line Status || Payment GateAway
-
 const projectSchema = new Schema({
     clientId: {
         type: Schema.Types.ObjectId,

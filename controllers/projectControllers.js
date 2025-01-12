@@ -146,3 +146,10 @@ export const deleteProject = async (req, res) => {
         });
     }
 }
+
+
+// TODO: Add Payment Integration
+// TODO: Add Request Files -- mark isFilesRequested as true -- sends email
+// TODO: Add Upload Files -- upload files and mark isFilesUploaded true -- sends email -- reminder email sent if pass 3 days
+// TODO: Add Delete Files When Deleting Project
+// TODO: 
