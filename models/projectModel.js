@@ -59,6 +59,13 @@ const projectSchema = new Schema({
             message: "Timelines array length must match stages array length."
         }
     },
+    currentTimeLine: {
+        type: String,
+        required: true,
+        default: function () {
+            return this.timelines[0];
+        }
+    },
     stage: {
         type: String,
         required: true,

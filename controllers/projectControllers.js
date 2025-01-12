@@ -66,7 +66,9 @@ export const changeProjectStage = async (req, res) => {
 
         if (!project.stages.includes(stage)) return res.status(401).json({ message: `${stage} is not part of the project stages!` });
 
-        const updatedProject = await Project.findByIdAndUpdate(id, { $set: { stage } }, { new: true });
+        const updatedTimelineIndex = project.stages.indexOf(stage);
+
+        const updatedProject = await Project.findByIdAndUpdate(id, { $set: { stage, currentTimeLine: project.timelines[updatedTimelineIndex] } }, { new: true });
 
         console.log(chalk.yellow.bold(`Project ${project} Stage Change to ${stage}`));
 
