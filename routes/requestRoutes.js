@@ -1,10 +1,11 @@
 import express from "express";
 
-import { approveQuotation, cancelRequest, createRequest, deleteRequest, getAllClientOrProviderRequests, getAllRequests, getSingleRequest, passRequestToProvider, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
+import { approveQuotation, cancelRequest, createRequest, deleteRequest, getAllClientOrProviderRequests, getAllRequests, getSingleRequest, passRequestToProvider, requestRequestMeeting, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
 
 const requestRoutes = express.Router();
 
 requestRoutes.post("/create", createRequest);
+requestRoutes.post("/request-meeting/:id", requestRequestMeeting);
 
 requestRoutes.get("/get-single/:id", getSingleRequest);
 
