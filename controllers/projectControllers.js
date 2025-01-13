@@ -7,7 +7,7 @@ import removeFile from "../utils/removeFile.js";
 // Start a project
 export const startProject = async (req, res) => {
     try {
-        const { clientId, providerId, serviceId, amount, stages, timelines } = req.body;
+        const { clientId, providerId, serviceId, amount, stages, timelines, availableHours } = req.body;
 
         const project = new Project({
             clientId,
@@ -16,6 +16,7 @@ export const startProject = async (req, res) => {
             amount,
             stages,
             timelines,
+            availableHours
         });
         await project.save();
         console.log(chalk.green.bold(`Started new project between ${clientId} and ${providerId}`));
@@ -158,6 +159,51 @@ export const deleteFiles = async (req, res) => {
     }
 }
 
+// Send Project Ticket -- sent from client or provider to admin
+// used to send any additional inquiry, remark, complaints
+export const sendProjectTicket = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { subject, body } = req.body;
+
+        // get project
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        // TODO: Add Ticket Template Here ( email )
+
+        res.status(200).json({ message: "Ticket Sent Successfully " });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Sending Ticket",
+            error: error.message
+        });
+    }
+}
+
+// Request Project Meeting
+export const requestProjectMeeting = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const { selectedTime } = req.body;
+
+        // get project
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        // TODO: Add Request Meeting Template Here ( email )
+
+        res.status(200).json({ message: "Meeting Requested Successfully " });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Requesting Meeting",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Projects
 // ? can filter to select only client or provider projects
 // ? can filter to select only completed or in_progress projects
@@ -226,5 +272,4 @@ export const deleteProject = async (req, res) => {
 
 
 // TODO: Add Payment Integration -- pay button for client ( pays admin ) -- pay button for admin ( pays provider )
-// TODO: Add Delete Files When Deleting Project
 // TODO: Add Project Ticket ( projectId - subject - description ) ( sends email )

@@ -72,7 +72,8 @@ export const otpTemplate = (receiverEmail, otp) => {
 }
 
 
-// TODO: Add files requested template
-// TODO: Add files uploaded template
-// TODO: Add reminder template
-// TODO: Add Ticket template
+// TODO: Add files requested template -- inside it client (name - phone - email ), provider(name - phone - email ), project id.
+// TODO: Add files uploaded template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id.
+// TODO: Add reminder template -- should have project id or request id, reminder message.
+// TODO: Add Ticket template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id, subject and body.
+// TODO: Add Request Meeting template -- should have inside it client (name - phone - email ), provider (name - phone - email ), project id, time requested.

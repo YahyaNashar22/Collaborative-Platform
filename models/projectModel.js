@@ -71,6 +71,11 @@ const projectSchema = new Schema({
             return this.stages[0];
         },
     },
+    // meeting hours
+    availableHours: [{
+        type: String,
+        required: false
+    }],
 },
     {
         timestamps: true,
