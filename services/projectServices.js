@@ -5,7 +5,7 @@ import Project from "../models/projectModel.js";
 
 export const getProjectByIdService = async (id) => {
     try {
-        const project = await Project.findById(id);
+        const project = await Project.findById(id).populate("clientId").populate("providerId").populate("serviceId");
         console.log(chalk.yellow.bold(`project fetched by id --> ${project}`));
         return project;
     } catch (error) {
