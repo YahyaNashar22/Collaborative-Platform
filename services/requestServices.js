@@ -217,3 +217,82 @@ export const getAllClientRequestsService = async ({ userId, firstName, lastName,
         console.error(error);
     }
 }
+
+// get all requests -- for provider
+export const getAllProviderRequestsService = async ({ userId, firstName, lastName, phone, name }) => {
+    try {
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "clientId",
+                    foreignField: "_id",
+                    as: "client"
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "providerId",
+                    foreignField: "_id",
+                    as: "provider"
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "serviceDetails"
+                }
+            },
+            {
+                $lookup: {
+                    from: "quotations",
+                    localField: "approvedQuotations",
+                    foreignField: "_id",
+                    as: "approvedQuotations"
+                }
+            },
+            {
+                $lookup: {
+                    from: "quotations",
+                    localField: "selectedQuotation",
+                    foreignField: "_id",
+                    as: "selectedQuotation"
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        { "provider._id": new mongoose.Types.ObjectId(userId) },
+                        {
+                            $or: [
+                                firstName ? { "client.firstName": firstName } : {},
+                                lastName ? { "client.lastName": lastName } : {},
+                                phone ? { "client.phone": phone } : {},
+                                name ? { "service.name": name } : {}
+                            ]
+                        }
+                    ]
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ];
+        const requests = await Request.aggregate(pipeline);
+
+        if (!requests) {
+            console.log(chalk.yellow.bold("No requests found"));
+            return [];
+        }
+
+        console.log(chalk.yellow.bold("Requests found!"));
+        return requests;
+
+    } catch (error) {
+        console.log(chalk.red.bold("Failed To Fetch Requests!"));
+        console.error(error);
+    }
+}

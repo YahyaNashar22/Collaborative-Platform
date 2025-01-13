@@ -1,6 +1,6 @@
 import Request from "../models/requestModel.js";
 import { deleteAllRequestQuotations, getSingleQuotationService } from "../services/quotationServices.js";
-import { changeRequestStageService, createRequestService, getAllClientRequestsService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
+import { changeRequestStageService, createRequestService, getAllClientRequestsService, getAllProviderRequestsService, getAllRequestsService, getRequestByIdService } from "../services/requestServices.js";
 
 
 // Create request
@@ -206,13 +206,33 @@ export const getAllRequests = async (req, res) => {
     }
 }
 
-// Get all client or provider requests -- for client/provider dashboard ( by clientId/providerId )
+// Get all client requests -- for client dashboard ( by clientId )
 // make sure to send the correct logged in userId from the front end
-export const getAllClientOrProviderRequests = async (req, res) => {
+export const getAllClientRequests = async (req, res) => {
     try {
         const { userId, firstName, lastName, phone, name } = req.body;
 
         const requests = await getAllClientRequestsService({ userId, firstName, lastName, phone, name });
+
+        if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
+
+        return res.status(200).json({ message: "requests found successfully", payload: requests });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Fetching Requests",
+            error: error.message
+        });
+    }
+}
+
+// Get all provider requests -- for provider dashboard ( by providerId )
+// make sure to send the correct logged in userId from the front end
+export const getAllProviderRequests = async (req, res) => {
+    try {
+        const { userId, firstName, lastName, phone, name } = req.body;
+
+        const requests = await getAllProviderRequestsService({ userId, firstName, lastName, phone, name });
 
         if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
 

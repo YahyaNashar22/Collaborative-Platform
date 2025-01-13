@@ -204,13 +204,13 @@ export const requestProjectMeeting = async (req, res) => {
     }
 }
 
-// Fetch All Projects
+// Fetch All Projects -- admin
 // ? can filter to select only client or provider projects
 // ? can filter to select only completed or in_progress projects
 export const getAllProjects = async (req, res) => {
     try {
-        const { clientId, providerId, status } = req.body;
-        const projects = await getAllProjectsService({ clientId, providerId, status });
+        const { userId, serviceId, firstName, lastName, phone, name, status } = req.body;
+        const projects = await getAllProjectsService({ userId, serviceId, firstName, lastName, phone, name, status });
 
         if (!projects || projects.length == 0) return res.status(404).json({ message: "No Projects Found!" });
 
