@@ -1,6 +1,7 @@
 import express from "express";
-import { changeProjectStage, checkProjectFilesState, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, startProject, uploadFiles } from "../controllers/projectControllers.js";
+import { changeProjectStage, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, startProject, uploadFiles } from "../controllers/projectControllers.js";
 import { upload } from "../middlewares/multer.js";
+import checkProjectFilesState from "../middlewares/checkProjectFileState.js";
 
 const projectRoutes = express.Router();
 
