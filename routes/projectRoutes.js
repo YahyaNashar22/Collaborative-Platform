@@ -1,5 +1,5 @@
 import express from "express";
-import { changeProjectStage, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, startProject, uploadFiles } from "../controllers/projectControllers.js";
+import { changeProjectStage, deleteFiles, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, startProject, uploadFiles } from "../controllers/projectControllers.js";
 import { upload } from "../middlewares/multer.js";
 import checkProjectFilesState from "../middlewares/checkProjectFileState.js";
 
@@ -12,6 +12,7 @@ projectRoutes.patch("/mark-as-complete/:id", markProjectAsCompleted);
 projectRoutes.patch("/change-stage/:id", changeProjectStage);
 projectRoutes.patch("/request-files/:id", requestFiles);
 projectRoutes.patch("/upload-files/:id", checkProjectFilesState, upload.single("projectFiles"), uploadFiles);
+projectRoutes.patch("/delete-files/:id", deleteFiles);
 
 projectRoutes.get("/get-single/:id", getProjectById);
 

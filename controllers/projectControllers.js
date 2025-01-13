@@ -133,6 +133,31 @@ export const uploadFiles = async (req, res) => {
     }
 }
 
+// Delete Files
+export const deleteFiles = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // get project
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        if (!project.isUploadedFiles) return res.status(400).json({ message: "Files haven't been uploaded" });
+
+        if (project.projectFiles) removeFile(project.projectFiles);
+
+        await Project.findByIdAndUpdate(id, { $set: { isUploadedFiles: false } }, { new: true });
+
+        res.status(200).json({ message: "Files Deleted Successfully" });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Deleting Files",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Projects
 // ? can filter to select only client or provider projects
 // ? can filter to select only completed or in_progress projects
