@@ -248,8 +248,6 @@ export const getSingleRequest = async (req, res) => {
     }
 }
 
-
-
 //  Delete request
 export const deleteRequest = async (req, res) => {
     try {

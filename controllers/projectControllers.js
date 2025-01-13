@@ -2,6 +2,7 @@ import chalk from "chalk";
 
 import Project from "../models/projectModel.js";
 import { getAllProjectsService, getProjectByIdService } from "../services/projectServices.js";
+import removeFile from "../utils/removeFile.js";
 
 // Start a project
 export const startProject = async (req, res) => {
@@ -61,6 +62,7 @@ export const changeProjectStage = async (req, res) => {
         const id = req.params.id;
         const { stage } = req.body;
 
+        // get projects
         const project = await getProjectByIdService(id);
         if (!project) return res.status(404).json({ message: "Project Not Found!" });
 
@@ -79,6 +81,29 @@ export const changeProjectStage = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             message: "Problem Changing Project Stage",
+            error: error.message
+        });
+    }
+}
+
+// Request Files -- provider requests files from client
+export const requestFiles = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        // get project
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        if (project.isRequestedFiles) return res.status(400).json({ message: "Files already requested" });
+
+        await Project.findByIdAndUpdate(id, { $set: { isRequestedFiles: true } }, { new: true });
+
+        res.status(200).json({ message: "Files Requested Successfully" });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Requesting Files",
             error: error.message
         });
     }
@@ -133,6 +158,8 @@ export const deleteProject = async (req, res) => {
 
         if (!project) return res.status(404).json({ message: "Project does not exist" });
 
+        if (project && project.projectFiles) removeFile(project.projectFiles);
+
         const deletedProject = await Project.findByIdAndDelete(id);
 
         return res.status(200).json({
@@ -148,8 +175,8 @@ export const deleteProject = async (req, res) => {
 }
 
 
-// TODO: Add Payment Integration
+// TODO: Add Payment Integration -- pay button for client ( pays admin ) -- pay button for admin ( pays provider )
 // TODO: Add Request Files -- mark isFilesRequested as true -- sends email
 // TODO: Add Upload Files -- upload files and mark isFilesUploaded true -- sends email -- reminder email sent if pass 3 days
 // TODO: Add Delete Files When Deleting Project
-// TODO: 
+// TODO: Add Project Ticket ( projectId - subject - description ) ( sends email )
