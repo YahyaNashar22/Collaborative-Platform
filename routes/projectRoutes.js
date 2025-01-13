@@ -1,5 +1,5 @@
 import express from "express";
-import { changeProjectStage, deleteFiles, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, sendProjectTicket, startProject, uploadFiles } from "../controllers/projectControllers.js";
+import { changeProjectStage, deleteFiles, deleteProject, getAllProjects, getProjectById, markProjectAsCompleted, requestFiles, requestProjectMeeting, sendProjectTicket, startProject, uploadFiles } from "../controllers/projectControllers.js";
 import { upload } from "../middlewares/multer.js";
 import checkProjectFilesState from "../middlewares/checkProjectFileState.js";
 
@@ -7,7 +7,8 @@ const projectRoutes = express.Router();
 
 projectRoutes.post("/start", startProject);
 projectRoutes.post("/get-all", getAllProjects);
-projectRoutes.post("/send-ticket", sendProjectTicket);
+projectRoutes.post("/send-ticket/:id", sendProjectTicket);
+projectRoutes.post("/request-meeting/:id", requestProjectMeeting);
 
 
 projectRoutes.patch("/mark-as-complete/:id", markProjectAsCompleted);
