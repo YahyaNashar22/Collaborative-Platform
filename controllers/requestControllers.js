@@ -212,6 +212,8 @@ export const getAllClientRequests = async (req, res) => {
     try {
         const { userId, firstName, lastName, phone, name } = req.body;
 
+        if (!userId) return res.status(401).json({ message: "userId must be provided" });
+
         const requests = await getAllClientRequestsService({ userId, firstName, lastName, phone, name });
 
         if (!requests || requests.length == 0) return res.status(404).json({ message: "no requests available", payload: [] });
@@ -231,6 +233,8 @@ export const getAllClientRequests = async (req, res) => {
 export const getAllProviderRequests = async (req, res) => {
     try {
         const { userId, firstName, lastName, phone, name } = req.body;
+
+        if (!userId) return res.status(401).json({ message: "userId must be provided" });
 
         const requests = await getAllProviderRequestsService({ userId, firstName, lastName, phone, name });
 

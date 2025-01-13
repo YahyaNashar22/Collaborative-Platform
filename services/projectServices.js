@@ -16,6 +16,7 @@ export const getProjectByIdService = async (id) => {
     }
 }
 
+// get all projects service for admin
 export const getAllProjectsService = async ({ userId, serviceId, firstName, lastName, phone, name, status }) => {
     try {
         const pipeline = [
@@ -76,6 +77,104 @@ export const getAllProjectsService = async ({ userId, serviceId, firstName, last
 
                         },
 
+                        serviceId ? { "serviceId": new mongoose.Types.ObjectId(serviceId) } : {},
+                        name ? { "serviceDetails.name": name } : {},
+                        status ? { "status": status } : {}
+                    ]
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ]
+
+
+        const projects = await Project.aggregate(pipeline);
+        console.log(chalk.yellow.bold(`projects fetched successfully`));
+        return projects;
+    } catch (error) {
+        console.log(chalk.red.bold("problem fetching projects"));
+        console.error(error);
+        return [];
+    }
+}
+
+// get all projects service for client
+export const getAllClientProjectsService = async ({ userId, serviceId, firstName, lastName, phone, name, status }) => {
+    try {
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "providerId",
+                    foreignField: "_id",
+                    as: "provider"
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "serviceDetails"
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        userId ? { "clientId": new mongoose.Types.ObjectId(userId) } : {},
+                        firstName ? { "provider.firstName": firstName } : {},
+                        lastName ? { "provider.lastName": lastName } : {},
+                        phone ? { "provider.phone": phone } : {},
+                        serviceId ? { "serviceId": new mongoose.Types.ObjectId(serviceId) } : {},
+                        name ? { "serviceDetails.name": name } : {},
+                        status ? { "status": status } : {}
+                    ]
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            }
+        ]
+
+
+        const projects = await Project.aggregate(pipeline);
+        console.log(chalk.yellow.bold(`projects fetched successfully`));
+        return projects;
+    } catch (error) {
+        console.log(chalk.red.bold("problem fetching projects"));
+        console.error(error);
+        return [];
+    }
+}
+
+// get all projects service for client
+export const getAllProviderProjectsService = async ({ userId, serviceId, firstName, lastName, phone, name, status }) => {
+    try {
+        const pipeline = [
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "clientId",
+                    foreignField: "_id",
+                    as: "client"
+                }
+            },
+            {
+                $lookup: {
+                    from: "services",
+                    localField: "serviceId",
+                    foreignField: "_id",
+                    as: "serviceDetails"
+                }
+            },
+            {
+                $match: {
+                    $and: [
+                        userId ? { "providerId": new mongoose.Types.ObjectId(userId) } : {},
+                        firstName ? { "client.firstName": firstName } : {},
+                        lastName ? { "client.lastName": lastName } : {},
+                        phone ? { "client.phone": phone } : {},
                         serviceId ? { "serviceId": new mongoose.Types.ObjectId(serviceId) } : {},
                         name ? { "serviceDetails.name": name } : {},
                         status ? { "status": status } : {}

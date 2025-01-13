@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import Project from "../models/projectModel.js";
-import { getAllProjectsService, getProjectByIdService } from "../services/projectServices.js";
+import { getAllClientProjectsService, getAllProjectsService, getAllProviderProjectsService, getProjectByIdService } from "../services/projectServices.js";
 import removeFile from "../utils/removeFile.js";
 
 // Start a project
@@ -205,12 +205,56 @@ export const requestProjectMeeting = async (req, res) => {
 }
 
 // Fetch All Projects -- admin
-// ? can filter to select only client or provider projects
-// ? can filter to select only completed or in_progress projects
 export const getAllProjects = async (req, res) => {
     try {
         const { userId, serviceId, firstName, lastName, phone, name, status } = req.body;
         const projects = await getAllProjectsService({ userId, serviceId, firstName, lastName, phone, name, status });
+
+        if (!projects || projects.length == 0) return res.status(404).json({ message: "No Projects Found!" });
+
+        return res.status(200).json({
+            message: "Projects fetched successfully",
+            payload: projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Fetching Projects",
+            error: error.message
+        });
+    }
+}
+
+// Fetch All Projects -- client
+export const getAllClientProjects = async (req, res) => {
+    try {
+        const { userId, serviceId, firstName, lastName, phone, name, status } = req.body;
+
+        if (!userId) return res.status(401).json({ message: "userId must be provided" });
+
+        const projects = await getAllClientProjectsService({ userId, serviceId, firstName, lastName, phone, name, status });
+
+        if (!projects || projects.length == 0) return res.status(404).json({ message: "No Projects Found!" });
+
+        return res.status(200).json({
+            message: "Projects fetched successfully",
+            payload: projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Fetching Projects",
+            error: error.message
+        });
+    }
+}
+
+// Fetch All Projects -- providers
+export const getAllProviderProjects = async (req, res) => {
+    try {
+        const { userId, serviceId, firstName, lastName, phone, name, status } = req.body;
+
+        if (!userId) return res.status(401).json({ message: "userId must be provided" });
+
+        const projects = await getAllProviderProjectsService({ userId, serviceId, firstName, lastName, phone, name, status });
 
         if (!projects || projects.length == 0) return res.status(404).json({ message: "No Projects Found!" });
 

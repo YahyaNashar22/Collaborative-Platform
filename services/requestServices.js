@@ -166,14 +166,6 @@ export const getAllClientRequestsService = async ({ userId, firstName, lastName,
             {
                 $lookup: {
                     from: "users",
-                    localField: "clientId",
-                    foreignField: "_id",
-                    as: "client"
-                }
-            },
-            {
-                $lookup: {
-                    from: "users",
                     localField: "providerId",
                     foreignField: "_id",
                     as: "provider"
@@ -206,15 +198,11 @@ export const getAllClientRequestsService = async ({ userId, firstName, lastName,
             {
                 $match: {
                     $and: [
-                        { "client._id": new mongoose.Types.ObjectId(userId) },
-                        {
-                            $or: [
-                                firstName ? { "provider.firstName": firstName } : {},
-                                lastName ? { "provider.lastName": lastName } : {},
-                                phone ? { "provider.phone": phone } : {},
-                                name ? { "serviceDetails.name": name } : {}
-                            ]
-                        }
+                        userId ? { "clientId": new mongoose.Types.ObjectId(userId) } : {},
+                        firstName ? { "provider.firstName": firstName } : {},
+                        lastName ? { "provider.lastName": lastName } : {},
+                        phone ? { "provider.phone": phone } : {},
+                        name ? { "serviceDetails.name": name } : {}
                     ]
                 }
             },
@@ -252,14 +240,6 @@ export const getAllProviderRequestsService = async ({ userId, firstName, lastNam
             },
             {
                 $lookup: {
-                    from: "users",
-                    localField: "providerId",
-                    foreignField: "_id",
-                    as: "provider"
-                }
-            },
-            {
-                $lookup: {
                     from: "services",
                     localField: "serviceId",
                     foreignField: "_id",
@@ -285,15 +265,11 @@ export const getAllProviderRequestsService = async ({ userId, firstName, lastNam
             {
                 $match: {
                     $and: [
-                        { "provider._id": new mongoose.Types.ObjectId(userId) },
-                        {
-                            $or: [
-                                firstName ? { "client.firstName": firstName } : {},
-                                lastName ? { "client.lastName": lastName } : {},
-                                phone ? { "client.phone": phone } : {},
-                                name ? { "serviceDetails.name": name } : {}
-                            ]
-                        }
+                        userId ? { "providerId": new mongoose.Types.ObjectId(userId) } : {},
+                        firstName ? { "client.firstName": firstName } : {},
+                        lastName ? { "client.lastName": lastName } : {},
+                        phone ? { "client.phone": phone } : {},
+                        name ? { "serviceDetails.name": name } : {}
                     ]
                 }
             },
