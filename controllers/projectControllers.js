@@ -109,6 +109,30 @@ export const requestFiles = async (req, res) => {
     }
 }
 
+// Upload Files -- client uploads files
+export const uploadFiles = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const projectFiles = req.file?.filename;
+
+        // get project
+        const project = await getProjectByIdService(id);
+        if (!project) return res.status(404).json({ message: "Project Not Found!" });
+
+        if (project.isUploadedFiles) return res.status(400).json({ message: "Files already uploaded" });
+
+        await Project.findByIdAndUpdate(id, { $set: { isUploadedFiles: true, projectFiles } }, { new: true });
+
+        res.status(200).json({ message: "Files Uploaded Successfully" });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Problem Uploading Files",
+            error: error.message
+        });
+    }
+}
+
 // Fetch All Projects
 // ? can filter to select only client or provider projects
 // ? can filter to select only completed or in_progress projects
@@ -173,6 +197,28 @@ export const deleteProject = async (req, res) => {
         });
     }
 }
+
+// check if project files are already uploaded
+export const checkProjectFilesState = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const project = await getProjectByIdService(id);
+
+        if (!project) {
+            return res.status(404).json({ message: "Project Not Found!" });
+        }
+
+        if (project.isUploadedFiles) {
+            return res.status(400).json({ message: "Files already uploaded" });
+        }
+
+        // If project is found and files aren't uploaded yet, proceed
+        next();
+    } catch (error) {
+        res.status(500).json({ message: "Server Error", error: error.message });
+    }
+};
+
 
 
 // TODO: Add Payment Integration -- pay button for client ( pays admin ) -- pay button for admin ( pays provider )
