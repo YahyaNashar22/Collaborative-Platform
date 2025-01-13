@@ -45,17 +45,39 @@ export const getAllProjectsService = async ({ userId, serviceId, firstName, last
             },
             {
                 $match: {
-                    $or: [
-                        userId ? { "client._id": new mongoose.Types.ObjectId(userId) } : {},
-                        userId ? { "provider._id": new mongoose.Types.ObjectId(userId) } : {},
-                        serviceId ? { "serviceDetails._id": new mongoose.Types.ObjectId(serviceId) } : {},
-                        firstName ? { "client.firstName": firstName } : {},
-                        lastName ? { "client.lastName": lastName } : {},
-                        phone ? { "client.phone": phone } : {},
-                        firstName ? { "provider.firstName": firstName } : {},
-                        lastName ? { "provider.lastName": lastName } : {},
-                        phone ? { "provider.phone": phone } : {},
-                        name ? { "service.name": name } : {},
+                    $and: [
+                        {
+                            $and: [
+                                {
+                                    $or: [
+                                        userId ? { "client._id": new mongoose.Types.ObjectId(userId) } : {},
+                                        userId ? { "provider._id": new mongoose.Types.ObjectId(userId) } : {},
+                                    ]
+                                },
+                                {
+                                    $or: [
+                                        firstName ? { "client.firstName": firstName } : {},
+                                        firstName ? { "provider.firstName": firstName } : {},
+                                    ]
+                                },
+                                {
+                                    $or: [
+                                        lastName ? { "client.lastName": lastName } : {},
+                                        lastName ? { "provider.lastName": lastName } : {},
+                                    ]
+                                },
+                                {
+                                    $or: [
+                                        phone ? { "client.phone": phone } : {},
+                                        phone ? { "provider.phone": phone } : {},
+                                    ]
+                                }
+                            ]
+
+                        },
+
+                        serviceId ? { "serviceId": new mongoose.Types.ObjectId(serviceId) } : {},
+                        name ? { "serviceDetails.name": name } : {},
                         status ? { "status": status } : {}
                     ]
                 }
