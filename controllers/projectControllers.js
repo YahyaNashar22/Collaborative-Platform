@@ -316,3 +316,5 @@ export const deleteProject = async (req, res) => {
 
 
 // TODO: Add Payment Integration -- pay button for client ( pays admin ) -- pay button for admin ( pays provider )
+
+// TODO: Add reminder logic
