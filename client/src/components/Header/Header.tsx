@@ -1,7 +1,10 @@
+import styles from "./Header.module.css";
 
 const Header = () => {
   return (
-    <div>Header</div>
+    <head className={styles.wrapper}>
+
+    </head>
   )
 }
 
