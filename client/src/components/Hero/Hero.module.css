@@ -1,0 +1,128 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 120px;
+  background-color: var(--darker-white);
+  column-gap:50px;
+}
+
+.textContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 20px;
+  font-weight: normal;
+  z-index: 1;
+}
+
+.heroText {
+  font-size: 4rem;
+  word-spacing: 30px;
+}
+
+.circled {
+  position: relative;
+}
+
+.circle {
+  position: absolute;
+  height: 50px;
+  width: 100%;
+  border: 4px solid var(--deep-purple);
+  border-radius: 100%;
+  left: -30px;
+  bottom: 10px;
+  transform: rotate(-4deg);
+}
+
+.soft {
+  font-weight: 400;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin: auto 30px;
+}
+
+.dots span {
+  width: 24px;
+  height: 24px;
+  background-color: var(--deep-purple);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.arrow {
+  width: 240px;
+}
+
+.btnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 20px;
+  align-self: flex-start;
+}
+
+.expert {
+  background-color: var(--light-grey);
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-decoration: none;
+  text-align: center;
+  color: var(--deep-shade-black);
+  font-weight: bold;
+  opacity: 0.8;
+  transition: 0.3s ease-in-out;
+}
+
+.client {
+  background-color: var(--deep-purple);
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-decoration: none;
+  text-align: center;
+  color: var(--white);
+  font-weight: bold;
+  opacity: 0.8;
+  transition: 0.3s ease-in-out;
+}
+
+.expert:hover {
+  opacity: 1;
+}
+
+.client:hover {
+  opacity: 1;
+}
+
+.heroImage {
+  z-index: 3;
+  position: relative;
+}
+
+.diagonalLine {
+  position: absolute;
+  right: 30%;
+  top: 0px;
+  height: 600px;
+  z-index: 1;
+}
+
+.leftArrow {
+  position: absolute;
+  right: 0;
+}
+
+.purpleArrow {
+  position: absolute;
+  bottom: 0;
+  left: -200px;
+}

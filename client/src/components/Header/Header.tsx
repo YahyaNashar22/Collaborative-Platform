@@ -1,11 +1,14 @@
 import styles from "./Header.module.css";
 
+import { useNavigate } from "react-router-dom";
+
 import logo from "../../assets/icons/Logo.png";
 
 const Header = () => {
+  const navigator = useNavigate();
   return (
     <header className={styles.wrapper}>
-      <div className={styles.left}>
+      <div className={styles.left} onClick={() => navigator("/")}>
         <img src={logo} width={80} height={64} alt="logo" />
         <ul className={styles.navLinks}>
           <li className={styles.navLink}>

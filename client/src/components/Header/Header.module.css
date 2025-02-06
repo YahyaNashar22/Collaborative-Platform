@@ -5,6 +5,7 @@
   padding: 20px 40px;
   position: fixed;
   width: 100%;
+  z-index: 100;
 }
 
 .left {
