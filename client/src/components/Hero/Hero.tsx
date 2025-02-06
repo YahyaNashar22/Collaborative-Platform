@@ -10,7 +10,7 @@ import diagonalLine from "../../assets/icons/diagonal_line.png";
 
 const Hero = () => {
   return (
-    <section className={styles.wrapper}>
+    <section className={styles.wrapper} id="join">
       <div className={styles.textContainer}>
         <h1 className={styles.heroText}>
           <span className={styles.circled}>

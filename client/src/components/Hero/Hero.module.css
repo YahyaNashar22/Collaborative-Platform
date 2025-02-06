@@ -5,7 +5,8 @@
   justify-content: center;
   padding-top: 120px;
   background-color: var(--darker-white);
-  column-gap:50px;
+  column-gap: 50px;
+  height: 100%;
 }
 
 .textContainer {
@@ -123,6 +124,6 @@
 
 .purpleArrow {
   position: absolute;
-  bottom: 0;
+  bottom: -10px;
   left: -200px;
 }

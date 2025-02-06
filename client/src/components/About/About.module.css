@@ -1,0 +1,36 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--deep-shade-black);
+  padding: 20px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 50px;
+  width: 600px;
+  z-index: 1;
+}
+
+.header {
+  color: var(--white);
+  font-size: 2rem;
+}
+
+.purple {
+    color: var(--deep-purple);
+}
+
+.bio {
+  color: var(--darker-white);
+  font-weight: 600;
+}
+
+.lines {
+  position: absolute;
+  left:-170px;
+  top: -300px;
+}
