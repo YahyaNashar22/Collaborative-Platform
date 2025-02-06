@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 50px;
+  background-color: var(--light-purple);
+  color: var(--white);
+  padding: 40px;
+}
+
+.quote {
+  font-size: 1.8rem;
+  width: 700px;
+  font-weight: 600;
+}
