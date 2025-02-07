@@ -36,7 +36,7 @@ const Hero = () => {
           <Link to={"/"} className={styles.expert}>
             I'm an Expert
           </Link>
-          <Link to={"/"} className={styles.client}>
+          <Link to={"/client-sign-up"} className={styles.client}>
             I Need Help
           </Link>
         </div>
