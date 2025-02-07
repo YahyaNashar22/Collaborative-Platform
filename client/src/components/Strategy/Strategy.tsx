@@ -53,6 +53,7 @@ const Strategy = () => {
               BUSINESS
               <br /> EMPOWERMENT
             </p>
+            <span className={styles.purpleDiv}></span>
           </div>
           <p className={styles.lower}>
             We focus on empowering businesses with a wide range of professional
