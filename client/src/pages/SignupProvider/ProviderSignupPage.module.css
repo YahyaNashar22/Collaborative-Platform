@@ -78,6 +78,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  cursor: pointer;
 }
 
 .input {
@@ -155,6 +156,25 @@ select {
   background: var(--accent-grey);
 }
 
+.checkboxContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.checkbox {
+  cursor: pointer;
+}
 /* Responsive Design */
 @media (max-width: 600px) {
   .formContainer {

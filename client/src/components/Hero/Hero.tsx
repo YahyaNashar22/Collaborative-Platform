@@ -33,7 +33,7 @@ const Hero = () => {
           <span className={styles.soft}>Anytime</span>
         </h1>
         <div className={styles.btnContainer}>
-          <Link to={"/"} className={styles.expert}>
+          <Link to={"/provider-sign-up"} className={styles.expert}>
             I'm an Expert
           </Link>
           <Link to={"/client-sign-up"} className={styles.client}>

@@ -25,8 +25,13 @@
   --deep-shade-black: #2e2e2e;
 
   --green: #7eb541;
+  --red: #B54141;
 }
 
 body {
   font-family: DM Sans, Inter;
+}
+
+textarea {
+  resize: none;
 }

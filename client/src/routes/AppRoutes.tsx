@@ -8,6 +8,9 @@ const HomePage = lazy(() => import("../pages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
   () => import("../pages/SignupClient/ClientSignupPage.tsx")
 );
+const ProviderSignupPage = lazy(
+  () => import("../pages/SignupProvider/ProviderSignupPage.tsx")
+);
 
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
 
@@ -20,6 +23,7 @@ const AppRoutes = () => {
         </Route>
 
         <Route path="/client-sign-up" element={<ClientSignupPage />} />
+        <Route path="/provider-sign-up" element={<ProviderSignupPage />} />
 
         {/* protected routes */}
 
