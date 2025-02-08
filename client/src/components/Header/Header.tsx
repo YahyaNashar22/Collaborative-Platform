@@ -24,15 +24,15 @@ const Header = () => {
             <a href="#strategy">Strategy</a>
           </li>
           <li className={styles.navLink}>
-            <a href="#contact">Contact</a>
+            <a href="#subscribe">Subscribe</a>
           </li>
         </ul>
       </div>
 
       <div className={styles.phoneHelp}>
         <p className={styles.helpText}>Need help? Talk to an expert</p>
-        <a className={styles.phone} href="https://wa.me/+961153425">
-          00 961 76 153 425
+        <a className={styles.phone} href="https://wa.me/+966541041901">
+          00 966 54 104 1901
         </a>
       </div>
     </header>

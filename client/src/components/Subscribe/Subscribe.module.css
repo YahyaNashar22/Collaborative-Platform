@@ -46,6 +46,11 @@
   background-color: var(--button-purple);
   color: var(--white);
   right: -90px;
+  transition: 0.3s ease-in-out;
+}
+
+.subscribeBtn:hover {
+    background-color: var(--intense-purple);
 }
 
 .left,
