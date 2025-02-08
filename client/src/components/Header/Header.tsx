@@ -1,11 +1,15 @@
-import styles from "./Header.module.css";
 
 import { useNavigate } from "react-router-dom";
 
+import styles from "./Header.module.css";
+
 import logo from "../../assets/icons/Logo.png";
+
 
 const Header = () => {
   const navigator = useNavigate();
+
+
   return (
     <header className={styles.wrapper}>
       <div className={styles.left} onClick={() => navigator("/")}>
