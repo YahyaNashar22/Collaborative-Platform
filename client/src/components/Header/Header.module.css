@@ -47,6 +47,28 @@
   font-size: 1rem;
 }
 
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 20px;
+}
+
+.login {
+  text-decoration: none;
+  cursor: pointer;
+  background-color: var(--deep-purple);
+  padding: 10px 20px;
+  border-radius: 12px;
+  color: var(--darker-white);
+  transition: 0.3s ease-in-out;
+  font-weight: 900;
+}
+
+.login:hover {
+  background-color: var(--intense-purple);
+}
+
 .phoneHelp {
     display: flex;
     flex-direction: column;

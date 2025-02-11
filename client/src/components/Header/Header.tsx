@@ -1,14 +1,11 @@
-
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "./Header.module.css";
 
 import logo from "../../assets/icons/Logo.png";
 
-
 const Header = () => {
   const navigator = useNavigate();
-
 
   return (
     <header className={styles.wrapper}>
@@ -33,11 +30,14 @@ const Header = () => {
         </ul>
       </div>
 
-      <div className={styles.phoneHelp}>
-        <p className={styles.helpText}>Need help? Talk to an expert</p>
-        <a className={styles.phone} href="https://wa.me/+966541041901">
-          00 966 54 104 1901
-        </a>
+      <div className={styles.right}>
+        <Link to="/dashboard" className={styles.login}>Login</Link>
+        <div className={styles.phoneHelp}>
+          <p className={styles.helpText}>Need help? Talk to an expert</p>
+          <a className={styles.phone} href="https://wa.me/+966541041901">
+            00 966 54 104 1901
+          </a>
+        </div>
       </div>
     </header>
   );
