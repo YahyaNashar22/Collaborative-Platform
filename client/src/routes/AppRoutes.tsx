@@ -12,6 +12,7 @@ const ClientSignupPage = lazy(
 const ProviderSignupPage = lazy(
   () => import("../pages/SignupProvider/ProviderSignupPage.tsx")
 );
+const LoginPage = lazy(() => import("../pages/Login/LoginPage.tsx"));
 
 const DashboardPage = lazy(
   () => import("../pages/Dashboard/DashboardPage.tsx")
@@ -39,6 +40,7 @@ const AppRoutes = () => {
 
         <Route path="/client-sign-up" element={<ClientSignupPage />} />
         <Route path="/provider-sign-up" element={<ProviderSignupPage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* protected routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>

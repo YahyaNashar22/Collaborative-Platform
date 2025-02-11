@@ -1,4 +1,4 @@
-import styles from "./DashboardPage.module.css";
+import styles from "./Dashboard.module.css";
 
 const DashboardPage = () => {
   return <main className={styles.wrapper}>DashboardPage</main>;

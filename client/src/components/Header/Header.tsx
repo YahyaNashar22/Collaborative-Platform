@@ -37,7 +37,7 @@ const Header = () => {
       </div>
 
       <div className={styles.right}>
-        <Link to="/dashboard" className={styles.login}>
+        <Link to="/login" className={styles.login}>
           Login
         </Link>
         <div className={styles.phoneHelp}>
