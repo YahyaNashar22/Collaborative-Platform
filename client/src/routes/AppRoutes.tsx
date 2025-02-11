@@ -27,6 +27,9 @@ const ManageServicesPage = lazy(
   () => import("../pages/ManageServices/ManageServices.tsx")
 );
 const UsersListPage = lazy(() => import("../pages/UsersList/UsersList.tsx"));
+const ServicesPagePage = lazy(
+  () => import("../pages/ServicesPage/ServicesPage.tsx")
+);
 
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
 
@@ -58,6 +61,7 @@ const AppRoutes = () => {
             element={<ManageServicesPage />}
           />
           <Route path="/dashboard/users-list" element={<UsersListPage />} />
+          {/* <Route path="/dashboard/services" element={<ServicesPagePage />} /> */}
         </Route>
         {/* Not Found Route */}
         <Route path="*" element={<NotFound />} />

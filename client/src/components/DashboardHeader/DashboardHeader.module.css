@@ -37,6 +37,10 @@
   border-bottom-color: var(--intense-purple);
 }
 
+.active {
+  border-bottom-color: var(--intense-purple);
+}
+
 .navLink > a {
   text-decoration: none;
   color: var(--intense-purple);
