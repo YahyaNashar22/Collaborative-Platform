@@ -9,8 +9,14 @@ const Header = () => {
 
   return (
     <header className={styles.wrapper}>
-      <div className={styles.left} onClick={() => navigator("/")}>
-        <img src={logo} width={80} height={64} alt="logo" />
+      <div className={styles.left}>
+        <img
+          src={logo}
+          width={80}
+          height={64}
+          alt="logo"
+          onClick={() => navigator("/")}
+        />
         <ul className={styles.navLinks}>
           <li className={styles.navLink}>
             <a href="#join">Join</a>
@@ -31,7 +37,9 @@ const Header = () => {
       </div>
 
       <div className={styles.right}>
-        <Link to="/dashboard" className={styles.login}>Login</Link>
+        <Link to="/dashboard" className={styles.login}>
+          Login
+        </Link>
         <div className={styles.phoneHelp}>
           <p className={styles.helpText}>Need help? Talk to an expert</p>
           <a className={styles.phone} href="https://wa.me/+966541041901">
