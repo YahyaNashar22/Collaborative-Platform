@@ -61,7 +61,7 @@ const AppRoutes = () => {
             element={<ManageServicesPage />}
           />
           <Route path="/dashboard/users-list" element={<UsersListPage />} />
-          {/* <Route path="/dashboard/services" element={<ServicesPagePage />} /> */}
+          <Route path="/dashboard/services" element={<ServicesPagePage />} />
         </Route>
         {/* Not Found Route */}
         <Route path="*" element={<NotFound />} />
