@@ -1,0 +1,20 @@
+.wrapper {
+  margin-top: 50px;
+}
+
+.formWrapper {
+  gap: 20px;
+}
+
+.description {
+  color: var(--dark-grey);
+  font-weight: 500;
+}
+
+.firstRow {
+  gap: 10px;
+}
+
+.form {
+  gap: 10px;
+}

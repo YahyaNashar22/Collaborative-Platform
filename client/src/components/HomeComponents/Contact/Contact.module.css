@@ -1,0 +1,37 @@
+.wrapper {
+  text-align: center;
+  margin-top: 80px;
+  gap: 40px;
+}
+
+.headerContainer {
+  line-height: 0.9;
+}
+
+.title {
+  font-size: 40px;
+  letter-spacing: 2px;
+}
+
+.subTitle {
+  color: var(--dark-grey);
+  font-weight: 900;
+}
+
+.article {
+  max-width: 300px;
+  gap: 20px;
+}
+
+.article p {
+  letter-spacing: 0.7px;
+}
+
+.article a {
+  font-size: 20px;
+}
+
+.links {
+  gap: 30px;
+  margin-bottom: 20px;
+}

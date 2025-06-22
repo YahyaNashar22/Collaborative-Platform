@@ -1,0 +1,135 @@
+.wrapper {
+  background-color: var(--deep-shade-black);
+  color: var(--darker-white);
+  padding: 50px;
+  font-weight: 900;
+  row-gap: 50px;
+}
+
+.upper {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  column-gap: 100px;
+}
+
+.left,
+.right,
+.middle {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 35px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  /* gap: 3rem; */
+}
+
+.logoText,
+.infoItem > a,
+.supportItem > a,
+.lower > p,
+.link > a {
+  opacity: 0.8;
+  text-decoration: none;
+  color: var(--darker-white);
+}
+
+.logoText {
+  border-bottom: 1px solid #373737;
+  padding-bottom: 10px;
+}
+
+.infoContainer,
+.supportContainer,
+.links {
+  list-style: none;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.supportContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.infoItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  column-gap: 10px;
+}
+
+.infoItem > a {
+  text-decoration: none;
+  color: var(--darker-white);
+}
+
+.newsLetterForm {
+  background-color: var(--intense-purple);
+  padding: 25px 40px;
+}
+
+.newsletterLabel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  position: relative;
+  row-gap: 20px;
+  font-size: 0.9rem;
+}
+
+.newsletterLabel > input {
+  padding: 15px 20px;
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+}
+
+.newsletterSubmit {
+  position: absolute;
+  right: 10px;
+  bottom: 6px;
+  background-color: var(--intense-purple);
+  border: none;
+  color: var(--darker-white);
+  padding: 10px 20px;
+  letter-spacing: 1px;
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+.lower {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 73%;
+  border-top: 1px solid #373737;
+  padding-top: 20px;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.emailInput::placeholder {
+  font-weight: 600;
+  font-size: 10px;
+}

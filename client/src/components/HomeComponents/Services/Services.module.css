@@ -1,0 +1,50 @@
+.wrapper {
+  margin-top: 80px;
+  gap: 40px;
+}
+
+.boxsContainer {
+  gap: 20px;
+}
+
+.box {
+  position: relative;
+}
+
+.subBox {
+  position: absolute;
+  top: 70%;
+  left: 10%;
+  background: #fff;
+  width: calc(100% - 10%);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  padding: 25px;
+}
+
+.status,
+.subTitle {
+  font-size: 13px;
+}
+
+.status {
+  background-color: var(--light-purple);
+  color: #fff;
+  width: fit-content;
+  padding: 3px 7px;
+  margin-bottom: 2px;
+}
+
+.subTitle {
+  color: var(--accent-grey);
+  margin-bottom: 2px;
+}
+
+.more {
+  margin-top: 50px;
+  color: white;
+  font-weight: 600;
+  background-color: var(--light-purple);
+  padding: 10px 25px;
+  border-radius: 28px;
+}

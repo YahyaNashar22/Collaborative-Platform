@@ -84,7 +84,7 @@ const ClientSignupPage = () => {
           )}
           <button
             type="button"
-            className={styles.verifyBtn}
+            className={`${styles.verifyBtn} pointer`}
             onClick={sendEmailVerification}
           >
             Verify
@@ -204,10 +204,10 @@ const ClientSignupPage = () => {
         </label>
 
         <div className={styles.btnContainer}>
-          <Link to={"/"} className={styles.back}>
+          <Link to={"/"} className={`${styles.back} pointer`}>
             Back
           </Link>
-          <button type="submit" className={styles.join}>
+          <button type="submit" className={`${styles.join} pointer`}>
             Join
           </button>
         </div>

@@ -1,0 +1,32 @@
+.heroText {
+  font-size: 50px;
+  text-align: center;
+  line-height: 1;
+}
+
+.boxContainer {
+  position: relative;
+  top: 200px;
+  gap: 15px;
+}
+
+.box h3 {
+  background-color: var(--intense-purple);
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.box :last-child {
+  width: 240px;
+  background-color: #eeeeeeba;
+  color: var(--dark-grey);
+  font-weight: 600;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.box.leftBox h3 {
+  background-color: var(--dark-grey);
+}

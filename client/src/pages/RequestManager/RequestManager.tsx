@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import EmptyDashboard from "../../components/EmptyDashboard/EmptyDashboard";
+import EmptyDashboard from "../../components/homePage/EmptyDashboard/EmptyDashboard";
 import styles from "./RequestManager.module.css";
 
 const RequestManager = () => {

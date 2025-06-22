@@ -1,0 +1,17 @@
+.wrapper {
+  gap: 10px;
+}
+
+.item {
+  padding: 5px 15px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.right {
+  font-size: 30px;
+}
+
+.left .title {
+  letter-spacing: 1px;
+}

@@ -1,0 +1,10 @@
+.wrapper {
+  text-align: center;
+  margin-top: 80px;
+  gap: 40px;
+}
+
+.title {
+  font-size: 40px;
+  letter-spacing: 2px;
+}

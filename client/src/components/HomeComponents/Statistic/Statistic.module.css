@@ -1,0 +1,27 @@
+.wrapper {
+  position: relative;
+  column-gap: 10%;
+  background-image: url(/src/assets/images/terms_background.png);
+  padding: 40px 100px;
+  background-position: center;
+  margin-top: 80px;
+  overflow: hidden;
+  background-size: cover;
+  background-color: #654fb3;
+}
+
+.element {
+  gap: 10px;
+}
+
+.icon {
+  font-size: 48px;
+}
+
+.elementText {
+  color: #fff;
+}
+
+.elementText h1 {
+  font-size: 32px;
+}

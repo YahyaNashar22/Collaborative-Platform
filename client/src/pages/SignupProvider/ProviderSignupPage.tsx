@@ -45,7 +45,7 @@ const ProviderSignupPage = () => {
         </h2>
 
         <form className={styles.formContainer} onSubmit={handleSubmit}>
-          <label className={styles.inputLabel}>
+          <label className={`${styles.inputLabel} pointer`}>
             First Name
             <input
               type="text"
@@ -195,10 +195,13 @@ const ProviderSignupPage = () => {
             Services
             <div className={styles.checkboxContainer}>
               {services.map((service, index) => (
-                <label key={index} className={styles.checkboxLabel}>
+                <label
+                  key={index}
+                  className={`${styles.checkboxLabel} pointer`}
+                >
                   <input
                     type="checkbox"
-                    className={styles.checkbox}
+                    className={`${styles.checkbox} pointer`}
                     value={service}
                     name={service}
                   />

@@ -98,11 +98,6 @@
 }
 
 /* File Inputs & Selects */
-input[type="file"],
-select {
-  cursor: pointer;
-}
-
 /* Button Container */
 .btnContainer {
   display: flex;

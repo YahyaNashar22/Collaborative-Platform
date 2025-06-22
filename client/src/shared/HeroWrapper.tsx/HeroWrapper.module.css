@@ -1,0 +1,16 @@
+.wrapper {
+  position: relative;
+  column-gap: 50px;
+  background-size: 100% auto;
+  background-position: center top;
+  background-image: url("../../assets/images/homePageBackground.png");
+  /* margin-top: 88px; */
+  background-size: cover;
+  height: calc(100vh + 143px);
+  width: 100%;
+  background-repeat: no-repeat;
+}
+
+.isAbout {
+  background-image: url("../../assets/images/About_Us.png");
+}

@@ -1,21 +1,23 @@
-import styles from "./HomePage.module.css";
-
-import Hero from "../../components/Hero/Hero";
-import About from "../../components/About/About";
-import Quote from "../../components/Quote/Quote";
-import Vision from "../../components/Vision/Vision";
-import Strategy from "../../components/Strategy/Strategy";
-import Subscribe from "../../components/Subscribe/Subscribe";
+import About from "../../components/HomeComponents/About/About";
+import Contact from "../../components/HomeComponents/Contact/Contact";
+import Hero from "../../components/HomeComponents/Hero/Hero";
+import Partners from "../../components/HomeComponents/Partners/Partners";
+import Quote from "../../components/HomeComponents/Quote/QuoteComponent";
+import Services from "../../components/HomeComponents/Services/Services";
+import Statistic from "../../components/HomeComponents/Statistic/Statistic";
 
 const HomePage = () => {
   return (
-    <div className={styles.wrapper}>
+    <div className=" d-f f-dir-col justify-between">
       <Hero />
-      <About />
       <Quote />
-      <Vision />
-      <Strategy />
-      <Subscribe />
+      <div className="container">
+        <Services />
+        <About />
+        <Partners />
+      </div>
+      <Statistic />
+      <Contact />
     </div>
   );
 };

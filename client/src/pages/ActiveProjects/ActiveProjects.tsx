@@ -1,16 +1,17 @@
 import { useNavigate } from "react-router-dom";
 
 import styles from "./ActiveProjects.module.css";
-
-import EmptyDashboard from "../../components/EmptyDashboard/EmptyDashboard";
+import EmptyDashboard from "../../shared/EmptyDashboard/EmptyDashboard";
 
 const ActiveProjects = () => {
   const navigate = useNavigate();
 
   return (
-    <main className={styles.wrapper}>
+    <main
+      className={`${styles.wrapper} d-f align-center justify-center f-dir-center`}
+    >
       <h1 className={styles.welcome}>
-        Welcome Back <span className={styles.purple}>Full Name</span>
+        Welcome Back <span className="purple">Full Name</span>
       </h1>
       {/* If not subscribed to any services yet */}
       <EmptyDashboard

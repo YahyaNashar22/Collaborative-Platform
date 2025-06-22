@@ -1,0 +1,125 @@
+.textContainer {
+  row-gap: 20px;
+  font-weight: normal;
+  z-index: 1;
+  margin-right: 200px;
+}
+
+.heroText {
+  font-size: 40px;
+  /* word-spacing: 30px; */
+}
+
+/* .circle {
+  position: absolute;
+  height: 50px;
+  width: 100%;
+  border: 4px solid var(--deep-purple);
+  border-radius: 100%;
+  left: -30px;
+  bottom: 10px;
+  transform: rotate(-4deg);
+} */
+
+.strength {
+  font-weight: 600;
+  word-spacing: 2px;
+}
+
+.soft {
+  font-weight: 400;
+}
+
+.last {
+  font-weight: 500;
+  letter-spacing: 3px;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  margin: auto 30px;
+}
+
+.firstSentence {
+  font-weight: 900;
+  margin-left: -2rem;
+  letter-spacing: 1.5px;
+}
+
+.dots span {
+  width: 24px;
+  height: 24px;
+  background-color: var(--deep-purple);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.arrow_container {
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.arrow {
+  width: 8rem;
+  height: 2rem;
+}
+
+.expert {
+  background-color: var(--light-grey);
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-decoration: none;
+  text-align: center;
+  color: var(--deep-shade-black);
+  font-weight: bold;
+  opacity: 0.8;
+  transition: 0.3s ease-in-out;
+}
+
+.client {
+  background-color: var(--deep-purple);
+  border-radius: 16px;
+  padding: 10px 16px;
+  text-decoration: none;
+  text-align: center;
+  color: var(--white);
+  font-weight: bold;
+  opacity: 0.8;
+  transition: 0.3s ease-in-out;
+}
+
+.expert:hover {
+  opacity: 1;
+}
+
+.client:hover {
+  opacity: 1;
+}
+
+.heroImage {
+  z-index: 3;
+  position: relative;
+}
+
+.diagonalLine {
+  position: absolute;
+  right: 30%;
+  top: 0px;
+  height: 600px;
+  z-index: 1;
+}
+
+.leftArrow {
+  position: absolute;
+  right: 0;
+}
+
+.purpleArrow {
+  position: absolute;
+  bottom: -10px;
+  left: -200px;
+}

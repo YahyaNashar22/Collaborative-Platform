@@ -1,9 +1,13 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Loading from "../components/Loading/Loading.tsx";
+import Loading from "../shared/Loading/Loading.tsx";
 import MainLayout from "./MainLayout.tsx";
 import DashboardLayout from "./DashboardLayout.tsx";
+import AboutPage from "../pages/AboutPage/AboutPage.tsx";
+import TermsPage from "../pages/TermsPage/TermsPage.tsx";
+import FAQPage from "../pages/FAQPage/FAQPage.tsx";
+import ContactPage from "../pages/ContactPage/ContactPage.tsx";
 
 const HomePage = lazy(() => import("../pages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
@@ -39,6 +43,10 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/FAQ" element={<FAQPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Route>
 
         <Route path="/client-sign-up" element={<ClientSignupPage />} />

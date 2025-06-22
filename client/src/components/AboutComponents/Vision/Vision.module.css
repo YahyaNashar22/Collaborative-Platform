@@ -1,0 +1,120 @@
+.wrapper {
+  background-color: var(--white);
+  width: 100%;
+  height: 100%;
+  font-family: DM Sans, Inter;
+  margin-top: 80px;
+  column-gap: 70px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 20px;
+}
+
+.logoContainer {
+  background-color: var(--deep-purple);
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftText {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--shade-black);
+  line-height: 2rem;
+}
+
+.circled {
+  position: relative;
+}
+.circle {
+  position: absolute;
+  height: 50px;
+  width: 100%;
+  border: 4px solid var(--deep-purple);
+  border-radius: 100%;
+  left: 0px;
+  bottom: 10px;
+  transform: rotate(-1deg);
+}
+
+.landscape {
+  border-color: var(--dark-blue);
+  margin-left: -1.7rem;
+}
+
+.dots {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.dots span {
+  width: 15px;
+  height: 15px;
+  background-color: var(--deep-purple);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 20px;
+  width: 450px;
+  padding-left: 40px;
+  border-left: 2px solid var(--soft-grey);
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  row-gap: 10px;
+  position: relative;
+}
+
+.block::before {
+  content: "";
+  position: absolute;
+  left: -43px;
+  top: 0;
+  width: 4px;
+  height: 100%;
+  background-color: var(--deep-purple);
+}
+
+.blockTitle {
+  color: var(--deep-purple);
+  font-size: 1.4rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 10px;
+}
+
+.blockText {
+  color: var(--shade-black);
+  font-weight: 900;
+}
+
+.consultingText {
+  writing-mode: vertical-rl;
+  text-orientation: sideways;
+  color: var(--pure-grey);
+  font-size: 4rem;
+  font-weight: 500;
+  letter-spacing: 1rem;
+}

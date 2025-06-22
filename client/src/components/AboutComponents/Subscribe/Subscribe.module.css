@@ -1,0 +1,85 @@
+.wrapper {
+  position: relative;
+  column-gap: 10%;
+  background-image: url(/src/assets/images/terms_background.png);
+  padding: 40px 100px;
+  background-position: center;
+  margin-top: 80px;
+  overflow: hidden;
+  background-size: cover;
+  background-color: #654fb3;
+}
+
+.title {
+  font-size: 2rem;
+  color: var(--white);
+  font-weight: 900;
+  z-index: 1;
+}
+
+.subscribeContainer {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.subscribeInput {
+  padding: 10px 2.6rem 10px 1rem;
+  text-align: center;
+  border-radius: 32px;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  caret-color: var(--shade-black);
+  color: var(--shade-black);
+  font-weight: 600;
+}
+
+.subscribeInput::placeholder {
+  font-weight: 900;
+  font-size: 12px;
+}
+
+.subscribeBtn {
+  padding: 10px 20px;
+  text-align: center;
+  border-radius: 32px;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  background-color: var(--button-purple);
+  color: var(--white);
+  margin-left: -2.5rem;
+  transition: 0.3s ease-in-out;
+}
+
+.subscribeBtn:hover {
+  background-color: var(--intense-purple);
+}
+
+.left,
+.right,
+.down,
+.diagonal {
+  position: absolute;
+}
+
+.right {
+  left: 0;
+  top: 0;
+}
+
+.diagonal {
+  top: 0;
+  left: 7px;
+}
+
+.left {
+  right: 0;
+}
+
+.down {
+  right: 0;
+  top: 0;
+}
