@@ -3,15 +3,16 @@
   position: fixed;
   width: 100%;
   z-index: 100;
-  background-color: var(--darker-white);
+  background-color: transparent;
   opacity: 1;
   transition: 0.3s ease-in-out;
 }
 
-.wrapper:hover {
-  /* opacity: 1; */
+.scrolled {
+  background-color: red !important;
+  /* Add any other styles you want when scrolled */
+  transition: background-color 0.3s ease; /* Smooth transition */
 }
-
 .left {
   display: flex;
   align-items: center;
@@ -35,9 +36,21 @@
   width: fit-content;
   display: block;
 }
-/* .navLink > a:hover {
-  color: var(--deep-purple);
-} */
+
+.navLinks .navLink:last-of-type {
+  background-color: var(--deep-purple);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 90px;
+}
+
+.navLinks .navLink:last-of-type a {
+  color: #fff;
+}
+
+.navLinks .navLink:last-of-type a::before {
+  display: none;
+}
 
 .navLink > a:hover::before {
   right: 0;

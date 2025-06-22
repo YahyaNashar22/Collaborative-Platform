@@ -1,17 +1,40 @@
 .wrapper {
   gap: 10px;
+  transition: 0.3s;
 }
 
-.item {
+.containerItem {
   padding: 5px 15px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
   border-radius: 4px;
+  transition: 0.3s;
+  overflow: hidden;
 }
 
 .right {
   font-size: 30px;
+  transform: rotate(90deg);
+  transition: 0.3s;
 }
 
 .left .title {
   letter-spacing: 1px;
+}
+
+.collapsas .right {
+  transform: rotate(-90deg) !important;
+}
+
+.collapsesContent {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.show {
+  max-height: 700px;
+
+  opacity: 1;
+  transition: max-height 1s ease, opacity 0.3 ease;
 }

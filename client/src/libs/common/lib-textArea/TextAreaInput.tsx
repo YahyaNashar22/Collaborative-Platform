@@ -16,9 +16,9 @@ const TextAreaInput = ({
   required,
   onChange,
 }: props) => {
-  const [descriptionValue, setDescriptionValue] = useState("");
-  const [focus, setFocus] = useState(false);
-  const [error, setError] = useState(false);
+  const [descriptionValue, setDescriptionValue] = useState<string>("");
+  const [focus, setFocus] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     // prevant enter value if max reached

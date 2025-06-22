@@ -6,7 +6,7 @@ import logo from "../../assets/icons/Logo.png";
 const Header = () => {
   const navigator = useNavigate();
   const currentPath = useLocation().pathname;
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
     <header className={`${styles.wrapper} d-f align-center justify-between`}>
@@ -36,7 +36,7 @@ const Header = () => {
           ].map(({ path, label }) => (
             <li
               key={path}
-              className={`${styles.navLink} ${
+              className={`${styles.navLink}  ${
                 currentPath === path ? styles.active : ""
               } pointer`}
             >

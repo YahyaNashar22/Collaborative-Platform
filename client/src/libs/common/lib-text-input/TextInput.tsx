@@ -17,10 +17,10 @@ const TextInput = ({
   required,
   onChange,
 }: props) => {
-  const [focus, setFocus] = useState(false);
-  const [error, setError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [isEmail, setIsEmail] = useState(false);
+  const [focus, setFocus] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [emailError, setEmailError] = useState<boolean>(false);
+  const [isEmail, setIsEmail] = useState<boolean>(false);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

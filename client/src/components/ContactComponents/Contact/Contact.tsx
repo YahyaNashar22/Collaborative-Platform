@@ -6,9 +6,9 @@ const Contact = () => {
   return (
     <div className={`${styles.wrapper} d-f `}>
       <div className={styles.left}>
-        <img src={map} alt="map" />
+        <img src={map} alt="map" width={500} height={665} />
       </div>
-      <div>
+      <div className="w-100">
         <ContactForm />
       </div>
     </div>

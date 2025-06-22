@@ -12,10 +12,18 @@ interface formType {
   required: boolean;
   onChange: (value: string, name: string) => void;
 }
-const ContactForm = () => {
-  const [disabledBtn, setDisabledBtn] = useState(true);
 
-  const [formData, setFormData] = useState({
+type formDataSTate = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  description: string;
+};
+const ContactForm = () => {
+  const [disabledBtn, setDisabledBtn] = useState<boolean>(true);
+
+  const [formData, setFormData] = useState<formDataSTate>({
     firstName: "",
     lastName: "",
     email: "",
@@ -91,15 +99,15 @@ const ContactForm = () => {
   const handleCLick = () => {};
 
   return (
-    <div className={`${styles.wrapper} d-f f-dir-col`}>
+    <div className={`${styles.wrapper} d-f f-dir-col w-100`}>
       <div className={`${styles.formWrapper} d-f f-dir-col align-start`}>
-        <div>
+        <div className="w-100">
           <h1 className="title">Get in Touch</h1>
           <small className={styles.description}>
             Fill up the form our team will get back to you within 24 Hours
           </small>
         </div>
-        <form className={`${styles.form} d-f f-dir-col `}>
+        <form className={`${styles.form} d-f f-dir-col w-100`}>
           <div className={`${styles.firstRow} d-f w-100`}>
             {formInputs.slice(0, 2).map((elem, index) => (
               <TextInput
