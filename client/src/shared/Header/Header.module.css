@@ -83,30 +83,6 @@
   column-gap: 10px;
 }
 
-.login,
-.signup {
-  text-decoration: none;
-
-  background-color: var(--accent-grey);
-  padding: 5px 20px;
-  border-radius: 3px;
-  color: var(--darker-white);
-  transition: 0.3s ease-in-out;
-  font-weight: 900;
-}
-
-.signup {
-  background: var(--deep-purple);
-}
-
-.signup:hover {
-  background-color: var(--intense-purple);
-}
-
-.login:hover {
-  background-color: #6f7071;
-}
-
 .phoneHelp {
   display: flex;
   flex-direction: column;
@@ -189,4 +165,59 @@
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* window style */
+.windowContainer {
+  gap: 20px;
+}
+
+.header {
+  gap: 10px;
+}
+
+.boxContainer {
+  gap: 15px;
+}
+.title {
+  font-weight: 900;
+  font-size: 25px;
+}
+
+.description {
+  color: var(--label-color);
+}
+
+.leftBox,
+.rightBox {
+  border-radius: 8px;
+  padding: 30px;
+  color: #fff;
+  flex: 1;
+}
+
+.leftBox p,
+.rightBox p {
+  text-align: center;
+}
+
+.leftBox h1,
+.rightBox h1 {
+  font-size: 23px;
+  font-weight: 400;
+}
+
+.leftBox {
+  background-image: url("../../assets/images/partner_box.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.rightBox {
+  background-image: url("../../assets/images/client_box.png");
+  background-repeat: no-repeat;
+}
+
+.btn {
+  margin-top: 10px;
 }

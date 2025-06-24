@@ -1,37 +1,47 @@
-import styles from "./libButton.module.css";
+import styles from "./LibButton.module.css";
 
 type LibButtonType = {
+  label: string;
   outlined?: boolean;
   backgroundColor?: string;
   onSubmit: () => void;
   disabled: boolean;
   hoverColor?: string;
+  styleClass?: string;
 };
 
 const LibButton = ({
+  label,
   disabled,
   outlined,
   backgroundColor,
   onSubmit,
   hoverColor,
+  styleClass,
 }: LibButtonType) => {
   return (
     <div
-      className={`${styles.buttonWrapper} d-f justify-end ${
+      className={`${styles.buttonWrapper} d-f justify-end align-center ${
         outlined ? styles.outlined : ""
       }`}
     >
       <button
         type="submit"
-        className={styles.button}
+        className={`${styles.button} ${
+          styleClass ? styles[styleClass] : ""
+        } justify-center`}
         style={{
-          backgroundColor: backgroundColor ? backgroundColor : "#6550b4",
+          backgroundColor: backgroundColor
+            ? backgroundColor
+            : outlined
+            ? "transparent"
+            : "#6550b4",
           ["--hover-bg" as string]: hoverColor ? hoverColor : "#563db1",
         }}
         onClick={onSubmit}
         disabled={disabled}
       >
-        Submit
+        {label}
       </button>
     </div>
   );

@@ -10,6 +10,7 @@
   color: #fff;
   background-position: center;
   transition: background 0.1s;
+  min-width: 70px;
 }
 
 .outlined button {
@@ -24,4 +25,15 @@
 .button:disabled {
   pointer-events: none;
   opacity: 0.4;
+}
+
+.rounded {
+  border-width: 3px !important;
+  border-radius: 90px;
+  width: 100%;
+  padding: 0 50px;
+}
+
+.rounded:hover {
+  background-color: #00000029 !important;
 }

@@ -2,21 +2,27 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Loading from "../shared/Loading/Loading.tsx";
-import MainLayout from "./MainLayout.tsx";
-import DashboardLayout from "./DashboardLayout.tsx";
-import AboutPage from "../pages/AboutPage/AboutPage.tsx";
-import TermsPage from "../pages/TermsPage/TermsPage.tsx";
-import FAQPage from "../pages/FAQPage/FAQPage.tsx";
-import ContactPage from "../pages/ContactPage/ContactPage.tsx";
+import DashboardLayout from "../Layouts/DashboardLayout.tsx";
 
-const HomePage = lazy(() => import("../pages/HomePage/HomePage.tsx"));
+import FAQPage from "../pages/MainPages/FAQPage/FAQPage.tsx";
+
+import SignUpPage from "../pages/MainAuthPages/Signup/SignUpPage.tsx";
+import AboutPage from "../pages/MainPages/AboutPage/AboutPage.tsx";
+import TermsPage from "../pages/MainPages/TermsPage/TermsPage.tsx";
+import ContactPage from "../pages/MainPages/ContactPage/ContactPage.tsx";
+import MainLayout from "../Layouts/MainLayout.tsx";
+import EntryPage from "../pages/MainAuthPages/Entry/EntryPage.tsx";
+
+const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
   () => import("../pages/SignupClient/ClientSignupPage.tsx")
 );
 const ProviderSignupPage = lazy(
   () => import("../pages/SignupProvider/ProviderSignupPage.tsx")
 );
-const LoginPage = lazy(() => import("../pages/Login/LoginPage.tsx"));
+const LoginPage = lazy(
+  () => import("../pages/MainAuthPages/Login/LoginPage.tsx")
+);
 
 const DashboardPage = lazy(
   () => import("../pages/Dashboard/DashboardPage.tsx")
@@ -32,7 +38,7 @@ const ManageServicesPage = lazy(
 );
 const UsersListPage = lazy(() => import("../pages/UsersList/UsersList.tsx"));
 const ServicesPagePage = lazy(
-  () => import("../pages/ServicesPage/ServicesPage.tsx")
+  () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx")
 );
 
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
@@ -42,7 +48,7 @@ const AppRoutes = () => {
     <Suspense fallback={<Loading />}>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
+          <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/FAQ" element={<FAQPage />} />
@@ -51,7 +57,13 @@ const AppRoutes = () => {
 
         <Route path="/client-sign-up" element={<ClientSignupPage />} />
         <Route path="/provider-sign-up" element={<ProviderSignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+
+        {/* AUthorization routes */}
+        <Route path="/auth" element={<DashboardLayout />}>
+          <Route path="/auth" element={<EntryPage />} />
+          <Route path="sign-up" element={<SignUpPage />} />
+          <Route path="login" element={<LoginPage />} />
+        </Route>
 
         {/* protected routes */}
         <Route path="/dashboard" element={<DashboardLayout />}>
