@@ -8,6 +8,7 @@ type LibButtonType = {
   disabled: boolean;
   hoverColor?: string;
   styleClass?: string;
+  padding?: string;
 };
 
 const LibButton = ({
@@ -18,6 +19,7 @@ const LibButton = ({
   onSubmit,
   hoverColor,
   styleClass,
+  padding,
 }: LibButtonType) => {
   return (
     <div
@@ -37,6 +39,7 @@ const LibButton = ({
             ? "transparent"
             : "#6550b4",
           ["--hover-bg" as string]: hoverColor ? hoverColor : "#563db1",
+          padding: padding ? padding : "0 10px",
         }}
         onClick={onSubmit}
         disabled={disabled}

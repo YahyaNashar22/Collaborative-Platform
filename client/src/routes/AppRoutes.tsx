@@ -60,7 +60,7 @@ const AppRoutes = () => {
 
         {/* AUthorization routes */}
         <Route path="/auth" element={<DashboardLayout />}>
-          <Route path="/auth" element={<EntryPage />} />
+          <Route index element={<EntryPage />} />
           <Route path="sign-up" element={<SignUpPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>

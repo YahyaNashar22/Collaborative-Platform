@@ -6,4 +6,29 @@
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+  transition: 0.3s;
+}
+
+.content {
+  color: #fff;
+  font-size: 25px;
+}
+
+.headerContainer {
+  gap: 30px;
+}
+
+.content h1 {
+  position: relative;
+  letter-spacing: 1.5px;
+}
+
+.content h1:before {
+  content: "";
+  position: absolute;
+  top: calc(100% + 5px);
+  width: 130%;
+  left: -15%;
+  height: 2px;
+  background-color: #fff;
 }

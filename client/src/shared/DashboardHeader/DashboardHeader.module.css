@@ -35,3 +35,22 @@
 .navLink > a:hover {
   color: var(--intense-purple);
 }
+
+.whiteHomeIcon {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.3s;
+}
+
+.whiteHomeIcon:hover .whiteIcon,
+.whiteHomeIcon:hover .homeIcon {
+  color: var(--light-purple) !important;
+}
+
+.whiteIcon,
+.homeIcon {
+  color: #fff;
+  transition: 0.3s;
+  font-weight: 400;
+}

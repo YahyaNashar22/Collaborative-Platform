@@ -1,0 +1,24 @@
+.avatarBox {
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid transparent;
+  min-width: 300px;
+  transition: 0.3s;
+}
+
+.avatarBox.allowHover:hover {
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+
+.selected {
+  border: 1px solid #fff;
+  border-radius: 8px;
+}
+
+.avatar {
+  background-color: #e9effd;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+}

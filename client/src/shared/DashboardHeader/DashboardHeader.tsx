@@ -27,7 +27,7 @@ const DashboardHeader = () => {
           { path: "/dashboard/requests", label: "Requests", hasIcon: false },
           { path: "/dashboard/proposals", label: "Proposals", hasIcon: false },
           { path: "/dashboard/services", label: "Services", hasIcon: false },
-          { path: "/", label: "Home", hasIcon: true },
+          { path: "/", label: "home", hasIcon: true },
         ].map(({ path, label, hasIcon }) => (
           <li
             key={path}
@@ -36,16 +36,34 @@ const DashboardHeader = () => {
             } pointer`}
           >
             <Link to={path} className="d-f align-center gap-2">
-              {currentPath === "/auth" ? (
+              {currentPath.includes("/auth") ? (
                 hasIcon && (
-                  <>
+                  <div className={styles.whiteHomeIcon}>
                     <FontAwesomeIcon
+                      className={styles.homeIcon}
                       icon={faHouse}
                       size="lg"
-                      style={{ color: "#ffffff" }}
+                      style={{
+                        color:
+                          currentPath.includes("/sign-up") ||
+                          currentPath.includes("/login")
+                            ? "#6550b4"
+                            : "#ffffff",
+                      }}
                     />
-                    <span>{label}</span>
-                  </>
+                    <span
+                      className={styles.whiteIcon}
+                      style={{
+                        color:
+                          currentPath.includes("/sign-up") ||
+                          currentPath.includes("/login")
+                            ? "#495057"
+                            : "#ffffff",
+                      }}
+                    >
+                      {label}
+                    </span>
+                  </div>
                 )
               ) : (
                 <>

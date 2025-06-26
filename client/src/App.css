@@ -123,6 +123,18 @@ textarea {
   width: 100%;
 }
 
+.gap-10 {
+  gap: 100px;
+}
+
+.gap-5 {
+  gap: 50px;
+}
+
+.text-align-center {
+  text-align: center;
+}
+
 .align-text {
   text-align: justify;
   text-align-last: left;
