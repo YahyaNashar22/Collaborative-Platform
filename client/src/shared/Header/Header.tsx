@@ -9,7 +9,7 @@ import LibButton from "../../libs/common/lib-button/LibButton";
 
 const Header = () => {
   const navigator = useNavigate();
-  const currentPath = useLocation().pathname;
+  const { pathname } = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);
   const [nextRoute, setNextRoute] = useState<string>("");
@@ -17,14 +17,39 @@ const Header = () => {
 
   const navigate = useNavigate();
 
+  const cardData = [
+    {
+      icon: faBriefcase,
+      title: "Become A Partner",
+      description: "a partner to deliver services through our platform",
+      type: "partner",
+    },
+    {
+      icon: faCircleUser,
+      title: "Become A Client",
+      description: "a client to benefit from our expert services",
+      type: "client",
+    },
+  ];
+
   const openAuthWindow = (type: string) => {
     setNextRoute(type);
     setOnWindowOpen(true);
   };
 
-  const handleClick = () => {
-    if (nextRoute === "sign-up") navigate(`/auth`);
-    else navigate(`auth/${nextRoute}`);
+  const handleClick = (type: string) => {
+    switch (type) {
+      case "partner":
+        if (nextRoute === "register") navigate(`auth/${type}`);
+        else navigate(`auth/${type}/${nextRoute}`);
+        break;
+      case "client":
+        if (nextRoute === "register") navigate(`auth/${type}`);
+        else navigate(`auth/${type}/${nextRoute}`);
+        break;
+      default:
+        break;
+    }
   };
 
   useEffect(() => {
@@ -77,7 +102,7 @@ const Header = () => {
               <li
                 key={path}
                 className={`${styles.navLink}  ${
-                  currentPath === path ? styles.active : ""
+                  pathname === path ? styles.active : ""
                 } pointer`}
               >
                 <Link to={path}>{label}</Link>
@@ -89,7 +114,6 @@ const Header = () => {
         <div className={styles.right}>
           <LibButton
             label="LOG IN"
-            disabled={false}
             backgroundColor="#868788"
             hoverColor="#6f7071"
             onSubmit={() => openAuthWindow("login")}
@@ -97,8 +121,7 @@ const Header = () => {
 
           <LibButton
             label="SIGN UP"
-            disabled={false}
-            onSubmit={() => openAuthWindow("sign-up")}
+            onSubmit={() => openAuthWindow("register")}
           ></LibButton>
         </div>
       </header>
@@ -118,48 +141,32 @@ const Header = () => {
               </p>
             </div>
             <main className={`${styles.boxContainer} d-f w-100`}>
-              <article
-                className={`${styles.leftBox} d-f f-dir-col align-center`}
-              >
-                <FontAwesomeIcon
-                  icon={faBriefcase}
-                  size="2xl"
-                  style={{ color: "#ffffff" }}
-                />
+              {cardData.map((card, index) => (
+                <article
+                  key={card.type}
+                  className={`${
+                    index === 0 ? styles.leftBox : styles.rightBox
+                  } d-f f-dir-col align-center`}
+                >
+                  <FontAwesomeIcon
+                    icon={card.icon}
+                    size="2xl"
+                    style={{ color: "#ffffff" }}
+                  />
 
-                <h1>Become A Partner</h1>
-                <p>a partner to deliver services through our platform</p>
+                  <h1>{card.title}</h1>
+                  <p>{card.description}</p>
 
-                <div className={styles.btn}>
-                  <LibButton
-                    label="JOIN US"
-                    disabled={false}
-                    outlined={true}
-                    onSubmit={handleClick}
-                    styleClass="rounded"
-                  ></LibButton>
-                </div>
-              </article>
-              <article
-                className={`${styles.rightBox} d-f f-dir-col align-center`}
-              >
-                <FontAwesomeIcon
-                  icon={faCircleUser}
-                  size="2xl"
-                  style={{ color: "#ffffff" }}
-                />
-                <h1>Become A Client</h1>
-                <p>a client to benefit from our expert services</p>
-                <div className={styles.btn}>
-                  <LibButton
-                    label="JOIN US"
-                    disabled={false}
-                    outlined={true}
-                    onSubmit={handleClick}
-                    styleClass="rounded"
-                  ></LibButton>
-                </div>
-              </article>
+                  <div className={styles.btn}>
+                    <LibButton
+                      label="JOIN US"
+                      outlined={true}
+                      onSubmit={() => handleClick(card.type)}
+                      styleClass="rounded"
+                    />
+                  </div>
+                </article>
+              ))}
             </main>
           </div>
         </Window>

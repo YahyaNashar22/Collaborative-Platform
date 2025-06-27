@@ -9,6 +9,7 @@ interface formType {
   label: string;
   placeholder: string;
   name: string;
+  value: string;
   type: string;
   required: boolean;
   onChange: (value: string, name: string) => void;
@@ -36,6 +37,7 @@ const ContactForm = () => {
       label: "First Name",
       placeholder: "First Name",
       name: "firstName",
+      value: "",
       type: "text",
       required: true,
       onChange: (value: string, name: string) => {
@@ -46,6 +48,7 @@ const ContactForm = () => {
       label: "Last Name",
       placeholder: "Last Name",
       name: "lastName",
+      value: "",
       type: "text",
       required: true,
       onChange: (value: string, name: string) => {
@@ -57,6 +60,7 @@ const ContactForm = () => {
       placeholder: "Email Address",
       name: "email",
       type: "email",
+      value: "",
       required: true,
       onChange: (value: string, name: string) => {
         console.log(`Changed ${name}:`, value);
@@ -67,6 +71,7 @@ const ContactForm = () => {
       placeholder: "Phone Number",
       name: "phoneNumber",
       type: "text",
+      value: "",
       required: true,
       onChange: (value: string, name: string) => {
         console.log(`Changed ${name}:`, value);
@@ -115,6 +120,7 @@ const ContactForm = () => {
                 key={index}
                 label={elem.label}
                 type={elem.type}
+                value={elem.value}
                 placeholder={elem.placeholder}
                 name={elem.name}
                 required={elem.required}
@@ -130,6 +136,7 @@ const ContactForm = () => {
               key={index + 2}
               label={elem.label}
               type={elem.type}
+              value={elem.value}
               placeholder={elem.placeholder}
               name={elem.name}
               required={elem.required}

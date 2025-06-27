@@ -1,0 +1,15 @@
+.wrapper {
+  margin-left: 10px;
+  gap: 5px;
+}
+
+.wrapper span {
+  width: 45px;
+  height: 5px;
+  border-radius: 10px;
+  background-color: var(--light-grey);
+}
+
+.wrapper span.selected {
+  background-color: var(--deep-purple);
+}

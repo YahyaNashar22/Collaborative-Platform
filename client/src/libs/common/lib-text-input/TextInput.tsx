@@ -1,52 +1,39 @@
-import { useState } from "react";
 import styles from "./TextInput.module.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 type props = {
   label: string;
   placeholder: string;
   name: string;
   type: string;
+  value: string;
   required: boolean;
+  maxLength?: number;
+  minLength?: number;
   onChange: (value: string, name: string) => void;
+  isShowPassword?: boolean;
+  errorMessage?: string;
+  toggleShowPassword?: () => void;
+  onBlur?: () => void;
 };
 const TextInput = ({
   type,
   label,
   placeholder,
   name,
+  value,
   required,
+  maxLength,
+  minLength,
   onChange,
+  isShowPassword,
+  toggleShowPassword,
+  errorMessage,
+  onBlur,
 }: props) => {
-  const [focus, setFocus] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-  const [emailError, setEmailError] = useState<boolean>(false);
-  const [isEmail, setIsEmail] = useState<boolean>(false);
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // handle if user clear all data and didn't blur yet
-    if (e.target.value.length === 0) setError(true);
-
-    if (error) setError(false);
-
-    if (isEmail && !emailRegex.test(e.target.value)) {
-      setEmailError(true);
-    } else if (emailRegex.test(e.target.value)) {
-      setEmailError(false);
-    }
     onChange(e.target.value, name);
-  };
-
-  const handleCLick = (e: React.MouseEvent<HTMLInputElement>) => {
-    setFocus(true);
-    if ((e.target as HTMLInputElement).name === "email") setIsEmail(true);
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    // reset isEmailError
-    setIsEmail(false);
-    if (focus && e.target.value.length === 0) setError(true);
   };
 
   return (
@@ -58,24 +45,39 @@ const TextInput = ({
       </label>
       <div
         className={`${styles.inputHolder}  ${
-          error || emailError ? styles.error : ""
+          errorMessage ? styles.error : ""
         } d-f align-center`}
       >
         <input
-          type={type}
+          type={type === "password" && isShowPassword ? "text" : type}
           id={name}
           placeholder={placeholder}
           name={name}
+          value={value}
           required={required}
+          maxLength={maxLength || 0}
+          minLength={minLength || 0}
           onChange={handleChange}
-          onClick={(e) => handleCLick(e)}
-          onBlur={(e) => handleBlur(e)}
+          onBlur={onBlur}
         />
+        {type === "password" && (
+          <div className="pointer">
+            {type === "password" && toggleShowPassword && (
+              <div className="pointer" onClick={toggleShowPassword}>
+                {isShowPassword ? (
+                  <FontAwesomeIcon
+                    icon={faEyeSlash}
+                    style={{ color: "#495059" }}
+                  />
+                ) : (
+                  <FontAwesomeIcon icon={faEye} style={{ color: "#495059" }} />
+                )}
+              </div>
+            )}
+          </div>
+        )}
       </div>
-      {error && <small className="error">* This field is required.</small>}
-      {emailError && !error && (
-        <small className="error">* Please enter a valid email.</small>
-      )}
+      {errorMessage && <small className="error">{errorMessage}</small>}
     </div>
   );
 };

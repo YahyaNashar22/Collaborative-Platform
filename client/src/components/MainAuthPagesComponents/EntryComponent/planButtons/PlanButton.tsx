@@ -19,14 +19,12 @@ const PlanButton = ({
         onSubmit={onBack}
         backgroundColor="#57417e"
         hoverColor="#49356a"
-        disabled={false}
       />
       <LibButton
         label="Continue"
         onSubmit={onContinue}
         backgroundColor="#57417e"
         hoverColor="#49356a"
-        disabled={false}
       />
     </div>
   ) : (

@@ -1,14 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PlanBoxes from "../../../components/MainAuthPagesComponents/EntryComponent/PlanBoxes/PlanBoxes";
 import PlanButton from "../../../components/MainAuthPagesComponents/EntryComponent/planButtons/PlanButton";
 import styles from "./EntryPage.module.css";
 import PlanSelected from "../../../components/MainAuthPagesComponents/EntryComponent/PlanSelected/PlanSelected";
+import LibButton from "../../../libs/common/lib-button/LibButton";
 
 const EntryPage = () => {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
+  const { role } = useParams();
 
   const moveForward = () => {
     setStep(1);
@@ -23,7 +25,13 @@ const EntryPage = () => {
   };
 
   const redirectToSignUp = () => {
-    navigate("/auth/sign-up");
+    console.log(role);
+    if (role === "partner") {
+      navigate("register");
+    } else {
+      const planId = selectedPlan === "BOX-1" ? "individual" : "company";
+      navigate(`register/${planId}`, { relative: "path" });
+    }
   };
 
   return (
@@ -33,21 +41,40 @@ const EntryPage = () => {
           step === 0 ? "gap-10" : "gap-5"
         } d-f f-dir-col align-center justify-center`}
       >
-        <PlanSelected step={step} backup="" />
-        <div className="d-f f-dir-col align-center gap-5">
-          <PlanBoxes
-            query={step === 1 ? (selectedPlan as "BOX-1" | "BOX-2") : null}
-            step={step}
-            selected={selectedPlan}
-            onSelect={handleSelectBox}
-          />
-          <PlanButton
-            step={step}
-            onBack={moveBack}
-            onContinue={step === 1 ? redirectToSignUp : moveForward}
-            disabled={selectedPlan === ""}
-          />
-        </div>
+        {role === "client" ? (
+          <>
+            <PlanSelected
+              step={step}
+              authSteps={selectedPlan === "BOX-1" ? 2 : 3}
+            />
+            <div className="d-f f-dir-col align-center gap-5">
+              <PlanBoxes
+                query={step === 1 ? (selectedPlan as "BOX-1" | "BOX-2") : null}
+                step={step}
+                selected={selectedPlan}
+                onSelect={handleSelectBox}
+              />
+
+              <PlanButton
+                step={step}
+                onBack={moveBack}
+                onContinue={step === 1 ? redirectToSignUp : moveForward}
+                disabled={selectedPlan === ""}
+              />
+            </div>
+          </>
+        ) : (
+          <div className="d-f f-dir-col align-center gap-5">
+            <PlanSelected step={1} authSteps={6} />
+            <LibButton
+              label="Continue"
+              onSubmit={redirectToSignUp}
+              backgroundColor="#57417e"
+              hoverColor="#49356a"
+              padding="0 30px"
+            />
+          </div>
+        )}
       </div>
     </div>
   );

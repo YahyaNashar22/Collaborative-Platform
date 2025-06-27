@@ -5,7 +5,7 @@ type LibButtonType = {
   outlined?: boolean;
   backgroundColor?: string;
   onSubmit: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   hoverColor?: string;
   styleClass?: string;
   padding?: string;
@@ -13,7 +13,7 @@ type LibButtonType = {
 
 const LibButton = ({
   label,
-  disabled,
+  disabled = false,
   outlined,
   backgroundColor,
   onSubmit,

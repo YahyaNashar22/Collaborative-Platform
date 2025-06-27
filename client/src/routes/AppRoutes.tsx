@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import Loading from "../shared/Loading/Loading.tsx";
-import DashboardLayout from "../Layouts/DashboardLayout.tsx";
+import DashboardLayout from "../Layouts/DashboardEntryLayout.tsx";
 
 import FAQPage from "../pages/MainPages/FAQPage/FAQPage.tsx";
 
@@ -12,6 +12,8 @@ import TermsPage from "../pages/MainPages/TermsPage/TermsPage.tsx";
 import ContactPage from "../pages/MainPages/ContactPage/ContactPage.tsx";
 import MainLayout from "../Layouts/MainLayout.tsx";
 import EntryPage from "../pages/MainAuthPages/Entry/EntryPage.tsx";
+import DashboardEntryLayout from "../Layouts/DashboardEntryLayout.tsx";
+import DashboardSideLayout from "../Layouts/DashboardSideLayout.tsx";
 
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
@@ -55,13 +57,18 @@ const AppRoutes = () => {
           <Route path="/contact" element={<ContactPage />} />
         </Route>
 
-        <Route path="/client-sign-up" element={<ClientSignupPage />} />
-        <Route path="/provider-sign-up" element={<ProviderSignupPage />} />
+        <Route path="/client-register" element={<ClientSignupPage />} />
+        <Route path="/provider-register" element={<ProviderSignupPage />} />
 
         {/* AUthorization routes */}
-        <Route path="/auth" element={<DashboardLayout />}>
+        {/* Layout for EntryPage without sidebar */}
+        <Route path="auth/:role" element={<DashboardEntryLayout />}>
           <Route index element={<EntryPage />} />
-          <Route path="sign-up" element={<SignUpPage />} />
+        </Route>
+
+        {/* Layout for SignUp and Login with sidebar */}
+        <Route path="auth/:role" element={<DashboardSideLayout />}>
+          <Route path="register/:plan" element={<SignUpPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
 

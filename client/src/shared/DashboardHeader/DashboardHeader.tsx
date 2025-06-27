@@ -8,7 +8,7 @@ import { faHouse } from "@fortawesome/free-solid-svg-icons";
 
 const DashboardHeader = () => {
   const navigator = useNavigate();
-  const currentPath = useLocation().pathname;
+  const { pathname } = useLocation();
 
   return (
     <header
@@ -32,11 +32,11 @@ const DashboardHeader = () => {
           <li
             key={path}
             className={`${styles.navLink} ${
-              currentPath === path ? styles.active : ""
+              pathname === path ? styles.active : ""
             } pointer`}
           >
             <Link to={path} className="d-f align-center gap-2">
-              {currentPath.includes("/auth") ? (
+              {pathname.includes("/auth") ? (
                 hasIcon && (
                   <div className={styles.whiteHomeIcon}>
                     <FontAwesomeIcon
@@ -45,8 +45,8 @@ const DashboardHeader = () => {
                       size="lg"
                       style={{
                         color:
-                          currentPath.includes("/sign-up") ||
-                          currentPath.includes("/login")
+                          pathname.includes("/register") ||
+                          pathname.includes("/login")
                             ? "#6550b4"
                             : "#ffffff",
                       }}
@@ -55,8 +55,8 @@ const DashboardHeader = () => {
                       className={styles.whiteIcon}
                       style={{
                         color:
-                          currentPath.includes("/sign-up") ||
-                          currentPath.includes("/login")
+                          pathname.includes("/register") ||
+                          pathname.includes("/login")
                             ? "#495057"
                             : "#ffffff",
                       }}
