@@ -5,7 +5,15 @@ import logo from "../../assets/icons/Logo.png";
 import Window from "../../libs/common/lib-window/Window";
 import { faBriefcase, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import LibButton from "../../libs/common/lib-button/LibButton";
+
+interface cardDataType {
+  icon: IconDefinition;
+  title: string;
+  description: string;
+  type: string;
+}
 
 const Header = () => {
   const navigator = useNavigate();
@@ -17,7 +25,7 @@ const Header = () => {
 
   const navigate = useNavigate();
 
-  const cardData = [
+  const cardData: cardDataType[] = [
     {
       icon: faBriefcase,
       title: "Become A Partner",
@@ -33,11 +41,13 @@ const Header = () => {
   ];
 
   const openAuthWindow = (type: string) => {
+    console.log(type);
     setNextRoute(type);
     setOnWindowOpen(true);
   };
 
   const handleClick = (type: string) => {
+    console.log(type);
     switch (type) {
       case "partner":
         if (nextRoute === "register") navigate(`auth/${type}`);

@@ -1,0 +1,13 @@
+.wrapper {
+  width: 70%;
+}
+.wrapper > div {
+  gap: 40px;
+}
+.placeholder {
+  font-size: 24px;
+  color: var(--light-grey);
+}
+.formContainer {
+  gap: 15px;
+}

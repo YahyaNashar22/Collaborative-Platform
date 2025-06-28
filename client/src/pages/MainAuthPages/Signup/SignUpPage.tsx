@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import CompanySignUp from "../../../components/MainAuthPagesComponents/SignUp/CompanySignUp/CompanySignUp";
 import IndividualSignUp from "../../../components/MainAuthPagesComponents/SignUp/IndividualSignUp/IndividualSignUp";
 import PartnerSignUp from "../../../components/MainAuthPagesComponents/SignUp/PartnerSignUp/PartnerSignUp";
+import vector from "../../../assets/icons/bottomIcon.png";
 
 const SignUpPage = () => {
   const { role, plan } = useParams<{ role?: string; plan?: string }>();
@@ -34,13 +35,26 @@ const SignUpPage = () => {
         />
       );
   } else {
-    content = <PartnerSignUp />;
+    content = (
+      <PartnerSignUp
+        title={registerFormData.title}
+        placeholder={registerFormData.roles.partner.placeholder}
+        formData={registerFormData.roles.partner.types.default}
+      />
+    );
   }
 
   return (
-    <div className={`${styles.wrapper} d-f align-center justify-center w-100`}>
-      {content}
-    </div>
+    <>
+      <div
+        className={`${styles.wrapper} d-f align-center justify-center w-100`}
+      >
+        {content}
+      </div>
+      <div className="d-f align-end">
+        <img src={vector} alt="logo" />
+      </div>
+    </>
   );
 };
 export default SignUpPage;

@@ -1,0 +1,15 @@
+.policy {
+  gap: 5px;
+  color: var(--label-color);
+}
+
+.buttons {
+  gap: 10px;
+}
+
+.form {
+  gap: 5px;
+}
+.formContainer {
+  gap: 15px;
+}

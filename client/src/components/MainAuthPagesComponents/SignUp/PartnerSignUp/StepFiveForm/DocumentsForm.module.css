@@ -1,0 +1,23 @@
+.firstRow {
+  gap: 10px;
+}
+
+.firstRow div {
+  flex: 1;
+}
+
+.policy {
+  gap: 5px;
+  color: var(--label-color);
+}
+
+.buttons {
+  gap: 10px;
+}
+
+.form {
+  gap: 5px;
+}
+.formContainer {
+  gap: 15px;
+}

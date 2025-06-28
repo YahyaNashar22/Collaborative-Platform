@@ -21,7 +21,11 @@ const DashboardSide = () => {
             Log in
           </Link>
         ) : (
-          <Link to="/register" className={`${styles.redirectBtn} pointer`}>
+          <Link
+            to="register"
+            relative="path"
+            className={`${styles.redirectBtn} pointer`}
+          >
             Sign up
           </Link>
         )}

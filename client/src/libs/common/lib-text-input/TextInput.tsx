@@ -16,6 +16,7 @@ type props = {
   onChange: (value: string, name: string) => void;
   isShowPassword?: boolean;
   errorMessage?: string;
+  min?: number;
   toggleShowPassword?: () => void;
   onBlur?: () => void;
 };
@@ -33,6 +34,7 @@ const TextInput = ({
   toggleShowPassword,
   errorMessage,
   onBlur,
+  min,
 }: props) => {
   return (
     <div className={`${styles.inputContainer} d-f f-dir-col`}>
@@ -63,8 +65,9 @@ const TextInput = ({
             name={name}
             value={value}
             required={required}
-            maxLength={maxLength || 0}
+            maxLength={maxLength}
             minLength={minLength || 0}
+            {...(type === "number" ? { min } : {})}
             onChange={(e) => onChange(e.target.value, name)}
             onBlur={onBlur}
           />

@@ -1,0 +1,14 @@
+.wrapper > div {
+  gap: 40px;
+}
+.placeholder {
+  font-size: 24px;
+  color: var(--light-grey);
+}
+.formContainer {
+  gap: 15px;
+}
+
+.buttons small:hover {
+  color: var(--light-purple);
+}
