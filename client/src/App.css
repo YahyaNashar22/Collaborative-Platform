@@ -190,3 +190,10 @@ li {
   color: var(--error);
   font-size: 0.75rem;
 }
+
+.line {
+  margin-top: 15px;
+  background-color: var(--light-grey);
+  display: block;
+  height: 1px;
+}

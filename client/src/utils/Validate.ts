@@ -1,5 +1,3 @@
-import { isValidPhoneNumber } from "libphonenumber-js";
-
 export type FieldError = {
   [fieldName: string]: string;
 };
@@ -24,10 +22,11 @@ export const Validate = (
   }
 
   if (name === "phoneNumber") {
-    if (!isValidPhoneNumber(value.trim())) {
-      return "* Please enter a valid international phone number";
+    const onlyDigits = value.replace(/\D/g, "");
+    if (onlyDigits.length < 8) {
+      return "* Please enter a valid phone number";
     }
   }
 
-  return ""; // no error
+  return "";
 };

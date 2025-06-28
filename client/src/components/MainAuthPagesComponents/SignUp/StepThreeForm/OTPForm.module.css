@@ -1,0 +1,60 @@
+.formContainer > h1 {
+  margin-top: 20px;
+}
+
+.form {
+  margin-top: 50px;
+  gap: 15px;
+}
+
+.form .inputHolder {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+}
+
+.form .inputHolder input {
+  height: 100%;
+  border-radius: 8px;
+  background-color: #e6dffa;
+  border: none;
+  caret-color: transparent;
+  color: #000;
+  font-size: 30px;
+  text-align: center;
+}
+
+.form .inputHolder input.selected {
+  background-color: var(--deep-purple);
+}
+
+.otpActionBtn {
+  margin: 30px 0;
+  gap: 100px;
+}
+
+.disabled {
+  color: var(--soft-purple);
+  pointer-events: none;
+}
+
+.terms {
+  gap: 5px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.terms label {
+  color: var(--label-color);
+}
+
+.terms input {
+  width: 20px;
+  height: 20px;
+}
+
+.buttons {
+  gap: 10px;
+  margin-top: 30px;
+}

@@ -1,19 +1,30 @@
 import { useState } from "react";
-import TextInput from "../../../../libs/common/lib-text-input/TextInput";
-import styles from "./SimpleFormView.module.css";
-import LibButton from "../../../../libs/common/lib-button/LibButton";
-import useFormStore from "../../../../store/FormsStore";
-import { Validate } from "../../../../utils/Validate";
-import { FormField, FormStepData } from "../../../../interfaces/registerSignup";
+import {
+  FormField,
+  FormStepData,
+} from "../../../../../interfaces/registerSignup";
+import LibButton from "../../../../../libs/common/lib-button/LibButton";
+import TextInput from "../../../../../libs/common/lib-text-input/TextInput";
+import { Validate } from "../../../../../utils/Validate";
+import styles from "./OrgInformationForm.module.css";
+import useFormStore from "../../../../../store/FormsStore";
+import SelectInput from "../../../../../libs/common/lib-select-input/SelectInput";
+import FileInput from "../../../../../libs/common/lib-file-input/FileInput";
+import TextAreaInput from "../../../../../libs/common/lib-textArea/TextAreaInput";
 
-type SimpleFormViewProps = {
+type OrgInformationFormViewProps = {
   data: FormStepData;
   title: string;
   moveForward: () => void;
+  moveBackward: () => void;
 };
 
-const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
-  const [isShowPassword, setIsShowPassword] = useState(false);
+const OrgInformationForm = ({
+  data,
+  title,
+  moveForward,
+  moveBackward,
+}: OrgInformationFormViewProps) => {
   const { role, type, getFormValues, updateFieldValue } = useFormStore();
   const [touchedFields, setTouchedFields] = useState<{
     [key: string]: boolean;
@@ -22,11 +33,8 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
 
   const fieldValues = getFormValues(role, type);
 
-  const togglePasswordVisibility = () => setIsShowPassword((prev) => !prev);
-
   const onNext = () => {
     const hasError = onNextVaidation();
-
     if (Object.keys(hasError).length > 0) return;
 
     moveForward();
@@ -55,7 +63,7 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
 
   const handleChange = (name: string, value: string, required: boolean) => {
     updateFieldValue(role, type, name, value);
-    console.log(getFormValues(role, type));
+
     if (touchedFields[name]) {
       const error = Validate(name, value, required, type);
       setErrors((prev) => ({ ...prev, [name]: error }));
@@ -78,72 +86,91 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
       <h1 className="purple">{title}</h1>
       <form className={`${styles.form} d-f f-dir-col `}>
         {/* Group First Name and Last Name */}
-        <div className={`${styles.firstRow} d-f w-100`} style={{ gap: "20px" }}>
-          {data.form.slice(0, 2).map((field: FormField, index: number) => (
+        {data.form.slice(0, 3).map((field: FormField, index: number) => {
+          return (
             <div key={index}>
-              <TextInput
+              {field.type === "aria" ? (
+                <TextAreaInput
+                  label={field.label}
+                  placeholder={field.placeholder}
+                  name={field.name}
+                  required={field.required || false}
+                  onChange={(value, name) =>
+                    handleChange(name, value, field.required || false)
+                  }
+                />
+              ) : (
+                <TextInput
+                  label={field.label}
+                  type={field.type}
+                  placeholder={field.placeholder}
+                  name={field.name}
+                  value={fieldValues[field.name] || ""}
+                  required={field.required || false}
+                  maxLength={Number(field.maxLength)}
+                  minLength={Number(field.minLength)}
+                  onChange={(value, name) =>
+                    handleChange(name, value, field.required || false)
+                  }
+                  errorMessage={errors[field.name]}
+                  onBlur={() =>
+                    handleBlur(
+                      field.name,
+                      fieldValues[field.name] || "",
+                      field.required || false,
+                      field.type
+                    )
+                  }
+                />
+              )}
+            </div>
+          );
+        })}
+        <div className={`${styles.firstRow} d-f w-100`} style={{ gap: "20px" }}>
+          {data.form.slice(3, 5).map((field: FormField, index: number) => (
+            <div key={index}>
+              <SelectInput
                 label={field.label}
-                type={field.type}
-                value={fieldValues[field.name] || ""}
-                placeholder={field.placeholder}
                 name={field.name}
-                required={field.required || false}
-                maxLength={Number(field.maxLength)}
-                minLength={Number(field.minLength)}
+                value={fieldValues[field.name]}
+                required={field.required}
+                placeholder={field.placeholder}
+                options={field.options || []}
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false)
                 }
                 errorMessage={errors[field.name]}
-                onBlur={() =>
-                  handleBlur(
-                    field.name,
-                    fieldValues[field.name] || "",
-                    field.required || false,
-                    field.type
-                  )
-                }
               />
             </div>
           ))}
         </div>
-
-        {data.form.slice(2).map((field: FormField, index: number) => {
-          const isPasswordField =
-            field.name === "password" || field.name === "confirmPassword";
-
+        {data.form.slice(5).map((field: FormField, index: number) => {
           return (
             <div key={index}>
-              <TextInput
+              <FileInput
                 label={field.label}
-                type={field.type}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={fieldValues[field.name] || ""}
+                value={fieldValues[field.name]}
                 required={field.required || false}
-                maxLength={Number(field.maxLength)}
-                minLength={Number(field.minLength)}
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false)
                 }
-                isShowPassword={isPasswordField ? isShowPassword : undefined}
-                toggleShowPassword={
-                  isPasswordField ? togglePasswordVisibility : undefined
-                }
                 errorMessage={errors[field.name]}
-                onBlur={() =>
-                  handleBlur(
-                    field.name,
-                    fieldValues[field.name] || "",
-                    field.required || false,
-                    field.type
-                  )
-                }
               />
             </div>
           );
         })}
       </form>
       <div className={`${styles.buttons} d-f align-center justify-end`}>
+        <LibButton
+          label="Back"
+          onSubmit={moveBackward}
+          backgroundColor="#57417e"
+          hoverColor="#49356a"
+          padding="0 20px"
+        />
+
         <LibButton
           label="Next"
           onSubmit={onNext}
@@ -156,4 +183,4 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
   );
 };
 
-export default SimpleFormView;
+export default OrgInformationForm;

@@ -68,6 +68,9 @@ const AppRoutes = () => {
 
         {/* Layout for SignUp and Login with sidebar */}
         <Route path="auth/:role" element={<DashboardSideLayout />}>
+          {/* partner route */}
+          <Route path="register" element={<SignUpPage />} />
+          {/* user route */}
           <Route path="register/:plan" element={<SignUpPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>

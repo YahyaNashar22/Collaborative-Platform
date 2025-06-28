@@ -8,16 +8,19 @@ export interface FormField {
   minLength?: number;
   required?: boolean;
   errorMsg?: string;
+  options?: { label: string; value: string }[];
 }
 
 export interface FormStepData {
-  [stepIndex: number]: FormField[];
+  formTitle: string;
+  form: FormField[];
 }
 
 export interface TypeFormData {
-  formTitle: string;
   steps: number;
-  formData: FormStepData;
+  formData: {
+    [stepIndex: number]: FormStepData;
+  };
 }
 
 export interface RoleData {

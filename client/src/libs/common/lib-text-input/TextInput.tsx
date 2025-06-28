@@ -1,6 +1,8 @@
 import styles from "./TextInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { PhoneInput } from "react-international-phone";
+import "react-international-phone/style.css";
 
 type props = {
   label: string;
@@ -32,10 +34,6 @@ const TextInput = ({
   errorMessage,
   onBlur,
 }: props) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value, name);
-  };
-
   return (
     <div className={`${styles.inputContainer} d-f f-dir-col`}>
       <label htmlFor={name} className="bold">
@@ -46,20 +44,31 @@ const TextInput = ({
       <div
         className={`${styles.inputHolder}  ${
           errorMessage ? styles.error : ""
-        } d-f align-center`}
+        } ${name === "phoneNumber" ? styles.phoneInput : ""} d-f align-center`}
       >
-        <input
-          type={type === "password" && isShowPassword ? "text" : type}
-          id={name}
-          placeholder={placeholder}
-          name={name}
-          value={value}
-          required={required}
-          maxLength={maxLength || 0}
-          minLength={minLength || 0}
-          onChange={handleChange}
-          onBlur={onBlur}
-        />
+        {name === "phoneNumber" ? (
+          <PhoneInput
+            defaultCountry="lb"
+            value={value}
+            required={required}
+            onChange={(phone) => onChange(phone, name)}
+            className="custom-phone-input-wrapper"
+            onBlur={onBlur}
+          />
+        ) : (
+          <input
+            type={type === "password" && isShowPassword ? "text" : type}
+            id={name}
+            placeholder={placeholder}
+            name={name}
+            value={value}
+            required={required}
+            maxLength={maxLength || 0}
+            minLength={minLength || 0}
+            onChange={(e) => onChange(e.target.value, name)}
+            onBlur={onBlur}
+          />
+        )}
         {type === "password" && (
           <div className="pointer">
             {type === "password" && toggleShowPassword && (

@@ -5,12 +5,14 @@ import PlanButton from "../../../components/MainAuthPagesComponents/EntryCompone
 import styles from "./EntryPage.module.css";
 import PlanSelected from "../../../components/MainAuthPagesComponents/EntryComponent/PlanSelected/PlanSelected";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import useFormStore from "../../../store/FormsStore";
 
 const EntryPage = () => {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [step, setStep] = useState(0);
   const navigate = useNavigate();
   const { role } = useParams();
+  const { resetForm } = useFormStore();
 
   const moveForward = () => {
     setStep(1);
@@ -25,7 +27,9 @@ const EntryPage = () => {
   };
 
   const redirectToSignUp = () => {
-    console.log(role);
+    // reset the form
+    const planId = selectedPlan === "BOX-1" ? "individual" : "company";
+    resetForm(role || "individual", planId);
     if (role === "partner") {
       navigate("register");
     } else {
@@ -45,6 +49,7 @@ const EntryPage = () => {
           <>
             <PlanSelected
               step={step}
+              role={role}
               authSteps={selectedPlan === "BOX-1" ? 2 : 3}
             />
             <div className="d-f f-dir-col align-center gap-5">
@@ -65,7 +70,7 @@ const EntryPage = () => {
           </>
         ) : (
           <div className="d-f f-dir-col align-center gap-5">
-            <PlanSelected step={1} authSteps={6} />
+            <PlanSelected step={1} authSteps={6} role={role || "partner"} />
             <LibButton
               label="Continue"
               onSubmit={redirectToSignUp}

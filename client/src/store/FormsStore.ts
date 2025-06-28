@@ -28,11 +28,20 @@ interface FormActions {
     fieldName: string,
     value: string
   ) => void;
+
   updateFormPage: (
     role: string,
     type: string,
     data: Record<string, string>
   ) => void;
+
+  // updateFileFieldValue: (
+  //   role: string,
+  //   type: string,
+  //   fieldName: string,
+  //   file: File
+  // ) => void;
+
   getFormValues: (role: string, type: string) => Record<string, string>;
   resetForm: (role: string, type: string) => void;
   setStep: (step: number) => void;
@@ -107,7 +116,8 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
     return get().roleFormData?.[role]?.[type] || {};
   },
 
-  resetForm: (role, type) =>
+  resetForm: (role, type) => {
+    console.log(role, type);
     set((state) => ({
       roleFormData: {
         ...state.roleFormData,
@@ -116,7 +126,8 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
           [type]: {},
         },
       },
-    })),
+    }));
+  },
 }));
 
 export default useFormStore;

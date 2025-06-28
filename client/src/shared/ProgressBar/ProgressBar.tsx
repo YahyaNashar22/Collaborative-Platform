@@ -6,7 +6,6 @@ interface ProgressBarProps {
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({ nodes, currentNode }) => {
-  console.log(nodes, currentNode);
   return (
     <div className={`${styles.wrapper} d-f align-center`}>
       {Array.from({ length: nodes }).map((_, index: number) => (
