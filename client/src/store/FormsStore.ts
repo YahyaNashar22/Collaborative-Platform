@@ -54,7 +54,7 @@ interface FormActions {
 const useFormStore = create<FormState & FormActions>((set, get) => ({
   role: "",
   type: "",
-  step: 0,
+  step: 4,
   roleFormData: {},
 
   setRole: (role) => set({ role }),

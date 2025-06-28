@@ -2,7 +2,7 @@
   flex: 1;
 }
 
-.inputContainer label {
+/* .inputContainer label {
   font-size: 12px;
   color: var(--label-color);
 }
@@ -54,4 +54,49 @@
 
 .phoneInput {
   padding: 0 10px;
+} */
+
+.inputContainer {
+  margin-bottom: 16px;
+}
+
+.required {
+  color: red;
+  margin-left: 4px;
+}
+
+.fileWrapper {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 12px;
+  background-color: #f8f9fa;
+}
+
+.inputHolder {
+  position: relative;
+  cursor: pointer;
+}
+
+.customFileLabel {
+  gap: 12px;
+}
+
+.placeholderText {
+  color: #6c757d;
+  font-size: 14px;
+  max-width: 155px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: block;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
 }

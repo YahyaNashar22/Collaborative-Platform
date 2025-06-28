@@ -50,6 +50,7 @@ const TextInput = ({
       >
         {name === "phoneNumber" ? (
           <PhoneInput
+            style={{ width: "100%" }}
             defaultCountry="lb"
             value={value}
             required={required}

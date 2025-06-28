@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styles from "./FileInput.module.css";
 import { faFolderPlus } from "@fortawesome/free-solid-svg-icons";
+import styles from "./FileInput.module.css";
 
 type FileInputProps = {
   label: string;
@@ -8,7 +9,6 @@ type FileInputProps = {
   required?: boolean;
   errorMessage?: string;
   placeholder: string;
-
   onChange: (file: File | null, name: string) => void;
 };
 
@@ -18,11 +18,13 @@ const FileInput = ({
   required = false,
   errorMessage,
   onChange,
-
   placeholder,
 }: FileInputProps) => {
+  const [fileName, setFileName] = useState<string>("");
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
+    setFileName(file?.name || "");
     onChange(file, name);
   };
 
@@ -31,30 +33,36 @@ const FileInput = ({
       <label htmlFor={name} className="bold">
         {label} {required && <span className={styles.required}>*</span>}
       </label>
+
       <div
         className={`${styles.fileWrapper} ${errorMessage ? styles.error : ""}`}
       >
-        <div
-          className={`${styles.inputHolder}  ${
-            errorMessage ? styles.error : ""
-          }  d-f align-center`}
-        >
-          <input
-            type="file"
-            id={name}
-            name={name}
-            placeholder={placeholder}
-            onChange={handleFileChange}
-          />
-          <label htmlFor={name} className={styles.customFileLabel}>
+        <div className={`${styles.inputHolder} d-f align-center`}>
+          <label
+            htmlFor={name}
+            className={`${`${styles.customFileLabel} d-f w-100 align-center pointer bold`} `}
+          >
             <FontAwesomeIcon
               icon={faFolderPlus}
               size="xl"
               style={{ color: "#495057" }}
             />
+            <span className={styles.placeholderText}>
+              {fileName || placeholder}
+            </span>
           </label>
+
+          <input
+            type="file"
+            id={name}
+            name={name}
+            className={styles.hiddenInput}
+            required={required}
+            onChange={handleFileChange}
+          />
         </div>
       </div>
+
       {errorMessage && <small className="error">{errorMessage}</small>}
     </div>
   );
