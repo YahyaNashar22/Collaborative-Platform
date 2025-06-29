@@ -1,12 +1,15 @@
-import { useState } from "react";
 import styles from "./TextAreaInput.module.css";
 
-type props = {
+type TextAreaInputProps = {
   label: string;
   placeholder: string;
   name: string;
   required: boolean;
+  value: string;
+  maxLength?: number;
+  errorMessage?: string;
   onChange: (value: string, name: string) => void;
+  onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
 };
 
 const TextAreaInput = ({
@@ -14,59 +17,45 @@ const TextAreaInput = ({
   placeholder,
   name,
   required,
+  value,
   onChange,
-}: props) => {
-  const [descriptionValue, setDescriptionValue] = useState<string>("");
-  const [focus, setFocus] = useState<boolean>(false);
-  const [error, setError] = useState<boolean>(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    // prevant enter value if max reached
-    if (descriptionValue.length === max) return;
-    if (error) setError(false);
-    onChange(e.target.value, name);
-    setDescriptionValue(e.target.value);
-  };
-
-  const handleCLick = () => {
-    setFocus(true);
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLTextAreaElement>) => {
-    if (focus && e.target.value.length === 0) setError(true);
-  };
-
-  const max: number = 1000;
-
+  errorMessage,
+  maxLength = 1000,
+  onBlur,
+}: TextAreaInputProps) => {
   return (
-    <div className={`${styles.inputContainer} d-f f-dir-col`}>
+    <div
+      className={`${styles.inputContainer} ${
+        errorMessage ? styles.error : ""
+      }  d-f f-dir-col`}
+    >
       <label htmlFor={name} className="bold">
         <span>
           {label} {required && <span className={styles.required}>*</span>}
         </span>
       </label>
       <div
-        className={`${styles.inputHolder} ${
-          error ? styles.error : ""
-        } d-f align-center`}
+        className={`${styles.inputHolder} d-f align-center ${
+          errorMessage ? styles.error : ""
+        }`}
       >
         <textarea
           required={required}
           name={name}
-          maxLength={max}
           id={name}
+          value={value}
+          placeholder={placeholder}
           rows={4}
           cols={50}
-          placeholder={placeholder}
-          onChange={handleChange}
-          onBlur={(e) => handleBlur(e)}
-          onClick={handleCLick}
-        ></textarea>
+          maxLength={maxLength}
+          onChange={(e) => onChange(e.target.value, name)}
+          onBlur={onBlur}
+        />
         <div className={styles.length}>
-          {descriptionValue.length} / {max}
+          {value?.length} / {maxLength}
         </div>
       </div>
-      {error && <small className="error">* This field is required.</small>}
+      {errorMessage && <small className="error">{errorMessage}</small>}
     </div>
   );
 };

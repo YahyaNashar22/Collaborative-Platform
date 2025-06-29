@@ -11,6 +11,7 @@ export const Validate = (
   if (required && !value.trim()) {
     return "* This field is required";
   }
+  console.log(value, required, type);
 
   if (type === "email") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,6 +27,14 @@ export const Validate = (
     if (onlyDigits.length < 8) {
       return "* Please enter a valid phone number";
     }
+  }
+
+  if (type === "file") {
+    console.log(required, value);
+    if (required && !(value instanceof File)) {
+      return "* This file is required";
+    }
+    return "";
   }
 
   return "";

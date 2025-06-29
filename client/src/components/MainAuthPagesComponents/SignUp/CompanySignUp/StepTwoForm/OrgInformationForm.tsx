@@ -94,9 +94,18 @@ const OrgInformationForm = ({
                   label={field.label}
                   placeholder={field.placeholder}
                   name={field.name}
+                  value={fieldValues[field.name] || ""}
                   required={field.required || false}
                   onChange={(value, name) =>
                     handleChange(name, value, field.required || false)
+                  }
+                  onBlur={() =>
+                    handleBlur(
+                      field.name,
+                      fieldValues[field.name] || "",
+                      field.required || false,
+                      field.type
+                    )
                   }
                 />
               ) : (

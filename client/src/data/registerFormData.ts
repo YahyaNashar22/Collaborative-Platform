@@ -296,7 +296,7 @@ export const registerFormData: RegisterFormData = {
                   placeholder: "About the company",
                   type: "aria",
                   maxLength: 100,
-                  required: true,
+                  required: false,
                   errorMsg: "* This Field is Required",
                 },
                 {
@@ -475,7 +475,7 @@ export const registerFormData: RegisterFormData = {
                   placeholder: "About the company",
                   type: "aria",
                   // maxLength: 30,
-                  required: true,
+                  required: false,
                   errorMsg: "* This Field is Required",
                 },
                 {

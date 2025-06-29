@@ -54,7 +54,7 @@ interface FormActions {
 const useFormStore = create<FormState & FormActions>((set, get) => ({
   role: "",
   type: "",
-  step: 4,
+  step: 0,
   roleFormData: {},
 
   setRole: (role) => set({ role }),
@@ -65,11 +65,11 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
     const { role, type, step } = get();
     console.log(role, type, step);
     const currentTypeData = registerFormData.roles[role]?.types[type];
+    console.log("moving...", currentTypeData);
 
     if (!currentTypeData) return;
 
     const maxStep = currentTypeData.steps;
-
     if (step < maxStep - 1) {
       set({ step: step + 1 });
     }
@@ -84,7 +84,7 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
   decreaseStep: () => set((state) => ({ step: Math.max(state.step - 1, 0) })),
   getStep: () => get().step,
 
-  updateFieldValue: (role, type, fieldName, value) =>
+  updateFieldValue: (role, type, fieldName, value) => {
     set((state) => ({
       roleFormData: {
         ...state.roleFormData,
@@ -96,7 +96,8 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
           },
         },
       },
-    })),
+    }));
+  },
 
   updateFormPage: (role, type, data) =>
     set((state) => ({
@@ -117,7 +118,7 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
   },
 
   resetForm: (role, type) => {
-    console.log(role, type);
+    set({ step: 0 });
     set((state) => ({
       roleFormData: {
         ...state.roleFormData,

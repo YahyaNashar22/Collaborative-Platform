@@ -7,10 +7,10 @@
 .boxContainer {
   position: relative;
   top: 200px;
-  gap: 15px;
+  gap: 50px;
 }
 
-.box h3 {
+.box a {
   background-color: var(--intense-purple);
   padding: 10px;
   color: #fff;
@@ -27,6 +27,6 @@
   text-align: center;
 }
 
-.box.leftBox h3 {
+.box.leftBox a {
   background-color: var(--dark-grey);
 }

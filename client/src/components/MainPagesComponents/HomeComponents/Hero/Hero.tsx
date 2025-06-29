@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import HeroWrapper from "../../../../shared/HeroWrapper.tsx/HeroWrapper";
 import styles from "./Hero.module.css";
 
@@ -13,11 +14,15 @@ const Hero = () => {
           <div
             className={`${styles.box} ${styles.leftBox} d-f f-dir-col align-center w-100`}
           >
-            <h3 className="w-100 pointer">BECOME A PARTNER</h3>
+            <Link to={"/auth/partner"} className="w-100 pointer">
+              BECOME A PARTNER
+            </Link>
             <div>Become a Partner In 6 Steps to grow your business</div>
           </div>
           <div className={`${styles.box} d-f f-dir-col align-center w-100`}>
-            <h3 className="w-100 pointer">BECOME A CLIENT</h3>
+            <Link to={"/auth/client"} className="w-100 pointer">
+              BECOME A CLIENT
+            </Link>
             <div>Become a client In 3 Steps to Settle your project</div>
           </div>
         </div>

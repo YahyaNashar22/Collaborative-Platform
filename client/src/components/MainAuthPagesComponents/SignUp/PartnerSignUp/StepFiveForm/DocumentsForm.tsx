@@ -10,7 +10,7 @@ import LibButton from "../../../../../libs/common/lib-button/LibButton";
 import styles from "./DocumentsForm.module.css";
 import FileInput from "../../../../../libs/common/lib-file-input/FileInput";
 
-type SimpleFormViewProps = {
+type DocumentsFormViewProps = {
   data: FormStepData;
   title: string;
   moveForward: () => void;
@@ -22,7 +22,7 @@ const DocumentsForm = ({
   title,
   moveForward,
   moveBackward,
-}: SimpleFormViewProps) => {
+}: DocumentsFormViewProps) => {
   const { role, type, getFormValues, updateFieldValue } = useFormStore();
   const [touchedFields, setTouchedFields] = useState<{
     [key: string]: boolean;
@@ -33,7 +33,6 @@ const DocumentsForm = ({
 
   const onNext = () => {
     const hasError = onNextVaidation();
-
     if (Object.keys(hasError).length > 0) return;
 
     moveForward();
@@ -57,6 +56,7 @@ const DocumentsForm = ({
     });
     setErrors(newErrors);
     setTouchedFields((prev) => ({ ...prev, ...newTouched }));
+    console.log(newErrors);
     return newErrors;
   };
 
@@ -66,6 +66,7 @@ const DocumentsForm = ({
     if (touchedFields[name]) {
       const error = Validate(name, value, required, type);
       setErrors((prev) => ({ ...prev, [name]: error }));
+      console.log(error);
     }
   };
 
@@ -75,6 +76,7 @@ const DocumentsForm = ({
     required: boolean,
     type: string
   ) => {
+    console.log(name, value);
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
     const error = Validate(name, value, required, type);
     setErrors((prev) => ({ ...prev, [name]: error }));
@@ -83,14 +85,14 @@ const DocumentsForm = ({
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
       <h1 className="purple">{title}</h1>
-      <form className={`${styles.form} d-f f-dir-col `}>
+      <form className={`${styles.form} d-f f-dir-col`}>
         {/* Group First Name and Last Name */}
         <div className={`${styles.firstRow} d-f w-100`} style={{ gap: "20px" }}>
           {data.form.slice(0, 2).map((field: FormField, index: number) => (
             <div key={index}>
               <FileInput
                 label={field.label}
-                value={fieldValues[field.name] || ""}
+                value={fieldValues[field.name]}
                 placeholder={field.placeholder}
                 name={field.name}
                 required={field.required || false}
@@ -120,7 +122,7 @@ const DocumentsForm = ({
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={fieldValues[field.name] || ""}
+                value={fieldValues[field.name]}
                 required={field.required || false}
                 maxLength={Number(field.maxLength)}
                 minLength={Number(field.minLength)}

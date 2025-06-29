@@ -12,7 +12,6 @@ interface formType {
   value: string;
   type: string;
   required: boolean;
-  onChange: (value: string, name: string) => void;
 }
 
 type formDataSTate = {
@@ -23,8 +22,6 @@ type formDataSTate = {
   description: string;
 };
 const ContactForm = () => {
-  const [disabledBtn, setDisabledBtn] = useState<boolean>(true);
-
   const [formData, setFormData] = useState<formDataSTate>({
     firstName: "",
     lastName: "",
@@ -40,9 +37,6 @@ const ContactForm = () => {
       value: "",
       type: "text",
       required: true,
-      onChange: (value: string, name: string) => {
-        console.log(`Changed ${name}:`, value);
-      },
     },
     {
       label: "Last Name",
@@ -51,9 +45,6 @@ const ContactForm = () => {
       value: "",
       type: "text",
       required: true,
-      onChange: (value: string, name: string) => {
-        console.log(`Changed ${name}:`, value);
-      },
     },
     {
       label: "Email Address",
@@ -62,9 +53,6 @@ const ContactForm = () => {
       type: "email",
       value: "",
       required: true,
-      onChange: (value: string, name: string) => {
-        console.log(`Changed ${name}:`, value);
-      },
     },
     {
       label: "Phone Number",
@@ -73,22 +61,17 @@ const ContactForm = () => {
       type: "text",
       value: "",
       required: true,
-      onChange: (value: string, name: string) => {
-        console.log(`Changed ${name}:`, value);
-      },
     },
   ];
 
   const handleChange = (name: string, value: string) => {
+    console.log(name, value);
     const updatedFormData = {
       ...formData,
       [name]: value,
     };
-
     setFormData(updatedFormData);
-
     const hasError = checkingValidation(updatedFormData);
-    setDisabledBtn(hasError);
   };
 
   const checkingValidation = (data: typeof formData) => {
@@ -102,7 +85,9 @@ const ContactForm = () => {
     });
   };
 
-  const handleCLick = () => {};
+  const handleCLick = () => {
+    console.log(formData);
+  };
 
   return (
     <div className={`${styles.wrapper} d-f f-dir-col w-100`}>
@@ -120,7 +105,7 @@ const ContactForm = () => {
                 key={index}
                 label={elem.label}
                 type={elem.type}
-                value={elem.value}
+                value={formData[elem.name]}
                 placeholder={elem.placeholder}
                 name={elem.name}
                 required={elem.required}
@@ -136,7 +121,7 @@ const ContactForm = () => {
               key={index + 2}
               label={elem.label}
               type={elem.type}
-              value={elem.value}
+              value={formData[elem.name]}
               placeholder={elem.placeholder}
               name={elem.name}
               required={elem.required}
@@ -150,15 +135,12 @@ const ContactForm = () => {
             placeholder="Type here..."
             name="description"
             required={true}
+            value={formData.description}
             onChange={(value: string, name: string) =>
               handleChange(name, value)
             }
           />
-          <LibButton
-            label="Submit"
-            disabled={disabledBtn}
-            onSubmit={handleCLick}
-          />
+          <LibButton label="Submit" onSubmit={handleCLick} />
         </form>
       </div>
     </div>

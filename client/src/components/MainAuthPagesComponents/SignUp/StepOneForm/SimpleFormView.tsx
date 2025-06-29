@@ -50,6 +50,7 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
     });
     setErrors(newErrors);
     setTouchedFields((prev) => ({ ...prev, ...newTouched }));
+    console.log(newErrors);
     return newErrors;
   };
 
