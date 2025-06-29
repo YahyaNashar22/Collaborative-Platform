@@ -1,11 +1,12 @@
 import { create } from "zustand";
 import { registerFormData } from "../data/registerFormData";
+import { multiSelectType } from "../interfaces/registerSignup";
 
 // 🔷 Define the structure of your form data
 export interface RoleFormData {
   [role: string]: {
     [type: string]: {
-      [field: string]: string;
+      [field: string]: string | multiSelectType[];
     };
   };
 }
@@ -26,7 +27,7 @@ interface FormActions {
     role: string,
     type: string,
     fieldName: string,
-    value: string
+    value: string | multiSelectType[]
   ) => void;
 
   updateFormPage: (
@@ -35,14 +36,10 @@ interface FormActions {
     data: Record<string, string>
   ) => void;
 
-  // updateFileFieldValue: (
-  //   role: string,
-  //   type: string,
-  //   fieldName: string,
-  //   file: File
-  // ) => void;
-
-  getFormValues: (role: string, type: string) => Record<string, string>;
+  getFormValues: (
+    role: string,
+    type: string
+  ) => Record<string, string | multiSelectType[]>;
   resetForm: (role: string, type: string) => void;
   setStep: (step: number) => void;
   increaseStep: () => void;
@@ -54,7 +51,7 @@ interface FormActions {
 const useFormStore = create<FormState & FormActions>((set, get) => ({
   role: "",
   type: "",
-  step: 0,
+  step: 1,
   roleFormData: {},
 
   setRole: (role) => set({ role }),

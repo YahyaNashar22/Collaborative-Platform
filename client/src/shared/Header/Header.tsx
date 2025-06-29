@@ -164,12 +164,20 @@ const Header = () => {
                     style={{ color: "#ffffff" }}
                   />
 
-                  <h1>{card.title}</h1>
+                  <h1>
+                    {nextRoute === "login" && card.type === "partner"
+                      ? "Log In As Partner"
+                      : nextRoute === "login" && card.type === "client"
+                      ? "Log In As Client"
+                      : card.title}
+                  </h1>
                   <p>{card.description}</p>
 
                   <div className={styles.btn}>
                     <LibButton
-                      label="JOIN US"
+                      label={`${
+                        nextRoute === "register" ? "JOIN US" : "SIGN IN"
+                      }`}
                       outlined={true}
                       onSubmit={() => handleClick(card.type)}
                       styleClass="rounded"

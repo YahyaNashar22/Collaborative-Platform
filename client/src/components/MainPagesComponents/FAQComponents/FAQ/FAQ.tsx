@@ -14,9 +14,6 @@ const FAQ = () => {
     <div className={`${styles.wrapper} d-f `}>
       <div className={`${styles.left} d-f f-dir-col align-start`}>
         <h1 className="title">Frequently Asked Questions</h1>
-        <a href="_blank" className="bold align-text purple pointer intense">
-          View All FAQ
-        </a>
       </div>
       <div className="w-100">
         <Menu data={termsData} />

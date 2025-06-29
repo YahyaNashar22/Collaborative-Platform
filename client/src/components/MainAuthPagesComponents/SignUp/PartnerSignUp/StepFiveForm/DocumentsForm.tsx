@@ -32,13 +32,13 @@ const DocumentsForm = ({
   const fieldValues = getFormValues(role, type);
 
   const onNext = () => {
-    const hasError = onNextVaidation();
+    const hasError = onNextValidation();
     if (Object.keys(hasError).length > 0) return;
 
     moveForward();
   };
 
-  const onNextVaidation = () => {
+  const onNextValidation = () => {
     const newErrors: { [key: string]: string } = {};
     const newTouched: { [key: string]: boolean } = {};
     data.form.forEach((field) => {
