@@ -23,8 +23,6 @@ const Header = () => {
   const [nextRoute, setNextRoute] = useState<string>("");
   const [isDarkNav, setIsDarkNav] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
   const cardData: cardDataType[] = [
     {
       icon: faBriefcase,
@@ -50,12 +48,12 @@ const Header = () => {
     console.log(type);
     switch (type) {
       case "partner":
-        if (nextRoute === "register") navigate(`auth/${type}`);
-        else navigate(`auth/${type}/${nextRoute}`);
+        if (nextRoute === "register") navigator(`auth/${type}`);
+        else navigator(`auth/${type}/${nextRoute}`);
         break;
       case "client":
-        if (nextRoute === "register") navigate(`auth/${type}`);
-        else navigate(`auth/${type}/${nextRoute}`);
+        if (nextRoute === "register") navigator(`auth/${type}`);
+        else navigator(`auth/${type}/${nextRoute}`);
         break;
       default:
         break;
@@ -64,23 +62,25 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 500) {
+      if (window.scrollY > 50) {
         setIsDarkNav(true);
       } else {
         setIsDarkNav(false);
       }
     };
+
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [isDarkNav]);
 
   return (
     <>
       <header
         className={`${styles.wrapper} d-f align-center justify-between ${
-          isDarkNav ? "dark" : ""
+          isDarkNav ? styles.dark : ""
         }`}
       >
         <div className={`${styles.left}`}>
