@@ -1,16 +1,17 @@
-import { useState } from "react";
 import {
   FormField,
   FormStepData,
 } from "../../../../../interfaces/registerSignup";
 import LibButton from "../../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../../libs/common/lib-text-input/TextInput";
-import { Validate } from "../../../../../utils/Validate";
+
 import styles from "./OrgInformationForm.module.css";
 import useFormStore from "../../../../../store/FormsStore";
 import SelectInput from "../../../../../libs/common/lib-select-input/SelectInput";
 import FileInput from "../../../../../libs/common/lib-file-input/FileInput";
 import TextAreaInput from "../../../../../libs/common/lib-textArea/TextAreaInput";
+import { getStringValue } from "../../../../../utils/CastToString";
+import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
 
 type OrgInformationFormViewProps = {
   data: FormStepData;
@@ -25,60 +26,15 @@ const OrgInformationForm = ({
   moveForward,
   moveBackward,
 }: OrgInformationFormViewProps) => {
-  const { role, type, getFormValues, updateFieldValue } = useFormStore();
-  const [touchedFields, setTouchedFields] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const { role, type } = useFormStore();
 
-  const fieldValues = getFormValues(role, type);
+  const { fieldValues, errors, handleChange, handleBlur, validateStep } =
+    useStepFormHandlers(role, type);
 
   const onNext = () => {
-    const hasError = onNextValidation();
+    const hasError = validateStep(data.form);
     if (Object.keys(hasError).length > 0) return;
-
     moveForward();
-  };
-
-  const onNextValidation = () => {
-    const newErrors: { [key: string]: string } = {};
-    const newTouched: { [key: string]: boolean } = {};
-    data.form.forEach((field) => {
-      const value = fieldValues[field.name] || "";
-      const error = Validate(
-        field.name,
-        value,
-        field.required || false,
-        field.type
-      );
-      if (error) {
-        newErrors[field.name] = error;
-        newTouched[field.name] = true;
-      }
-    });
-    setErrors(newErrors);
-    setTouchedFields((prev) => ({ ...prev, ...newTouched }));
-    return newErrors;
-  };
-
-  const handleChange = (name: string, value: string, required: boolean) => {
-    updateFieldValue(role, type, name, value);
-
-    if (touchedFields[name]) {
-      const error = Validate(name, value, required, type);
-      setErrors((prev) => ({ ...prev, [name]: error }));
-    }
-  };
-
-  const handleBlur = (
-    name: string,
-    value: string,
-    required: boolean,
-    type: string
-  ) => {
-    setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type);
-    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   return (
@@ -94,7 +50,7 @@ const OrgInformationForm = ({
                   label={field.label}
                   placeholder={field.placeholder}
                   name={field.name}
-                  value={fieldValues[field.name] || ""}
+                  value={getStringValue(fieldValues[field.name])}
                   required={field.required || false}
                   onChange={(value, name) =>
                     handleChange(name, value, field.required || false)
@@ -102,7 +58,7 @@ const OrgInformationForm = ({
                   onBlur={() =>
                     handleBlur(
                       field.name,
-                      fieldValues[field.name] || "",
+                      getStringValue(fieldValues[field.name]),
                       field.required || false,
                       field.type
                     )
@@ -114,7 +70,7 @@ const OrgInformationForm = ({
                   type={field.type}
                   placeholder={field.placeholder}
                   name={field.name}
-                  value={fieldValues[field.name] || ""}
+                  value={getStringValue(fieldValues[field.name])}
                   required={field.required || false}
                   maxLength={Number(field.maxLength)}
                   minLength={Number(field.minLength)}
@@ -125,7 +81,7 @@ const OrgInformationForm = ({
                   onBlur={() =>
                     handleBlur(
                       field.name,
-                      fieldValues[field.name] || "",
+                      getStringValue(fieldValues[field.name]),
                       field.required || false,
                       field.type
                     )

@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import logo from "../../assets/icons/Logo.png";
+import hamburg from "../../assets/icons/menu-icon.png";
 import Window from "../../libs/common/lib-window/Window";
 import { faBriefcase, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import LibButton from "../../libs/common/lib-button/LibButton";
+import SidePanel from "../SidePanel/SidePanel";
 
 interface cardDataType {
   icon: IconDefinition;
@@ -18,7 +20,6 @@ interface cardDataType {
 const Header = () => {
   const navigator = useNavigate();
   const { pathname } = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);
   const [nextRoute, setNextRoute] = useState<string>("");
   const [isDarkNav, setIsDarkNav] = useState<boolean>(false);
@@ -41,9 +42,9 @@ const Header = () => {
   ];
 
   const openAuthWindow = (type: string) => {
-    console.log(type);
     setNextRoute(type);
     setOnWindowOpen(true);
+    closeSidePanel();
   };
 
   const handleClick = (type: string) => {
@@ -76,8 +77,32 @@ const Header = () => {
     };
   }, []);
 
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+
+  const toggleSidePanel = () => setIsSidePanelOpen((prev) => !prev);
+  const closeSidePanel = () => setIsSidePanelOpen(false);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsSidePanelOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
+      {/* Backdrop */}
+      {isSidePanelOpen && (
+        <div className={styles.backdrop} onClick={closeSidePanel}></div>
+      )}
+      <SidePanel
+        isOpen={isSidePanelOpen}
+        onClose={toggleSidePanel}
+        openAuthWindow={(type) => openAuthWindow(type)}
+      />
       <header
         className={`${styles.wrapper} d-f align-center justify-between ${
           isDarkNav ? "dark" : ""
@@ -86,22 +111,8 @@ const Header = () => {
         <div className={`${styles.left}`}>
           <img src={logo} alt="logo" onClick={() => navigator("/")} />
 
-          {/* Hamburger button */}
-          <button
-            className={styles.hamburger}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span className={styles.bar}></span>
-            <span className={styles.bar}></span>
-            <span className={styles.bar}></span>
-          </button>
-
           {/* Nav Links */}
-          <ul
-            className={`${styles.navLinks} ${
-              isMenuOpen ? styles.showMenu : ""
-            }`}
-          >
+          <ul className={`${styles.navLinks}`}>
             {[
               { path: "/", label: "HOME" },
               { path: "/about", label: "ABOUT US" },
@@ -134,6 +145,11 @@ const Header = () => {
             onSubmit={() => openAuthWindow("register")}
           ></LibButton>
         </div>
+
+        {/* Hamburger button */}
+        <button className={styles.hamburger} onClick={toggleSidePanel}>
+          <img width={40} src={hamburg} alt="hamburg menu" />
+        </button>
       </header>
       {onWindowOpen && (
         <Window

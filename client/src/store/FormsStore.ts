@@ -33,7 +33,7 @@ interface FormActions {
   updateFormPage: (
     role: string,
     type: string,
-    data: Record<string, string>
+    data: Record<string, string | multiSelectType[]>
   ) => void;
 
   getFormValues: (
@@ -51,7 +51,7 @@ interface FormActions {
 const useFormStore = create<FormState & FormActions>((set, get) => ({
   role: "",
   type: "",
-  step: 1,
+  step: 0,
   roleFormData: {},
 
   setRole: (role) => set({ role }),

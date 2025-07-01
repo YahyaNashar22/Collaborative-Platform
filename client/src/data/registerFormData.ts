@@ -43,13 +43,13 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "email",
+                  name: "recoveryEmail",
                   label: "Recovery email",
                   value: "",
                   placeholder: "Recovery email",
                   type: "email",
                   maxLength: 30,
-                  required: true,
+                  required: false,
                   errorMsg: "* This Field is Required",
                 },
                 {
@@ -130,7 +130,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "email",
+                  name: "recoveryEmail",
                   label: "Recovery email",
                   value: "",
                   placeholder: "Recovery email",
@@ -223,7 +223,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "email",
+                  name: "recoveryEmail",
                   label: "Recovery email",
                   value: "",
                   placeholder: "Recovery email",
@@ -392,7 +392,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "email",
+                  name: "recoveryEmail",
                   label: "Recovery email",
                   value: "",
                   placeholder: "Recovery email",

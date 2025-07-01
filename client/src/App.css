@@ -43,12 +43,11 @@ body {
   font-family: DM Sans, Inter;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 2px;
 }
 ::-webkit-scrollbar-thumb {
   background-color: #eee;
@@ -56,6 +55,12 @@ body {
 }
 ::-webkit-scrollbar-track {
   background-color: transparent;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
 }
 
 textarea {

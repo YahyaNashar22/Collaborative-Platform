@@ -8,7 +8,7 @@ interface OTPFromProps {
 }
 const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [number, setNumber] = useState<string[]>(["", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(2 * 60);
 

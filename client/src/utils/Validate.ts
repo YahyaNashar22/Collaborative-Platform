@@ -6,7 +6,7 @@ export type FieldError = {
 
 export const Validate = (
   name: string,
-  value: string | multiSelectType[] | File | File[] | undefined,
+  value: string | multiSelectType[],
   required: boolean = false,
   type: string = "text"
 ): string => {

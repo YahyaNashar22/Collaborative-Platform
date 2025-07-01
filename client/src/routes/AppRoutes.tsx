@@ -10,7 +10,7 @@ import SignUpPage from "../pages/MainAuthPages/Signup/SignUpPage.tsx";
 import AboutPage from "../pages/MainPages/AboutPage/AboutPage.tsx";
 import TermsPage from "../pages/MainPages/TermsPage/TermsPage.tsx";
 import ContactPage from "../pages/MainPages/ContactPage/ContactPage.tsx";
-import MainLayout from "../Layouts/MainLayout.tsx";
+import MainLayout from "../Layouts/MainLayout/MainLayout.tsx";
 import EntryPage from "../pages/MainAuthPages/Entry/EntryPage.tsx";
 import DashboardEntryLayout from "../Layouts/DashboardEntryLayout.tsx";
 import DashboardSideLayout from "../Layouts/DashboardSideLayout.tsx";
@@ -76,7 +76,7 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected routes */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route path="/dashboard" element={<DashboardSideLayout />}>
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route
             path="/dashboard/active-projects"

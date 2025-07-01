@@ -3,8 +3,10 @@ import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import styles from "./SimpleFormView.module.css";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import useFormStore from "../../../../store/FormsStore";
-import { Validate } from "../../../../utils/Validate";
+
 import { FormField, FormStepData } from "../../../../interfaces/registerSignup";
+import { useStepFormHandlers } from "../../../../hooks/useStepFormHandlers";
+import { getStringValue } from "../../../../utils/CastToString";
 
 type SimpleFormViewProps = {
   data: FormStepData;
@@ -13,65 +15,19 @@ type SimpleFormViewProps = {
 };
 
 const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
+  const { role, type } = useFormStore();
+  const { fieldValues, errors, handleChange, handleBlur, validateStep } =
+    useStepFormHandlers(role, type);
   const [isShowPassword, setIsShowPassword] = useState(false);
-  const { role, type, getFormValues, updateFieldValue } = useFormStore();
-  const [touchedFields, setTouchedFields] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const fieldValues = getFormValues(role, type);
 
   const togglePasswordVisibility = () => setIsShowPassword((prev) => !prev);
 
   const onNext = () => {
-    const hasError = onNextValidation();
+    const hasError = validateStep(data.form);
 
     if (Object.keys(hasError).length > 0) return;
 
     moveForward();
-  };
-
-  const onNextValidation = () => {
-    const newErrors: { [key: string]: string } = {};
-    const newTouched: { [key: string]: boolean } = {};
-    data.form.forEach((field) => {
-      const value = fieldValues[field.name] || "";
-      const error = Validate(
-        field.name,
-        value,
-        field.required || false,
-        field.type
-      );
-      if (error) {
-        newErrors[field.name] = error;
-        newTouched[field.name] = true;
-      }
-    });
-    setErrors(newErrors);
-    setTouchedFields((prev) => ({ ...prev, ...newTouched }));
-    console.log(newErrors);
-    return newErrors;
-  };
-
-  const handleChange = (name: string, value: string, required: boolean) => {
-    updateFieldValue(role, type, name, value);
-    console.log(getFormValues(role, type));
-    if (touchedFields[name]) {
-      const error = Validate(name, value, required, type);
-      setErrors((prev) => ({ ...prev, [name]: error }));
-    }
-  };
-
-  const handleBlur = (
-    name: string,
-    value: string,
-    required: boolean,
-    type: string
-  ) => {
-    setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type);
-    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   return (
@@ -85,9 +41,9 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
               <TextInput
                 label={field.label}
                 type={field.type}
-                value={fieldValues[field.name] || ""}
                 placeholder={field.placeholder}
                 name={field.name}
+                value={fieldValues[field.name] || ""}
                 required={field.required || false}
                 maxLength={Number(field.maxLength)}
                 minLength={Number(field.minLength)}
@@ -98,7 +54,7 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
                 onBlur={() =>
                   handleBlur(
                     field.name,
-                    fieldValues[field.name] || "",
+                    getStringValue(fieldValues[field.name]),
                     field.required || false,
                     field.type
                   )
@@ -134,7 +90,7 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
                 onBlur={() =>
                   handleBlur(
                     field.name,
-                    fieldValues[field.name] || "",
+                    getStringValue(fieldValues[field.name]),
                     field.required || false,
                     field.type
                   )

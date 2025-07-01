@@ -2,7 +2,7 @@
   background-image: url(/src/assets/images/barnerHomePage.png);
   background-size: cover;
   background-repeat: no-repeat;
-  padding: 100px 100px;
+  padding: min(100px, 8%);
 }
 
 .quoteContainer {

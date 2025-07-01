@@ -48,3 +48,9 @@
   padding: 10px 25px;
   border-radius: 28px;
 }
+
+@media (max-width: 1250px) {
+  /* .boxsContainer {
+    flex-wrap: wrap;
+  } */
+}

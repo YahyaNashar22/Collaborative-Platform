@@ -30,3 +30,71 @@
 .box.leftBox a {
   background-color: var(--dark-grey);
 }
+
+@media (max-width: 992px) {
+  .leftBox,
+  .rightBox {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .boxContainer {
+    gap: 30px;
+    /* top: 80px; */
+  }
+
+  .leftBox,
+  .rightBox {
+    padding: 20px 15px;
+  }
+}
+
+@media (max-width: 550px) {
+  .heroText {
+    font-size: 35px;
+  }
+  .boxContainer {
+    flex-direction: column;
+    align-items: center;
+    top: 100px;
+  }
+
+  .leftBox,
+  .rightBox {
+    padding: 15px;
+    text-align: center;
+  }
+
+  .leftBox h1,
+  .rightBox h1 {
+    font-size: 18px;
+  }
+
+  .leftBox p,
+  .rightBox p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroText {
+    font-size: 24px;
+  }
+
+  /* .leftBox,
+  .rightBox {
+    padding: 15px;
+    text-align: center;
+  } */
+
+  .leftBox h1,
+  .rightBox h1 {
+    font-size: 18px;
+  }
+
+  .leftBox p,
+  .rightBox p {
+    font-size: 14px;
+  }
+}

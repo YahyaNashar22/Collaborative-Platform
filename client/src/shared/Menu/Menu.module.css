@@ -34,7 +34,6 @@
 
 .show {
   max-height: 700px;
-
   opacity: 1;
   transition: max-height 1s ease, opacity 0.3 ease;
 }

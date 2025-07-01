@@ -3,13 +3,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
+import { multiSelectType } from "../../../interfaces/registerSignup";
+import { getStringValue } from "../../../utils/CastToString";
 
 type props = {
   label: string;
   placeholder: string;
   name: string;
   type: string;
-  value: string;
+  value: string | multiSelectType[];
   required: boolean;
   maxLength?: number;
   minLength?: number;
@@ -52,7 +54,7 @@ const TextInput = ({
           <PhoneInput
             style={{ width: "100%" }}
             defaultCountry="lb"
-            value={value}
+            value={getStringValue(value)}
             required={required}
             onChange={(phone) => onChange(phone, name)}
             className="custom-phone-input-wrapper"
@@ -64,7 +66,7 @@ const TextInput = ({
             id={name}
             placeholder={placeholder}
             name={name}
-            value={value}
+            value={getStringValue(value)}
             required={required}
             maxLength={maxLength}
             minLength={minLength || 0}

@@ -1,16 +1,16 @@
-import { useState } from "react";
 import {
   FormField,
   FormStepData,
-  multiSelectType,
 } from "../../../../../interfaces/registerSignup";
 import LibButton from "../../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../../libs/common/lib-text-input/TextInput";
-import { Validate } from "../../../../../utils/Validate";
+
 import styles from "./CompanyForm.module.css";
 import useFormStore from "../../../../../store/FormsStore";
 import SelectInput from "../../../../../libs/common/lib-select-input/SelectInput";
 import TextAreaInput from "../../../../../libs/common/lib-textArea/TextAreaInput";
+import { getStringValue } from "../../../../../utils/CastToString";
+import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
 
 type CompanyFormViewProps = {
   data: FormStepData;
@@ -25,76 +25,15 @@ const CompanyForm = ({
   moveForward,
   moveBackward,
 }: CompanyFormViewProps) => {
-  const { role, type, getFormValues, updateFieldValue } = useFormStore();
-  const [touchedFields, setTouchedFields] = useState<{
-    [key: string]: boolean;
-  }>({});
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const fieldValues = getFormValues(role, type);
+  const { role, type } = useFormStore();
+  const { fieldValues, errors, handleChange, handleBlur, validateStep } =
+    useStepFormHandlers(role, type);
 
   const onNext = () => {
-    const hasError = onNextValidation();
-    console.log(fieldValues);
+    const hasError = validateStep(data.form);
     if (Object.keys(hasError).length > 0) return;
     moveForward();
   };
-
-  const onNextValidation = () => {
-    const newErrors: { [key: string]: string } = {};
-    const newTouched: { [key: string]: boolean } = {};
-    data.form.forEach((field) => {
-      const value =
-        fieldValues[field.name] || (field.type === "multiSelect" ? [] : "");
-      const error = Validate(
-        field.name,
-        value,
-        field.required || false,
-        field.type
-      );
-      if (error) {
-        newErrors[field.name] = error;
-        newTouched[field.name] = true;
-      }
-    });
-    setErrors(newErrors);
-    setTouchedFields((prev) => ({ ...prev, ...newTouched }));
-    return newErrors;
-  };
-
-  const handleChange = (
-    name: string,
-    value: string | multiSelectType[],
-    required: boolean
-  ) => {
-    console.log(value);
-    updateFieldValue(role, type, name, value);
-
-    if (touchedFields[name]) {
-      const fieldType = Array.isArray(value)
-        ? "multiSelect"
-        : typeof value === "string"
-        ? "text"
-        : "";
-      const error = Validate(name, value, required, fieldType);
-      setErrors((prev) => ({ ...prev, [name]: error }));
-    }
-  };
-
-  const handleBlur = (
-    name: string,
-    value: string,
-    required: boolean,
-    type: string
-  ) => {
-    setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type);
-    setErrors((prev) => ({ ...prev, [name]: error }));
-  };
-
-  // this function to handle if value is only string so the input type not multiSelect
-  const getStringValue = (val: string | multiSelectType[]) =>
-    typeof val === "string" ? val : "";
 
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>

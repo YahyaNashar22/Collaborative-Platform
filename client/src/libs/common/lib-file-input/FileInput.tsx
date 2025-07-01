@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFolderPlus } from "@fortawesome/free-solid-svg-icons";
 import styles from "./FileInput.module.css";
@@ -9,7 +9,9 @@ type FileInputProps = {
   required?: boolean;
   errorMessage?: string;
   placeholder: string;
+  value?: File;
   onChange: (file: File | null, name: string) => void;
+  onBlur?: () => void;
 };
 
 const FileInput = ({
@@ -18,13 +20,25 @@ const FileInput = ({
   required = false,
   errorMessage,
   onChange,
+  onBlur,
   placeholder,
+  value,
 }: FileInputProps) => {
   const [fileName, setFileName] = useState<string>("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (value) {
+      setFileName(value.name);
+    } else {
+      setFileName("");
+    }
+  }, [value]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFileName(file?.name || "");
+    console.log(file, name);
     onChange(file, name);
   };
 
@@ -40,13 +54,9 @@ const FileInput = ({
         <div className={`${styles.inputHolder} d-f align-center`}>
           <label
             htmlFor={name}
-            className={`${`${styles.customFileLabel} d-f w-100 align-center pointer bold`} `}
+            className={`${styles.customFileLabel} d-f w-100 align-center pointer bold`}
           >
-            <FontAwesomeIcon
-              icon={faFolderPlus}
-              size="xl"
-              style={{ color: "#495057" }}
-            />
+            <FontAwesomeIcon icon={faFolderPlus} size="xl" color="#495057" />
             <span className={styles.placeholderText}>
               {fileName || placeholder}
             </span>
@@ -56,9 +66,11 @@ const FileInput = ({
             type="file"
             id={name}
             name={name}
+            ref={inputRef}
             className={styles.hiddenInput}
             required={required}
             onChange={handleFileChange}
+            onBlur={onBlur}
           />
         </div>
       </div>
