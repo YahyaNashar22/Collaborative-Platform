@@ -29,7 +29,9 @@ const DashboardSide = () => {
             Sign up
           </Link>
         )}
-        <div>Having troubles? Get Help</div>
+        <Link to={"/contact"} className={`${styles.redirectBtn} pointer`}>
+          Having troubles? Get Help
+        </Link>
       </div>
     </div>
   );

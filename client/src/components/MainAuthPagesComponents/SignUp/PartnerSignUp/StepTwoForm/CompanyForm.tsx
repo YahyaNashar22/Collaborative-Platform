@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   FormField,
   FormStepData,
+  multiSelectType,
 } from "../../../../../interfaces/registerSignup";
 import LibButton from "../../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../../libs/common/lib-text-input/TextInput";
@@ -33,17 +34,18 @@ const CompanyForm = ({
   const fieldValues = getFormValues(role, type);
 
   const onNext = () => {
-    const hasError = onNextVaidation();
+    const hasError = onNextValidation();
+    console.log(fieldValues);
     if (Object.keys(hasError).length > 0) return;
-
     moveForward();
   };
 
-  const onNextVaidation = () => {
+  const onNextValidation = () => {
     const newErrors: { [key: string]: string } = {};
     const newTouched: { [key: string]: boolean } = {};
     data.form.forEach((field) => {
-      const value = fieldValues[field.name] || "";
+      const value =
+        fieldValues[field.name] || (field.type === "multiSelect" ? [] : "");
       const error = Validate(
         field.name,
         value,
@@ -60,11 +62,21 @@ const CompanyForm = ({
     return newErrors;
   };
 
-  const handleChange = (name: string, value: string, required: boolean) => {
+  const handleChange = (
+    name: string,
+    value: string | multiSelectType[],
+    required: boolean
+  ) => {
+    console.log(value);
     updateFieldValue(role, type, name, value);
 
     if (touchedFields[name]) {
-      const error = Validate(name, value, required, type);
+      const fieldType = Array.isArray(value)
+        ? "multiSelect"
+        : typeof value === "string"
+        ? "text"
+        : "";
+      const error = Validate(name, value, required, fieldType);
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
   };
@@ -80,6 +92,10 @@ const CompanyForm = ({
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
+  // this function to handle if value is only string so the input type not multiSelect
+  const getStringValue = (val: string | multiSelectType[]) =>
+    typeof val === "string" ? val : "";
+
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
       <h1 className="purple">{title}</h1>
@@ -93,6 +109,7 @@ const CompanyForm = ({
                   label={field.label}
                   placeholder={field.placeholder}
                   name={field.name}
+                  value={getStringValue(fieldValues[field.name])}
                   required={field.required || false}
                   onChange={(value, name) =>
                     handleChange(name, value, field.required || false)
@@ -104,7 +121,7 @@ const CompanyForm = ({
                   type={field.type}
                   placeholder={field.placeholder}
                   name={field.name}
-                  value={fieldValues[field.name] || ""}
+                  value={getStringValue(fieldValues[field.name])}
                   required={field.required || false}
                   maxLength={Number(field.maxLength)}
                   minLength={Number(field.minLength)}
@@ -116,7 +133,7 @@ const CompanyForm = ({
                   onBlur={() =>
                     handleBlur(
                       field.name,
-                      fieldValues[field.name] || "",
+                      getStringValue(fieldValues[field.name]),
                       field.required || false,
                       field.type
                     )
@@ -132,6 +149,7 @@ const CompanyForm = ({
               <SelectInput
                 label={field.label}
                 name={field.name}
+                type={field.type}
                 value={fieldValues[field.name]}
                 required={field.required}
                 placeholder={field.placeholder}
@@ -147,26 +165,21 @@ const CompanyForm = ({
 
         {data.form.slice(7).map((field: FormField, index: number) => (
           <div key={index}>
-            <TextInput
+            <SelectInput
               label={field.label}
-              type={field.type}
-              placeholder={field.placeholder}
               name={field.name}
-              value={fieldValues[field.name] || ""}
-              required={field.required || false}
-              minLength={Number(field.minLength)}
+              type={field.type}
+              value={fieldValues[field.name]}
+              required={field.required}
+              placeholder={field.placeholder}
+              options={field.options || []}
               onChange={(value, name) =>
                 handleChange(name, value, field.required || false)
               }
-              errorMessage={errors[field.name]}
-              onBlur={() =>
-                handleBlur(
-                  field.name,
-                  fieldValues[field.name] || "",
-                  field.required || false,
-                  field.type
-                )
+              onRemove={(items) =>
+                handleChange(field.name, items, field.required ?? false)
               }
+              errorMessage={errors[field.name]}
             />
           </div>
         ))}

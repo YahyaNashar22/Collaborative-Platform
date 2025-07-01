@@ -200,4 +200,32 @@ li {
   height: 1px;
 }
 
+/* reset multi select dropdown */
+.multiSelect .chip {
+  background-color: var(--deep-purple) !important;
+  color: white !important;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 500;
+}
 
+.specialError .searchWrapper {
+  border: 1px solid #dc3545;
+}
+
+.multiSelect input {
+  cursor: pointer;
+}
+
+.multiSelect input::placeholder {
+  color: #757575;
+  font-size: 12px;
+}
+
+.multiSelect .highlightOption {
+  background-color: var(--deep-purple) !important;
+}
+
+.multiSelect .option:not(.highlightOption):hover {
+  background-color: #6c46d9 !important;
+}

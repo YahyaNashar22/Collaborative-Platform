@@ -1,39 +1,45 @@
+import { multiSelectType } from "../interfaces/registerSignup";
+
 export type FieldError = {
   [fieldName: string]: string;
 };
 
 export const Validate = (
   name: string,
-  value: string,
+  value: string | multiSelectType[] | File | File[] | undefined,
   required: boolean = false,
   type: string = "text"
 ): string => {
-  if (required && !value.trim()) {
-    return "* This field is required";
+  if (required) {
+    if (type === "multiSelect") {
+      if (!Array.isArray(value) || value.length === 0) {
+        return "* This field is required";
+      }
+    } else if (type === "file") {
+      if (
+        !(value instanceof File) &&
+        (!Array.isArray(value) || value.length === 0)
+      ) {
+        return "* This file is required";
+      }
+    } else if (typeof value === "string" && !value.trim()) {
+      return "* This field is required";
+    }
   }
-  console.log(value, required, type);
 
-  if (type === "email") {
+  if (type === "email" && typeof value === "string") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) return "* Please enter a valid email";
   }
 
-  if (name === "confirmPassword") {
-    return "";
-  }
-
-  if (name === "phoneNumber") {
+  if (name === "phoneNumber" && typeof value === "string") {
     const onlyDigits = value.replace(/\D/g, "");
     if (onlyDigits.length < 8) {
       return "* Please enter a valid phone number";
     }
   }
 
-  if (type === "file") {
-    console.log(required, value);
-    if (required && !(value instanceof File)) {
-      return "* This file is required";
-    }
+  if (name === "confirmPassword") {
     return "";
   }
 

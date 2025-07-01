@@ -1,14 +1,14 @@
 export interface FormField {
   name: string;
   label: string;
-  value: string;
+  value: string | multiSelectType[];
   placeholder: string;
   type: string;
   maxLength?: number;
   minLength?: number;
   required?: boolean;
   errorMsg?: string;
-  options?: { label: string; value: string }[];
+  options?: { label: string; value: string; id?: string }[];
 }
 
 export interface FormStepData {
@@ -35,4 +35,10 @@ export interface RegisterFormData {
   roles: {
     [roleName: string]: RoleData;
   };
+}
+
+export interface multiSelectType {
+  id?: string;
+  label: string;
+  value: string;
 }

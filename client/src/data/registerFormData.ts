@@ -531,9 +531,14 @@ export const registerFormData: RegisterFormData = {
                 {
                   name: "service",
                   label: "What service do you provide?",
-                  value: "",
-                  placeholder: "Service",
-                  type: "text",
+                  value: [],
+                  placeholder: "Pick Your Services",
+                  options: [
+                    { label: "Accounting", value: "accounting", id: "1" },
+                    { label: "Marketing Agency", value: "markerting", id: "2" },
+                    { label: "other", value: "other", id: "3" },
+                  ],
+                  type: "multiSelect",
                   required: true,
                   errorMsg: "* This Field is Required",
                 },
