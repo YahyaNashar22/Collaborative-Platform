@@ -55,3 +55,7 @@
 .phoneInput {
   padding: 0 10px;
 }
+
+.search_inputContainer {
+  max-width: 20rem;
+}

@@ -1,13 +1,17 @@
 import styles from "./TextInput.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faMagnifyingGlass,
+} from "@fortawesome/free-solid-svg-icons";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { multiSelectType } from "../../../interfaces/registerSignup";
 import { getStringValue } from "../../../utils/CastToString";
 
 type props = {
-  label: string;
+  label?: string;
   placeholder: string;
   name: string;
   type: string;
@@ -18,6 +22,7 @@ type props = {
   onChange: (value: string, name: string) => void;
   isShowPassword?: boolean;
   errorMessage?: string;
+  hasIcon?: boolean;
   min?: number;
   toggleShowPassword?: () => void;
   onBlur?: () => void;
@@ -37,9 +42,14 @@ const TextInput = ({
   errorMessage,
   onBlur,
   min,
+  hasIcon = false,
 }: props) => {
   return (
-    <div className={`${styles.inputContainer} d-f f-dir-col`}>
+    <div
+      className={`${styles.inputContainer} ${
+        name === "search_projects" ? styles.search_inputContainer : ""
+      } d-f f-dir-col`}
+    >
       <label htmlFor={name} className="bold">
         <span>
           {label} {required && <span className={styles.required}>*</span>}
@@ -61,19 +71,27 @@ const TextInput = ({
             onBlur={onBlur}
           />
         ) : (
-          <input
-            type={type === "password" && isShowPassword ? "text" : type}
-            id={name}
-            placeholder={placeholder}
-            name={name}
-            value={getStringValue(value)}
-            required={required}
-            maxLength={maxLength}
-            minLength={minLength || 0}
-            {...(type === "number" ? { min } : {})}
-            onChange={(e) => onChange(e.target.value, name)}
-            onBlur={onBlur}
-          />
+          <>
+            <input
+              type={type === "password" && isShowPassword ? "text" : type}
+              id={name}
+              placeholder={placeholder}
+              name={name}
+              value={getStringValue(value)}
+              required={required}
+              maxLength={maxLength}
+              minLength={minLength || 0}
+              {...(type === "number" ? { min } : {})}
+              onChange={(e) => onChange(e.target.value, name)}
+              onBlur={onBlur}
+            />
+            {hasIcon && (
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                style={{ color: "#757575" }}
+              />
+            )}
+          </>
         )}
         {type === "password" && (
           <div className="pointer">

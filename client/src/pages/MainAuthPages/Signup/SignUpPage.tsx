@@ -56,9 +56,6 @@ const SignUpPage = () => {
       >
         {content}
       </div>
-      <div className="d-f align-end">
-        <img src={vector} alt="logo" />
-      </div>
     </>
   );
 };

@@ -1,0 +1,38 @@
+.table {
+  border-collapse: separate;
+  border-spacing: 0 1rem;
+}
+
+thead .title {
+  text-align: start;
+}
+
+.table tbody tr {
+  box-shadow: inset 0 -3em 3em rgb(255 255 255 / 30%), 0 0 0 2px white,
+    0.3em 0.3em 1em rgb(158 158 158 / 16%);
+  border-radius: 8px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.table tbody tr:hover {
+  box-shadow: inset 0 -3em 3em rgb(255 255 255 / 30%), 0 0 0 2px white,
+    0.5em 0.5em 1.5em rgb(158 158 158 / 30%);
+  transform: translateY(-2px);
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px;
+}
+/* 
+th:nth-child(1) {
+  width: 40%;
+}
+
+th:nth-child(2),
+th:nth-child(3),
+th:nth-child(4),
+th:nth-child(5) {
+  width: 15%;
+} */

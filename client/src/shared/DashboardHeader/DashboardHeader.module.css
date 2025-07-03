@@ -5,10 +5,12 @@
   z-index: 100;
   background-color: transparent;
   transition: 0.3s ease-in-out;
+  gap: 20rem;
 }
 
 .navLinks {
   list-style: none;
+  gap: 3rem;
 }
 
 .navLink {
@@ -17,11 +19,12 @@
   padding-bottom: 4px;
 }
 
-.navLink:last-of-type {
-  margin-left: auto;
+.navLink.last {
+  flex: 1;
+  text-align: end;
 }
 
-.active {
+.active span {
   color: var(--intense-purple);
 }
 
@@ -36,15 +39,14 @@
   color: var(--intense-purple);
 }
 
-.whiteHomeIcon {
-  display: flex;
-  align-items: center;
+.homeIconContainer {
   gap: 5px;
   transition: 0.3s;
+  transition: 0.3s;
+  font-weight: 400;
 }
 
-.whiteHomeIcon:hover .whiteIcon,
-.whiteHomeIcon:hover .homeIcon {
+.whiteHomeIcon:hover .whiteIcon {
   color: var(--light-purple) !important;
 }
 

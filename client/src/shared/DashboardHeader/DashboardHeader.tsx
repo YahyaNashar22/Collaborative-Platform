@@ -32,13 +32,15 @@ const DashboardHeader = () => {
           <li
             key={path}
             className={`${styles.navLink} ${
-              pathname === path ? styles.active : ""
-            } pointer`}
+              label === "Services" && styles.last
+            } ${pathname === path ? styles.active : ""} pointer`}
           >
             <Link to={path} className="d-f align-center gap-2">
               {pathname.includes("/auth") ? (
                 hasIcon && (
-                  <div className={styles.whiteHomeIcon}>
+                  <div
+                    className={`${styles.whiteHomeIcon} ${styles.homeIconContainer} d-f align-center`}
+                  >
                     <FontAwesomeIcon
                       className={styles.homeIcon}
                       icon={faHouse}
@@ -66,16 +68,18 @@ const DashboardHeader = () => {
                   </div>
                 )
               ) : (
-                <>
+                <div
+                  className={`${styles.homeIconContainer}  d-f align-center`}
+                >
                   {hasIcon && (
                     <FontAwesomeIcon
                       icon={faHouse}
                       size="lg"
-                      style={{ color: "#ffffff" }}
+                      style={{ color: "#6550b4" }}
                     />
                   )}
                   <span>{label}</span>
-                </>
+                </div>
               )}
             </Link>
           </li>

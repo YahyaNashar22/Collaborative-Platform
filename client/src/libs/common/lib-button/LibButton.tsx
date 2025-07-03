@@ -9,6 +9,8 @@ type LibButtonType = {
   hoverColor?: string;
   styleClass?: string;
   padding?: string;
+  color?: string;
+  bold?: boolean;
 };
 
 const LibButton = ({
@@ -20,6 +22,8 @@ const LibButton = ({
   hoverColor,
   styleClass,
   padding,
+  color,
+  bold,
 }: LibButtonType) => {
   return (
     <div
@@ -29,8 +33,8 @@ const LibButton = ({
     >
       <button
         type="submit"
-        className={`${styles.button} ${
-          styleClass ? styles[styleClass] : ""
+        className={`${styles.button} ${styleClass ? styles[styleClass] : ""} ${
+          bold ? "bold" : ""
         } justify-center`}
         style={{
           backgroundColor: backgroundColor
@@ -40,6 +44,7 @@ const LibButton = ({
             : "#6550b4",
           ["--hover-bg" as string]: hoverColor ? hoverColor : "#563db1",
           padding: padding ? padding : "0 10px",
+          color: color ? color : "white",
         }}
         onClick={onSubmit}
         disabled={disabled}

@@ -1,8 +1,7 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Loading from "../shared/Loading/Loading.tsx";
-import DashboardLayout from "../Layouts/DashboardEntryLayout.tsx";
 
 import FAQPage from "../pages/MainPages/FAQPage/FAQPage.tsx";
 
@@ -14,6 +13,10 @@ import MainLayout from "../Layouts/MainLayout/MainLayout.tsx";
 import EntryPage from "../pages/MainAuthPages/Entry/EntryPage.tsx";
 import DashboardEntryLayout from "../Layouts/DashboardEntryLayout.tsx";
 import DashboardSideLayout from "../Layouts/DashboardSideLayout.tsx";
+import ProjectsPage from "../pages/Dashboard/ProjectsPage/ProjectsPage.tsx";
+import RequestsPage from "../pages/Dashboard/RequestsPage/RequestsPage.tsx";
+import ProposalsPage from "../pages/Dashboard/ProposalsPage/ProposalsPage.tsx";
+import ServicesPage from "../pages/Dashboard/ServicesPage/ServicesPage.tsx";
 
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
@@ -26,9 +29,6 @@ const LoginPage = lazy(
   () => import("../pages/MainAuthPages/Login/LoginPage.tsx")
 );
 
-const DashboardPage = lazy(
-  () => import("../pages/Dashboard/DashboardPage.tsx")
-);
 const ActiveProjectsPage = lazy(
   () => import("../pages/ActiveProjects/ActiveProjects.tsx")
 );
@@ -77,7 +77,11 @@ const AppRoutes = () => {
 
         {/* protected routes */}
         <Route path="/dashboard" element={<DashboardSideLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route index element={<Navigate to="projects" replace />} />
+          <Route path="projects" element={<ProjectsPage />} />
+          <Route path="requests" element={<RequestsPage />} />
+          <Route path="proposals" element={<ProposalsPage />} />
+          <Route path="services" element={<ServicesPage />} />
           <Route
             path="/dashboard/active-projects"
             element={<ActiveProjectsPage />}

@@ -27,9 +27,6 @@ const LoginPage = () => {
       >
         {content}
       </main>
-      <div className="d-f align-end">
-        <img src={vector} alt="logo" />
-      </div>
     </>
   );
 };

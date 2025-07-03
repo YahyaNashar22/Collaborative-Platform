@@ -1,0 +1,88 @@
+.card {
+  position: relative;
+  background: white;
+  border-radius: 0.5rem;
+  padding: 28px 24px 36px 24px;
+  box-shadow: 0 10px 15px rgba(101, 80, 180, 0.12),
+    0 4px 6px rgba(82, 82, 82, 0.08);
+  cursor: pointer;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 23rem;
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 30px rgba(101, 80, 180, 0.25),
+    0 10px 14px rgba(82, 82, 82, 0.15);
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -50%;
+  width: 180%;
+  height: 180%;
+  background: radial-gradient(
+    circle at center,
+    rgba(101, 80, 180, 0.3),
+    transparent 70%
+  );
+  pointer-events: none;
+  transform: rotate(25deg);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.title {
+  position: relative;
+  font-size: 20px;
+  font-weight: 700;
+  color: rgb(101, 80, 180);
+  z-index: 1;
+  letter-spacing: 0.03em;
+  text-transform: capitalize;
+}
+
+.description {
+  position: relative;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #525252;
+  z-index: 1;
+  max-height: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.deadlines {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: #777;
+  z-index: 1;
+}
+
+.deadlineItem {
+  background: rgba(101, 80, 180, 0.1);
+  padding: 8px 12px;
+  border-radius: 12px;
+  color: rgb(101, 80, 180);
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(101, 80, 180, 0.15);
+  transition: background-color 0.25s ease;
+}
+
+.deadlineItem:hover {
+  background: rgb(101, 80, 180);
+  color: white;
+  box-shadow: 0 4px 12px rgba(101, 80, 180, 0.4);
+}

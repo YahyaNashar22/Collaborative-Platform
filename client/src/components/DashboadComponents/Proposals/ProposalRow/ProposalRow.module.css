@@ -1,0 +1,27 @@
+.left {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.proposalInfo h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.proposalInfo p {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* .row td {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+} */
+
+.row td:last-of-type {
+  text-align: center;
+}
