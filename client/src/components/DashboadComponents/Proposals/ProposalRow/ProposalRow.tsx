@@ -60,7 +60,9 @@ const ProposalRow = ({
     <tr onClick={onClick} className={`${styles.row} pointer`}>
       <td>
         <div className={`${styles.left} d-f align-center`}>
-          <img src={image} alt="proposal" width={70} height={50} />
+          <div className={styles.imageContainer}>
+            <img src={image} alt="proposal" />
+          </div>
           <div className={`${styles.proposalInfo} d-f f-dir-col`}>
             <h4>{title}</h4>
             <p>{description}</p>

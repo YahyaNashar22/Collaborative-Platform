@@ -21,7 +21,7 @@ thead .title {
 }
 
 th,
-td {
+td:not(:first-of-type) {
   text-align: left;
   padding: 12px;
 }
