@@ -25,6 +25,12 @@ td:not(:first-of-type) {
   text-align: left;
   padding: 12px;
 }
+
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 /* 
 th:nth-child(1) {
   width: 40%;
