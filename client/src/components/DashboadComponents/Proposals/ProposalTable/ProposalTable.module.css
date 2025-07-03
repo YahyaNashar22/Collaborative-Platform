@@ -1,6 +1,9 @@
 .table {
+  width: 100%;
   border-collapse: separate;
+  table-layout: fixed;
   border-spacing: 0 1rem;
+  overflow-x: auto;
 }
 
 thead .title {
@@ -27,9 +30,9 @@ td:not(:first-of-type) {
 }
 
 td {
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 /* 
 th:nth-child(1) {
