@@ -65,8 +65,9 @@ const Proposals = () => {
 
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
+  const [proposals, setProposals] = useState<Proposal[]>(mockData);
 
-  const filteredData: Proposal[] = mockData.filter(
+  const filteredData: Proposal[] = proposals.filter(
     (data) =>
       data.title.toLowerCase().includes(debouncedSearchValue.toLowerCase()) ||
       data.description
@@ -82,7 +83,19 @@ const Proposals = () => {
     console.log("Card clicked with id:", id);
   };
 
-  const handleAddRequest = () => {};
+  const handleConfirmationClick = (id: string) => {
+    setProposals((prev) =>
+      prev.map((proposal) =>
+        proposal.id === id
+          ? { ...proposal, isConfirmed: !proposal.isConfirmed }
+          : proposal
+      )
+    );
+  };
+
+  const handleAddRequest = () => {
+    console.log("Add New Proposal clicked");
+  };
 
   return (
     <main className={`${styles.wrapper} w-100`}>
@@ -108,7 +121,8 @@ const Proposals = () => {
       <div className={styles.content}>
         <ProposalTable
           data={filteredData}
-          onClick={() => handleCardClick(id)}
+          onRowClick={(id: string) => handleCardClick(id)}
+          onConfirmationClick={(id: string) => handleConfirmationClick(id)}
         />
       </div>
     </main>

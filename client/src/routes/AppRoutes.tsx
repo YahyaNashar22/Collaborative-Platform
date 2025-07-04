@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Loading from "../shared/Loading/Loading.tsx";
 
@@ -17,6 +17,9 @@ import ProjectsPage from "../pages/Dashboard/ProjectsPage/ProjectsPage.tsx";
 import RequestsPage from "../pages/Dashboard/RequestsPage/RequestsPage.tsx";
 import ProposalsPage from "../pages/Dashboard/ProposalsPage/ProposalsPage.tsx";
 import ServicesPage from "../pages/Dashboard/ServicesPage/ServicesPage.tsx";
+import DashboardPage from "../pages/Dashboard/DashboardPage/DashboardPage.tsx";
+import UsersPage from "../pages/Dashboard/UsersPage/UsersPage.tsx";
+import MarketPlacePage from "../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx";
 
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
@@ -52,6 +55,7 @@ const AppRoutes = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/Market_place" element={<MarketPlacePage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/FAQ" element={<FAQPage />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -77,11 +81,13 @@ const AppRoutes = () => {
 
         {/* protected routes */}
         <Route path="/dashboard" element={<DashboardSideLayout />}>
-          <Route index element={<Navigate to="projects" replace />} />
+          {/* <Route index element={<Navigate to="projects" replace />} /> */}
+          <Route index element={<DashboardPage />} />
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="requests" element={<RequestsPage />} />
           <Route path="proposals" element={<ProposalsPage />} />
           <Route path="services" element={<ServicesPage />} />
+          <Route path="users" element={<UsersPage />} />
           <Route
             path="/dashboard/active-projects"
             element={<ActiveProjectsPage />}

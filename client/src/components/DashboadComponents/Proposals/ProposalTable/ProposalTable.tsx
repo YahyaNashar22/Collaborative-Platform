@@ -4,10 +4,15 @@ import styles from "./ProposalTable.module.css";
 
 type ProposalRowProps = {
   data: Proposal[];
-  onClick?: () => void;
+  onRowClick?: (id: string) => void;
+  onConfirmationClick?: (id: string) => void;
 };
 
-const ProposalTable = ({ data, onClick }: ProposalRowProps) => {
+const ProposalTable = ({
+  data,
+  onRowClick,
+  onConfirmationClick,
+}: ProposalRowProps) => {
   return (
     <table className={`${styles.table} w-100`}>
       <thead>
@@ -23,6 +28,7 @@ const ProposalTable = ({ data, onClick }: ProposalRowProps) => {
         {data.map((proposal, idx) => (
           <ProposalRow
             key={proposal.id ?? idx}
+            id={proposal.id ?? idx}
             image={proposal.image}
             title={proposal.title}
             description={proposal.description}
@@ -30,7 +36,8 @@ const ProposalTable = ({ data, onClick }: ProposalRowProps) => {
             status={proposal.status}
             price={proposal.price}
             isConfirmed={proposal.isConfirmed}
-            onClick={onClick}
+            onRowClick={() => onRowClick?.(proposal.id)}
+            onConfirmationClick={(id) => onConfirmationClick?.(id)}
           />
         ))}
       </tbody>

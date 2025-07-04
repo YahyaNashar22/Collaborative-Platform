@@ -1,0 +1,89 @@
+.wrapper {
+  margin-top: 5rem;
+  gap: 2rem;
+}
+
+.servicesContainer {
+  row-gap: 3rem;
+  margin-top: 1rem;
+}
+
+.leftSidePanel {
+  gap: 1rem;
+  padding: 1.5rem;
+  background-color: #f9f9fe;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  min-width: 280px;
+  height: fit-content;
+  overflow-y: auto;
+  position: sticky;
+  top: 5rem;
+}
+
+.leftSidePanel h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--deep-purple);
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.5rem;
+}
+
+.serviceItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  margin-bottom: 0.4rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.serviceItem:hover {
+  background-color: #edeaff;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--deep-purple);
+  width: 16px;
+  height: 16px;
+}
+
+.content {
+  flex: 1;
+}
+
+.boxDetails {
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 400px;
+  width: 100%;
+  color: #333;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.boxDetails > div {
+  margin-bottom: 1rem;
+}
+
+.boxDetails h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--deep-purple, #6550b4);
+}
+
+.boxDetails p {
+  font-size: 0.9rem;
+  color: #555;
+  margin: 0;
+}
+
+.boxDetails .d-f {
+  gap: 1rem;
+}

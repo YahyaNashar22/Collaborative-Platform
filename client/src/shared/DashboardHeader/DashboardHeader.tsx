@@ -23,9 +23,11 @@ const DashboardHeader = () => {
       />
       <ul className={`${styles.navLinks} w-100 d-f align-center`}>
         {[
+          { path: "/dashboard", label: "Dashboard", hasIcon: false },
           { path: "/dashboard/projects", label: "Projects", hasIcon: false },
           { path: "/dashboard/requests", label: "Requests", hasIcon: false },
           { path: "/dashboard/proposals", label: "Proposals", hasIcon: false },
+          { path: "/dashboard/users", label: "Users", hasIcon: false },
           { path: "/dashboard/services", label: "Services", hasIcon: false },
           { path: "/", label: "home", hasIcon: true },
         ].map(({ path, label, hasIcon }) => (

@@ -83,6 +83,10 @@ textarea {
   display: flex;
 }
 
+.f-wrap {
+  flex-wrap: wrap;
+}
+
 .align-center {
   align-items: center;
 }

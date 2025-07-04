@@ -2,6 +2,7 @@ import styles from "./Services.module.css";
 import box_1 from "../../../../assets/images/box_1.png";
 import box_2 from "../../../../assets/images/box_2.png";
 import box_3 from "../../../../assets/images/box_3.png";
+import BoxCard from "../../../../shared/BoxCard/BoxCard";
 
 interface boxType {
   image: string;
@@ -34,21 +35,15 @@ const Services = () => {
       <h3 className="title">SERVICES</h3>
 
       <div className={`align-text ${styles.boxsContainer} d-f align-center`}>
-        {boxesContent.map((box: boxType, index: number) => (
-          <div className={styles.box} key={index}>
-            <img
-              src={box.image}
-              width={350}
-              height={300}
-              className={styles.cardImg}
-              alt={box.alt}
-            />
-            <div className={styles.subBox}>
-              <div className={styles.status}>OPEN</div>
-              <div className={styles.subTitle}>Provider name</div>
-              <h1 className={styles.boxTitle}>{box.title}</h1>
-            </div>
-          </div>
+        {boxesContent.map((box, index) => (
+          <BoxCard
+            key={index}
+            image={box.image}
+            alt={box.alt}
+            title={box.title}
+            status="OPEN"
+            providerName="Provider name"
+          />
         ))}
       </div>
       <button className={styles.more}>SHOW MORE</button>

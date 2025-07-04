@@ -116,6 +116,7 @@ const Header = () => {
             {[
               { path: "/", label: "HOME" },
               { path: "/about", label: "ABOUT US" },
+              { path: "/market_place", label: "MARKET PLACE" },
               { path: "/FAQ", label: "FAQ" },
               { path: "/terms", label: "TERMS" },
               { path: "/contact", label: "CONTACT US" },

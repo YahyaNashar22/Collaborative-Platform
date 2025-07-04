@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 type ProposalRowProps = {
+  id: string;
   image: string;
   title: string;
   description: string;
@@ -14,10 +15,12 @@ type ProposalRowProps = {
   status: string;
   price: string;
   isConfirmed: boolean;
-  onClick?: () => void;
+  onRowClick: (id: string) => void;
+  onConfirmationClick: (id: string) => void;
 };
 
 const ProposalRow = ({
+  id,
   image,
   title,
   description,
@@ -25,7 +28,8 @@ const ProposalRow = ({
   status,
   price,
   isConfirmed,
-  onClick,
+  onRowClick,
+  onConfirmationClick,
 }: ProposalRowProps) => {
   const renderConfirmationIcon = () => {
     if (isConfirmed) {
@@ -48,6 +52,22 @@ const ProposalRow = ({
       );
     }
 
+    if (status === "Pending") {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+          fill="none"
+          stroke="#666"
+          strokeWidth="24"
+          width="20"
+          height="20"
+        >
+          <circle cx="256" cy="256" r="208" />
+        </svg>
+      );
+    }
+
     return (
       <FontAwesomeIcon
         icon={faCircleXmark}
@@ -56,8 +76,14 @@ const ProposalRow = ({
       />
     );
   };
+
+  const handleConfirmationClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onConfirmationClick?.(id);
+  };
+
   return (
-    <tr onClick={onClick} className={`${styles.row} pointer`}>
+    <tr onClick={() => onRowClick?.(id)} className={`${styles.row} pointer`}>
       <td>
         <div className={`${styles.left} d-f align-center`}>
           <div className={styles.imageContainer}>
@@ -72,7 +98,7 @@ const ProposalRow = ({
       <td>{deadline}</td>
       <td>{status}</td>
       <td>{price}</td>
-      <td>{renderConfirmationIcon()}</td>
+      <td onClick={handleConfirmationClick}>{renderConfirmationIcon()}</td>
     </tr>
   );
 };

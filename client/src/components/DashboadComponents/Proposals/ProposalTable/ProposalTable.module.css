@@ -1,7 +1,7 @@
 .table {
   width: 100%;
   border-collapse: separate;
-  table-layout: fixed;
+  /* table-layout: fixed; */
   border-spacing: 0 1rem;
   overflow-x: auto;
 }
