@@ -12,3 +12,8 @@
   gap: 10px;
   margin-top: 1rem;
 }
+
+.content {
+  overflow-y: auto;
+  height: calc(100vh - 162px);
+}

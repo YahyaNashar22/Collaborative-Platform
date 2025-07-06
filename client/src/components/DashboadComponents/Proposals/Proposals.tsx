@@ -25,7 +25,8 @@ const Proposals = () => {
       image: itachi,
       title: "Design Landing Page",
       description:
-        "Create a clean, modern landing page for a new SaaS product.",
+        "Create a clean, modern landing page for a new SaaS product. Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis soluta eaque ea aut, voluptate laudantium inventore amet facere aspernatur, omnis, ipsa nulla error unde consequuntur perspiciatis esse reprehenderit! Accusantium, incidunt?",
+
       deadline: "2025-07-15",
       status: "Pending",
       price: "250$",

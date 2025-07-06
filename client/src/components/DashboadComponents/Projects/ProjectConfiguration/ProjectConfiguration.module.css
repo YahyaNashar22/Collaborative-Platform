@@ -1,0 +1,171 @@
+.subNavbar {
+  overflow-x: auto;
+  align-items: baseline;
+  height: 5rem;
+  scrollbar-width: none;
+  padding: 0 2rem;
+  margin: 0 1rem;
+}
+
+.line {
+  height: 1px;
+  width: 100%;
+  min-width: 100px;
+  background: #7b849c;
+}
+
+.node {
+  font-size: 16px;
+  min-width: 65px;
+}
+
+.step {
+  width: 40px;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  border: 1px solid #7b849c;
+  color: var(--deep-purple);
+}
+
+.title {
+  min-width: 9rem;
+  text-align: center;
+  color: var(--label-color);
+  line-height: 3rem;
+}
+
+.selected .step {
+  background-color: var(--deep-purple);
+  color: white;
+}
+
+.selected .title {
+  color: var(--deep-purple);
+}
+
+.content {
+  margin: 1rem 0;
+}
+
+.phasesWrapper,
+.filesContainer {
+  overflow: auto;
+  height: calc(100vh - 16rem);
+}
+
+.addBtn {
+  margin-right: 0.3rem;
+}
+
+.timelineContainer,
+.filesContainer {
+  gap: 1.5rem;
+}
+
+.phaseCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.phaseCard h4 {
+  margin: 0;
+  color: var(--deep-purple, #6550b4);
+}
+
+.phaseCard label {
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.buttons {
+  gap: 10px;
+  margin-top: 1rem;
+  margin-right: 0.3rem;
+}
+
+.customUploadBox {
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  background-color: #f9f9fb;
+  padding: 2rem;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+.customUploadBox:hover {
+  border-color: var(--deep-purple);
+  background-color: #f1effa;
+}
+
+.customUploadBox span {
+  display: block;
+  font-size: 2rem;
+  color: var(--deep-purple);
+  margin-bottom: 0.5rem;
+}
+
+.customUploadBox p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.uploadedFileName {
+  font-size: 0.9rem;
+  color: green;
+  margin-top: 0.5rem;
+}
+
+/* quotation view */
+.quotationContainer {
+  padding: 2rem;
+  background-color: #f9f9fb;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  color: #333;
+}
+
+.dataGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.dataItem {
+  flex: 1 1 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.dataLabel {
+  font-weight: 600;
+  color: var(--deep-purple);
+  font-size: 0.95rem;
+}
+
+.dataValue {
+  font-size: 1rem;
+  color: #444;
+  background-color: #fff;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.fileLink {
+  color: #5b4d9d;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}

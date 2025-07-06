@@ -24,7 +24,8 @@
 }
 
 .content {
-  overflow-x: auto;
+  overflow: auto;
+  height: calc(100vh - 12rem);
   border-radius: 8px;
   background: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
