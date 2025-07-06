@@ -13,9 +13,13 @@
   min-width: 70px;
 }
 
-.outlined button {
+.outlined button:not(.rounded) {
   background-color: transparent;
   border: 1px solid var(--deep-purple);
+}
+
+.outlined button.rounded {
+  border: 1px solid #fff;
 }
 
 .button:hover {

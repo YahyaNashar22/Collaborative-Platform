@@ -26,6 +26,10 @@ const DashboardHeader = () => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const isTwoLevelPath = () => {
+    return pathname.split("/").filter(Boolean).length === 2;
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -73,7 +77,7 @@ const DashboardHeader = () => {
           ))}
 
         {/* Avatar at the end */}
-        {!pathname.includes("auth") && (
+        {!pathname.includes("auth") ? (
           <li className={`${styles.navLink} ${styles.last} pointer`}>
             <div className={`${styles.homeIconContainer} d-f align-center`}>
               <Avatar
@@ -116,6 +120,19 @@ const DashboardHeader = () => {
               </div>
             )}
           </li>
+        ) : (
+          <div className={`${styles.homeIcon}  d-f justify-end w-100 `}>
+            <Link
+              to={"/"}
+              className={`  ${
+                isTwoLevelPath() ? styles.whiteHome : styles.PurpleHome
+              } d-f align-baseline pointer`}
+              onClick={() => setToggleDropDown(false)}
+            >
+              <FontAwesomeIcon icon={faHouse} className={styles.icon} />
+              <span>Home</span>
+            </Link>
+          </div>
         )}
       </ul>
     </header>

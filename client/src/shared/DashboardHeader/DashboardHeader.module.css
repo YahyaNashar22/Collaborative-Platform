@@ -110,3 +110,24 @@
   width: 15px;
   color: var(--label-color);
 }
+
+.PurpleHome,
+.whiteHome {
+  gap: 0.3rem;
+}
+
+.PurpleHome .icon {
+  color: var(--deep-purple);
+}
+
+.PurpleHome span {
+  color: var(--label-color);
+}
+
+.whiteHome .icon {
+  color: #fff;
+}
+
+.whiteHome span {
+  color: v#fff;
+}
