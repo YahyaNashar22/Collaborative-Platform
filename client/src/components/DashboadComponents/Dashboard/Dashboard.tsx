@@ -1,4 +1,5 @@
 import styles from "./Dashboard.module.css";
+import { Chart as ChartJS } from "chart.js/auto";
 
 const Dashboard = () => {
   return (

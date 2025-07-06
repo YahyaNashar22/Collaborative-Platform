@@ -23,3 +23,8 @@
   color: var(--soft-purple);
   text-decoration: underline;
 }
+
+.buttons {
+  margin-top: 1rem;
+  gap: 10px;
+}

@@ -17,7 +17,10 @@ const ProposalTable = ({
     <table className={`${styles.table} w-100`}>
       <thead>
         <tr>
-          <th className={styles.title}>Proposal</th>
+          <th className={styles.title}>
+            Proposals {"  "}
+            <span style={{ color: "var(--light-grey)" }}>({data.length})</span>
+          </th>
           <th className={styles.title}>Deadline</th>
           <th className={styles.title}>Status</th>
           <th className={styles.title}>Price</th>

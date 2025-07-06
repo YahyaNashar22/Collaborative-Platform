@@ -24,6 +24,8 @@ type props = {
   errorMessage?: string;
   hasIcon?: boolean;
   min?: number;
+  max?: number;
+  hasCurrency?: boolean;
   toggleShowPassword?: () => void;
   onBlur?: () => void;
 };
@@ -42,6 +44,8 @@ const TextInput = ({
   errorMessage,
   onBlur,
   min,
+  max,
+  hasCurrency = false,
   hasIcon = false,
 }: props) => {
   return (
@@ -55,58 +59,74 @@ const TextInput = ({
           {label} {required && <span className={styles.required}>*</span>}
         </span>
       </label>
-      <div
-        className={`${styles.inputHolder}  ${
-          errorMessage ? styles.error : ""
-        } ${name === "phoneNumber" ? styles.phoneInput : ""} d-f align-center`}
-      >
-        {name === "phoneNumber" ? (
-          <PhoneInput
-            style={{ width: "100%" }}
-            defaultCountry="lb"
-            value={getStringValue(value)}
-            required={required}
-            onChange={(phone) => onChange(phone, name)}
-            className="custom-phone-input-wrapper"
-            onBlur={onBlur}
-          />
-        ) : (
-          <>
-            <input
-              type={type === "password" && isShowPassword ? "text" : type}
-              id={name}
-              placeholder={placeholder}
-              name={name}
+      <div className="d-f align-center">
+        <div
+          className={`${styles.inputHolder}  ${
+            errorMessage ? styles.error : ""
+          } ${
+            name === "phoneNumber" ? styles.phoneInput : ""
+          } d-f align-center`}
+        >
+          {name === "phoneNumber" ? (
+            <PhoneInput
+              style={{ width: "100%" }}
+              defaultCountry="lb"
               value={getStringValue(value)}
               required={required}
-              maxLength={maxLength}
-              minLength={minLength || 0}
-              {...(type === "number" ? { min } : {})}
-              onChange={(e) => onChange(e.target.value, name)}
+              onChange={(phone) => onChange(phone, name)}
+              className="custom-phone-input-wrapper"
               onBlur={onBlur}
             />
-            {hasIcon && (
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                style={{ color: "#757575" }}
+          ) : (
+            <>
+              <input
+                type={type === "password" && isShowPassword ? "text" : type}
+                id={name}
+                placeholder={placeholder}
+                name={name}
+                value={getStringValue(value)}
+                required={required}
+                maxLength={maxLength}
+                minLength={minLength || 0}
+                {...(type === "number" ? { min } : {})}
+                {...(type === "number" ? { max } : {})}
+                onChange={(e) => onChange(e.target.value, name)}
+                onBlur={onBlur}
               />
-            )}
-          </>
-        )}
-        {type === "password" && (
-          <div className="pointer">
-            {type === "password" && toggleShowPassword && (
-              <div className="pointer" onClick={toggleShowPassword}>
-                {isShowPassword ? (
-                  <FontAwesomeIcon
-                    icon={faEyeSlash}
-                    style={{ color: "#495059" }}
-                  />
-                ) : (
-                  <FontAwesomeIcon icon={faEye} style={{ color: "#495059" }} />
-                )}
-              </div>
-            )}
+
+              {hasIcon && (
+                <FontAwesomeIcon
+                  icon={faMagnifyingGlass}
+                  style={{ color: "#757575" }}
+                />
+              )}
+            </>
+          )}
+          {type === "password" && (
+            <div className="pointer">
+              {type === "password" && toggleShowPassword && (
+                <div className="pointer" onClick={toggleShowPassword}>
+                  {isShowPassword ? (
+                    <FontAwesomeIcon
+                      icon={faEyeSlash}
+                      style={{ color: "#495059" }}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faEye}
+                      style={{ color: "#495059" }}
+                    />
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+        {hasCurrency && (
+          <div
+            className={`${styles.currencySymbol} d-f align-center justify-center intense`}
+          >
+            USD
           </div>
         )}
       </div>

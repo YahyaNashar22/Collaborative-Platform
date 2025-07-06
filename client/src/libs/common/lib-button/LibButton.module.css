@@ -15,7 +15,7 @@
 
 .outlined button {
   background-color: transparent;
-  border: 1px solid #fff;
+  border: 1px solid var(--deep-purple);
 }
 
 .button:hover {

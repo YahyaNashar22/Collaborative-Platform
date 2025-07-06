@@ -4,7 +4,9 @@ import {
   faCheckDouble,
   faCircleCheck,
   faCircleXmark,
+  faDownload,
 } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 
 type ProposalRowProps = {
   id: string;
@@ -31,22 +33,18 @@ const ProposalRow = ({
   onRowClick,
   onConfirmationClick,
 }: ProposalRowProps) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleDescription = (e: React.MouseEvent) => {
+    e.stopPropagation(); // prevent triggering row click
+    setIsExpanded((prev) => !prev);
+  };
   const renderConfirmationIcon = () => {
     if (isConfirmed) {
       return (
         <FontAwesomeIcon
           icon={faCircleCheck}
           style={{ color: "#44aa55" }}
-          size="lg"
-        />
-      );
-    }
-
-    if (status === "submitted") {
-      return (
-        <FontAwesomeIcon
-          icon={faCheckDouble}
-          style={{ color: "#707070" }}
           size="lg"
         />
       );
@@ -60,21 +58,13 @@ const ProposalRow = ({
           fill="none"
           stroke="#666"
           strokeWidth="24"
-          width="20"
+          width="24"
           height="20"
         >
           <circle cx="256" cy="256" r="208" />
         </svg>
       );
     }
-
-    return (
-      <FontAwesomeIcon
-        icon={faCircleXmark}
-        style={{ color: "#c52c2c" }}
-        size="lg"
-      />
-    );
   };
 
   const handleConfirmationClick = (e: React.MouseEvent) => {
@@ -86,19 +76,51 @@ const ProposalRow = ({
     <tr onClick={() => onRowClick?.(id)} className={`${styles.row} pointer`}>
       <td>
         <div className={`${styles.left} d-f align-center`}>
-          <div className={styles.imageContainer}>
-            <img src={image} alt="proposal" />
-          </div>
           <div className={`${styles.proposalInfo} d-f f-dir-col`}>
-            <h4>{title}</h4>
-            <p>{description}</p>
+            <h4 title={title}>{title}</h4>
+            <p
+              title={description}
+              onClick={toggleDescription}
+              className={!isExpanded ? styles.ellipsis : styles.expanded}
+            >
+              {description}
+            </p>
+            <span
+              onClick={toggleDescription}
+              className={`${styles.toggleText} bold`}
+            >
+              {isExpanded ? "Show less" : "Show more"}
+            </span>
           </div>
         </div>
       </td>
-      <td>{deadline}</td>
-      <td>{status}</td>
-      <td>{price}</td>
-      <td onClick={handleConfirmationClick}>{renderConfirmationIcon()}</td>
+
+      <td title={deadline}>{deadline}</td>
+      <td title={status}>
+        <span
+          className={`${styles.status} ${
+            styles[status.replace(/\s+/g, "").toLowerCase()]
+          }`}
+        >
+          <span className={styles.dot}></span>
+          {status}
+        </span>
+      </td>
+      <td title={price}>{price}</td>
+      <td>
+        <div className="d-f">
+          <div onClick={handleConfirmationClick}>
+            {renderConfirmationIcon()}
+          </div>
+          <div onClick={() => console.log("download")}>
+            <FontAwesomeIcon
+              icon={faDownload}
+              size="lg"
+              style={{ color: "#6550b4" }}
+            />
+          </div>
+        </div>
+      </td>
     </tr>
   );
 };

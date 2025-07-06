@@ -22,6 +22,8 @@
 .navLink.last {
   flex: 1;
   text-align: end;
+  justify-self: flex-end;
+  position: relative;
 }
 
 .active span {
@@ -31,7 +33,7 @@
 .navLink > a {
   text-decoration: none;
   color: #525252;
-  font-weight: 900;
+  font-weight: 400;
   font-size: 1rem;
 }
 
@@ -44,6 +46,7 @@
   transition: 0.3s;
   transition: 0.3s;
   font-weight: 400;
+  justify-self: flex-end;
 }
 
 .whiteHomeIcon:hover .whiteIcon {
@@ -55,4 +58,55 @@
   color: #fff;
   transition: 0.3s;
   font-weight: 400;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 110%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.15);
+  padding: 6px 0;
+  min-width: 9rem;
+  z-index: 1000;
+  text-align: start;
+}
+
+.menuItem {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.menuItem:hover {
+  background-color: #f3f3f3;
+}
+
+.signOutItem {
+  color: var(--error);
+  /* border-top: 1px solid #eee; */
+}
+
+.profile sapn {
+  color: var(--deep-purple);
+}
+
+.profileIcon {
+  color: var(--intense-purple);
+  margin-right: 0.5rem;
+}
+
+.signOutItem .icon {
+  color: var(--error);
+  margin-right: 0.5rem;
+}
+
+.home .icon {
+  margin-right: 0.5rem;
+  width: 15px;
+  color: var(--label-color);
 }

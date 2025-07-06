@@ -255,8 +255,8 @@ const MarketPlace = () => {
           <div className="d-f justify-between align-center mt-3">
             <LibButton
               label="Not Interested"
-              backgroundColor="var(--error)"
-              hoverColor="#a32626"
+              backgroundColor="var(--light-grey)"
+              hoverColor="#d1d1d1"
               onSubmit={() => {}}
             />
             <LibButton label="Interested" onSubmit={() => {}} />

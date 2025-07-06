@@ -1,0 +1,136 @@
+.navBar {
+  display: flex;
+  gap: 2rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 0.5rem 1rem 1.5rem 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.tabWrapper {
+  position: relative;
+  top: 1px;
+  padding: 0 10px;
+}
+
+.activeTab {
+  border-bottom: 2px solid var(--deep-purple);
+}
+
+.activeTab > div {
+  color: var(--deep-purple);
+}
+
+.tab {
+  padding-bottom: 5px;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  transition: 0.2s;
+}
+
+.tab:hover {
+  color: #6550b4;
+}
+
+.background {
+  position: relative;
+  border-radius: 10px;
+  width: 150px;
+  height: 150px;
+  background-size: cover !important;
+  background-position: center !important;
+  background: var(--deep-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  cursor: default;
+  transition: 0.2s ease;
+  overflow: hidden;
+}
+
+.background:hover .penHolder {
+  visibility: visible;
+  top: 4px;
+  transition: top 0.2s ease;
+}
+
+.penHolder {
+  position: absolute;
+  right: 4px;
+  top: -30px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.2s ease;
+}
+
+.fileInput {
+  display: none;
+}
+
+.penHolder:hover {
+  transition: top 0.2s ease;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.pen {
+  width: 12px;
+}
+
+.switchMethod {
+  color: var(--deep-purple);
+  cursor: pointer;
+  text-decoration: underline;
+  margin: 1rem 0;
+}
+
+.switchMethod:hover {
+  color: #4f3da1;
+}
+
+.servicesData {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.selectedServices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.serviceTag {
+  background-color: #f0ebff;
+  color: #6550b4;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.serviceTag button {
+  background: none;
+  border: none;
+  color: #6550b4;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.serviceTag button:hover {
+  color: #4f3da1;
+}

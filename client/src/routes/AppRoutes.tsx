@@ -15,11 +15,11 @@ import DashboardEntryLayout from "../Layouts/DashboardEntryLayout.tsx";
 import DashboardSideLayout from "../Layouts/DashboardSideLayout.tsx";
 import ProjectsPage from "../pages/Dashboard/ProjectsPage/ProjectsPage.tsx";
 import RequestsPage from "../pages/Dashboard/RequestsPage/RequestsPage.tsx";
-import ProposalsPage from "../pages/Dashboard/ProposalsPage/ProposalsPage.tsx";
 import ServicesPage from "../pages/Dashboard/ServicesPage/ServicesPage.tsx";
 import DashboardPage from "../pages/Dashboard/DashboardPage/DashboardPage.tsx";
 import UsersPage from "../pages/Dashboard/UsersPage/UsersPage.tsx";
 import MarketPlacePage from "../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx";
+import ProfilePage from "../pages/ProfilePage/ProfilePage.tsx";
 
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ClientSignupPage = lazy(
@@ -85,9 +85,10 @@ const AppRoutes = () => {
           <Route index element={<DashboardPage />} />
           <Route path="projects" element={<ProjectsPage />} />
           <Route path="requests" element={<RequestsPage />} />
-          <Route path="proposals" element={<ProposalsPage />} />
-          <Route path="services" element={<ServicesPage />} />
+          {/* <Route path="proposals" element={<ProposalsPage />} /> */}
           <Route path="users" element={<UsersPage />} />
+          <Route path="services" element={<ServicesPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route
             path="/dashboard/active-projects"
             element={<ActiveProjectsPage />}
