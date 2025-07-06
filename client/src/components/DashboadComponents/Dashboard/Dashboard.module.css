@@ -1,4 +1,68 @@
 .wrapper {
   /* max-width: 1200px; */
   padding: 0 1.2rem;
+  overflow-y: auto;
+}
+
+.header {
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.card {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.2rem 1.5rem;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+}
+
+.statCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--deep-purple);
+}
+
+.statCard h5 {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0 0 5px;
+}
+
+.statCard p {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--deep-purple);
+}
+
+.smallChart {
+  max-width: 300px;
+  max-height: 300px;
+  margin: 0 auto;
 }
