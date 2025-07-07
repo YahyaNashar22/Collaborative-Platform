@@ -43,6 +43,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .terms label {

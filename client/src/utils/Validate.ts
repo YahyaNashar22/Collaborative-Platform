@@ -32,7 +32,7 @@ export const Validate = (
     if (!emailRegex.test(value)) return "* Please enter a valid email";
   }
 
-  if (name === "phoneNumber" && typeof value === "string") {
+  if (name === "phone" && typeof value === "string") {
     const onlyDigits = value.replace(/\D/g, "");
     if (onlyDigits.length < 8) {
       return "* Please enter a valid phone number";

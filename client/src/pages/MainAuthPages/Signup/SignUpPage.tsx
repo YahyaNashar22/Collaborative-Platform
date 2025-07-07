@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import CompanySignUp from "../../../components/MainAuthPagesComponents/SignUp/CompanySignUp/CompanySignUp";
 import IndividualSignUp from "../../../components/MainAuthPagesComponents/SignUp/IndividualSignUp/IndividualSignUp";
 import PartnerSignUp from "../../../components/MainAuthPagesComponents/SignUp/PartnerSignUp/PartnerSignUp";
-import vector from "../../../assets/icons/bottomIcon.png";
 
 const SignUpPage = () => {
   const { role, plan } = useParams<{ role?: string; plan?: string }>();

@@ -11,10 +11,16 @@ import { getStringValue } from "../../../../utils/CastToString";
 type SimpleFormViewProps = {
   data: FormStepData;
   title: string;
+  error?: string;
   moveForward: () => void;
 };
 
-const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
+const SimpleFormView = ({
+  data,
+  title,
+  moveForward,
+  error,
+}: SimpleFormViewProps) => {
   const { role, type } = useFormStore();
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
     useStepFormHandlers(role, type);
@@ -100,6 +106,11 @@ const SimpleFormView = ({ data, title, moveForward }: SimpleFormViewProps) => {
           );
         })}
       </form>
+      {error && (
+        <small className={`${styles.errorMsg} d-f align-center error`}>
+          {error}
+        </small>
+      )}
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton
           label="Next"

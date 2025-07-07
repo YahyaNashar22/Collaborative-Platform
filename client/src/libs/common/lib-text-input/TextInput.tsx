@@ -63,11 +63,9 @@ const TextInput = ({
         <div
           className={`${styles.inputHolder}  ${
             errorMessage ? styles.error : ""
-          } ${
-            name === "phoneNumber" ? styles.phoneInput : ""
-          } d-f align-center`}
+          } ${name === "phone" ? styles.phoneInput : ""} d-f align-center`}
         >
-          {name === "phoneNumber" ? (
+          {name === "phone" ? (
             <PhoneInput
               style={{ width: "100%" }}
               defaultCountry="lb"

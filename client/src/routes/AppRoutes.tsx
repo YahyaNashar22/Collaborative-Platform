@@ -20,14 +20,11 @@ import DashboardPage from "../pages/Dashboard/DashboardPage/DashboardPage.tsx";
 import UsersPage from "../pages/Dashboard/UsersPage/UsersPage.tsx";
 import MarketPlacePage from "../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx";
 import ProfilePage from "../pages/ProfilePage/ProfilePage.tsx";
+import { useAuth } from "../hooks/useAuth.ts";
+import PrivateRoute from "./PrivateRoute.tsx";
 
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
-const ClientSignupPage = lazy(
-  () => import("../pages/SignupClient/ClientSignupPage.tsx")
-);
-const ProviderSignupPage = lazy(
-  () => import("../pages/SignupProvider/ProviderSignupPage.tsx")
-);
+
 const LoginPage = lazy(
   () => import("../pages/MainAuthPages/Login/LoginPage.tsx")
 );
@@ -41,7 +38,7 @@ const RequestManagerPage = lazy(
 const ManageServicesPage = lazy(
   () => import("../pages/ManageServices/ManageServices.tsx")
 );
-const UsersListPage = lazy(() => import("../pages/UsersList/UsersList.tsx"));
+
 const ServicesPagePage = lazy(
   () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx")
 );
@@ -49,6 +46,8 @@ const ServicesPagePage = lazy(
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
 
 const AppRoutes = () => {
+  const { user, loading } = useAuth();
+
   return (
     <Suspense fallback={<Loading />}>
       <Routes>
@@ -60,9 +59,6 @@ const AppRoutes = () => {
           <Route path="/FAQ" element={<FAQPage />} />
           <Route path="/contact" element={<ContactPage />} />
         </Route>
-
-        <Route path="/client-register" element={<ClientSignupPage />} />
-        <Route path="/provider-register" element={<ProviderSignupPage />} />
 
         {/* AUthorization routes */}
         {/* Layout for EntryPage without sidebar */}
@@ -80,29 +76,31 @@ const AppRoutes = () => {
         </Route>
 
         {/* protected routes */}
-        <Route path="/dashboard" element={<DashboardSideLayout />}>
-          {/* <Route index element={<Navigate to="projects" replace />} /> */}
-          <Route index element={<DashboardPage />} />
-          <Route path="projects" element={<ProjectsPage />} />
-          <Route path="requests" element={<RequestsPage />} />
-          {/* <Route path="proposals" element={<ProposalsPage />} /> */}
-          <Route path="users" element={<UsersPage />} />
-          <Route path="services" element={<ServicesPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route
-            path="/dashboard/active-projects"
-            element={<ActiveProjectsPage />}
-          />
-          <Route
-            path="/dashboard/request-manager"
-            element={<RequestManagerPage />}
-          />
-          <Route
-            path="/dashboard/manage-services"
-            element={<ManageServicesPage />}
-          />
-          <Route path="/dashboard/users-list" element={<UsersListPage />} />
-          <Route path="/dashboard/services" element={<ServicesPagePage />} />
+        <Route element={<PrivateRoute user={user} loading={loading} />}>
+          <Route path="/dashboard" element={<DashboardSideLayout />}>
+            {/* <Route index element={<Navigate to="projects" replace />} /> */}
+            <Route index element={<DashboardPage />} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="requests" element={<RequestsPage />} />
+            {/* <Route path="proposals" element={<ProposalsPage />} /> */}
+            <Route path="users" element={<UsersPage />} />
+            <Route path="services" element={<ServicesPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route
+              path="/dashboard/active-projects"
+              element={<ActiveProjectsPage />}
+            />
+            <Route
+              path="/dashboard/request-manager"
+              element={<RequestManagerPage />}
+            />
+            <Route
+              path="/dashboard/manage-services"
+              element={<ManageServicesPage />}
+            />
+
+            <Route path="/dashboard/services" element={<ServicesPagePage />} />
+          </Route>
         </Route>
         {/* Not Found Route */}
         <Route path="*" element={<NotFound />} />

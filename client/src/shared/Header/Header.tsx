@@ -9,6 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import SidePanel from "../SidePanel/SidePanel";
+import { useAuth } from "../../hooks/useAuth";
+import Avatar from "../Avatar/Avatar";
 
 interface cardDataType {
   icon: IconDefinition;
@@ -23,6 +25,8 @@ const Header = () => {
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);
   const [nextRoute, setNextRoute] = useState<string>("");
   const [isDarkNav, setIsDarkNav] = useState<boolean>(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const cardData: cardDataType[] = [
     {
@@ -39,6 +43,33 @@ const Header = () => {
     },
   ];
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > window.innerHeight / 2 - 400) {
+        setIsDarkNav(true);
+      } else {
+        setIsDarkNav(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isDarkNav]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setIsSidePanelOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const openAuthWindow = (type: string) => {
     setNextRoute(type);
     setOnWindowOpen(true);
@@ -46,7 +77,6 @@ const Header = () => {
   };
 
   const handleClick = (type: string) => {
-    console.log(type);
     switch (type) {
       case "partner":
         if (nextRoute === "register") navigator(`auth/${type}`);
@@ -61,36 +91,10 @@ const Header = () => {
     }
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > window.innerHeight / 2 - 100) {
-        setIsDarkNav(true);
-      } else {
-        setIsDarkNav(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [isDarkNav]);
-
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 
   const toggleSidePanel = () => setIsSidePanelOpen((prev) => !prev);
   const closeSidePanel = () => setIsSidePanelOpen(false);
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 768) {
-        setIsSidePanelOpen(false);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   return (
     <>
@@ -134,17 +138,28 @@ const Header = () => {
         </div>
 
         <div className={styles.right}>
-          <LibButton
-            label="LOG IN"
-            backgroundColor="#868788"
-            hoverColor="#6f7071"
-            onSubmit={() => openAuthWindow("login")}
-          ></LibButton>
-
-          <LibButton
-            label="SIGN UP"
-            onSubmit={() => openAuthWindow("register")}
-          ></LibButton>
+          {user ? (
+            <Avatar
+              currentUser={{
+                firstName: user?.firstName,
+                lastName: user?.lastName,
+              }}
+              onClick={() => navigate("/dashboard")}
+            />
+          ) : (
+            <>
+              <LibButton
+                label="LOG IN"
+                backgroundColor="#868788"
+                hoverColor="#6f7071"
+                onSubmit={() => openAuthWindow("login")}
+              ></LibButton>
+              <LibButton
+                label="SIGN UP"
+                onSubmit={() => openAuthWindow("register")}
+              ></LibButton>
+            </>
+          )}
         </div>
 
         {/* Hamburger button */}

@@ -5,6 +5,11 @@ import styles from "./IndividualSignUp.module.css";
 import ProgressBar from "../../../../shared/ProgressBar/ProgressBar";
 import AuthFooterLink from "../../../../shared/AuthFooterLink/AuthFooterLink";
 import OTPForm from "../StepThreeForm/OTPForm";
+import { useState } from "react";
+import { clientSignUp } from "../../../../services/UserServices";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import authStore from "../../../../store/AuthStore";
 
 interface individualProps {
   title: string;
@@ -17,14 +22,36 @@ const IndividualSignUp = ({
   placeholder,
   formData,
 }: individualProps) => {
-  const { increaseStep, decreaseStep, role } = useFormStore();
+  const { setUser } = authStore();
+  const { increaseStep, decreaseStep, getFormValues, type, role } =
+    useFormStore();
+  const [, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const step = useFormStore((state) => state.step);
 
   const data = formData.formData[step] || [];
   const formTitle = data.formTitle;
 
-  const createAccount = () => {};
+  const handleSignUp = async () => {
+    const payload = getFormValues(role, type);
+    setIsLoading(true);
+    try {
+      const result = await clientSignUp(payload);
+      setUser(result);
+      console.log(result);
+      increaseStep();
+      toast.success("Signed up successfully!");
+      setError("");
+      navigate("/dashboard");
+    } catch (error: any) {
+      decreaseStep();
+      setError(error?.response?.data?.message || "Sign-up failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   let content;
   switch (step) {
@@ -34,14 +61,13 @@ const IndividualSignUp = ({
           data={data}
           title={formTitle}
           moveForward={increaseStep}
+          error={error}
         />
       );
       break;
 
     case 1:
-      content = (
-        <OTPForm onSubmit={createAccount} moveBackward={decreaseStep} />
-      );
+      content = <OTPForm onSubmit={handleSignUp} moveBackward={decreaseStep} />;
       break;
     default:
       content = (
@@ -49,6 +75,7 @@ const IndividualSignUp = ({
           data={data}
           title={formTitle}
           moveForward={increaseStep}
+          error={error}
         />
       );
   }
