@@ -6,6 +6,11 @@ import ProgressBar from "../../../../shared/ProgressBar/ProgressBar";
 import AuthFooterLink from "../../../../shared/AuthFooterLink/AuthFooterLink";
 import OrgInformationForm from "./StepTwoForm/OrgInformationForm";
 import OTPForm from "../StepThreeForm/OTPForm";
+import { useState } from "react";
+import authStore from "../../../../store/AuthStore";
+import { signUp } from "../../../../services/UserServices";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 interface CompanySignUpProps {
   title: string;
@@ -18,15 +23,38 @@ const CompanySignUp = ({
   placeholder,
   formData,
 }: CompanySignUpProps) => {
-  const { increaseStep, role, decreaseStep } = useFormStore();
-
+  const [, setIsLoading] = useState(false);
+  const { increaseStep, role, type, decreaseStep, getFormValues } =
+    useFormStore();
+  const { setUser, setLoading } = authStore();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
   const step = useFormStore((state) => state.step);
 
   const data = formData.formData[step] || [];
   const formTitle = data.formTitle;
 
-  const createAccount = () => {
-    console.log("create acccount");
+  const handleSignUp = async () => {
+    const payload = getFormValues(role, type);
+    setIsLoading(true);
+    try {
+      const result = await signUp(payload, type);
+      setUser({
+        firstName: result.payload.firstName,
+        lastName: result.payload.lastName,
+      });
+      setLoading(false);
+      console.log(result);
+      increaseStep();
+      toast.success("Signed up successfully!");
+      setError("");
+      navigate("/dashboard");
+    } catch (error: any) {
+      decreaseStep();
+      setError(error?.response?.data?.message || "Sign-up failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   let content;
@@ -51,9 +79,7 @@ const CompanySignUp = ({
       );
       break;
     case 2:
-      content = (
-        <OTPForm onSubmit={createAccount} moveBackward={decreaseStep} />
-      );
+      content = <OTPForm onSubmit={handleSignUp} moveBackward={decreaseStep} />;
       break;
     default:
       content = (

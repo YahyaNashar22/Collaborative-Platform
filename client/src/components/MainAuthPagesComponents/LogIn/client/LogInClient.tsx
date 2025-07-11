@@ -23,6 +23,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
     setError("");
     try {
       const response = await logIn(data);
+      console.log(response.payload.firstName);
       setUser({
         firstName: response.payload.firstName,
         lastName: response.payload.lastName,

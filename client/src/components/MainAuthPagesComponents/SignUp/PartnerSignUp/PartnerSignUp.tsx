@@ -9,6 +9,11 @@ import CompanyForm from "./StepTwoForm/CompanyForm";
 import AddressForm from "./StepThreeForm/AddressForm";
 import BankForm from "./StepFourForm/BankForm";
 import DocumentsForm from "./StepFiveForm/DocumentsForm";
+import authStore from "../../../../store/AuthStore";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { signUp } from "../../../../services/UserServices";
+import { toast } from "react-toastify";
 
 interface PartnerSignUpProps {
   title: string;
@@ -21,14 +26,40 @@ const PartnerSignUp = ({
   placeholder,
   formData,
 }: PartnerSignUpProps) => {
-  const { increaseStep, decreaseStep, role } = useFormStore();
+  const [, setIsLoading] = useState(false);
+  const { increaseStep, role, type, decreaseStep, getFormValues, setStep } =
+    useFormStore();
+  const { setUser, setLoading } = authStore();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const step = useFormStore((state) => state.step);
 
   const data = formData.formData[step] || [];
   const formTitle = data.formTitle;
 
-  const createAccount = () => {};
+  const handleSignUp = async () => {
+    const payload = getFormValues(role, type);
+    setIsLoading(true);
+    try {
+      const result = await signUp(payload, type);
+      setUser({
+        firstName: result.payload.firstName,
+        lastName: result.payload.lastName,
+      });
+      setLoading(false);
+      console.log(result);
+      increaseStep();
+      toast.success("Signed up successfully!");
+      setError("");
+      navigate("/dashboard");
+    } catch (error: any) {
+      setStep(0);
+      setError(error?.response?.data?.message || "Sign-up failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   let content;
   switch (step) {
@@ -83,9 +114,7 @@ const PartnerSignUp = ({
       );
       break;
     case 5:
-      content = (
-        <OTPForm onSubmit={createAccount} moveBackward={decreaseStep} />
-      );
+      content = <OTPForm onSubmit={handleSignUp} moveBackward={decreaseStep} />;
 
       break;
     default:

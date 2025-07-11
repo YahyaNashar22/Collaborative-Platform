@@ -248,12 +248,12 @@ export const registerProvider = async (req, res) => {
       services,
     } = req.body;
 
-    const profilePicture = req.files.profilePicture
-      ? req.files.profilePicture[0].filename
-      : "default";
-    const cvOrCompanyProfile = req.files.cvOrCompanyProfile
-      ? req.files.cvOrCompanyProfile[0].filename
-      : null;
+    // const profilePicture = req.files.profilePicture
+    //   ? req.files.profilePicture[0].filename
+    //   : "default";
+    // const cvOrCompanyProfile = req.files.cvOrCompanyProfile
+    //   ? req.files.cvOrCompanyProfile[0].filename
+    //   : null;
 
     // Check if email already exists
     const existingUser = await getUserByEmailService(email);
@@ -277,8 +277,8 @@ export const registerProvider = async (req, res) => {
       language,
       experience,
       services,
-      profilePicture,
-      cvOrCompanyProfile,
+      // profilePicture,
+      // cvOrCompanyProfile,
       role: "provider",
     });
     await newProvider.save();

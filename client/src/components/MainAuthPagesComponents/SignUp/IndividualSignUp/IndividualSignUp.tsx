@@ -6,7 +6,7 @@ import ProgressBar from "../../../../shared/ProgressBar/ProgressBar";
 import AuthFooterLink from "../../../../shared/AuthFooterLink/AuthFooterLink";
 import OTPForm from "../StepThreeForm/OTPForm";
 import { useState } from "react";
-import { clientSignUp } from "../../../../services/UserServices";
+import { signUp } from "../../../../services/UserServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import authStore from "../../../../store/AuthStore";
@@ -22,7 +22,7 @@ const IndividualSignUp = ({
   placeholder,
   formData,
 }: individualProps) => {
-  const { setUser } = authStore();
+  const { setUser, setLoading } = authStore();
   const { increaseStep, decreaseStep, getFormValues, type, role } =
     useFormStore();
   const [, setIsLoading] = useState(false);
@@ -38,8 +38,12 @@ const IndividualSignUp = ({
     const payload = getFormValues(role, type);
     setIsLoading(true);
     try {
-      const result = await clientSignUp(payload);
-      setUser(result);
+      const result = await signUp(payload, type);
+      setUser({
+        firstName: result.payload.firstName,
+        lastName: result.payload.lastName,
+      });
+      setLoading(false);
       console.log(result);
       increaseStep();
       toast.success("Signed up successfully!");

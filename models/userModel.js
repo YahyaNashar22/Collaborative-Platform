@@ -122,27 +122,27 @@ const userSchema = new Schema(
     // },
 
     // ------ Attributes for role == provider block ------
-    experience: {
-      // Text Field
-      type: String,
-      required: function () {
-        return this.role == "provider";
-      },
-    },
-    cvOrCompanyProfile: {
-      // File
-      type: String,
-      required: function () {
-        return this.role == "provider";
-      },
-    },
-    availability: {
-      type: Boolean,
-      required: function () {
-        return this.role == "provider";
-      },
-      default: true,
-    },
+    // experience: {
+    //   // Text Field
+    //   type: String,
+    //   required: function () {
+    //     return this.role == "provider";
+    //   },
+    // },
+    // cvOrCompanyProfile: {
+    //   // File
+    //   type: String,
+    //   required: function () {
+    //     return this.role == "provider";
+    //   },
+    // },
+    // availability: {
+    //   type: Boolean,
+    //   required: function () {
+    //     return this.role == "provider";
+    //   },
+    //   default: true,
+    // },
     // aka - Area of expertise
     services: [
       {

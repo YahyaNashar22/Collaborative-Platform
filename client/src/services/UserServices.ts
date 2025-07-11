@@ -16,8 +16,14 @@ export const verifyOtp = async (email: string, emailOtp: string) => {
 
 const AuthBaseURL = "/users";
 
-export const clientSignUp = async (payload) => {
-  const response = await axios.post(`${AuthBaseURL}/new-client`, payload);
+export const signUp = async (payload, type: string) => {
+  let url = "";
+  if (type === "individual" || type === "company") {
+    url = `${AuthBaseURL}/new-client`;
+  } else {
+    url = `${AuthBaseURL}/new-provider`;
+  }
+  const response = await axios.post(url, payload);
   return response.data.payload;
 };
 
