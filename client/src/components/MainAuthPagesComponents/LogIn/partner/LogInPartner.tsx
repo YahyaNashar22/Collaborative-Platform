@@ -20,8 +20,11 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
 
   const handleLogin = async (data: { [key: string]: string }) => {
     setError("");
+    const payload = { ...data, role: role };
+
     try {
-      const response = await logIn(data);
+      const response = await logIn(payload);
+
       setUser({
         firstName: response.payload.firstName,
         lastName: response.payload.lastName,

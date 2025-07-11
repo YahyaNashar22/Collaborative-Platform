@@ -21,9 +21,11 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
 
   const handleLogin = async (data: { [key: string]: string }) => {
     setError("");
+    const payload = { ...data, role: role };
+
     try {
-      const response = await logIn(data);
-      console.log(response.payload.firstName);
+      const response = await logIn(payload);
+
       setUser({
         firstName: response.payload.firstName,
         lastName: response.payload.lastName,

@@ -310,13 +310,17 @@ export const registerProvider = async (req, res) => {
 // User Log in
 export const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     // check if email exists
     const existingUser = await getUserByEmailService(email);
     if (!existingUser)
       return res.status(404).json({ message: "email does not exist" });
 
+    // check the role
+    const invalidRole = existingUser.role !== role;
+    if (invalidRole)
+      return res.status(404).json({ message: "Invalid credentials" });
     // check if password match
     const isValidPassword = await bcrypt.compare(
       password,
