@@ -2,6 +2,10 @@
   margin-top: 20px;
 }
 
+.formContainer .otpError {
+  margin-top: 1rem;
+}
+
 .form {
   margin-top: 50px;
   gap: 15px;

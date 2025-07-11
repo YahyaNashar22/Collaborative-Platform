@@ -1,4 +1,3 @@
-import { useState } from "react";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import styles from "./SimpleFormView.module.css";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
@@ -24,12 +23,10 @@ const SimpleFormView = ({
   const { role, type } = useFormStore();
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
     useStepFormHandlers(role, type);
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
-  const togglePasswordVisibility = () => setIsShowPassword((prev) => !prev);
 
   const onNext = () => {
     const hasError = validateStep(data.form);
+    console.log(hasError);
 
     if (Object.keys(hasError).length > 0) return;
 
@@ -70,46 +67,35 @@ const SimpleFormView = ({
           ))}
         </div>
 
-        {data.form.slice(2).map((field: FormField, index: number) => {
-          const isPasswordField =
-            field.name === "password" || field.name === "confirmPassword";
-
-          return (
-            <div key={index}>
-              <TextInput
-                label={field.label}
-                type={field.type}
-                placeholder={field.placeholder}
-                name={field.name}
-                value={fieldValues[field.name] || ""}
-                required={field.required || false}
-                maxLength={Number(field.maxLength)}
-                minLength={Number(field.minLength)}
-                onChange={(value, name) =>
-                  handleChange(name, value, field.required || false)
-                }
-                isShowPassword={isPasswordField ? isShowPassword : undefined}
-                toggleShowPassword={
-                  isPasswordField ? togglePasswordVisibility : undefined
-                }
-                errorMessage={errors[field.name]}
-                onBlur={() =>
-                  handleBlur(
-                    field.name,
-                    getStringValue(fieldValues[field.name]),
-                    field.required || false,
-                    field.type
-                  )
-                }
-              />
-            </div>
-          );
-        })}
+        {data.form.slice(2).map((field: FormField, index: number) => (
+          <div key={index}>
+            <TextInput
+              label={field.label}
+              type={field.type}
+              placeholder={field.placeholder}
+              name={field.name}
+              value={fieldValues[field.name] || ""}
+              required={field.required || false}
+              maxLength={Number(field.maxLength)}
+              minLength={Number(field.minLength)}
+              onChange={(value, name) =>
+                handleChange(name, value, field.required || false)
+              }
+              errorMessage={errors[field.name]}
+              onBlur={() =>
+                handleBlur(
+                  field.name,
+                  getStringValue(fieldValues[field.name]),
+                  field.required || false,
+                  field.type
+                )
+              }
+            />
+          </div>
+        ))}
       </form>
       {error && (
-        <small className={`${styles.errorMsg} d-f align-center error`}>
-          {error}
-        </small>
+        <small className="errorMsg d-f align-center error">{error}</small>
       )}
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton

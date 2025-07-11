@@ -84,7 +84,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "password",
+                  name: "confirmPassword",
                   label: "Confirm password",
                   value: "",
                   placeholder: "confirm Password",
@@ -177,7 +177,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "password",
+                  name: "confirmPassword",
                   label: "Confirm password",
                   value: "",
                   placeholder: "confirm Password",
@@ -346,7 +346,7 @@ export const registerFormData: RegisterFormData = {
                   errorMsg: "* This Field is Required",
                 },
                 {
-                  name: "password",
+                  name: "confirmPassword",
                   label: "Confirm password",
                   value: "",
                   placeholder: "confirm Password",

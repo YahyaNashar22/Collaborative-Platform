@@ -60,6 +60,7 @@ const Header = () => {
   }, [isDarkNav]);
 
   useEffect(() => {
+    console.log(user);
     const handleResize = () => {
       if (window.innerWidth > 768) {
         setIsSidePanelOpen(false);

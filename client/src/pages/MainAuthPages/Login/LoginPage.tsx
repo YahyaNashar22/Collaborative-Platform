@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import styles from "./LoginPage.module.css";
 import LogInClient from "../../../components/MainAuthPagesComponents/LogIn/client/LogInClient";
 import LogInPartner from "../../../components/MainAuthPagesComponents/LogIn/partner/LogInPartner";
-import vector from "../../../assets/icons/bottomIcon.png";
 
 const LoginPage = () => {
   const { role } = useParams();

@@ -4,6 +4,9 @@ import styles from "./LogInClient.module.css";
 import LogInComponent from "../LogInComponent";
 import { useState } from "react";
 import ForgetPasswordComponent from "../forgetPassword/ForgetPasswordComponent";
+import { logIn } from "../../../../services/UserServices";
+import { useNavigate } from "react-router-dom";
+import authStore from "../../../../store/AuthStore";
 
 interface LogInClientProps {
   role: string;
@@ -12,9 +15,24 @@ interface LogInClientProps {
 
 const LogInClient = ({ role, placeholder }: LogInClientProps) => {
   const [step, setStep] = useState<number>(0);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const { setUser, setLoading } = authStore();
 
-  const handleLogin = (data: { [key: string]: string }) => {
-    console.log(data);
+  const handleLogin = async (data: { [key: string]: string }) => {
+    setError("");
+    try {
+      const response = await logIn(data);
+      setUser({
+        firstName: response.payload.firstName,
+        lastName: response.payload.lastName,
+      });
+      setLoading(false);
+      if (response.success === true) navigate("/dashboard");
+    } catch (error: any) {
+      if (error?.response?.data?.message)
+        setError(error?.response?.data?.message);
+    }
   };
 
   const handleResetPassword = () => {};
@@ -31,7 +49,13 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
             <LogInComponent
               onLogin={handleLogin}
               onForgetPassword={() => setStep((prev) => prev + 1)}
-            />
+            >
+              {error && (
+                <small className="errorMsg d-f align-center error">
+                  {error}
+                </small>
+              )}
+            </LogInComponent>
           ) : (
             <ForgetPasswordComponent
               moveBackward={() => setStep((prev) => prev - 1)}

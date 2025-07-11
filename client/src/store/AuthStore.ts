@@ -1,9 +1,9 @@
 import { create } from "zustand";
 
 interface AuthState {
-  user: any;
+  user: { [key: string]: string } | null;
   loading: boolean;
-  setUser: (user: any) => void;
+  setUser: (user: { [key: string]: string } | null) => void;
   setLoading: (loading: boolean) => void;
 }
 

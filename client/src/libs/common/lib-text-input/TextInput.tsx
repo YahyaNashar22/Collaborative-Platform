@@ -9,6 +9,7 @@ import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { multiSelectType } from "../../../interfaces/registerSignup";
 import { getStringValue } from "../../../utils/CastToString";
+import { useState } from "react";
 
 type props = {
   label?: string;
@@ -26,7 +27,7 @@ type props = {
   min?: number;
   max?: number;
   hasCurrency?: boolean;
-  toggleShowPassword?: () => void;
+
   onBlur?: () => void;
 };
 const TextInput = ({
@@ -39,8 +40,6 @@ const TextInput = ({
   maxLength,
   minLength,
   onChange,
-  isShowPassword,
-  toggleShowPassword,
   errorMessage,
   onBlur,
   min,
@@ -48,6 +47,14 @@ const TextInput = ({
   hasCurrency = false,
   hasIcon = false,
 }: props) => {
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+
+  const inputType =
+    type === "password" ? (showPassword ? "text" : "password") : type;
   return (
     <div
       className={`${styles.inputContainer} ${
@@ -78,7 +85,7 @@ const TextInput = ({
           ) : (
             <>
               <input
-                type={type === "password" && isShowPassword ? "text" : type}
+                type={inputType}
                 id={name}
                 placeholder={placeholder}
                 name={name}
@@ -101,21 +108,14 @@ const TextInput = ({
             </>
           )}
           {type === "password" && (
-            <div className="pointer">
-              {type === "password" && toggleShowPassword && (
-                <div className="pointer" onClick={toggleShowPassword}>
-                  {isShowPassword ? (
-                    <FontAwesomeIcon
-                      icon={faEyeSlash}
-                      style={{ color: "#495059" }}
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={faEye}
-                      style={{ color: "#495059" }}
-                    />
-                  )}
-                </div>
+            <div className="pointer" onClick={handleTogglePassword}>
+              {showPassword ? (
+                <FontAwesomeIcon
+                  icon={faEyeSlash}
+                  style={{ color: "#495059" }}
+                />
+              ) : (
+                <FontAwesomeIcon icon={faEye} style={{ color: "#495059" }} />
               )}
             </div>
           )}

@@ -1,27 +1,26 @@
-// hooks/useAuth.ts
 import { useEffect } from "react";
-import axios from "../Config/axiosInstence";
 import authStore from "../store/AuthStore";
+import axios from "../Config/axiosInstence";
 
 export const useAuth = () => {
   const { user, loading, setUser, setLoading } = authStore();
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get("/users/me");
-        setUser(res.data.payload);
-      } catch {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchUser = async () => {
+    try {
+      const res = await axios.get("/users/me");
+      setUser(res.data.payload);
+    } catch {
+      setUser(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (user === null && loading) {
       fetchUser();
     }
-  }, [user, loading, setUser, setLoading]);
+  }, [user, loading]);
 
-  return { user, loading };
+  return { user, loading, refresh: fetchUser };
 };

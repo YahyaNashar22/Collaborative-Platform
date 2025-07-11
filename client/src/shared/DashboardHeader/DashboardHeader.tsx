@@ -10,11 +10,19 @@ import {
   faRightFromBracket,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import Window from "../../libs/common/lib-window/Window";
+import LibButton from "../../libs/common/lib-button/LibButton";
+import { useAuth } from "../../hooks/useAuth";
+import { signOut } from "../../services/UserServices";
+import authStore from "../../store/AuthStore";
 
 const DashboardHeader = () => {
-  const navigator = useNavigate();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [toggleDropDown, setToggleDropDown] = useState(false);
+  const [toggleWindow, setToggleWindow] = useState<boolean>(false);
+  const { user } = useAuth();
+  const { setUser, setLoading } = authStore();
 
   const links = [
     { path: "/dashboard", label: "Dashboard" },
@@ -46,96 +54,135 @@ const DashboardHeader = () => {
     };
   }, []);
 
+  const onSignOut = () => {
+    setToggleWindow(true);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      const response = await signOut();
+      if (response.status === 200) {
+        setUser(null);
+        setLoading(false);
+      }
+      {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
-    <header
-      className={`${styles.wrapper} d-f align-center justify-start w-100`}
-    >
-      <img
-        src={logo}
-        width={167}
-        height={65}
-        alt="logo"
-        onClick={() => navigator("/")}
-        className="pointer"
-      />
+    <>
+      <header
+        className={`${styles.wrapper} d-f align-center justify-start w-100`}
+      >
+        <img
+          src={logo}
+          width={167}
+          height={65}
+          alt="logo"
+          onClick={() => navigate("/")}
+          className="pointer"
+        />
 
-      <ul className={`${styles.navLinks} w-100 d-f align-center`}>
-        {/* in the profile page remove the navbar */}
-        {!pathname.includes("profile") &&
-          !pathname.includes("auth") &&
-          links.map(({ path, label }) => (
-            <li
-              key={path}
-              className={`${styles.navLink} ${
-                label === "Services" ? styles.last : ""
-              } ${pathname === path ? styles.active : ""} pointer`}
-            >
-              <Link to={path} className="d-f align-center gap-2">
-                <span>{label}</span>
-              </Link>
-            </li>
-          ))}
+        <ul className={`${styles.navLinks} w-100 d-f align-center`}>
+          {/* in the profile page remove the navbar */}
+          {!pathname.includes("profile") &&
+            !pathname.includes("auth") &&
+            links.map(({ path, label }) => (
+              <li
+                key={path}
+                className={`${styles.navLink} ${
+                  label === "Services" ? styles.last : ""
+                } ${pathname === path ? styles.active : ""} pointer`}
+              >
+                <Link to={path} className="d-f align-center gap-2">
+                  <span>{label}</span>
+                </Link>
+              </li>
+            ))}
 
-        {/* Avatar at the end */}
-        {!pathname.includes("auth") ? (
-          <li className={`${styles.navLink} ${styles.last} pointer`}>
-            <div className={`${styles.homeIconContainer} d-f align-center`}>
-              <Avatar
-                currentUser={{
-                  firstName: "abdel rahman",
-                  lastName: "Ghannoum",
-                }}
-                onClick={() => setToggleDropDown(!toggleDropDown)}
-              />
-            </div>
-            {toggleDropDown && (
-              <div className={styles.dropdownMenu} ref={dropdownRef}>
-                <div
-                  className={`${styles.menuItem} ${styles.profile} d-f align-center`}
-                  onClick={() => setToggleDropDown(false)}
-                >
-                  <FontAwesomeIcon
-                    icon={faUser}
-                    className={styles.profileIcon}
-                  />
-                  <Link to={"profile"}>View Profile</Link>
-                </div>
-                <div
-                  className={`${styles.menuItem} ${styles.home} d-f align-center`}
-                  onClick={() => setToggleDropDown(false)}
-                >
-                  <FontAwesomeIcon icon={faHouse} className={styles.icon} />
-                  <Link to={"/"}>Go Home</Link>
-                </div>
-                <div
-                  className={`${styles.menuItem} ${styles.signOutItem} d-f align-center`}
-                  onClick={() => setToggleDropDown(false)}
-                >
-                  <FontAwesomeIcon
-                    icon={faRightFromBracket}
-                    className={styles.icon}
-                  />
-                  <span>Sign Out</span>
-                </div>
+          {/* Avatar at the end */}
+          {!pathname.includes("auth") ? (
+            <li className={`${styles.navLink} ${styles.last} pointer`}>
+              <div className={`${styles.homeIconContainer} d-f align-center`}>
+                <Avatar
+                  currentUser={{
+                    firstName: user?.firstName ?? "",
+                    lastName: user?.lastName ?? "",
+                  }}
+                  onClick={() => setToggleDropDown(!toggleDropDown)}
+                />
               </div>
-            )}
-          </li>
-        ) : (
-          <div className={`${styles.homeIcon}  d-f justify-end w-100 `}>
-            <Link
-              to={"/"}
-              className={`  ${
-                isTwoLevelPath() ? styles.whiteHome : styles.PurpleHome
-              } d-f align-baseline pointer`}
-              onClick={() => setToggleDropDown(false)}
-            >
-              <FontAwesomeIcon icon={faHouse} className={styles.icon} />
-              <span>Home</span>
-            </Link>
+              {toggleDropDown && (
+                <div className={styles.dropdownMenu} ref={dropdownRef}>
+                  <div
+                    className={`${styles.menuItem} ${styles.profile} d-f align-center`}
+                    onClick={() => setToggleDropDown(false)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faUser}
+                      className={styles.profileIcon}
+                    />
+                    <Link to={"profile"}>View Profile</Link>
+                  </div>
+                  <div
+                    className={`${styles.menuItem} ${styles.home} d-f align-center`}
+                    onClick={() => setToggleDropDown(false)}
+                  >
+                    <FontAwesomeIcon icon={faHouse} className={styles.icon} />
+                    <Link to={"/"}>Go Home</Link>
+                  </div>
+                  <div
+                    className={`${styles.menuItem} ${styles.signOutItem} d-f align-center`}
+                    onClick={() => setToggleDropDown(false)}
+                  >
+                    <FontAwesomeIcon
+                      icon={faRightFromBracket}
+                      className={styles.icon}
+                    />
+                    <span onClick={onSignOut}>Sign Out</span>
+                  </div>
+                </div>
+              )}
+            </li>
+          ) : (
+            <div className={`${styles.homeIcon}  d-f justify-end w-100 `}>
+              <Link
+                to={"/"}
+                className={`  ${
+                  isTwoLevelPath() ? styles.whiteHome : styles.PurpleHome
+                } d-f align-baseline pointer`}
+                onClick={() => setToggleDropDown(false)}
+              >
+                <FontAwesomeIcon icon={faHouse} className={styles.icon} />
+                <span>Home</span>
+              </Link>
+            </div>
+          )}
+        </ul>
+      </header>
+      {toggleWindow && (
+        <Window
+          title="Sign Out"
+          onClose={() => setToggleWindow(false)}
+          visible={toggleWindow}
+        >
+          <p>Are you sure you want to sign out?</p>
+
+          <div className={`${styles.buttons} d-f align-center justify-end`}>
+            <LibButton
+              label="Sign Out"
+              onSubmit={handleSignOut}
+              backgroundColor="var(--error)"
+              hoverColor="#bb2d3b"
+            />
           </div>
-        )}
-      </ul>
-    </header>
+        </Window>
+      )}
+    </>
   );
 };
 

@@ -29,6 +29,24 @@ export const useStepFormHandlers = (role: string, type: string) => {
       const error = Validate(name, value, required, fieldType);
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
+
+    if (
+      (name === "password" || name === "confirmPassword") &&
+      touchedFields["confirmPassword"]
+    ) {
+      const password = name === "password" ? value : fieldValues["password"];
+      const confirmPassword =
+        name === "confirmPassword" ? value : fieldValues["confirmPassword"];
+
+      const confirmError =
+        typeof confirmPassword === "string" &&
+        typeof password === "string" &&
+        confirmPassword !== password
+          ? "* Passwords do not match"
+          : "";
+
+      setErrors((prev) => ({ ...prev, confirmPassword: confirmError }));
+    }
   };
 
   const handleBlur = (
@@ -61,9 +79,22 @@ export const useStepFormHandlers = (role: string, type: string) => {
       }
     });
 
+    if ("password" in fieldValues && "confirmPassword" in fieldValues) {
+      const password = fieldValues["password"];
+      const confirmPassword = fieldValues["confirmPassword"];
+      if (
+        typeof password === "string" &&
+        typeof confirmPassword === "string" &&
+        password !== confirmPassword
+      ) {
+        newErrors["confirmPassword"] = "* Passwords do not match";
+        newTouched["confirmPassword"] = true;
+      }
+    }
+
     setErrors(newErrors);
     setTouchedFields((prev) => ({ ...prev, ...newTouched }));
-    console.log(fieldValues);
+
     return newErrors;
   };
 

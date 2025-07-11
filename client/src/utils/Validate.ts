@@ -39,9 +39,5 @@ export const Validate = (
     }
   }
 
-  if (name === "confirmPassword") {
-    return "";
-  }
-
   return "";
 };

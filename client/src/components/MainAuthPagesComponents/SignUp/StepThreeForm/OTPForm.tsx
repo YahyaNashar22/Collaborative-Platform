@@ -165,8 +165,10 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
             Takatuf Subscription Agreement
           </span>
         </label>
-        {errorMsg && <small className="error">{errorMsg}</small>}
       </div>
+      {errorMsg && (
+        <small className={`error ${styles.otpError}`}>{errorMsg}</small>
+      )}
       <div className={`${styles.buttons} d-f align-center justify-start`}>
         <LibButton
           label="Back"

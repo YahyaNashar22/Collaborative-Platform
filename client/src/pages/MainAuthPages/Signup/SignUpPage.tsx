@@ -12,7 +12,6 @@ const SignUpPage = () => {
   const { setRole, setType } = useFormStore();
 
   useEffect(() => {
-    console.log(role, plan);
     if (role) setRole(role);
     if (plan && role) {
       setType(plan);

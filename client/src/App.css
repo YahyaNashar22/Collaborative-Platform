@@ -211,6 +211,18 @@ li {
   font-size: 0.75rem;
 }
 
+.errorMsg {
+  width: 100%;
+  font-size: 12px;
+  height: 1rem;
+  color: var(--error);
+  transition: opacity 0.3s ease;
+  padding: 1.2rem 0.5rem;
+  border-radius: 2px;
+  background-color: #f7e3be;
+  box-shadow: 0 0 0 1.3px;
+}
+
 .line {
   margin-top: 15px;
   background-color: var(--light-grey);

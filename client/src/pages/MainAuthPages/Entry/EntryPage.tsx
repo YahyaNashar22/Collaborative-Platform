@@ -27,9 +27,15 @@ const EntryPage = () => {
   };
 
   const redirectToSignUp = () => {
-    // reset the form
-    const planId = selectedPlan === "BOX-1" ? "individual" : "company";
-    resetForm(role || "individual", planId);
+    const planId =
+      role === "client"
+        ? selectedPlan === "BOX-1"
+          ? "individual"
+          : "company"
+        : role === "partner"
+        ? "default"
+        : "";
+    if (role) resetForm(role, planId);
     if (role === "partner") {
       navigate("register");
     } else {

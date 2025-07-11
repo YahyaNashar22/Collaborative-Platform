@@ -23,6 +23,7 @@ import {
   getCurrentUser,
   getUserById,
   login,
+  logout,
   registerAdmin,
   registerClient,
   registerProvider,
@@ -46,6 +47,7 @@ userRoutes.post(
 );
 
 userRoutes.post("/log-in", login);
+userRoutes.post("/log-out", logout);
 
 userRoutes.post("/verify-password/:id", verifyPassword);
 

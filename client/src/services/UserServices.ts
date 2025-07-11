@@ -20,3 +20,13 @@ export const clientSignUp = async (payload) => {
   const response = await axios.post(`${AuthBaseURL}/new-client`, payload);
   return response.data.payload;
 };
+
+export const signOut = async () => {
+  const response = await axios.post(`${AuthBaseURL}/log-out`);
+  return response;
+};
+
+export const logIn = async (payload) => {
+  const response = await axios.post(`${AuthBaseURL}/log-in`, payload);
+  return response.data.payload;
+};

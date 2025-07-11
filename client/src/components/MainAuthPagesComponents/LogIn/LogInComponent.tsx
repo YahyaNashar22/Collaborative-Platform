@@ -3,6 +3,7 @@ import styles from "./LoginComponent.module.css";
 import { Validate } from "../../../utils/Validate";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { ReactNode } from "react";
 
 interface dataType {
   name: string;
@@ -19,11 +20,14 @@ interface dataType {
 interface loginComponentType {
   onLogin: (data: { [key: string]: string }) => void;
   onForgetPassword: () => void;
+  children?: ReactNode;
 }
 
-const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
-  const [isShowPassword, setIsShowPassword] = useState(false);
-
+const LogInComponent = ({
+  onLogin,
+  onForgetPassword,
+  children,
+}: loginComponentType) => {
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({});
   const [touchedFields, setTouchedFields] = useState<{
     [key: string]: boolean;
@@ -43,9 +47,9 @@ const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
     },
     {
       name: "password",
-      label: "New password",
+      label: "password",
       value: "",
-      placeholder: "New password",
+      placeholder: "password",
       type: "password",
       maxLength: 30,
       minLength: 5,
@@ -53,8 +57,6 @@ const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
       errorMsg: "* This Field is Required",
     },
   ];
-
-  const togglePasswordVisibility = () => setIsShowPassword((prev) => !prev);
 
   const onSubmit = () => {
     const hasError = onNextValidation();
@@ -112,8 +114,6 @@ const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
         <div className={`${styles.formContainer} d-f f-dir-col`}>
           <form className={`${styles.form} d-f f-dir-col`}>
             {data.map((field, index) => {
-              const isPasswordField = field.name === "password";
-
               return (
                 <div key={index}>
                   <TextInput
@@ -127,12 +127,6 @@ const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
                     minLength={field.minLength}
                     onChange={(value, name) =>
                       handleChange(name, value, field.required)
-                    }
-                    isShowPassword={
-                      isPasswordField ? isShowPassword : undefined
-                    }
-                    toggleShowPassword={
-                      isPasswordField ? togglePasswordVisibility : undefined
                     }
                     errorMessage={errors[field.name]}
                     onBlur={() =>
@@ -148,6 +142,7 @@ const LogInComponent = ({ onLogin, onForgetPassword }: loginComponentType) => {
               );
             })}
           </form>
+          {children}
           <div className={`${styles.buttons} d-f align-center justify-between`}>
             <small className="purple pointer bold" onClick={onForgetPassword}>
               Forgot password?

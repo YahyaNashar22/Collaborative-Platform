@@ -1,11 +1,17 @@
 import styles from "./Avatar.module.css";
 
-const Avatar = ({ currentUser, onClick }) => {
+interface AvatarType {
+  currentUser: { firstName: string; lastName: string };
+  onClick: () => void;
+}
+
+const Avatar = ({ currentUser, onClick }: AvatarType) => {
+  console.log(currentUser);
   const configureAvatarName = () => {
     if (currentUser) {
-      return `${currentUser.firstName
+      return `${currentUser?.firstName
         .charAt(0)
-        .toUpperCase()}.${currentUser.lastName.charAt(0).toUpperCase()}`;
+        .toUpperCase()}.${currentUser?.lastName.charAt(0).toUpperCase()}`;
     }
   };
   return (

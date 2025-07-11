@@ -39,10 +39,6 @@ const Profile = () => {
     setUserServices((prev) => prev.filter((s) => s !== service));
   };
 
-  const togglePasswordVisibility = () => setIsShowPassword((prev) => !prev);
-  const toggleOldPasswordVisibility = () =>
-    setIsOldShowPassword((prev) => !prev);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
@@ -177,7 +173,6 @@ const Profile = () => {
                   value={"123456789"}
                   onChange={console.log}
                   isShowPassword={isOldShowPassword}
-                  toggleShowPassword={toggleOldPasswordVisibility}
                 />
                 <TextInput
                   name="password"
@@ -188,7 +183,6 @@ const Profile = () => {
                   value={""}
                   onChange={console.log}
                   isShowPassword={isShowPassword}
-                  toggleShowPassword={togglePasswordVisibility}
                 />
                 <TextInput
                   name="password"
@@ -199,7 +193,6 @@ const Profile = () => {
                   value={""}
                   onChange={console.log}
                   isShowPassword={isShowPassword}
-                  toggleShowPassword={togglePasswordVisibility}
                 />
               </form>
               <div
