@@ -1,11 +1,10 @@
 .wrapper {
   /* max-width: 1200px; */
   padding: 0 1.2rem;
-  overflow-y: auto;
 }
 
 .header {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
@@ -16,6 +15,9 @@
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 1.5rem;
   margin: 2rem 0;
+  overflow-y: auto;
+  height: calc(100vh - 175px);
+  padding-right: 0.1rem;
 }
 
 .card {
