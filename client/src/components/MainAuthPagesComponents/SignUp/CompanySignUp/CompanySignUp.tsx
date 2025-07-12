@@ -38,13 +38,10 @@ const CompanySignUp = ({
     const payload = getFormValues(role, type);
     setIsLoading(true);
     try {
-      const result = await signUp(payload, type);
-      setUser({
-        firstName: result.payload.firstName,
-        lastName: result.payload.lastName,
-      });
+      const response = await signUp(payload, type);
+      setUser(response.payload);
       setLoading(false);
-      console.log(result);
+      console.log(response);
       increaseStep();
       toast.success("Signed up successfully!");
       setError("");

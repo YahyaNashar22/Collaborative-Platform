@@ -10,6 +10,7 @@ import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import SidePanel from "../SidePanel/SidePanel";
 import Avatar from "../Avatar/Avatar";
+import { User } from "../../interfaces/User";
 
 interface cardDataType {
   icon: IconDefinition;
@@ -18,7 +19,7 @@ interface cardDataType {
   type: string;
 }
 
-const Header = ({ user }: { user: { [key: string]: string } | null }) => {
+const Header = ({ user }: { user: User | null }) => {
   const navigator = useNavigate();
   const { pathname } = useLocation();
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);

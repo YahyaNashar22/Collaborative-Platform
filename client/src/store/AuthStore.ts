@@ -1,9 +1,10 @@
 import { create } from "zustand";
+import { User } from "../interfaces/User";
 
 interface AuthState {
-  user: { [key: string]: string } | null;
+  user: User | null;
   loading: boolean;
-  setUser: (user: { [key: string]: string } | null) => void;
+  setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
 }
 

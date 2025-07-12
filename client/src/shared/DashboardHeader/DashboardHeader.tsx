@@ -23,7 +23,7 @@ const DashboardHeader = () => {
   const [toggleWindow, setToggleWindow] = useState<boolean>(false);
   const { user } = useAuth();
   const { setUser, setLoading } = authStore();
-
+  console.log(user, "*--------------");
   const links = (() => {
     switch (user?.role) {
       case "admin":

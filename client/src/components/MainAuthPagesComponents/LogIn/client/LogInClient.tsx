@@ -26,10 +26,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
     try {
       const response = await logIn(payload);
 
-      setUser({
-        firstName: response.payload.firstName,
-        lastName: response.payload.lastName,
-      });
+      setUser(response.payload);
       setLoading(false);
       if (response.success === true) navigate("/dashboard");
     } catch (error: any) {

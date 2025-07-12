@@ -2,9 +2,10 @@ import { Link } from "react-router-dom";
 import HeroWrapper from "../../../../shared/HeroWrapper.tsx/HeroWrapper";
 import styles from "./Hero.module.css";
 import { useOutletContext } from "react-router-dom";
+import { User } from "../../../../interfaces/User";
 
 interface contextType {
-  user: { user: { [key: string]: string } | null };
+  user: { user: User | null };
 }
 
 const Hero = () => {
