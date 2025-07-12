@@ -321,6 +321,7 @@ export const login = async (req, res) => {
     const invalidRole = existingUser.role !== role;
     if (invalidRole)
       return res.status(404).json({ message: "Invalid credentials" });
+
     // check if password match
     const isValidPassword = await bcrypt.compare(
       password,

@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import SidePanel from "../SidePanel/SidePanel";
-import { useAuth } from "../../hooks/useAuth";
 import Avatar from "../Avatar/Avatar";
 
 interface cardDataType {
@@ -19,13 +18,12 @@ interface cardDataType {
   type: string;
 }
 
-const Header = () => {
+const Header = ({ user }: { user: { [key: string]: string } | null }) => {
   const navigator = useNavigate();
   const { pathname } = useLocation();
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);
   const [nextRoute, setNextRoute] = useState<string>("");
   const [isDarkNav, setIsDarkNav] = useState<boolean>(false);
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const cardData: cardDataType[] = [
@@ -60,7 +58,6 @@ const Header = () => {
   }, [isDarkNav]);
 
   useEffect(() => {
-    console.log(user);
     const handleResize = () => {
       if (window.innerWidth > 768) {
         setIsSidePanelOpen(false);
