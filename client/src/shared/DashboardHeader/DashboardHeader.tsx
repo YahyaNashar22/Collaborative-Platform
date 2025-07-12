@@ -24,14 +24,32 @@ const DashboardHeader = () => {
   const { user } = useAuth();
   const { setUser, setLoading } = authStore();
 
-  const links = [
-    { path: "/dashboard", label: "Dashboard" },
-    { path: "/dashboard/projects", label: "Projects" },
-    { path: "/dashboard/requests", label: "Requests" },
-    { path: "/dashboard/users", label: "Users" },
-    { path: "/dashboard/services", label: "Services" },
-  ];
-
+  const links = (() => {
+    switch (user?.role) {
+      case "admin":
+        return [
+          { path: "/dashboard", label: "Dashboard" },
+          { path: "/dashboard/users", label: "Users" },
+          { path: "/dashboard/services", label: "Services" },
+          { path: "/dashboard/projects", label: "Projects" },
+          { path: "/dashboard/requests", label: "Requests" },
+        ];
+      case "client":
+        return [
+          { path: "/dashboard", label: "Dashboard" },
+          { path: "/dashboard/projects", label: "Projects" },
+          { path: "/dashboard/requests", label: "Requests" },
+        ];
+      case "partner":
+        return [
+          { path: "/dashboard", label: "Dashboard" },
+          { path: "/dashboard/services", label: "Services" },
+          { path: "/dashboard/requests", label: "Client Requests" },
+        ];
+      default:
+        return [];
+    }
+  })();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isTwoLevelPath = () => {
@@ -95,8 +113,8 @@ const DashboardHeader = () => {
               <li
                 key={path}
                 className={`${styles.navLink} ${
-                  label === "Services" ? styles.last : ""
-                } ${pathname === path ? styles.active : ""} pointer`}
+                  pathname === path ? styles.active : ""
+                } pointer`}
               >
                 <Link to={path} className="d-f align-center gap-2">
                   <span>{label}</span>
