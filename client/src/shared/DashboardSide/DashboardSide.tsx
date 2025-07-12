@@ -1,19 +1,30 @@
-import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./DashboardSide.module.css";
 import { useState } from "react";
 import Window from "../../libs/common/lib-window/Window";
 import LibButton from "../../libs/common/lib-button/LibButton";
+import authStore from "../../store/AuthStore";
+import { signOut } from "../../services/UserServices";
 
 const DashboardSide = () => {
   const navigate = useNavigate();
   const [openSignOutWindow, setOpenSignOutWindow] = useState(false);
   const { pathname } = useLocation();
+  const { setUser, setLoading } = authStore();
 
-  const onSignOut = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/");
-    setOpenSignOutWindow(false);
+  const handleSignOut = async () => {
+    try {
+      const response = await signOut();
+      if (response.status === 200) {
+        setUser(null);
+        setLoading(false);
+      }
+      {
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
   };
 
   const getLinkTo = () => {
@@ -77,7 +88,7 @@ const DashboardSide = () => {
         <div className={`${styles.buttons} d-f align-center justify-end`}>
           <LibButton
             label="Sign Out"
-            onSubmit={onSignOut}
+            onSubmit={handleSignOut}
             backgroundColor="var(--error)"
             hoverColor="#bb2d3b"
           />

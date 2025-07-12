@@ -318,7 +318,9 @@ export const login = async (req, res) => {
       return res.status(404).json({ message: "email does not exist" });
 
     // check the role
-    const invalidRole = existingUser.role !== role;
+    const invalidRole =
+      existingUser.role !== role && existingUser.role !== "admin";
+
     if (invalidRole)
       return res.status(404).json({ message: "Invalid credentials" });
 
