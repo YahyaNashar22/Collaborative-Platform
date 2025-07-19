@@ -5,12 +5,14 @@ import FileInput from "../../../../libs/common/lib-file-input/FileInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import { Validate } from "../../../../utils/Validate";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
+import { RequestDataType } from "../../../../interfaces/request";
+import RequestDropdown from "./components/RequestDropdown";
 
 type FormField = {
   label: string;
   type: string;
   placeholder: string;
-  name: FormFieldName;
+  name: string;
   required?: boolean;
   maxLength?: number;
   minLength?: number;
@@ -18,40 +20,64 @@ type FormField = {
   errorMessage?: string;
 };
 
-type FormFieldName =
-  | "requestTitle"
-  | "serviceName"
-  | "description"
-  | "document"
-  | "offerDeadline"
-  | "projectDeadline"
-  | "budget";
+type ErrorFields = {
+  title: string;
+  description: string;
+  serviceId: string;
+  document: string;
+  offerDeadline: string;
+  projectDeadline: string;
+  budget: string;
+  [key: string]: string;
+};
 
 interface RequestFormType {
   data: FormField[];
   moveBackward: () => void;
-  onSubmit: (formData: Record<FormFieldName, string>) => void;
+  onSubmit: (formData: RequestDataType) => void;
 }
 
 const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
-  const [formValues, setFormValues] = useState<Record<FormFieldName, string>>({
-    requestTitle: "",
-    serviceName: "",
+  const [formValues, setFormValues] = useState<RequestDataType>({
+    title: "",
+    serviceId: "",
     description: "",
+    document: null,
+    offerDeadline: "",
+    projectDeadline: "",
+    budget: "",
+  });
+
+  const [errors, setErrors] = useState<ErrorFields>({
+    title: "",
+    description: "",
+    serviceId: "",
     document: "",
     offerDeadline: "",
     projectDeadline: "",
     budget: "",
   });
-  const [errors, setErrors] = useState({
-    requestTitle: "",
-    serviceName: "",
-    description: "",
-    document: "",
-    offerDeadline: "",
-    projectDeadline: "",
-    budget: "",
-  });
+
+  const resetForm = () => {
+    setFormValues({
+      title: "",
+      serviceId: "",
+      description: "",
+      document: null,
+      offerDeadline: "",
+      projectDeadline: "",
+      budget: "",
+    });
+    setErrors({
+      title: "",
+      serviceId: "",
+      description: "",
+      document: "",
+      offerDeadline: "",
+      projectDeadline: "",
+      budget: "",
+    });
+  };
 
   const handleChange = (
     name: string,
@@ -59,10 +85,9 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     isRequired: boolean,
     type: string
   ) => {
-    Validate(name, value);
     setErrors((prev) => ({
       ...prev,
-      [name]: Validate(name, value, isRequired, type),
+      [name]: Validate(name, value, isRequired, type, type === "date"),
     }));
     setFormValues((prev) => ({
       ...prev,
@@ -74,13 +99,14 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     let isValid = true;
     const newErrors = { ...errors };
 
-    data.forEach((field) => {
+    data.forEach((field: FormField) => {
       const value = formValues[field.name];
       const error = Validate(
         field.name,
         value,
         field.required ?? false,
-        field.type
+        field.type,
+        field.type === "date"
       );
 
       newErrors[field.name] = error;
@@ -88,10 +114,16 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     });
 
     setErrors(newErrors);
+    console.log(formValues);
 
     if (isValid) {
       onSubmit(formValues);
+      resetForm();
     }
+  };
+
+  const handleSelectService = (selectedService: string) => {
+    setFormValues((prev) => ({ ...prev, serviceId: selectedService }));
   };
 
   return (
@@ -99,26 +131,12 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       <div className={styles.header}>
         <h1>Create New request</h1>
       </div>
-      <form className={styles.form}>
-        <div className="d-f gap-1">
-          {data.slice(0, 2).map((input) => (
-            <TextInput
-              key={input.name}
-              {...input}
-              value={formValues[input.name]}
-              required={input.required ?? false}
-              onChange={(value, name) =>
-                handleChange(name, value, input.required ?? false, input.type)
-              }
-              errorMessage={errors[input.name]}
-            />
-          ))}
-        </div>
-        {data.slice(2).map((input) => {
+      <form className={`${styles.form} d-f f-dir-col`}>
+        {data.map((input, index: number) => {
           if (input.type === "file") {
             return (
               <FileInput
-                key={input.name}
+                key={index}
                 {...input}
                 value={formValues[input.name]}
                 onChange={(value, name) =>
@@ -130,7 +148,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
           } else if (input.type === "textarea") {
             return (
               <TextAreaInput
-                key={input.name}
+                key={index}
                 {...input}
                 value={formValues[input.name]}
                 required={input.required ?? false}
@@ -140,10 +158,24 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
                 errorMessage={errors[input.name]}
               />
             );
+          } else if (input.type === "searchableSelect") {
+            return (
+              <div className={`${styles.container} d-f f-wrap f-dir-col`}>
+                <label className="bold">
+                  Pick a Service <span>*</span>
+                </label>
+                <div className="d-f f-wrap gap-05">
+                  <RequestDropdown emitSelectedService={handleSelectService} />
+                </div>
+                {errors.serviceId && (
+                  <small className="error">* This field is required</small>
+                )}
+              </div>
+            );
           } else {
             return (
               <TextInput
-                key={input.name}
+                key={index}
                 {...input}
                 value={formValues[input.name]}
                 required={input.required ?? false}
@@ -156,6 +188,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
           }
         })}
       </form>
+
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton
           label="Back"

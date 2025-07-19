@@ -338,8 +338,8 @@ const Users = () => {
               .filter((user) =>
                 user.username.toLowerCase().includes(searchValue.toLowerCase())
               )
-              .map((user) => (
-                <tr key={user.id} className="pointer">
+              .map((user, index) => (
+                <tr key={`${user.id}-${index}`} className="pointer">
                   <td>{user.id}</td>
                   <td>{user.username}</td>
                   <td>{user.fullName}</td>

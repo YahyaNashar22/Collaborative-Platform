@@ -856,7 +856,7 @@ export const getUserById = async (req, res) => {
   try {
     const id = req.params.id;
 
-    const user = await getUserByIdService(id).populate("services");
+    const user = await getUserByIdService(id);
 
     if (!user) return res.status(404).json({ message: "User Not Found" });
     return res.status(200).json({ message: "User Found", payload: user });

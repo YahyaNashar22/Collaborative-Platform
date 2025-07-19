@@ -6,9 +6,10 @@ export type FieldError = {
 
 export const Validate = (
   name: string,
-  value: string | multiSelectType[],
+  value: string | multiSelectType[] | File | File[] | Date,
   required: boolean = false,
-  type: string = "text"
+  type: string = "text",
+  isFutureDate: boolean = false
 ): string => {
   if (required) {
     if (type === "multiSelect") {
@@ -30,6 +31,14 @@ export const Validate = (
   if (type === "email" && typeof value === "string") {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(value)) return "* Please enter a valid email";
+  }
+
+  if (isFutureDate) {
+    const inputDate = new Date(value);
+    const today = new Date();
+    if (inputDate <= today) {
+      return "* Date must be after today";
+    }
   }
 
   if (name === "phone" && typeof value === "string") {

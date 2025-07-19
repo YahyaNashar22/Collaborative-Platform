@@ -151,27 +151,27 @@ const Dashboard = () => {
           <h4>Timeline Progress</h4>
           <Line data={lineData} />
         </div>
+        <div className={`${styles.smallChartContainer} d-f f-wrap`}>
+          <div className={`${styles.card} ${styles.smallChart}`}>
+            <h4>File Upload Types</h4>
+            <Doughnut data={doughnutData} />
+          </div>
 
-        <div className={`${styles.card} ${styles.smallChart}`}>
-          <h4>File Upload Types</h4>
-          <Doughnut data={doughnutData} />
+          <div className={`${styles.card} ${styles.smallChart}`}>
+            <h4>Team Skills Overview</h4>
+            <Radar data={radarData} />
+          </div>
+
+          <div className={`${styles.card} ${styles.smallChart}`}>
+            <h4>Requested Services</h4>
+            <PolarArea data={polarData} />
+          </div>
+
+          <div className={`${styles.card} ${styles.smallChart}`}>
+            <h4>Project Status</h4>
+            <Pie data={pieData} />
+          </div>
         </div>
-
-        <div className={`${styles.card} ${styles.smallChart}`}>
-          <h4>Team Skills Overview</h4>
-          <Radar data={radarData} />
-        </div>
-
-        <div className={`${styles.card} ${styles.smallChart}`}>
-          <h4>Requested Services</h4>
-          <PolarArea data={polarData} />
-        </div>
-
-        <div className={`${styles.card} ${styles.smallChart}`}>
-          <h4>Project Status</h4>
-          <Pie data={pieData} />
-        </div>
-
         <div className={styles.card}>
           <h4>Files Uploaded per Month</h4>
           <Bar
@@ -183,20 +183,21 @@ const Dashboard = () => {
             }}
           />
         </div>
-      </div>
-      <div className={styles.statsGrid}>
-        {stats.map((stat, idx) => (
-          <div className={styles.statCard} key={idx}>
-            <div
-              className={styles.statCircle}
-              style={{ backgroundColor: stat.color }}
-            ></div>
-            <div>
-              <h5>{stat.title}</h5>
-              <p>{stat.value}</p>
+
+        <div className={styles.statsGrid}>
+          {stats.map((stat, idx) => (
+            <div className={styles.statCard} key={idx}>
+              <div
+                className={styles.statCircle}
+                style={{ backgroundColor: stat.color }}
+              ></div>
+              <div>
+                <h5>{stat.title}</h5>
+                <p>{stat.value}</p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </main>
   );

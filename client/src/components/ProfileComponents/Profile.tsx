@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../../libs/common/lib-text-input/TextInput";
 import styles from "./Profile.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,7 +16,33 @@ const servicesOptions = [
   { label: "SEO", value: "SEO" },
   { label: "Consulting", value: "Consulting" },
 ];
-const Profile = () => {
+
+interface UserProfileData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  recoveryEmail: string;
+  phone: string;
+  job: string;
+  profilePicture: string;
+  accountType: string;
+  role: string;
+  availability: boolean;
+  banned: boolean;
+  services: {
+    name: {
+      type: string;
+    };
+    description: {
+      type: string;
+    };
+    image: {
+      type: string;
+    };
+  };
+}
+
+const Profile = ({ userData }: { userData: UserProfileData }) => {
   const [selectedTab, setSelectedTab] = useState("Personal Data");
   const [image, setImage] = useState<string | null>(null);
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -26,6 +52,21 @@ const Profile = () => {
     "Design",
     "Development",
   ]);
+
+  const [formUserData, setFormUserData] = useState({
+    firstName: userData?.firstName || "",
+    lastName: userData?.lastName || "",
+    email: userData?.email || "",
+    recoveryEmail: userData?.recoveryEmail || "",
+    phone: userData?.phone || "",
+    job: userData?.job || "",
+    profilePicture: userData?.profilePicture || "",
+    accountType: userData?.accountType || "individual",
+    role: userData?.role || "client",
+    availability: userData?.availability ?? true,
+    banned: userData?.banned ?? false,
+    services: userData?.services || {},
+  });
 
   const navigate = useNavigate();
 
@@ -44,26 +85,80 @@ const Profile = () => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImage(reader.result as string); // base64 string
+        setImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
+  const handleUpdateData = () => {
+    console.log(shallowEqual(userData, formUserData));
+    console.log(formUserData);
+  };
   const handleResetPassword = () => {};
-  const handleUpdateData = () => {};
+
+  const handleChange = (name: string, value: string) => {
+    setFormUserData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const shallowEqual = (
+    obj1: { [key: string]: any },
+    obj2: { [key: string]: any }
+  ): boolean => {
+    const keys1 = Object.keys(obj1);
+    const keys2 = Object.keys(obj2);
+    if (keys1.length !== keys2.length) return false;
+
+    for (const key of keys1) {
+      const val1 = obj1[key];
+      const val2 = obj2[key];
+
+      if (Array.isArray(val1) && Array.isArray(val2)) {
+        if (
+          val1.length !== val2.length ||
+          !val1.every((v, i) => v === val2[i])
+        ) {
+          return false;
+        }
+      } else if (val1 !== val2) {
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  useEffect(() => {
+    if (userData) {
+      setFormUserData({
+        firstName: userData?.firstName || "",
+        lastName: userData?.lastName || "",
+        email: userData?.email || "",
+        recoveryEmail: userData?.recoveryEmail || "",
+        phone: userData?.phone || "",
+        job: userData?.job || "",
+        profilePicture: userData?.profilePicture || "",
+        accountType: userData?.accountType || "individual",
+        role: userData?.role || "client",
+        availability: userData?.availability ?? true,
+        banned: userData?.banned ?? false,
+        services: userData?.services || {},
+      });
+    }
+    console.log(userData);
+  }, [userData]);
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.navBar}>
-        {tabs.map((tab) => (
+        {tabs.map((tab, index: number) => (
           <div
+            key={index}
             className={`${styles.tabWrapper} ${
               selectedTab === tab ? styles.activeTab : ""
             }`}
           >
             <div
-              key={tab}
               className={`${styles.tab} `}
               onClick={() => setSelectedTab(tab)}
             >
@@ -107,8 +202,8 @@ const Profile = () => {
                 placeholder="First Name"
                 type="text"
                 required={true}
-                value={"Abdel rahman"}
-                onChange={console.log}
+                value={formUserData.firstName}
+                onChange={(value, name) => handleChange(name, value)}
               />
               <TextInput
                 name="lastName"
@@ -116,8 +211,8 @@ const Profile = () => {
                 placeholder="Last Name"
                 type="text"
                 required={true}
-                value={"Ghannoum"}
-                onChange={console.log}
+                value={formUserData.lastName}
+                onChange={(value, name) => handleChange(name, value)}
               />
             </div>
             <div className={`${styles.secondRow} d-f gap-1`}>
@@ -127,17 +222,17 @@ const Profile = () => {
                 placeholder="Email"
                 type="email"
                 required={true}
-                value={"A_Ghannoum@gmail.com"}
-                onChange={console.log}
+                value={formUserData.email}
+                onChange={(value, name) => handleChange(name, value)}
               />
               <TextInput
-                name="phoneNumber"
+                name="phone"
                 label="Phone Number"
                 placeholder="Phone Number"
                 type="text"
                 required={true}
-                value={"+961 76316965"}
-                onChange={console.log}
+                value={formUserData.phone}
+                onChange={(value, name) => handleChange(name, value)}
               />
             </div>
           </form>
@@ -170,7 +265,7 @@ const Profile = () => {
                   placeholder="Old Password"
                   type="password"
                   required={true}
-                  value={"123456789"}
+                  value={""}
                   onChange={console.log}
                   isShowPassword={isOldShowPassword}
                 />
@@ -236,8 +331,8 @@ const Profile = () => {
           />
 
           <div className={styles.selectedServices}>
-            {userServices.map((service) => (
-              <div className={styles.serviceTag} key={service}>
+            {userServices.map((service, index: number) => (
+              <div className={styles.serviceTag} key={index}>
                 {service}
                 <button
                   type="button"

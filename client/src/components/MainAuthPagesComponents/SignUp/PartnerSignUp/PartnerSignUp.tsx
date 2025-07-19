@@ -66,6 +66,7 @@ const PartnerSignUp = ({
           data={data}
           title={formTitle}
           moveForward={increaseStep}
+          error={error}
         />
       );
       break;

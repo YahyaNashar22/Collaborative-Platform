@@ -36,3 +36,8 @@ export const logIn = async (payload) => {
   const response = await axios.post(`${AuthBaseURL}/log-in`, payload);
   return response.data.payload;
 };
+
+export const getUserData = async (userId: string) => {
+  const response = await axios.get(`${AuthBaseURL}/get-single/${userId}`);
+  return response.data.payload;
+};

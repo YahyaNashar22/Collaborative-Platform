@@ -1,0 +1,87 @@
+.section {
+  background-color: var(--white);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 20px rgba(43, 43, 43, 0.1);
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+}
+
+.section:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(43, 43, 43, 0.15);
+}
+
+h3 {
+  font-size: 1.3rem;
+  color: var(--deep-purple);
+  margin-bottom: 1.5rem;
+  border-left: 5px solid var(--button-purple);
+  padding-left: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.clientInfo {
+  display: flex;
+  gap: 1.5rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 1rem;
+  border: 1px solid var(--soft-grey);
+  border-radius: 1rem;
+  background-color: var(--darker-white);
+}
+
+.profilePic {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--button-purple);
+  background-color: var(--soft-grey);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+}
+
+.clientDetails {
+  flex: 1;
+  min-width: 220px;
+}
+
+.clientDetails p,
+.section p {
+  margin: 0.6rem 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--label-color);
+  word-break: break-word;
+}
+
+.serviceItem {
+  background: linear-gradient(135deg, var(--pure-grey), var(--darker-white));
+  padding: 1.2rem 1.5rem;
+  border-radius: 1rem;
+  border-left: 5px solid var(--light-purple);
+  margin-bottom: 1rem;
+  transition: background-color 0.25s ease, transform 0.2s ease;
+  position: relative;
+}
+
+.serviceItem:hover {
+  background-color: var(--soft-grey);
+  transform: translateY(-2px);
+}
+
+strong {
+  font-weight: 700;
+  color: var(--shade-black);
+}
+
+.section p > strong {
+  display: inline-block;
+  width: 140px;
+  color: var(--dark-blue);
+}

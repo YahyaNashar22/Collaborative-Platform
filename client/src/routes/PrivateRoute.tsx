@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from "react-router-dom";
+import { User } from "../interfaces/User";
 
 interface PrivateRouteProps {
-  user: any;
+  user: User | null;
   loading: boolean;
   redirectPath?: string;
 }

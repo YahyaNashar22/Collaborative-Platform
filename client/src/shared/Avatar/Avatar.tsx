@@ -2,11 +2,10 @@ import styles from "./Avatar.module.css";
 
 interface AvatarType {
   currentUser: { firstName: string; lastName: string };
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const Avatar = ({ currentUser, onClick }: AvatarType) => {
-  console.log(currentUser);
   const configureAvatarName = () => {
     if (currentUser) {
       return `${currentUser?.firstName

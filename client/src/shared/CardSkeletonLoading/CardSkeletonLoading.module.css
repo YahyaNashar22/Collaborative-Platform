@@ -1,0 +1,78 @@
+.gridWrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.skeletonCard {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+}
+
+.skeletonBox {
+  position: relative;
+  overflow: hidden;
+  background-color: #ebe7fb;
+  border-radius: 8px;
+}
+
+.skeletonBox::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  height: 100%;
+  width: 150px;
+  background: linear-gradient(
+    to right,
+    rgba(161, 139, 242, 0) 0%,
+    rgba(161, 139, 242, 0.4) 50%,
+    rgba(161, 139, 242, 0) 100%
+  );
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -150px;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.skeletonHeader {
+  height: 20px;
+  width: 70%;
+  margin-bottom: 0.75rem;
+}
+
+.skeletonBody {
+  height: 50px;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.skeletonFooter {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.skeletonDeadline {
+  height: 16px;
+  width: 40%;
+}
+
+.skeletonButton {
+  height: 32px;
+  width: 30%;
+}

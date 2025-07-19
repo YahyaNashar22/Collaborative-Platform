@@ -44,7 +44,7 @@ const Header = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > window.innerHeight / 2 - 400) {
+      if (window.scrollY > window.innerHeight / 2 - 50) {
         setIsDarkNav(true);
       } else {
         setIsDarkNav(false);

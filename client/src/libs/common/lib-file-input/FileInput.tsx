@@ -9,7 +9,7 @@ type FileInputProps = {
   required?: boolean;
   errorMessage?: string;
   placeholder: string;
-  value?: File;
+  value?: File | null;
   onChange: (file: File | null, name: string) => void;
   onBlur?: () => void;
 };

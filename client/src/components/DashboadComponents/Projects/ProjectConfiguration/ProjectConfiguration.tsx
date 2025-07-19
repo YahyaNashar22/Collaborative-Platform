@@ -108,7 +108,10 @@ const ProjectConfiguration = ({ onClickNode }: ProjectConfigurationProps) => {
               />
             </div>
 
-            <div className={styles.phasesWrapper} ref={contentRef}>
+            <div
+              className={`${styles.phasesWrapper} d-f f-dir-col gap-1`}
+              ref={contentRef}
+            >
               {phases.map((phase, i) => (
                 <div
                   key={phase.id}

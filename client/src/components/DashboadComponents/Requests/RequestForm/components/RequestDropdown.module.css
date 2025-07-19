@@ -1,0 +1,7 @@
+.container {
+  width: 300px;
+}
+
+.container:first-child {
+  width: 100% !important;
+}

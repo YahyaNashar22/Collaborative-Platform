@@ -25,7 +25,7 @@
 
 .content {
   overflow: auto;
-  height: calc(100vh - 12rem);
+  height: calc(100vh - 11rem);
   padding-right: 0.1rem;
   border-radius: 8px;
   background: #ffffff;

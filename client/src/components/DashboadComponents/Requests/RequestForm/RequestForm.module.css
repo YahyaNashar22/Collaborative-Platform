@@ -1,3 +1,9 @@
+.wrapper {
+  overflow-y: auto;
+  height: calc(100vh - 11rem);
+  padding-right: 0.1rem;
+}
+
 .header h1 {
   margin-bottom: 1rem;
   color: var(--deep-purple);
@@ -6,4 +12,44 @@
 .buttons {
   gap: 10px;
   margin-top: 1rem;
+}
+
+.form {
+  gap: 0.2rem;
+}
+
+.container {
+  gap: 0.3rem;
+}
+.container label {
+  font-size: 12px;
+  color: var(--label-color);
+}
+
+.container label span {
+  color: var(--error);
+}
+
+.serviceButton {
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;
+  background-color: white;
+  color: #374151;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.serviceButton:hover {
+  background-color: #f3f4f6;
+}
+
+.selected {
+  background-color: var(--deep-purple);
+  color: white;
+  border-color: var(--deep-purple);
+}
+
+.selected:hover {
+  color: var(--deep-purple);
 }

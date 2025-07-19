@@ -85,7 +85,10 @@ const AppRoutes = () => {
             {/* <Route path="proposals" element={<ProposalsPage />} /> */}
             <Route path="users" element={<UsersPage />} />
             <Route path="services" element={<ServicesPage />} />
-            <Route path="profile" element={<ProfilePage />} />
+            <Route
+              path="profile"
+              element={<ProfilePage userId={user?._id} />}
+            />
             <Route
               path="/dashboard/active-projects"
               element={<ActiveProjectsPage />}

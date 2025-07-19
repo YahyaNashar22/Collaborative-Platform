@@ -1,10 +1,24 @@
 import express from "express";
+import { upload } from "../middlewares/multer.js";
 
-import { approveQuotation, cancelRequest, createRequest, deleteRequest, getAllClientRequests, getAllProviderRequests, getAllRequests, getSingleRequest, passRequestToProvider, requestRequestMeeting, selectQuotation, sendBackToClient } from "../controllers/requestControllers.js";
+import {
+  approveQuotation,
+  cancelRequest,
+  createRequest,
+  deleteRequest,
+  getAllClientRequests,
+  getAllProviderRequests,
+  getAllRequests,
+  getSingleRequest,
+  passRequestToProvider,
+  requestRequestMeeting,
+  selectQuotation,
+  sendBackToClient,
+} from "../controllers/requestControllers.js";
 
 const requestRoutes = express.Router();
 
-requestRoutes.post("/create", createRequest);
+requestRoutes.post("/create", upload.single("document"), createRequest);
 requestRoutes.post("/request-meeting/:id", requestRequestMeeting);
 
 requestRoutes.get("/get-single/:id", getSingleRequest);
