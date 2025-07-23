@@ -265,8 +265,8 @@ export const registerFormData: RegisterFormData = {
         },
       },
     },
-    partner: {
-      placeholder: "as a partner",
+    provider: {
+      placeholder: "as a provider",
       types: {
         default: {
           steps: 6,

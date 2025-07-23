@@ -15,7 +15,7 @@ const SignUpPage = () => {
     if (role) setRole(role);
     if (plan && role) {
       setType(plan);
-    } else if (!plan && role === "partner") {
+    } else if (!plan && role === "provider") {
       setType("default");
     }
   }, [role, plan, setRole, setType]);
@@ -41,8 +41,8 @@ const SignUpPage = () => {
     content = (
       <PartnerSignUp
         title={registerFormData.title}
-        placeholder={registerFormData.roles.partner.placeholder}
-        formData={registerFormData.roles.partner.types.default}
+        placeholder={registerFormData.roles.provider.placeholder}
+        formData={registerFormData.roles.provider.types.default}
       />
     );
   }

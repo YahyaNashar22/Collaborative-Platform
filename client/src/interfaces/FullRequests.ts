@@ -16,6 +16,7 @@ export interface RequestData {
   __v: number;
   client: Client[];
   provider: string[];
+  providerIds: string[];
   serviceDetails: serviceDetails[];
   quotations: string[];
   approvedQuotations: string[];

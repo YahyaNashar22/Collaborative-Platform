@@ -5,8 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import OTPForm from "../MainAuthPagesComponents/SignUp/StepThreeForm/OTPForm";
-import SelectInput from "../../libs/common/lib-select-input/SelectInput";
+
 import { useNavigate } from "react-router-dom";
+import TagSelector, { TagOption } from "../../shared/TagSelector/TagSelector";
+import { UserProfileData } from "../../interfaces/User";
 
 const tabs = ["Personal Data", "Security Data", "Services"];
 const servicesOptions = [
@@ -17,40 +19,15 @@ const servicesOptions = [
   { label: "Consulting", value: "Consulting" },
 ];
 
-interface UserProfileData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  recoveryEmail: string;
-  phone: string;
-  job: string;
-  profilePicture: string;
-  accountType: string;
-  role: string;
-  availability: boolean;
-  banned: boolean;
-  services: {
-    name: {
-      type: string;
-    };
-    description: {
-      type: string;
-    };
-    image: {
-      type: string;
-    };
-  };
-}
-
 const Profile = ({ userData }: { userData: UserProfileData }) => {
   const [selectedTab, setSelectedTab] = useState("Personal Data");
   const [image, setImage] = useState<string | null>(null);
   const [isShowPassword, setIsShowPassword] = useState(false);
   const [isOldShowPassword, setIsOldShowPassword] = useState(false);
   const [showOtpForm, setShowOtpForm] = useState(false);
-  const [userServices, setUserServices] = useState<string[]>([
-    "Design",
-    "Development",
+  const [userServices, setUserServices] = useState<TagOption[]>([
+    { label: "Design", value: "Design" },
+    { label: "Development", value: "Development" },
   ]);
 
   const [formUserData, setFormUserData] = useState({
@@ -71,13 +48,17 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
   const navigate = useNavigate();
 
   const handleAddService = (value: string) => {
-    if (!userServices.includes(value)) {
-      setUserServices((prev) => [...prev, value]);
+    const existing = userServices.find((s) => s.value === value);
+    if (!existing) {
+      const option = servicesOptions.find((opt) => opt.value === value);
+      if (option) {
+        setUserServices((prev) => [...prev, option]);
+      }
     }
   };
 
-  const handleRemoveService = (service: string) => {
-    setUserServices((prev) => prev.filter((s) => s !== service));
+  const handleRemoveService = (item: TagOption) => {
+    setUserServices((prev) => prev.filter((s) => s.value !== item.value));
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -318,33 +299,16 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
       )}
 
       {selectedTab === "Services" && (
-        <div className={styles.servicesData}>
-          <SelectInput
-            label="Add Service"
-            name="services"
-            type="select"
-            value=""
-            required={true}
-            placeholder="Select service"
-            options={servicesOptions || []}
-            onChange={(value) => handleAddService(value)}
-          />
-
-          <div className={styles.selectedServices}>
-            {userServices.map((service, index: number) => (
-              <div className={styles.serviceTag} key={index}>
-                {service}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveService(service)}
-                  aria-label={`Remove ${service}`}
-                >
-                  &times;
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+        <TagSelector
+          label="Add Service"
+          name="services"
+          placeholder="Select service"
+          options={servicesOptions}
+          selectedItems={userServices}
+          onAddItem={handleAddService}
+          onRemoveItem={handleRemoveService}
+          required={true}
+        />
       )}
     </div>
   );

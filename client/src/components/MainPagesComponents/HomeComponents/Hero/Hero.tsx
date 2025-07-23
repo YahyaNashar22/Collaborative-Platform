@@ -23,7 +23,7 @@ const Hero = () => {
             <div
               className={`${styles.box} ${styles.leftBox} d-f f-dir-col align-center w-100`}
             >
-              <Link to={"/auth/partner"} className="w-100 pointer">
+              <Link to={"/auth/provider"} className="w-100 pointer">
                 BECOME A PARTNER
               </Link>
               <div>Become a Partner In 6 Steps to grow your business</div>

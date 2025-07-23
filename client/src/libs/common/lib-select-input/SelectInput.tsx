@@ -11,6 +11,7 @@ type SelectInputProps = {
   placeholder?: string;
   options: multiSelectType[];
   errorMessage?: string;
+  disabled?: boolean;
   onChange: (value: string | multiSelectType[], name: string) => void;
   onBlur?: () => void;
   onRemove?: (items: multiSelectType[]) => void;
@@ -23,6 +24,7 @@ const SelectInput = ({
   type,
   required = false,
   placeholder,
+  disabled,
   options,
   errorMessage,
   onChange,
@@ -43,7 +45,13 @@ const SelectInput = ({
             id={name}
             name={name}
             value={typeof value === "string" ? value : ""}
-            onChange={(e) => onChange(e.target.value, name)}
+            onChange={(e) => {
+              const selectedOption = options.find(
+                (opt) => opt.value === e.target.value
+              );
+              onChange(e.target.value, selectedOption?.label || "");
+            }}
+            disabled={disabled}
             required={required}
             className="pointer"
           >

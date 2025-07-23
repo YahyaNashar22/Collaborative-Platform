@@ -11,8 +11,8 @@ const LoginPage = () => {
     case "clients":
       content = <LogInClient role={role} placeholder="as a client" />;
       break;
-    case "partner":
-      content = <LogInPartner role={role} placeholder="as a partner" />;
+    case "provider":
+      content = <LogInPartner role={role} placeholder="as a provider" />;
       break;
     default:
       content = (

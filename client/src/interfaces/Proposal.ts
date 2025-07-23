@@ -8,3 +8,10 @@ export interface Proposal {
   price: string;
   isConfirmed: boolean;
 }
+
+export interface proposalFormType {
+  estimatedDeadline: string;
+  amount: number;
+  file: File;
+  description: string;
+}

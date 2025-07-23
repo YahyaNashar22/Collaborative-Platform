@@ -295,6 +295,7 @@ li {
   box-sizing: border-box;
   position: relative;
   left: 45%;
+  margin-top: 0.3rem;
   animation: pulse 1s linear infinite;
 }
 .loader:after {

@@ -3,229 +3,230 @@ import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Proposals.module.css";
 import useDebounceSearch from "../../../hooks/useDebounceSearch";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDownload, faCheck } from "@fortawesome/free-solid-svg-icons";
+import { downloadFile } from "../../../services/FileUpload";
 
-import itachi from "../../../assets/images/itachi-uchiha-naruto-amoled-black-background-5k-5800x3197-4962.png";
-import ProposalTable from "./ProposalTable/ProposalTable";
-import { Proposal } from "../../../interfaces/Proposal";
-import Window from "../../../libs/common/lib-window/Window";
-import FileInput from "../../../libs/common/lib-file-input/FileInput";
-import TextAreaInput from "../../../libs/common/lib-textArea/TextAreaInput";
-
-interface proposalFormType {
-  estimatedDeadline: string;
-  amount: number;
-  file: File;
+interface Proposal {
+  _id: string;
+  amount: string;
   description: string;
+  estimatedDeadline: string[];
+  requestId: string;
+  providerId: { [key: string]: string };
+  uploadedFile: string;
 }
 
-const Proposals = () => {
-  const mockData: Proposal[] = [
-    {
-      id: "1",
-      image: itachi,
-      title: "Design Landing Page",
-      description:
-        "Create a clean, modern landing page for a new SaaS product. Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis soluta eaque ea aut, voluptate laudantium inventore amet facere aspernatur, omnis, ipsa nulla error unde consequuntur perspiciatis esse reprehenderit! Accusantium, incidunt?",
+interface ProposalsType {
+  data: Proposal[];
+  onBack: () => void;
+  isAdmin: boolean;
+  onAcceptProposalByAdmin: (id: string[], requestId: string) => void;
+  onAcceptProposalByClient: (id: string, requestId: string) => void;
+}
 
-      deadline: "2025-07-15",
-      status: "Pending",
-      price: "250$",
-      isConfirmed: false,
-    },
-    {
-      id: "2",
-      image: itachi,
-      title: "Develop Blog API",
-      description: "Build RESTful API for a blogging platform with Node.js.",
-      deadline: "2025-07-10",
-      status: "In Progress",
-      price: "500$",
-      isConfirmed: true,
-    },
-    {
-      id: "3",
-      image: itachi,
-      title: "Create Mobile Wireframes",
-      description: "Design UX wireframes for a mobile app in Figma.",
-      deadline: "2025-07-20",
-      status: "Completed",
-      price: "300$",
-      isConfirmed: true,
-    },
-    {
-      id: "4",
-      image: itachi,
-      title: "Test Payment Gateway",
-      description: "Write integration and E2E tests for Stripe payment flow.",
-      deadline: "2025-07-08",
-      status: "Pending",
-      price: "150$",
-      isConfirmed: false,
-    },
-  ];
-
-  const [onWindowOpen, setOnWindowOpen] = useState(false);
+const Proposals = ({
+  data,
+  onBack,
+  isAdmin,
+  onAcceptProposalByAdmin,
+  onAcceptProposalByClient,
+}: ProposalsType) => {
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
-  const [proposals, setProposals] = useState<Proposal[]>(mockData);
-  const [proposalForm, setProposalForm] = useState<proposalFormType>({
-    estimatedDeadline: "",
-    amount: 0,
-    file: new File([], ""),
-    description: "",
-  });
-  const [hasError, setHasError] = useState(false);
+  const [proposals] = useState(data);
+  const [expandedIds, setExpandedIds] = useState<string[]>([]);
+  const [confirmedIds, setConfirmedIds] = useState<string[]>([]);
 
-  const filteredData: Proposal[] = proposals.filter(
-    (data) =>
-      data.title.toLowerCase().includes(debouncedSearchValue.toLowerCase()) ||
-      data.description
-        .toLowerCase()
-        .includes(debouncedSearchValue.toLowerCase())
-  );
+  const isExpanded = (id: string) => expandedIds.includes(id);
+  const shouldShowToggle = (desc: string) => desc.length > 100;
+
+  const toggleDescription = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setExpandedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
-  const handleCardClick = (id: string) => {
-    console.log("Card clicked with id:", id);
-  };
-
-  const handleConfirmationClick = (id: string) => {
-    setProposals((prev) =>
-      prev.map((proposal) =>
-        proposal.id === id
-          ? { ...proposal, isConfirmed: !proposal.isConfirmed }
-          : proposal
-      )
-    );
-  };
-
-  const handleAddRequest = () => {
-    setHasError(false);
-    setProposalForm({
-      estimatedDeadline: "",
-      amount: 0,
-      file: new File([], ""),
-      description: "",
-    });
-    setOnWindowOpen(true);
-  };
-
-  const handleSubmitProposal = () => {
-    if (proposalForm.amount <= 0) {
-      setHasError(true);
-      return;
+  const toggleConfirm = (proposalId: string) => {
+    if (isAdmin) {
+      setConfirmedIds((prev) =>
+        prev.includes(proposalId)
+          ? prev.filter((id) => id !== proposalId)
+          : [...prev, proposalId]
+      );
+    } else {
+      setConfirmedIds((prev) =>
+        prev.includes(proposalId) ? [] : [proposalId]
+      );
     }
-    console.log(proposalForm);
-    setOnWindowOpen(false);
   };
+
+  const emitAcceptedProposals = () => {
+    if (confirmedIds.length === 0) return;
+
+    if (isAdmin) {
+      onAcceptProposalByAdmin(confirmedIds, data[0].requestId);
+    } else {
+      onAcceptProposalByClient(confirmedIds[0], data[0].requestId);
+    }
+  };
+
+  const isConfirmed = (id: string) => confirmedIds.includes(id);
+
+  const filteredData = proposals.filter((proposal) =>
+    proposal.description
+      .toLowerCase()
+      .includes(debouncedSearchValue.toLowerCase())
+  );
 
   return (
-    <>
-      <main className={`${styles.wrapper} w-100`}>
-        <div className={`${styles.header} d-f justify-between`}>
-          <TextInput
-            placeholder="Search"
-            type="text"
-            value={searchValue}
-            name="search_projects"
-            required={false}
-            hasIcon={true}
-            onChange={handleSearch}
-          />
-          <LibButton
-            label="+ Add New"
-            onSubmit={handleAddRequest}
-            backgroundColor="transparent"
-            color="#6550b4"
-            bold={true}
-            hoverColor="#563db11c"
-          />
-        </div>
-        <div className={styles.content}>
-          <ProposalTable
-            data={filteredData}
-            onRowClick={(id: string) => handleCardClick(id)}
-            onConfirmationClick={(id: string) => handleConfirmationClick(id)}
-          />
-        </div>
-      </main>
-      <Window
-        visible={onWindowOpen}
-        onClose={() => setOnWindowOpen(false)}
-        size="large"
-        title="Add New Proposal"
-      >
-        <form>
-          <div className="d-f" style={{ gap: "1rem" }}>
-            <TextInput
-              name="estimatedDeadline"
-              label="Estimated deadline"
-              type="string"
-              placeholder="Ex: 3 weeks, 1 month ..."
-              required={false}
-              value={proposalForm["estimatedDeadline"]}
-              onChange={(value: string) =>
-                setProposalForm((prev) => ({
-                  ...prev,
-                  estimatedDeadline: value,
-                }))
-              }
+    <main className={`${styles.wrapper} w-100`}>
+      <div className={`${styles.header} d-f justify-between`}>
+        <TextInput
+          placeholder="Search by description..."
+          type="text"
+          value={searchValue}
+          name="search_proposals"
+          required={false}
+          hasIcon={true}
+          onChange={handleSearch}
+        />
+      </div>
+
+      <h4 className={styles.title}>
+        Proposals{" "}
+        <span style={{ color: "var(--light-grey)" }}>({data.length})</span>
+      </h4>
+
+      <div className={styles.content}>
+        <div className={styles.gridWrapper}>
+          <div className={styles.gridContainer}>
+            <div className={`${styles.gridHeader} d-f`}>
+              <h4>Description</h4>
+              <h4>Deadline</h4>
+              <h4>Amount</h4>
+              <h4>File</h4>
+              {isAdmin && <h4>Provider</h4>}
+
+              <h4>Confirm</h4>
+            </div>
+
+            {filteredData.map((proposal, idx) => {
+              const confirmed = isConfirmed(proposal._id);
+              return (
+                <div
+                  key={proposal._id ?? idx}
+                  className={`${styles.gridRow} ${
+                    confirmed ? styles.confirmedRow : ""
+                  }`}
+                >
+                  <div className={`${styles.proposalInfo} d-f f-dir-col`}>
+                    <p
+                      title={proposal.description}
+                      onClick={(e) => toggleDescription(e, proposal._id)}
+                      className={`${
+                        !isExpanded(proposal._id)
+                          ? styles.ellipsis
+                          : styles.expanded
+                      } ${styles.cell}`}
+                    >
+                      {proposal.description || "—"}
+                    </p>
+                    {shouldShowToggle(proposal.description) && (
+                      <span
+                        onClick={(e) => toggleDescription(e, proposal._id)}
+                        className={`${styles.toggleText} bold pointer`}
+                      >
+                        {isExpanded(proposal._id) ? "Show less" : "Show more"}
+                      </span>
+                    )}
+                  </div>
+
+                  <p className={styles.cell}>
+                    {proposal.estimatedDeadline?.[0] ?? "N/A"}
+                  </p>
+
+                  <p className={styles.cell}>{proposal.amount || "—"} $</p>
+
+                  <p className={styles.cell}>
+                    {proposal.uploadedFile ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          downloadFile(proposal.uploadedFile);
+                        }}
+                        className={styles.downloadLink}
+                        title="Download file"
+                        type="button"
+                      >
+                        <FontAwesomeIcon icon={faDownload} />
+                      </button>
+                    ) : (
+                      "—"
+                    )}
+                  </p>
+
+                  {isAdmin && (
+                    <p className={styles.cell}>
+                      proposal.providerId ? (
+                      <>
+                        {proposal.providerId.firstName}{" "}
+                        {proposal.providerId.lastName}
+                        <br />
+                        <small>({proposal.providerId.email})</small>
+                      </>
+                      ) : ( "—" )
+                    </p>
+                  )}
+
+                  <div className={`${styles.cell} d-f align-center`}>
+                    <button
+                      className={`${styles.confirmToggle} ${
+                        confirmed ? styles.confirmedToggle : ""
+                      }`}
+                      onClick={() => toggleConfirm(proposal._id)}
+                      type="button"
+                    >
+                      {confirmed ? (
+                        <>
+                          <FontAwesomeIcon icon={faCheck} />
+                          <span>Confirmed</span>
+                        </>
+                      ) : (
+                        <span>Confirm</span>
+                      )}
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="d-f gap-05 justify-end">
+            <LibButton
+              label="Back"
+              onSubmit={onBack}
+              backgroundColor="#57417e"
+              hoverColor="#49356a"
+              padding="0 20px"
             />
-            <TextInput
-              name="amount"
-              min={0}
-              max={999999}
-              label="Amount"
-              type="number"
-              placeholder="Amount"
-              required={true}
-              value={proposalForm["amount"].toString()}
-              onChange={(value: string) => {
-                setHasError(false);
-                setProposalForm((prev) => ({
-                  ...prev,
-                  amount: Number(value),
-                }));
-              }}
-              errorMessage={hasError ? "* This field is required" : ""}
+            <LibButton
+              label={`Submit (${confirmedIds.length})`}
+              onSubmit={emitAcceptedProposals}
+              backgroundColor="#4CAF50"
+              hoverColor="#3e9d3e"
+              padding="0 20px"
+              disabled={confirmedIds.length === 0}
             />
           </div>
-          <FileInput
-            name="file"
-            label="Attach your file"
-            placeholder="Attach your file"
-            required={false}
-            value={proposalForm["file"]}
-            onChange={(file: File) =>
-              setProposalForm((prev) => ({
-                ...prev,
-                file: file,
-              }))
-            }
-          />
-
-          <TextAreaInput
-            name="description"
-            label="Description"
-            placeholder="Enter description"
-            required={false}
-            value={proposalForm["description"]}
-            onChange={(value: string) =>
-              setProposalForm((prev) => ({
-                ...prev,
-                description: value,
-              }))
-            }
-          />
-        </form>
-        <div className={styles.btn}>
-          <LibButton label="Submit" onSubmit={handleSubmitProposal} />
         </div>
-      </Window>
-    </>
+      </div>
+    </main>
   );
 };
 

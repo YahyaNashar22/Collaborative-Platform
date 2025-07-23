@@ -8,9 +8,10 @@ import {
   deleteRequest,
   getAllClientRequests,
   getAllProviderRequests,
+  getAllProvidersByRequestId,
   getAllRequests,
   getSingleRequest,
-  passRequestToProvider,
+  passRequestToProviders,
   requestRequestMeeting,
   selectQuotation,
   sendBackToClient,
@@ -23,14 +24,15 @@ requestRoutes.post("/request-meeting/:id", requestRequestMeeting);
 
 requestRoutes.get("/get-single/:id", getSingleRequest);
 
-requestRoutes.patch("/pass-request-to-provider", passRequestToProvider);
+requestRoutes.patch("/pass-request-to-provider", passRequestToProviders);
 requestRoutes.patch("/approve-quotation", approveQuotation);
 requestRoutes.patch("/send-back-to-client", sendBackToClient);
 requestRoutes.patch("/select-quotation", selectQuotation);
 requestRoutes.patch("/cancel-request", cancelRequest);
 
 requestRoutes.post("/get-all", getAllRequests);
-requestRoutes.post("/get-all-provider", getAllProviderRequests);
+requestRoutes.post("/get-all-provider-requests", getAllProviderRequests);
+requestRoutes.get("/get-all-providers/:requestId", getAllProvidersByRequestId);
 requestRoutes.post("/get-all-client", getAllClientRequests);
 
 requestRoutes.delete("/delete/:id", deleteRequest);

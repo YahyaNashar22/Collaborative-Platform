@@ -30,6 +30,11 @@
   font-weight: 700;
   color: #3b3b3b;
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cardBody {
@@ -40,7 +45,7 @@
 
 .description {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,20 +78,4 @@
 
 .cardContent {
   margin-top: 10px;
-}
-
-.statusMessage {
-  background: #f6f7ff;
-  border-left: 3px solid var(--deep-purple);
-  padding: 10px 12px;
-  border-radius: 4px;
-  font-size: 13.5px;
-  color: #383838;
-  line-height: 1.5;
-}
-
-.cardFooter {
-  border-top: 1px solid #f1f1f1;
-  padding-top: 10px;
-  margin-top: auto;
 }

@@ -3,6 +3,7 @@ import chalk from "chalk";
 import Request from "../models/requestModel.js";
 import mongoose from "mongoose";
 import Service from "../models/serviceModel.js";
+import User from "../models/userModel.js";
 
 // Create request
 export const createRequestService = async ({
@@ -326,6 +327,25 @@ export const getAllProviderRequestsService = async ({
       {
         $lookup: {
           from: "quotations",
+          localField: "quotations",
+          foreignField: "_id",
+          as: "quotationsDetails",
+        },
+      },
+      {
+        $addFields: {
+          providerIds: {
+            $map: {
+              input: "$quotationsDetails",
+              as: "quotation",
+              in: "$$quotation.providerId",
+            },
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "quotations",
           localField: "selectedQuotation",
           foreignField: "_id",
           as: "selectedQuotation",
@@ -343,9 +363,18 @@ export const getAllProviderRequestsService = async ({
         },
       },
       {
+        $project: {
+          clientId: 0,
+          providerId: 0,
+          client: 0,
+          quotationsDetails: 0,
+        },
+      },
+      {
         $sort: { createdAt: -1 },
       },
     ];
+
     const requests = await Request.aggregate(pipeline);
 
     if (!requests) {
@@ -359,4 +388,40 @@ export const getAllProviderRequestsService = async ({
     console.log(chalk.red.bold("Failed To Fetch Requests!"));
     console.error(error);
   }
+};
+
+// Get all providers that are not assign to specific request id
+// helpfull when admin assign request to user
+export const getProvidersForRequest = async (requestId) => {
+  const request = await Request.findById(requestId).select("providerId");
+
+  if (!request) {
+    throw new Error("Request not found");
+  }
+
+  const assignedProviderIds = request.providerId || [];
+
+  //  Get assigned providers
+  const assigned = await User.find({
+    _id: { $in: assignedProviderIds },
+    role: "provider",
+  }).select("_id firstName lastName email phone profilePicture");
+
+  //  Get unassigned providers
+  const unassigned = await User.find({
+    _id: { $nin: assignedProviderIds },
+    role: "provider",
+  }).select("_id firstName lastName email phone profilePicture");
+
+  //  map to { label, value } format for dropdowns
+  const format = (users) =>
+    users.map((user) => ({
+      label: `${user.firstName} ${user.lastName}`,
+      value: user._id,
+    }));
+
+  return {
+    assigned: format(assigned),
+    unassigned: format(unassigned),
+  };
 };

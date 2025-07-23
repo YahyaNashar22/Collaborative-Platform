@@ -1,37 +1,16 @@
-.wrapper {
-  /* max-width: 1200px; */
-  padding: 0 1.2rem;
-  /* margin-top: 3rem; */
-}
-
-.header {
-  margin-bottom: 1.5rem;
-}
-
-.buttons {
-  gap: 10px;
-  margin: 1rem 1.2rem;
-}
-
-.content {
-  overflow-y: auto;
-  height: calc(100vh - 175px);
-}
-
-.requestsData {
+.container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   margin-top: 2rem;
 }
 
-.selectedRequests {
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.requestTag {
+.tag {
   background-color: #f0ebff;
   color: #6550b4;
   padding: 0.4rem 0.8rem;
@@ -42,7 +21,7 @@
   gap: 0.4rem;
 }
 
-.requestTag button {
+.tag button {
   background: none;
   border: none;
   color: #6550b4;
@@ -52,6 +31,12 @@
   line-height: 1;
 }
 
-.requestTag button:hover {
+.tag button:hover {
   color: #4f3da1;
 }
+
+/* .locked {
+  margin-left: 6px;
+  color: #aaa;
+  font-size: 0.9em;
+} */

@@ -31,8 +31,8 @@ const Header = ({ user }: { user: User | null }) => {
     {
       icon: faBriefcase,
       title: "Become A Partner",
-      description: "a partner to deliver services through our platform",
-      type: "partner",
+      description: "a provider to deliver services through our platform",
+      type: "provider",
     },
     {
       icon: faCircleUser,
@@ -77,7 +77,7 @@ const Header = ({ user }: { user: User | null }) => {
 
   const handleClick = (type: string) => {
     switch (type) {
-      case "partner":
+      case "provider":
         if (nextRoute === "register") navigator(`auth/${type}`);
         else navigator(`auth/${type}/${nextRoute}`);
         break;
@@ -196,7 +196,7 @@ const Header = ({ user }: { user: User | null }) => {
                   />
 
                   <h1>
-                    {nextRoute === "login" && card.type === "partner"
+                    {nextRoute === "login" && card.type === "provider"
                       ? "Log In As Partner"
                       : nextRoute === "login" && card.type === "client"
                       ? "Log In As Client"

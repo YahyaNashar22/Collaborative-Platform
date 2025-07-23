@@ -53,6 +53,9 @@ export const getAllUsersService = async ({
 
     const users = await User.find(query)
       .populate("services")
+      .select(
+        "_id firstName lastName email phone role banned profilePicture services"
+      )
       .sort({ createdAt: -1 });
 
     if (!users) {

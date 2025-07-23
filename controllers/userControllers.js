@@ -238,6 +238,7 @@ export const registerProvider = async (req, res) => {
       firstName,
       lastName,
       email,
+      recoveryEmail,
       password,
       phone,
       company,
@@ -269,6 +270,7 @@ export const registerProvider = async (req, res) => {
       firstName,
       lastName,
       email,
+      recoveryEmail,
       password: hashedPassword,
       phone,
       company,
@@ -320,7 +322,6 @@ export const login = async (req, res) => {
     // check the role
     const invalidRole =
       existingUser.role !== role && existingUser.role !== "admin";
-
     if (invalidRole)
       return res.status(404).json({ message: "Invalid credentials" });
 
@@ -872,7 +873,7 @@ export const getUserById = async (req, res) => {
 export const getCurrentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select(
-      "firstName lastName role profilePicture"
+      "_id firstName lastName email phone role banned profilePicture services"
     );
     if (!user) return res.status(404).json({ message: "User not found" });
 

@@ -32,11 +32,11 @@ const EntryPage = () => {
         ? selectedPlan === "BOX-1"
           ? "individual"
           : "company"
-        : role === "partner"
+        : role === "provider"
         ? "default"
         : "";
     if (role) resetForm(role, planId);
-    if (role === "partner") {
+    if (role === "provider") {
       navigate("register");
     } else {
       const planId = selectedPlan === "BOX-1" ? "individual" : "company";
@@ -76,7 +76,7 @@ const EntryPage = () => {
           </>
         ) : (
           <div className="d-f f-dir-col align-center gap-5">
-            <PlanSelected step={1} authSteps={6} role={role || "partner"} />
+            <PlanSelected step={1} authSteps={6} role={role || "provider"} />
             <LibButton
               label="Continue"
               onSubmit={redirectToSignUp}

@@ -26,6 +26,7 @@ export const createRequest = async (
   if (data.document) {
     formData.append("document", data.document);
   }
+
   const response = await axios.post(
     `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/create`,
     formData,
@@ -41,8 +42,94 @@ export const createRequest = async (
   return response.data.payload.result;
 };
 
-export const getAllRequests = async (userId: string) => {
-  const payload = { userId: userId };
-  const response = await axiosInstance.post(`${AuthBaseURL}/get-all`, payload);
+export const getAllRequestsBy = (role: string, userId: string) => {
+  console.log(role, "**************");
+  switch (role) {
+    case "admin":
+      return getAllAdminRequests({ role: role });
+      break;
+
+    case "client":
+      return getAllClientRequests({ userId: userId });
+      break;
+    case "provider":
+      return getAllProviderRequests({ userId: userId });
+      break;
+    case "default":
+      return;
+  }
+};
+
+export const getAllAdminRequests = async (query: {
+  [key: string]: string | undefined;
+}) => {
+  console.log("query", query);
+  const response = await axiosInstance.post(`${AuthBaseURL}/get-all`, query);
   return response.data.payload;
+};
+
+export const getAllClientRequests = async (query: {
+  [key: string]: string | undefined;
+}) => {
+  const response = await axiosInstance.post(
+    `${AuthBaseURL}/get-all-client`,
+    query
+  );
+  return response.data.payload;
+};
+
+export const getAllProviderRequests = async (query: {
+  [key: string]: string | undefined;
+}) => {
+  const response = await axiosInstance.post(
+    `${AuthBaseURL}/get-all-provider-requests`,
+    query
+  );
+  return response.data.payload;
+};
+
+export const assignToProvider = async (payload: {
+  requestId: string;
+  providerIds: string[];
+}) => {
+  const response = await axiosInstance.patch(
+    `${AuthBaseURL}/pass-request-to-provider`,
+    payload
+  );
+  return response.data;
+};
+
+export const getAllUnassignedProvider = async (requestId: string) => {
+  const response = await axiosInstance.get(
+    `${AuthBaseURL}/get-all-providers/${requestId}`
+  );
+  return response.data.payload;
+};
+
+export const approveRequest = async (
+  requestId: string,
+  quotationIds: string[]
+) => {
+  const response = await axiosInstance.patch(
+    `${AuthBaseURL}/approve-quotation`,
+    {
+      requestId,
+      quotationIds,
+    }
+  );
+  return response.data.approvedQuotations;
+};
+
+export const approveProposalByClient = async (
+  requestId: string,
+  quotationId: string
+) => {
+  const response = await axiosInstance.patch(
+    `${AuthBaseURL}/select-quotation`,
+    {
+      requestId,
+      quotationId,
+    }
+  );
+  return response.data;
 };

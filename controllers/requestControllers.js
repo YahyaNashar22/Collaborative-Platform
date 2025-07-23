@@ -2,6 +2,7 @@ import Request from "../models/requestModel.js";
 import {
   deleteAllRequestQuotations,
   getSingleQuotationService,
+  getMultipleQuotationsService,
 } from "../services/quotationServices.js";
 import {
   changeRequestStageService,
@@ -9,6 +10,7 @@ import {
   getAllClientRequestsService,
   getAllProviderRequestsService,
   getAllRequestsService,
+  getProvidersForRequest,
   getRequestByIdService,
 } from "../services/requestServices.js";
 
@@ -58,44 +60,58 @@ export const createRequest = async (req, res) => {
 // Pass request to providers
 // * When admin selects providers and transfers the request to them ( Stage 2 )
 // * providers will be able to see the request only if they are on it
-export const passRequestToProvider = async (req, res) => {
+export const passRequestToProviders = async (req, res) => {
   try {
-    const { requestId, providerId } = req.body;
+    const { requestId, providerIds } = req.body;
+
+    if (!Array.isArray(providerIds)) {
+      return res.status(400).json({ message: "providerIds must be an array" });
+    }
 
     // check if request exists
     const request = await getRequestByIdService(requestId);
-
     if (!request)
       return res.status(404).json({ message: "Request Does Not Exist" });
 
-    // add provider to request
-    let updateOperation;
+    const existingProviderIds = request.providerId || [];
 
-    // check if providerId already exists in the request
-    if (request.providerId.includes(providerId)) {
-      // remove providerId
-      updateOperation = { $pull: { providerId: providerId } };
-    } else {
-      // add providerId
-      updateOperation = { $addToSet: { providerId: providerId } };
-    }
-
-    await Request.findByIdAndUpdate(requestId, updateOperation, { new: true });
-
-    await changeRequestStageService(
-      requestId,
-      2,
-      "awaiting providers quotations"
+    // Calculate IDs to add and remove
+    const idsToAdd = providerIds.filter(
+      (id) => !existingProviderIds.includes(id)
+    );
+    const idsToRemove = existingProviderIds.filter(
+      (id) => !providerIds.includes(id)
     );
 
-    const action = updateOperation.$pull ? "removed from" : "added to";
+    // Build bulk update operations
+    const updateOperations = {};
+    if (idsToAdd.length > 0)
+      updateOperations.$addToSet = { providerId: { $each: idsToAdd } };
+    if (idsToRemove.length > 0)
+      updateOperations.$pull = { providerId: { $in: idsToRemove } };
+
+    // Update only if there’s something to change
+    if (Object.keys(updateOperations).length > 0) {
+      await Request.findByIdAndUpdate(requestId, updateOperations, {
+        new: true,
+      });
+
+      // Update stage
+      await changeRequestStageService(
+        requestId,
+        2,
+        "⏳awaiting providers quotations"
+      );
+    }
 
     return res.status(200).json({
-      message: `provider ${providerId} successfully ${action} to request ${requestId}`,
+      message: `Updated assigned providers for request ${requestId}`,
+      added: idsToAdd,
+      removed: idsToRemove,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Problem Passing Request To Provider",
+      message: "Problem assigning providers to request",
       error: error.message,
     });
   }
@@ -105,7 +121,7 @@ export const passRequestToProvider = async (req, res) => {
 // * When admin selects quotations and transfers the request to the client ( Stage 3 )
 export const approveQuotation = async (req, res) => {
   try {
-    const { requestId, quotationId } = req.body;
+    const { requestId, quotationIds } = req.body;
 
     // check if request exists
     const request = await getRequestByIdService(requestId);
@@ -113,32 +129,46 @@ export const approveQuotation = async (req, res) => {
       return res.status(404).json({ message: "Request Does Not Exist" });
 
     // check if quotation exists
-    const quotation = await getSingleQuotationService(quotationId);
-    if (!quotation)
+    const quotation = await getMultipleQuotationsService(quotationIds);
+    if (!quotation.length)
       return res.status(404).json({ message: "Quotation Does Not Exist" });
 
-    // Approve Quotation
-    let updateOperation;
+    let approvedSet = new Set(
+      request.approvedQuotations.map((id) => id.toString())
+    );
 
-    // check if providerId already exists in the request
-    if (request.approvedQuotations.includes(quotationId)) {
-      // remove providerId
-      updateOperation = { $pull: { approvedQuotations: quotationId } };
-    } else {
-      // add providerId
-      updateOperation = { $addToSet: { approvedQuotations: quotationId } };
-    }
+    let actionMessages = [];
 
-    await Request.findByIdAndUpdate(requestId, updateOperation, { new: true });
+    quotationIds.forEach((id) => {
+      if (approvedSet.has(id)) {
+        approvedSet.delete(id);
+        actionMessages.push(`Removed Quotation ${id}`);
+      } else {
+        approvedSet.add(id);
+        actionMessages.push(`Approved Quotation ${id}`);
+      }
+    });
 
-    const action = updateOperation.$pull ? "Removed" : "Approved";
+    // Update the request
+    request.approvedQuotations = Array.from(approvedSet);
+
+    // update stage request
+    await changeRequestStageService(
+      requestId,
+      3,
+      "⏳awaiting client to choose quotation"
+    );
+
+    // await request.save();
 
     res.status(200).json({
-      message: `${action} Quotation ${quotationId}`,
+      message: "Request approve and sent back to client successfully",
+      details: actionMessages,
+      approvedQuotations: request.approvedQuotations,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Problem Approving Quotation",
+      message: "Problem Sending Request Back",
       error: error.message,
     });
   }
@@ -158,7 +188,7 @@ export const sendBackToClient = async (req, res) => {
     await changeRequestStageService(
       requestId,
       3,
-      "awaiting client to choose quotation"
+      "⏳awaiting client to choose quotation"
     );
 
     res.status(200).json({
@@ -323,6 +353,31 @@ export const getAllProviderRequests = async (req, res) => {
     res.status(500).json({
       message: "Problem Fetching Requests",
       error: error.message,
+    });
+  }
+};
+
+// Get all providers that are not assign to specific request id
+// helpfull when admin assign request to user
+
+export const getAllProvidersByRequestId = async (req, res) => {
+  const { requestId } = req.params;
+
+  try {
+    if (!requestId) {
+      return res.status(400).json({ message: "Request ID is required" });
+    }
+
+    const providers = await getProvidersForRequest(requestId);
+
+    return res.status(200).json({
+      message: "providers fetched successfully",
+      payload: providers,
+    });
+  } catch (error) {
+    console.error("Error in providers Fetching:", error);
+    return res.status(500).json({
+      message: "Failed to fetch providers",
     });
   }
 };

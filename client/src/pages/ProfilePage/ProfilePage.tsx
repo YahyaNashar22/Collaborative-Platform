@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import Profile from "../../components/ProfileComponents/Profile";
 import styles from "./ProfilePage.module.css";
 import { getUserData } from "../../services/UserServices";
+import { UserProfileData } from "../../interfaces/User";
 
 interface profileType {
   userId: string;
 }
 
 const ProfilePage = ({ userId }: profileType) => {
-  const [userData, setUserData] = useState();
+  const [userData, setUserData] = useState<UserProfileData>();
   const getCurrentUser = async () => {
     try {
       if (userId) {
@@ -26,7 +27,7 @@ const ProfilePage = ({ userId }: profileType) => {
 
   return (
     <div className={`${styles.wrapper} w-100`}>
-      <Profile userData={userData} />
+      {userData && <Profile userData={userData} />}
     </div>
   );
 };
