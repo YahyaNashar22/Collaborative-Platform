@@ -57,7 +57,7 @@ export const getAllQuotations = async (req, res) => {
 
     if (!quotations || quotations.length === 0) {
       return res.status(404).json({
-        message: "No quotations submitted yet.",
+        message: "No Offers submitted yet.",
         payload: [],
       });
     }

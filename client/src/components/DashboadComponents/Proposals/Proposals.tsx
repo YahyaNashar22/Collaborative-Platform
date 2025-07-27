@@ -106,8 +106,12 @@ const Proposals = ({
       <div className={styles.content}>
         <div className={styles.gridWrapper}>
           <div className={styles.gridContainer}>
-            <div className={`${styles.gridHeader} d-f`}>
-              <h4>Description</h4>
+            <div
+              className={`${styles.gridHeader} ${
+                isAdmin ? styles.withProvider : styles.noProvider
+              } d-f`}
+            >
+              <h4>Title</h4>
               <h4>Deadline</h4>
               <h4>Amount</h4>
               <h4>File</h4>
@@ -123,11 +127,11 @@ const Proposals = ({
                   key={proposal._id ?? idx}
                   className={`${styles.gridRow} ${
                     confirmed ? styles.confirmedRow : ""
-                  }`}
+                  }  ${isAdmin ? styles.withProvider : styles.noProvider}`}
                 >
                   <div className={`${styles.proposalInfo} d-f f-dir-col`}>
                     <p
-                      title={proposal.description}
+                      title={proposal.title}
                       onClick={(e) => toggleDescription(e, proposal._id)}
                       className={`${
                         !isExpanded(proposal._id)
@@ -173,14 +177,16 @@ const Proposals = ({
 
                   {isAdmin && (
                     <p className={styles.cell}>
-                      proposal.providerId ? (
-                      <>
-                        {proposal.providerId.firstName}{" "}
-                        {proposal.providerId.lastName}
-                        <br />
-                        <small>({proposal.providerId.email})</small>
-                      </>
-                      ) : ( "—" )
+                      {proposal.providerId ? (
+                        <>
+                          {proposal.providerId.firstName}{" "}
+                          {proposal.providerId.lastName}
+                          <br />
+                          <small>({proposal.providerId.email})</small>
+                        </>
+                      ) : (
+                        "—"
+                      )}
                     </p>
                   )}
 

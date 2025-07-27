@@ -147,3 +147,7 @@
 .title {
   font-size: 18px;
 }
+
+.errorWindow {
+  color: #000;
+}

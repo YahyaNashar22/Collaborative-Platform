@@ -115,7 +115,11 @@ const Header = ({ user }: { user: User | null }) => {
           <img src={logo} alt="logo" onClick={() => navigator("/")} />
 
           {/* Nav Links */}
-          <ul className={`${styles.navLinks}`}>
+          <ul
+            className={`${styles.navLinks} ${
+              isSidePanelOpen ? styles.showMenu : ""
+            }`}
+          >
             {[
               { path: "/", label: "HOME" },
               { path: "/about", label: "ABOUT US" },

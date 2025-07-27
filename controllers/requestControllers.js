@@ -1,3 +1,5 @@
+import chalk from "chalk";
+import Project from "../models/projectModel.js";
 import Request from "../models/requestModel.js";
 import {
   deleteAllRequestQuotations,
@@ -7,6 +9,7 @@ import {
 import {
   changeRequestStageService,
   createRequestService,
+  generateStagesAndTimelines,
   getAllClientRequestsService,
   getAllProviderRequestsService,
   getAllRequestsService,
@@ -204,22 +207,22 @@ export const sendBackToClient = async (req, res) => {
 
 // Client Select Quotation
 // * When client selects quotation and moves to payment gateway or start project( Stage 4 )
-export const selectQuotation = async (req, res) => {
+
+export const selectQuotationAndStartProject = async (req, res) => {
   try {
     const { requestId, quotationId } = req.body;
 
-    // check if request exists
     const request = await getRequestByIdService(requestId);
-    if (!request)
+    if (!request) {
       return res.status(404).json({ message: "Request Does Not Exist" });
+    }
 
-    // check if quotation exists
     const quotation = await getSingleQuotationService(quotationId);
-    if (!quotation)
+    if (!quotation) {
       return res.status(404).json({ message: "Quotation Does Not Exist" });
+    }
 
-    // mark quotation as selected
-    await Request.findByIdAndUpdate(
+    const newRequest = await Request.findByIdAndUpdate(
       requestId,
       { $set: { selectedQuotation: quotationId } },
       { new: true }
@@ -227,12 +230,30 @@ export const selectQuotation = async (req, res) => {
 
     await changeRequestStageService(requestId, 4, "accepted");
 
-    res.status(200).json({
-      message: "Selected Quotation Successfully",
+    const result = generateStagesAndTimelines(quotation.estimatedDeadline);
+
+    const project = new Project({
+      clientId: request.clientId,
+      providerId: quotation.providerId,
+      serviceId: request.serviceId,
+      amount: quotation.amount,
+      stages: result.stages,
+      timelines: result.timelines,
+      projectDeadline: request.projectDeadline,
+      projectEstimatedDeadline: quotation.estimatedDeadline,
+      stage: result.stages[0],
+      availableHours: quotation.availableHours || [],
+    });
+
+    await project.save();
+
+    res.status(201).json({
+      message: "Quotation selected and project started successfully",
+      payload: newRequest,
     });
   } catch (error) {
     res.status(500).json({
-      message: "Problem Selecting Quotation",
+      message: "Problem Selecting Quotation or Starting Project",
       error: error.message,
     });
   }
@@ -362,13 +383,14 @@ export const getAllProviderRequests = async (req, res) => {
 
 export const getAllProvidersByRequestId = async (req, res) => {
   const { requestId } = req.params;
+  const { query } = req.query;
 
   try {
     if (!requestId) {
       return res.status(400).json({ message: "Request ID is required" });
     }
 
-    const providers = await getProvidersForRequest(requestId);
+    const providers = await getProvidersForRequest(requestId, query);
 
     return res.status(200).json({
       message: "providers fetched successfully",

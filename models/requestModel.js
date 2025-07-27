@@ -29,6 +29,10 @@ const requestSchema = new Schema(
       default: 1,
       required: true,
     },
+    // timeLineStatus: {
+    //   type: String,
+    //   enum: ["new", "near", "past"],
+    // },
     status: {
       type: String,
       enum: [

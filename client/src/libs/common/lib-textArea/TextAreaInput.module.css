@@ -19,6 +19,10 @@
   position: relative;
 }
 
+.inputHolder:focus-within {
+  border-color: var(--intense-purple);
+}
+
 .inputHolder textarea {
   background-color: inherit;
   width: 100%;

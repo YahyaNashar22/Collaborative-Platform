@@ -30,6 +30,7 @@ import {
   registerSuper,
   sendEmail,
   sendSMS,
+  updateUserData,
   verifyPassword,
 } from "../controllers/userControllers.js";
 import { authMiddleware } from "../middlewares/checkAuth.js";
@@ -51,6 +52,11 @@ userRoutes.post("/log-out", logout);
 
 userRoutes.post("/verify-password/:id", verifyPassword);
 
+userRoutes.patch(
+  "/update/:id",
+  upload.single("profilePicture"),
+  updateUserData
+);
 userRoutes.patch("/change-password/:id", changePassword);
 userRoutes.patch("/ban/:id", changeUserBannedStatus);
 userRoutes.patch("/change-availability/:id", changeProviderAvailability);

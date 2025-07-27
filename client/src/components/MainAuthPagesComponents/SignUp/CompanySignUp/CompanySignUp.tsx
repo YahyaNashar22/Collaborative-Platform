@@ -8,7 +8,11 @@ import OrgInformationForm from "./StepTwoForm/OrgInformationForm";
 import OTPForm from "../StepThreeForm/OTPForm";
 import { useState } from "react";
 import authStore from "../../../../store/AuthStore";
-import { signUp } from "../../../../services/UserServices";
+import {
+  sendOtp,
+  verifyOtp,
+  signUpCompanyClient,
+} from "../../../../services/UserServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -24,33 +28,61 @@ const CompanySignUp = ({
   formData,
 }: CompanySignUpProps) => {
   const [, setIsLoading] = useState(false);
-  const { increaseStep, role, type, decreaseStep, getFormValues } =
+  const { increaseStep, role, type, decreaseStep, getFormValues, setStep } =
     useFormStore();
   const { setUser, setLoading } = authStore();
   const [error, setError] = useState("");
+  const [otpEmail, setOtpEmail] = useState<string>("");
+  const [isVerifying, setIsVerifying] = useState(false);
   const navigate = useNavigate();
   const step = useFormStore((state) => state.step);
 
   const data = formData.formData[step] || [];
   const formTitle = data.formTitle;
 
-  const handleSignUp = async () => {
+  const handleSendOtpAndProceed = async () => {
+    const payload = getFormValues(role, type);
+    const email = payload?.email;
+    if (!email) {
+      setError("Email is required before proceeding.");
+      return;
+    }
+
+    try {
+      await sendOtp(email as string);
+      setOtpEmail(email as string);
+      setError("");
+      increaseStep();
+    } catch (err: any) {
+      console.error("Error sending OTP:", err);
+      setError(err?.response?.data?.message || "Failed to send OTP");
+    }
+  };
+
+  const handleSignUp = async (otpCode: number) => {
     const payload = getFormValues(role, type);
     setIsLoading(true);
+    setIsVerifying(true);
     try {
-      const response = await signUp(payload, type);
-      setUser(response.payload);
+      const isVerified = await verifyOtp(otpEmail, otpCode.toString());
+
+      if (!isVerified.success) {
+        setError("Invalid or expired OTP.");
+        return;
+      }
+      const result = await signUpCompanyClient(payload);
+      console.log(result);
+      setUser(result.payload);
       setLoading(false);
-      console.log(response);
-      increaseStep();
       toast.success("Signed up successfully!");
       setError("");
       navigate("/dashboard");
     } catch (error: any) {
-      decreaseStep();
+      setStep(0);
       setError(error?.response?.data?.message || "Sign-up failed");
     } finally {
       setIsLoading(false);
+      setIsVerifying(false);
     }
   };
 
@@ -62,6 +94,7 @@ const CompanySignUp = ({
           data={data}
           title={formTitle}
           moveForward={increaseStep}
+          error={error}
         />
       );
       break;
@@ -70,13 +103,20 @@ const CompanySignUp = ({
         <OrgInformationForm
           data={data}
           title={formTitle}
-          moveForward={increaseStep}
+          moveForward={handleSendOtpAndProceed}
           moveBackward={decreaseStep}
         />
       );
       break;
     case 2:
-      content = <OTPForm onSubmit={handleSignUp} moveBackward={decreaseStep} />;
+      content = (
+        <OTPForm
+          onSubmit={handleSignUp}
+          moveBackward={decreaseStep}
+          email={otpEmail}
+          isVerifying={isVerifying}
+        />
+      );
       break;
     default:
       content = (

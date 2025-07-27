@@ -13,7 +13,7 @@ import {
   getSingleRequest,
   passRequestToProviders,
   requestRequestMeeting,
-  selectQuotation,
+  selectQuotationAndStartProject,
   sendBackToClient,
 } from "../controllers/requestControllers.js";
 
@@ -27,7 +27,7 @@ requestRoutes.get("/get-single/:id", getSingleRequest);
 requestRoutes.patch("/pass-request-to-provider", passRequestToProviders);
 requestRoutes.patch("/approve-quotation", approveQuotation);
 requestRoutes.patch("/send-back-to-client", sendBackToClient);
-requestRoutes.patch("/select-quotation", selectQuotation);
+requestRoutes.patch("/select-quotation", selectQuotationAndStartProject);
 requestRoutes.patch("/cancel-request", cancelRequest);
 
 requestRoutes.post("/get-all", getAllRequests);

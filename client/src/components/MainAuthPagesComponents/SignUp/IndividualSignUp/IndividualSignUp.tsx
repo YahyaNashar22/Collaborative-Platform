@@ -6,7 +6,11 @@ import ProgressBar from "../../../../shared/ProgressBar/ProgressBar";
 import AuthFooterLink from "../../../../shared/AuthFooterLink/AuthFooterLink";
 import OTPForm from "../StepThreeForm/OTPForm";
 import { useState } from "react";
-import { signUp } from "../../../../services/UserServices";
+import {
+  sendOtp,
+  verifyOtp,
+  signUpIndividualClient,
+} from "../../../../services/UserServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import authStore from "../../../../store/AuthStore";
@@ -25,27 +29,50 @@ const IndividualSignUp = ({
   const { setUser, setLoading } = authStore();
   const { increaseStep, decreaseStep, getFormValues, type, role } =
     useFormStore();
-  const [, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [otpEmail, setOtpEmail] = useState("");
   const navigate = useNavigate();
 
   const step = useFormStore((state) => state.step);
-
   const data = formData.formData[step] || [];
   const formTitle = data.formTitle;
 
-  const handleSignUp = async () => {
+  const handleSendOtpAndProceed = async () => {
+    const payload = getFormValues(role, type);
+    const email = payload?.email;
+
+    if (!email) {
+      setError("Email is required to proceed.");
+      return;
+    }
+
+    try {
+      const result = await sendOtp(email as string);
+      console.log(result);
+      setOtpEmail(email as string);
+      setError("");
+      increaseStep();
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to send OTP.");
+    }
+  };
+
+  const handleSignUp = async (otpCode: number) => {
     const payload = getFormValues(role, type);
     setIsLoading(true);
+    setIsVerifying(true);
     try {
-      const result = await signUp(payload, type);
-      setUser({
-        firstName: result.payload.firstName,
-        lastName: result.payload.lastName,
-      });
+      const isVerified = await verifyOtp(otpEmail, otpCode.toString());
+
+      if (!isVerified.success) {
+        setError("Invalid or expired OTP.");
+        return;
+      }
+      const result = await signUpIndividualClient(payload);
+      setUser(result.payload);
       setLoading(false);
-      console.log(result);
-      increaseStep();
       toast.success("Signed up successfully!");
       setError("");
       navigate("/dashboard");
@@ -54,6 +81,7 @@ const IndividualSignUp = ({
       setError(error?.response?.data?.message || "Sign-up failed");
     } finally {
       setIsLoading(false);
+      setIsVerifying(false);
     }
   };
 
@@ -64,15 +92,23 @@ const IndividualSignUp = ({
         <SimpleFormView
           data={data}
           title={formTitle}
-          moveForward={increaseStep}
+          moveForward={handleSendOtpAndProceed}
           error={error}
         />
       );
       break;
 
     case 1:
-      content = <OTPForm onSubmit={handleSignUp} moveBackward={decreaseStep} />;
+      content = (
+        <OTPForm
+          onSubmit={handleSignUp}
+          moveBackward={decreaseStep}
+          email={otpEmail}
+          isVerifying={isVerifying}
+        />
+      );
       break;
+
     default:
       content = (
         <SimpleFormView
@@ -83,6 +119,7 @@ const IndividualSignUp = ({
         />
       );
   }
+
   return (
     <div className={styles.wrapper}>
       <div className="d-f">

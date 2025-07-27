@@ -1,11 +1,11 @@
 .wrapper {
-  padding: 20px 40px;
+  padding: 20px 40px 20px 0.5rem;
   position: fixed;
   width: 100%;
   z-index: 100;
   background-color: transparent;
   transition: 0.3s ease-in-out;
-  gap: 20rem;
+  gap: 13.5rem;
 }
 
 .navLinks {

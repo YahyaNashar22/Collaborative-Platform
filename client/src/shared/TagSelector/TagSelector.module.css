@@ -1,13 +1,14 @@
 .container {
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .tags {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .tag {
@@ -40,3 +41,12 @@
   color: #aaa;
   font-size: 0.9em;
 } */
+
+.noProvidersMessage {
+  margin-top: 0.8rem;
+  color: var(--accent-grey);
+  font-style: italic;
+  font-size: 0.95rem;
+  text-align: center;
+  user-select: none;
+}

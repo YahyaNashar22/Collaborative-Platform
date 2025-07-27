@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Requests.module.css";
 import Cards from "../Cards/Cards";
@@ -10,6 +10,7 @@ import {
   approveProposalByClient,
   approveRequest,
   assignToProvider,
+  cancelRequestByClient,
   createRequest,
   getAllRequestsBy,
   getAllUnassignedProvider,
@@ -20,7 +21,6 @@ import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSke
 import { RequestData } from "../../../interfaces/FullRequests";
 import Window from "../../../libs/common/lib-window/Window";
 import RequestDetailsWindow from "../RequestsDetailsWindow/RequestsDetailsWindow";
-import { multiSelectType } from "../../../interfaces/registerSignup";
 import CreateProposal from "../../../shared/ProposalWindow/CreateProposal";
 import { proposalFormType } from "../../../interfaces/Proposal";
 import {
@@ -34,24 +34,34 @@ type ViewState = "LIST" | "CREATE" | "SELECT";
 
 const Requests = () => {
   const [view, setView] = useState<ViewState>("LIST");
-  const [searchValue, setSearchValue] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [loadingProviders, setLoadingProviders] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingProviders, setLoadingProviders] = useState<boolean>(false);
   const [assignedRequest, setAssignedRequest] = useState<string | null>(null);
-  const [isWindowOpen, setIsWindowOpen] = useState(false);
+  const [isWindowOpen, setIsWindowOpen] = useState<boolean>(false);
   const [requests, setRequests] = useState<RequestData[]>([]);
-  const [createProposalError, setCreateProposalError] = useState("");
+  const [createProposalError, setCreateProposalError] = useState<string>("");
   const [providers, setProviders] = useState<{
-    assigned: multiSelectType[];
-    unassigned: multiSelectType[];
-  }>({});
-  const [isCreateProposalStep, setIsCreateProposalStep] = useState(false);
-  const [isShowAllProposals, setIsShowAllProposals] = useState(false);
+    assigned: { [key: string]: string }[];
+    unassigned: { [key: string]: string }[];
+  }>();
+  const [isCreateProposalStep, setIsCreateProposalStep] =
+    useState<boolean>(false);
+  const [isShowAllProposals, setIsShowAllProposals] = useState<boolean>(false);
+  const [isCancelRequestWindow, setIsCancelRequestWindow] =
+    useState<boolean>(false);
+  const [canceldRequestId, setCanceledRequestId] = useState<string>("");
   const [proposalsData, setProposalsData] = useState();
 
   const [detailsWindow, setDetailsWindow] = useState<RequestData | null>(null);
 
-  let getAssignedProviders: () => multiSelectType[];
+  const assignedProvidersRef = useRef<() => { [key: string]: string }[]>(
+    () => []
+  );
+  const [filteredRequests, setFilteredRequests] = useState<RequestData[]>([]);
+  const [isFiltering, setIsFiltering] = useState<boolean>(false);
+  const debounceRef = useRef(null);
+
   const { user } = authStore();
 
   const requestsMap = useMemo(() => {
@@ -64,8 +74,6 @@ const Requests = () => {
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
-
-  const handleSubmit = () => {};
 
   // fetching requests
   const fetchRequests = async () => {
@@ -92,14 +100,39 @@ const Requests = () => {
     fetchRequests();
   }, []);
 
+  useEffect(() => {
+    if (!searchValue) {
+      setFilteredRequests(requests);
+      return;
+    }
+
+    setIsFiltering(true);
+
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      const search = searchValue.toLowerCase();
+
+      const filtered = requests.filter((req) =>
+        req.title?.toLowerCase().includes(search)
+      );
+
+      setFilteredRequests(filtered);
+      setIsFiltering(false);
+    }, 300); // debounce delay
+  }, [searchValue, requests]);
+
   //*********** Admin section Function ************//
 
   // fetch providers when open assign window
   const fetchProviders = async (requestId: string) => {
     setLoadingProviders(true);
     try {
-      const result = await getAllUnassignedProvider(requestId);
-      console.log(result, "unassigned provider");
+      console.log(requestsMap[requestId]);
+      const result = await getAllUnassignedProvider(
+        requestId,
+        requestsMap[requestId].serviceId
+      );
 
       setProviders(result);
     } catch (error) {
@@ -109,25 +142,23 @@ const Requests = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(requests);
-  }, [requests]);
-
   const assignProvidersToRequest = async () => {
     setIsWindowOpen(false);
+    setLoading(true);
 
     try {
-      const assigned = getAssignedProviders();
+      const assigned = assignedProvidersRef.current();
+      if (!assigned || assigned.length === 0) return;
+
       const providerIds = assigned.map((p) => p.value);
       const payload = {
-        providerIds: providerIds,
+        providerIds,
         requestId: assignedRequest as string,
       };
+      console.log(payload);
+
       const result = await assignToProvider(payload);
-      console.log(result);
-      // update manualy on the front end
       if (result && assignedRequest) {
-        console.log(result, assignedRequest, "------");
         setRequests((prev) =>
           prev.map((req) =>
             req._id === assignedRequest ? { ...req, stage: 2 } : req
@@ -135,12 +166,13 @@ const Requests = () => {
         );
       }
     } catch (error) {
-      console.error(error);
+      console.error("Failed to assign providers:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleAssignRequest = (id: string) => {
-    console.log(id, "from request");
     setAssignedRequest(id);
     setIsWindowOpen(true);
     fetchProviders(id);
@@ -150,7 +182,6 @@ const Requests = () => {
     ids: string[],
     requestId: string
   ) => {
-    console.log(ids, requestId);
     setIsShowAllProposals(false);
     setLoading(true);
     try {
@@ -160,7 +191,6 @@ const Requests = () => {
       for (let i = 0; i <= result.length; i++) {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
-      console.log(proposalsData);
     } catch (error) {
       console.error(error);
     } finally {
@@ -190,7 +220,9 @@ const Requests = () => {
 
   const handleCreateProposal = async (proposalForm: proposalFormType) => {
     // to show the skeleton loading so it cast like i refatch the data
+    setIsCreateProposalStep(false);
     setLoading(true);
+    console.log(requestsMap[assignedRequest], "before");
     try {
       const payload: { [key: string]: string | File } = {
         providerId: user?._id as string,
@@ -201,10 +233,10 @@ const Requests = () => {
         description: proposalForm.description,
       };
       const result = await createProposal(payload);
-      if (result.status === 200) {
+      if (result) {
         // update manualy the providerIds to disabel the buttton
-        requestsMap[assignedRequest ?? ""].providerIds.push(user?._id);
         setIsCreateProposalStep(false);
+        requestsMap[assignedRequest ?? ""].providerIds.push(user?._id);
       }
     } catch (error) {
       setCreateProposalError(
@@ -220,6 +252,7 @@ const Requests = () => {
   // create request (client)
   const handleCreateRequest = async (data: RequestDataType) => {
     setView("LIST");
+    setLoading(true);
     try {
       const result = await createRequest(data);
 
@@ -239,6 +272,8 @@ const Requests = () => {
       setRequests((prev) => [...prev, configureResult]);
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -250,12 +285,14 @@ const Requests = () => {
     quotationId: string,
     requestId: string
   ) => {
-    console.log(requestId);
     setIsShowAllProposals(false);
     setLoading(true);
     try {
-      const result = await approveProposalByClient(requestId, quotationId);
-      console.log(result);
+      await approveProposalByClient(requestId, quotationId);
+      // update manually
+      requestsMap[requestId].stage = 4;
+      requestsMap[requestId].selectedQuotation = quotationId;
+      requestsMap[requestId].status = "accepted";
     } catch (error) {
       console.error(error);
     } finally {
@@ -263,9 +300,25 @@ const Requests = () => {
     }
   };
 
+  const handleClickCancelRequestButton = (requestId: string) => {
+    setIsCancelRequestWindow(true);
+    setCanceledRequestId(requestId);
+  };
+
+  const handleCancelRequestByClient = async () => {
+    try {
+      const result = await cancelRequestByClient(canceldRequestId);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsCancelRequestWindow(false);
+    }
+  };
+
   if (isCreateProposalStep) {
     return (
       <CreateProposal
+        requestBudget={assignedRequest && requestsMap[assignedRequest].budget}
         onCreateProposal={handleCreateProposal}
         onBack={() => setIsCreateProposalStep(false)}
         requestIndentifier={requestsMap[assignedRequest as string].title}
@@ -312,15 +365,17 @@ const Requests = () => {
                 />
               )}
             </div>
-            {loading && <ServiceCardSkeletonGrid />}
+            {(loading || isFiltering) && <ServiceCardSkeletonGrid />}
+
             <div className={styles.content}>
               <Cards
-                data={Object.values(requestsMap)}
+                data={filteredRequests}
                 userData={user ?? user}
                 onShowDetails={handleShowDetails}
                 onShowProposals={handleShowProposals}
                 onAssignRequest={handleAssignRequest}
                 onSubmitProposal={handleSubmitProposal}
+                onCancelRequestByClient={handleClickCancelRequestButton}
               />
             </div>
           </>
@@ -364,11 +419,42 @@ const Requests = () => {
               placeholder="Select Provider"
               options={providers}
               onReady={(getterFn) => {
-                getAssignedProviders = getterFn;
+                assignedProvidersRef.current = getterFn;
               }}
               required
             />
           )}
+        </Window>
+      )}
+
+      {isCancelRequestWindow && (
+        <Window
+          title="Cancel Request"
+          visible={isCancelRequestWindow}
+          onClose={() => setIsCancelRequestWindow(false)}
+          isErrorWindow="true"
+        >
+          <small>
+            are you sure do you want to delete
+            {requestsMap[canceldRequestId].title} ?
+          </small>
+          <div className={`${styles.btns} d-f align-center justify-between`}>
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setIsCancelRequestWindow(false)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+            />
+            <LibButton
+              label="Confirm"
+              onSubmit={handleCancelRequestByClient}
+              bold={true}
+              padding="0"
+            />
+          </div>
         </Window>
       )}
     </>

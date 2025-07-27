@@ -6,6 +6,10 @@
   transition: 0.3s;
 }
 
+.avatarBox small {
+  color: #fff !important;
+}
+
 .avatarBox.allowHover:hover {
   border: 1px solid #fff;
   border-radius: 8px;

@@ -45,13 +45,16 @@ export const verifyEmailOtp = async (req, res) => {
 
     const otp = await findOtpByEmailService(email);
 
-    if (!otp) return res.status(404).json({ message: "OTP not found!" });
+    if (!otp)
+      return res.status(404).json({ message: "OTP not found!", sucess: false });
 
     const currentTime = Date.now();
     console.log(otp.emailOtp, emailOtp, otp.emailOtpExpiresAt, currentTime);
     // verify otp
     if (otp.emailOtp != emailOtp || otp.emailOtpExpiresAt < currentTime) {
-      return res.status(400).json({ message: "Invalid or expired email OTP" });
+      return res
+        .status(400)
+        .json({ message: "Invalid or expired email OTP", success: false });
     }
 
     // delete otp after verification
@@ -60,12 +63,14 @@ export const verifyEmailOtp = async (req, res) => {
     // if OTP is valid, proceed
     return res.status(200).json({
       message: "OTP verified successfully. Proceed.",
+      success: true,
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({
       message: "Problem Verifying Email Otp",
       error: error.message,
+      success: false,
     });
   }
 };

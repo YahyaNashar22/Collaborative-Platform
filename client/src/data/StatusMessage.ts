@@ -4,8 +4,8 @@ export const statusActions = {
       msg: "⏳ Awaiting your Assign",
       button: "Assign To Provider",
       action: "assignByAdmin",
-      secondButton: null,
-      secondAction: null,
+      secondButton: "Preview",
+      secondAction: "showRequest",
     },
     client: {
       msg: "⏳ Waiting for offers.",
@@ -57,8 +57,8 @@ export const statusActions = {
       msg: "📬 Please select an offer",
       button: "View Quotations",
       action: "seeOfferByClient",
-      secondButton: null,
-      secondAction: null,
+      secondButton: "Cancel",
+      secondAction: "cancelRequestByClient",
     },
     provider: {
       msg: "⏳ Waiting for client decision",

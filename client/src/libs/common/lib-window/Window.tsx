@@ -3,6 +3,7 @@ import styles from "./Window.module.css";
 
 type WindowProps = {
   visible: boolean;
+  isErrorWindow?: string;
   title?: string;
   size?: "normal" | "large" | "full";
   children: ReactNode;
@@ -11,6 +12,7 @@ type WindowProps = {
 
 const Window = ({
   visible,
+  isErrorWindow,
   title,
   size = "normal",
   children,
@@ -36,7 +38,13 @@ const Window = ({
       >
         <div className={`${styles.header}  ${title == null ? styles.end : ""}`}>
           {title && (
-            <div className={`${styles.title} bold purple`}>{title}</div>
+            <div
+              className={`${styles.title} bold ${
+                isErrorWindow ? styles.errorWindow : "purple"
+              }`}
+            >
+              {title}
+            </div>
           )}
           <div className={`${styles.closeIcon}`} onClick={onClose}>
             ×

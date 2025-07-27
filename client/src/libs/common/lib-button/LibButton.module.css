@@ -45,3 +45,12 @@
 .requestBtn {
   font-size: 12px;
 }
+
+.outlinedErrorBtn {
+  color: var(--error) !important;
+  border: 1px solid var(--error) !important;
+}
+
+.outlinedErrorBtn:hover {
+  background-color: #dc35460f !important;
+}

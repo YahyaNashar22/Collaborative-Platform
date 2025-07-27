@@ -211,7 +211,7 @@ li {
 }
 
 .error {
-  color: var(--error);
+  color: var(--error) !important;
   font-size: 0.75rem;
 }
 

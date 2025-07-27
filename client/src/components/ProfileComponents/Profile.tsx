@@ -1,63 +1,94 @@
-import { useEffect, useState } from "react";
-import TextInput from "../../libs/common/lib-text-input/TextInput";
+import { useMemo, useState } from "react";
 import styles from "./Profile.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen } from "@fortawesome/free-solid-svg-icons";
-import LibButton from "../../libs/common/lib-button/LibButton";
-import OTPForm from "../MainAuthPagesComponents/SignUp/StepThreeForm/OTPForm";
 
 import { useNavigate } from "react-router-dom";
-import TagSelector, { TagOption } from "../../shared/TagSelector/TagSelector";
-import { UserProfileData } from "../../interfaces/User";
+import TagSelector from "../../shared/TagSelector/TagSelector";
+import { Validate } from "../../utils/Validate";
+import { updateProfileData } from "../../services/UserServices";
+import SecurityData from "./SecurityData/SecurityData";
+import PersonalDataTab from "./PersonalData/PersonalData";
 
-const tabs = ["Personal Data", "Security Data", "Services"];
-const servicesOptions = [
-  { label: "Design", value: "Design" },
-  { label: "Development", value: "Development" },
-  { label: "Marketing", value: "Marketing" },
-  { label: "SEO", value: "SEO" },
-  { label: "Consulting", value: "Consulting" },
-];
+interface PersonalInputs {
+  name: string;
+  label: string;
+  placeholder: string;
+  type: string;
+  required: boolean;
+  role?: string;
+}
 
-const Profile = ({ userData }: { userData: UserProfileData }) => {
+const Profile = ({ userData }: { userData: { [key: string]: string } }) => {
+  const tabs = useMemo(() => {
+    const baseTabs = ["Personal Data", "Security Data"];
+    if (userData.role === "provider") baseTabs.push("Services");
+    return baseTabs;
+  }, [userData.role]);
+
+  const servicesOptions = useMemo(
+    () => [
+      { label: "Design", value: "Design" },
+      { label: "Development", value: "Development" },
+      { label: "Marketing", value: "Marketing" },
+      { label: "SEO", value: "SEO" },
+      { label: "Consulting", value: "Consulting" },
+    ],
+    []
+  );
+
+  const personalInputs: PersonalInputs[] = [
+    {
+      name: "firstName",
+      label: "First Name",
+      placeholder: "First Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "lastName",
+      label: "Last Name",
+      placeholder: "Last Name",
+      type: "text",
+      required: true,
+    },
+    {
+      name: "email",
+      label: "Email",
+      placeholder: "Email",
+      type: "email",
+      required: true,
+    },
+    {
+      name: "phone",
+      label: "Phone Number",
+      placeholder: "Phone Number",
+      type: "text",
+      required: true,
+    },
+  ];
+
   const [selectedTab, setSelectedTab] = useState("Personal Data");
-  const [image, setImage] = useState<string | null>(null);
-  const [isShowPassword, setIsShowPassword] = useState(false);
-  const [isOldShowPassword, setIsOldShowPassword] = useState(false);
-  const [showOtpForm, setShowOtpForm] = useState(false);
-  const [userServices, setUserServices] = useState<TagOption[]>([
+  const [updateData, setUpdateData] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [userServices, setUserServices] = useState([
     { label: "Design", value: "Design" },
     { label: "Development", value: "Development" },
   ]);
 
-  const [formUserData, setFormUserData] = useState({
-    firstName: userData?.firstName || "",
-    lastName: userData?.lastName || "",
-    email: userData?.email || "",
-    recoveryEmail: userData?.recoveryEmail || "",
-    phone: userData?.phone || "",
-    job: userData?.job || "",
-    profilePicture: userData?.profilePicture || "",
-    accountType: userData?.accountType || "individual",
-    role: userData?.role || "client",
-    availability: userData?.availability ?? true,
-    banned: userData?.banned ?? false,
-    services: userData?.services || {},
-  });
-
   const navigate = useNavigate();
+
+  const handleTabClick = (tab: string) => {
+    setSelectedTab(tab);
+  };
 
   const handleAddService = (value: string) => {
     const existing = userServices.find((s) => s.value === value);
     if (!existing) {
       const option = servicesOptions.find((opt) => opt.value === value);
-      if (option) {
-        setUserServices((prev) => [...prev, option]);
-      }
+      if (option) setUserServices((prev) => [...prev, option]);
     }
   };
 
-  const handleRemoveService = (item: TagOption) => {
+  const handleRemoveService = (item: { label: string; value: string }) => {
     setUserServices((prev) => prev.filter((s) => s.value !== item.value));
   };
 
@@ -66,68 +97,93 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
     if (file && file.type.startsWith("image/")) {
       const reader = new FileReader();
       reader.onload = () => {
-        setImage(reader.result as string);
+        setUpdateData((prev) => ({
+          ...prev,
+          profilePicture: reader.result as string,
+        }));
       };
       reader.readAsDataURL(file);
     }
   };
 
-  const handleUpdateData = () => {
-    console.log(shallowEqual(userData, formUserData));
-    console.log(formUserData);
-  };
-  const handleResetPassword = () => {};
-
-  const handleChange = (name: string, value: string) => {
-    setFormUserData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const shallowEqual = (
-    obj1: { [key: string]: any },
-    obj2: { [key: string]: any }
-  ): boolean => {
-    const keys1 = Object.keys(obj1);
-    const keys2 = Object.keys(obj2);
-    if (keys1.length !== keys2.length) return false;
-
-    for (const key of keys1) {
-      const val1 = obj1[key];
-      const val2 = obj2[key];
-
-      if (Array.isArray(val1) && Array.isArray(val2)) {
-        if (
-          val1.length !== val2.length ||
-          !val1.every((v, i) => v === val2[i])
-        ) {
-          return false;
-        }
-      } else if (val1 !== val2) {
-        return false;
-      }
+  const getChangedFields = (
+    original: { [key: string]: string },
+    updated: { [key: string]: string }
+  ): { [key: string]: string } => {
+    const changed: { [key: string]: string } = {};
+    for (const key in updated) {
+      if (updated[key] !== original[key]) changed[key] = updated[key];
     }
-
-    return true;
+    return changed;
   };
 
-  useEffect(() => {
-    if (userData) {
-      setFormUserData({
-        firstName: userData?.firstName || "",
-        lastName: userData?.lastName || "",
-        email: userData?.email || "",
-        recoveryEmail: userData?.recoveryEmail || "",
-        phone: userData?.phone || "",
-        job: userData?.job || "",
-        profilePicture: userData?.profilePicture || "",
-        accountType: userData?.accountType || "individual",
-        role: userData?.role || "client",
-        availability: userData?.availability ?? true,
-        banned: userData?.banned ?? false,
-        services: userData?.services || {},
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    Object.entries(updateData).forEach(([key, value]) => {
+      const inputConfig = personalInputs.find((input) => input.name === key);
+      if (!inputConfig) return;
+      const error = Validate(
+        key,
+        value,
+        inputConfig.required,
+        inputConfig.type
+      );
+      if (error) newErrors[key] = error;
+    });
+    setErrors(newErrors);
+    return newErrors;
+  };
+
+  const handleChange = (
+    name: string,
+    value: string,
+    required: boolean,
+    type: string
+  ) => {
+    if (value === userData[name]) {
+      setUpdateData((prev) => {
+        const newData = { ...prev };
+        delete newData[name];
+        return newData;
       });
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+      return;
     }
-    console.log(userData);
-  }, [userData]);
+
+    setUpdateData((prev) => ({ ...prev, [name]: value }));
+
+    const error = Validate(name, value, required, type);
+    setErrors((prev) => {
+      const newErrors = { ...prev };
+      if (error) newErrors[name] = error;
+      else delete newErrors[name];
+      return newErrors;
+    });
+  };
+
+  const handleUpdateData = async () => {
+    const payload = getChangedFields(userData, updateData);
+    if (Object.keys(payload).length === 0) return;
+
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) return;
+
+    try {
+      await updateProfileData(userData._id, payload);
+      navigate("/dashboard");
+      setErrors({});
+    } catch (error) {
+      console.error("Failed to update profile", error);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate("/dashboard");
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -139,10 +195,7 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
               selectedTab === tab ? styles.activeTab : ""
             }`}
           >
-            <div
-              className={`${styles.tab} `}
-              onClick={() => setSelectedTab(tab)}
-            >
+            <div className={styles.tab} onClick={() => handleTabClick(tab)}>
               {tab}
             </div>
           </div>
@@ -150,151 +203,21 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
       </div>
 
       {selectedTab === "Personal Data" && (
-        <div className={styles.personalData}>
-          <div
-            className={styles.background}
-            style={{ backgroundImage: image ? `url(${image})` : "none" }}
-          >
-            <label
-              className={`${styles.penHolder} d-f align-center justify-center`}
-            >
-              <input
-                type="file"
-                name="file"
-                accept="image/*"
-                className={styles.fileInput}
-                onChange={handleFileChange}
-              />
-              <FontAwesomeIcon
-                className={styles.pen}
-                icon={faPen}
-                size="2xs"
-                style={{ color: "#ffffff" }}
-              />
-            </label>
-
-            {!image && <div>A.G</div>}
-          </div>
-          <form className="d-f f-dir-col gap-1">
-            <div className={`${styles.firstRow} d-f gap-1`}>
-              <TextInput
-                name="firstName"
-                label="First Name"
-                placeholder="First Name"
-                type="text"
-                required={true}
-                value={formUserData.firstName}
-                onChange={(value, name) => handleChange(name, value)}
-              />
-              <TextInput
-                name="lastName"
-                label="Last Name"
-                placeholder="Last Name"
-                type="text"
-                required={true}
-                value={formUserData.lastName}
-                onChange={(value, name) => handleChange(name, value)}
-              />
-            </div>
-            <div className={`${styles.secondRow} d-f gap-1`}>
-              <TextInput
-                name="email"
-                label="Email "
-                placeholder="Email"
-                type="email"
-                required={true}
-                value={formUserData.email}
-                onChange={(value, name) => handleChange(name, value)}
-              />
-              <TextInput
-                name="phone"
-                label="Phone Number"
-                placeholder="Phone Number"
-                type="text"
-                required={true}
-                value={formUserData.phone}
-                onChange={(value, name) => handleChange(name, value)}
-              />
-            </div>
-          </form>
-          <div
-            className={`${styles.resetPasswordHolder} d-f align-center justify-between`}
-          >
-            <LibButton
-              label="Cancel"
-              onSubmit={() => navigate("/dashboard")}
-              outlined={true}
-              color="var(--deep-purple)"
-              hoverColor="#8563c326"
-              padding="0"
-            />
-            <LibButton label="Save" onSubmit={handleUpdateData} padding="0" />
-          </div>
-        </div>
+        <PersonalDataTab
+          userData={userData}
+          updateData={updateData}
+          errors={errors}
+          personalInputs={personalInputs}
+          onFileChange={handleFileChange}
+          onChange={handleChange}
+          onCancel={() => navigate("/dashboard")}
+          onSave={handleUpdateData}
+        />
       )}
 
       {selectedTab === "Security Data" && (
         <div className={styles.securityData}>
-          {/* toggle otp reset password */}
-          {!showOtpForm ? (
-            <>
-              {" "}
-              <form className="d-f f-dir-col">
-                <TextInput
-                  name="oldPassword"
-                  label="Old Password"
-                  placeholder="Old Password"
-                  type="password"
-                  required={true}
-                  value={""}
-                  onChange={console.log}
-                  isShowPassword={isOldShowPassword}
-                />
-                <TextInput
-                  name="password"
-                  label="Password"
-                  placeholder="Password"
-                  type="password"
-                  required={true}
-                  value={""}
-                  onChange={console.log}
-                  isShowPassword={isShowPassword}
-                />
-                <TextInput
-                  name="password"
-                  label="Confirm Password"
-                  placeholder="Confirm Password"
-                  type="password"
-                  required={true}
-                  value={""}
-                  onChange={console.log}
-                  isShowPassword={isShowPassword}
-                />
-              </form>
-              <div
-                className={`${styles.resetPasswordHolder} d-f align-center justify-between`}
-              >
-                <p
-                  className={styles.switchMethod}
-                  onClick={() => setShowOtpForm(true)}
-                >
-                  Forgot password? Reset via email
-                </p>
-                <LibButton
-                  label="Save"
-                  onSubmit={handleResetPassword}
-                  padding="0"
-                />
-              </div>
-            </>
-          ) : (
-            <div>
-              <OTPForm
-                moveBackward={() => setShowOtpForm(false)}
-                onSubmit={console.log}
-              />
-            </div>
-          )}
+          <SecurityData email={userData.email} />
         </div>
       )}
 
@@ -307,7 +230,7 @@ const Profile = ({ userData }: { userData: UserProfileData }) => {
           selectedItems={userServices}
           onAddItem={handleAddService}
           onRemoveItem={handleRemoveService}
-          required={true}
+          required
         />
       )}
     </div>

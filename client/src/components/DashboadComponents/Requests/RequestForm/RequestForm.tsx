@@ -85,9 +85,37 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     isRequired: boolean,
     type: string
   ) => {
+    let customError = "";
+
+    if (
+      (name === "offerDeadline" || name === "projectDeadline") &&
+      formValues.offerDeadline &&
+      formValues.projectDeadline
+    ) {
+      const offerDate = new Date(
+        name === "offerDeadline" ? value : formValues.offerDeadline
+      );
+      const projectDate = new Date(
+        name === "projectDeadline" ? value : formValues.projectDeadline
+      );
+
+      if (offerDate > projectDate) {
+        customError =
+          "Offer deadline must be before or equal to project deadline.";
+      }
+    }
+
+    const validationError = Validate(
+      name,
+      value,
+      isRequired,
+      type,
+      type === "date"
+    );
+
     setErrors((prev) => ({
       ...prev,
-      [name]: Validate(name, value, isRequired, type, type === "date"),
+      [name]: customError || validationError,
     }));
     setFormValues((prev) => ({
       ...prev,
@@ -112,6 +140,20 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       newErrors[field.name] = error;
       if (error) isValid = false;
     });
+
+    if (formValues.offerDeadline && formValues.projectDeadline) {
+      const offerDate = new Date(formValues.offerDeadline);
+      const projectDate = new Date(formValues.projectDeadline);
+
+      if (offerDate > projectDate) {
+        newErrors.offerDeadline =
+          "Offer deadline must be before or equal to project deadline.";
+
+        newErrors.projectDeadline =
+          "Project deadline must be after or equal to offer deadline.";
+        isValid = false;
+      }
+    }
 
     setErrors(newErrors);
     console.log(formValues);

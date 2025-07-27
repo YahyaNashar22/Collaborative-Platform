@@ -11,6 +11,8 @@ import SelectInput from "../../../../../libs/common/lib-select-input/SelectInput
 import TextAreaInput from "../../../../../libs/common/lib-textArea/TextAreaInput";
 import { getStringValue } from "../../../../../utils/CastToString";
 import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
+import { useEffect, useState } from "react";
+import { getAllServices } from "../../../../../services/ServiceServices";
 
 type CompanyFormViewProps = {
   data: FormStepData;
@@ -29,10 +31,43 @@ const CompanyForm = ({
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
     useStepFormHandlers(role, type);
 
+  const [serviceOptions, setServiceOptions] = useState([]);
+
   const onNext = () => {
     const hasError = validateStep(data.form);
     if (Object.keys(hasError).length > 0) return;
     moveForward();
+  };
+
+  const fetchAllServices = async () => {
+    try {
+      const result = await getAllServices();
+      const transformed = result.map((service: { [key: string]: string }) => ({
+        label: service.name,
+        value: service._id,
+        id: service._id,
+      }));
+      setServiceOptions(transformed);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!serviceOptions.length) fetchAllServices();
+  }, []);
+
+  const formWithDynamicServices = {
+    ...data,
+    form: data.form.map((field) => {
+      if (field.name === "services") {
+        return {
+          ...field,
+          options: serviceOptions,
+        };
+      }
+      return field;
+    }),
   };
 
   return (
@@ -40,50 +75,75 @@ const CompanyForm = ({
       <h1 className="purple">{title}</h1>
       <form className={`${styles.form} d-f f-dir-col `}>
         {/* Group First Name and Last Name */}
-        {data.form.slice(0, 5).map((field: FormField, index: number) => {
-          return (
-            <div key={index}>
-              {field.type === "aria" ? (
-                <TextAreaInput
+        {formWithDynamicServices.form
+          .slice(0, 5)
+          .map((field: FormField, index: number) => {
+            return (
+              <div key={index}>
+                {field.type === "aria" ? (
+                  <TextAreaInput
+                    label={field.label}
+                    placeholder={field.placeholder}
+                    name={field.name}
+                    value={getStringValue(fieldValues[field.name])}
+                    required={field.required || false}
+                    onChange={(value, name) =>
+                      handleChange(name, value, field.required || false)
+                    }
+                  />
+                ) : (
+                  <TextInput
+                    label={field.label}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    name={field.name}
+                    value={getStringValue(fieldValues[field.name])}
+                    required={field.required || false}
+                    maxLength={Number(field.maxLength)}
+                    minLength={Number(field.minLength)}
+                    min={Number(field.minLength)}
+                    onChange={(value, name) =>
+                      handleChange(name, value, field.required || false)
+                    }
+                    errorMessage={errors[field.name]}
+                    onBlur={() =>
+                      handleBlur(
+                        field.name,
+                        getStringValue(fieldValues[field.name]),
+                        field.required || false,
+                        field.type
+                      )
+                    }
+                  />
+                )}
+              </div>
+            );
+          })}
+        <div className={`${styles.firstRow} w-100`} style={{ gap: "20px" }}>
+          {formWithDynamicServices.form
+            .slice(5, 7)
+            .map((field: FormField, index: number) => (
+              <div key={index}>
+                <SelectInput
                   label={field.label}
-                  placeholder={field.placeholder}
                   name={field.name}
-                  value={getStringValue(fieldValues[field.name])}
-                  required={field.required || false}
-                  onChange={(value, name) =>
-                    handleChange(name, value, field.required || false)
-                  }
-                />
-              ) : (
-                <TextInput
-                  label={field.label}
                   type={field.type}
+                  value={fieldValues[field.name]}
+                  required={field.required}
                   placeholder={field.placeholder}
-                  name={field.name}
-                  value={getStringValue(fieldValues[field.name])}
-                  required={field.required || false}
-                  maxLength={Number(field.maxLength)}
-                  minLength={Number(field.minLength)}
-                  min={Number(field.minLength)}
+                  options={field.options || []}
                   onChange={(value, name) =>
-                    handleChange(name, value, field.required || false)
+                    handleChange(field.name, value, field.required || false)
                   }
                   errorMessage={errors[field.name]}
-                  onBlur={() =>
-                    handleBlur(
-                      field.name,
-                      getStringValue(fieldValues[field.name]),
-                      field.required || false,
-                      field.type
-                    )
-                  }
                 />
-              )}
-            </div>
-          );
-        })}
-        <div className={`${styles.firstRow} d-f w-100`} style={{ gap: "20px" }}>
-          {data.form.slice(5, 7).map((field: FormField, index: number) => (
+              </div>
+            ))}
+        </div>
+
+        {formWithDynamicServices.form
+          .slice(7)
+          .map((field: FormField, index: number) => (
             <div key={index}>
               <SelectInput
                 label={field.label}
@@ -94,34 +154,15 @@ const CompanyForm = ({
                 placeholder={field.placeholder}
                 options={field.options || []}
                 onChange={(value, name) =>
-                  handleChange(name, value, field.required || false)
+                  handleChange(field.name, value, field.required || false)
+                }
+                onRemove={(items) =>
+                  handleChange(field.name, items, field.required ?? false)
                 }
                 errorMessage={errors[field.name]}
               />
             </div>
           ))}
-        </div>
-
-        {data.form.slice(7).map((field: FormField, index: number) => (
-          <div key={index}>
-            <SelectInput
-              label={field.label}
-              name={field.name}
-              type={field.type}
-              value={fieldValues[field.name]}
-              required={field.required}
-              placeholder={field.placeholder}
-              options={field.options || []}
-              onChange={(value, name) =>
-                handleChange(name, value, field.required || false)
-              }
-              onRemove={(items) =>
-                handleChange(field.name, items, field.required ?? false)
-              }
-              errorMessage={errors[field.name]}
-            />
-          </div>
-        ))}
       </form>
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton

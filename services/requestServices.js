@@ -392,7 +392,7 @@ export const getAllProviderRequestsService = async ({
 
 // Get all providers that are not assign to specific request id
 // helpfull when admin assign request to user
-export const getProvidersForRequest = async (requestId) => {
+export const getProvidersForRequest = async (requestId, query) => {
   const request = await Request.findById(requestId).select("providerId");
 
   if (!request) {
@@ -401,16 +401,23 @@ export const getProvidersForRequest = async (requestId) => {
 
   const assignedProviderIds = request.providerId || [];
 
+  const serviceId = new mongoose.Types.ObjectId(query);
+
+  const filterBy = {
+    role: "provider",
+    services: serviceId,
+  };
+
   //  Get assigned providers
   const assigned = await User.find({
     _id: { $in: assignedProviderIds },
-    role: "provider",
+    ...filterBy,
   }).select("_id firstName lastName email phone profilePicture");
 
   //  Get unassigned providers
   const unassigned = await User.find({
     _id: { $nin: assignedProviderIds },
-    role: "provider",
+    ...filterBy,
   }).select("_id firstName lastName email phone profilePicture");
 
   //  map to { label, value } format for dropdowns
@@ -423,5 +430,60 @@ export const getProvidersForRequest = async (requestId) => {
   return {
     assigned: format(assigned),
     unassigned: format(unassigned),
+  };
+};
+
+export const generateStagesAndTimelines = (estimatedDeadline) => {
+  const stages = [
+    "Mobilization",
+    "Discovery",
+    "Design",
+    "Execution",
+    "Reporting and Feedback",
+  ];
+
+  const start = new Date();
+  const end = new Date(estimatedDeadline);
+
+  const totalDays = Math.ceil(
+    (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  if (totalDays <= 0) {
+    return {
+      stages,
+      timelines: stages.map((_, idx) => `Week ${idx + 1}`),
+    };
+  }
+
+  const daysPerStage = Math.floor(totalDays / stages.length);
+  const remainder = totalDays % stages.length;
+
+  const timelines = [];
+  let current = new Date(start);
+
+  for (let i = 0; i < stages.length; i++) {
+    const extra = i < remainder ? 1 : 0;
+    const next = new Date(current);
+    next.setDate(current.getDate() + daysPerStage + extra - 1);
+
+    const label = `${current.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })} - ${next.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    })}`;
+
+    timelines.push(label);
+
+    current.setDate(next.getDate() + 1);
+  }
+
+  return {
+    stages,
+    timelines,
   };
 };

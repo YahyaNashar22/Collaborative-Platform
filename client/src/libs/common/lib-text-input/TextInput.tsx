@@ -7,7 +7,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
-import { multiSelectType } from "../../../interfaces/registerSignup";
 import { getStringValue } from "../../../utils/CastToString";
 import { useState } from "react";
 
@@ -16,7 +15,7 @@ type props = {
   placeholder: string;
   name: string;
   type: string;
-  value: string | multiSelectType[];
+  value: string | { [key: string]: string }[];
   required: boolean;
   maxLength?: number;
   minLength?: number;
@@ -27,7 +26,6 @@ type props = {
   min?: number;
   max?: number;
   hasCurrency?: boolean;
-
   onBlur?: () => void;
 };
 const TextInput = ({

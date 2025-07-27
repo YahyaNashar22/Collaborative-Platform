@@ -377,11 +377,16 @@ export const logout = async (req, res) => {
 export const changePassword = async (req, res) => {
   try {
     const id = req.params.id;
-    const { password } = req.body;
+    const { password, oldPassword } = req.body;
 
     // get user
     const user = await getUserByIdService(id);
     if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Compare oldPassword with hashed password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Old password is incorrect" });
 
     // hash password
     const salt = bcrypt.genSaltSync(10);
@@ -911,6 +916,38 @@ export const deleteUser = async (req, res) => {
       message: "Problem deleting user",
       error: error.message,
     });
+  }
+};
+
+export const updateUserData = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const userExist = await User.findById(id);
+    if (!userExist) {
+      return res.status(404).json({ message: "User doesn't exist!" });
+    }
+
+    const updates = { ...req.body };
+
+    if (req.body.password) {
+      const salt = bcrypt.genSaltSync(10);
+      updates.password = bcrypt.hashSync(req.body.password, salt);
+    }
+
+    if (req.file) {
+      updates.profilePicture = req.file.filename;
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ message: "Server error during update." });
   }
 };
 

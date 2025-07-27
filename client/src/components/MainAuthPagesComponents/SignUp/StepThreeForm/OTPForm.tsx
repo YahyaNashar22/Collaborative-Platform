@@ -1,22 +1,31 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./OTPForm.module.css";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
-import { sendOtp, verifyOtp } from "../../../../services/UserServices";
-import useFormStore from "../../../../store/FormsStore";
+import { sendOtp } from "../../../../services/UserServices";
 
-interface OTPFromProps {
+interface OTPFormProps {
   moveBackward: () => void;
-  onSubmit: () => void;
+  onSubmit: (otpCode: string) => void;
+  email: string;
+  errorMessage: string;
+  isVerifying: boolean;
+  isResetPassword?: boolean;
 }
-const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
+
+const OTPForm: React.FC<OTPFormProps> = ({
+  moveBackward,
+  onSubmit,
+  email,
+  errorMessage,
+  isVerifying,
+  isResetPassword = false,
+}) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
-  const [isVerifying, setIsVerifying] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const [number, setNumber] = useState<string[]>(["", "", "", ""]);
   const [timeLeft, setTimeLeft] = useState(5 * 60);
-  const { getFormValues, role, type } = useFormStore();
 
   useEffect(() => {
     if (timeLeft <= 0) return;
@@ -28,21 +37,6 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
     return () => clearInterval(interval);
   }, [timeLeft]);
 
-  const formValues = getFormValues(role, type);
-  const email = formValues?.email?.toString() || "";
-
-  useEffect(() => {
-    const send = async () => {
-      try {
-        await sendOtp(email);
-        console.log("OTP sent");
-      } catch (err) {
-        console.error("Error sending OTP:", err);
-      }
-    };
-    send();
-  }, [email]);
-
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
@@ -50,6 +44,7 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
     const s = (seconds % 60).toString().padStart(2, "0");
     return `${m}:${s}`;
   };
+
   const isNumber = (value: string) => !isNaN(Number(value));
 
   const handleChange = (value: string, index: number) => {
@@ -83,31 +78,19 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
       return;
     }
 
-    const code = number.join("");
-    console.log(code);
-
-    if (!agreedToTerms) {
+    if (!isResetPassword && !agreedToTerms) {
       setErrorMsg("* You must agree to the subscription terms.");
       return;
     }
 
-    try {
-      setIsVerifying(true);
-      await verifyOtp(email, code);
-      console.log("OTP verified");
-      onSubmit();
-    } catch (error) {
-      console.error("OTP verification failed:", error);
-      setErrorMsg("* Invalid OTP. Please try again.");
-    } finally {
-      setIsVerifying(false);
-    }
+    onSubmit(number.join(""));
   };
 
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
       <h1>Enter Verification Code</h1>
       <small>Verification code has been sent to your email</small>
+
       <form className={`${styles.form} d-f align-center`}>
         {Array.from({ length: 4 }).map((_, index) => (
           <div className={`${styles.inputHolder} d-f align-center`} key={index}>
@@ -138,6 +121,7 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
           </div>
         ))}
       </form>
+
       <div className={`${styles.otpActionBtn} d-f purple bold`}>
         <p
           className={`${timeLeft > 0 ? styles.disabled : ""} pointer`}
@@ -147,28 +131,35 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
         </p>
         <p>{formatTime(timeLeft)}</p>
       </div>
-      <div className={` ${styles.terms} d-f align-center`}>
-        <input
-          type="checkbox"
-          name="terms"
-          id="terms"
-          className="pointer"
-          checked={agreedToTerms}
-          onChange={(e) => {
-            setAgreedToTerms(e.target.checked);
-            setErrorMsg("");
-          }}
-        />
-        <label htmlFor="terms" className="pointer">
-          I agree to the{" "}
-          <span className="purple pointer bold">
-            Takatuf Subscription Agreement
-          </span>
-        </label>
-      </div>
-      {errorMsg && (
-        <small className={`error ${styles.otpError}`}>{errorMsg}</small>
+
+      {!isResetPassword && (
+        <div className={` ${styles.terms} d-f align-center`}>
+          <input
+            type="checkbox"
+            name="terms"
+            id="terms"
+            className="pointer"
+            checked={agreedToTerms}
+            onChange={(e) => {
+              setAgreedToTerms(e.target.checked);
+              setErrorMsg("");
+            }}
+          />
+          <label htmlFor="terms" className="pointer">
+            I agree to the{" "}
+            <span className="purple pointer bold">
+              Takatuf Subscription Agreement
+            </span>
+          </label>
+        </div>
       )}
+
+      {(errorMsg || errorMessage) && (
+        <small className={`error ${styles.otpError}`}>
+          {errorMsg || errorMessage}
+        </small>
+      )}
+
       <div className={`${styles.buttons} d-f align-center justify-start`}>
         <LibButton
           label="Back"
@@ -178,7 +169,13 @@ const OTPForm: React.FC<OTPFromProps> = ({ moveBackward, onSubmit }) => {
           padding="2px 36.2px"
         />
         <LibButton
-          label={isVerifying ? "Verifying..." : "Create Account"}
+          label={
+            isVerifying
+              ? "Verifying..."
+              : isResetPassword
+              ? "Reset Password"
+              : "Create Account"
+          }
           onSubmit={handleVerify}
           backgroundColor="#825beb"
           disabled={isVerifying}

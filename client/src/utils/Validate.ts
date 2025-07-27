@@ -48,5 +48,12 @@ export const Validate = (
     }
   }
 
+  if (name === "budget") {
+    const numericRegex = /^[0-9]*$/;
+    if (!numericRegex.test(value)) {
+      return "* Budget must be a valid number with no letters or symbols.";
+    }
+  }
+
   return "";
 };

@@ -1,0 +1,14 @@
+.switchMethod {
+  color: var(--deep-purple);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.switchMethod:hover {
+  color: #4f3da1;
+}
+
+.buttons {
+  gap: 10px;
+  margin-top: 0.5rem;
+}

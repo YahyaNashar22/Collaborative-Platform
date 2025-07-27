@@ -18,6 +18,7 @@ export const useStepFormHandlers = (role: string, type: string) => {
     value: string | multiSelectType[],
     required: boolean
   ) => {
+    console.log(name, value);
     updateFieldValue(role, type, name, value);
 
     if (touchedFields[name]) {

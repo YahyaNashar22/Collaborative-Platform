@@ -16,6 +16,7 @@ import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
 type OrgInformationFormViewProps = {
   data: FormStepData;
   title: string;
+
   moveForward: () => void;
   moveBackward: () => void;
 };
@@ -103,7 +104,7 @@ const OrgInformationForm = ({
                 placeholder={field.placeholder}
                 options={field.options || []}
                 onChange={(value, name) =>
-                  handleChange(name, value, field.required || false)
+                  handleChange(field.name, value, field.required || false)
                 }
                 errorMessage={errors[field.name]}
               />
@@ -128,6 +129,7 @@ const OrgInformationForm = ({
           );
         })}
       </form>
+
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton
           label="Back"

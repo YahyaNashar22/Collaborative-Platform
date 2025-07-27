@@ -23,7 +23,7 @@ const quotationSchema = new Schema({
   },
   estimatedDeadline: [
     {
-      type: String,
+      type: Date,
       required: false,
     },
   ],

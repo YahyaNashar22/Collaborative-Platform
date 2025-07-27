@@ -99,9 +99,15 @@ export const assignToProvider = async (payload: {
   return response.data;
 };
 
-export const getAllUnassignedProvider = async (requestId: string) => {
+export const getAllUnassignedProvider = async (
+  requestId: string,
+  query: string
+) => {
   const response = await axiosInstance.get(
-    `${AuthBaseURL}/get-all-providers/${requestId}`
+    `${AuthBaseURL}/get-all-providers/${requestId}`,
+    {
+      params: { query },
+    }
   );
   return response.data.payload;
 };
@@ -131,5 +137,13 @@ export const approveProposalByClient = async (
       quotationId,
     }
   );
+  return response.data;
+};
+
+export const cancelRequestByClient = async (requestId: string) => {
+  const response = await axiosInstance.patch(`${AuthBaseURL}/cancel-request`, {
+    requestId,
+  });
+
   return response.data;
 };

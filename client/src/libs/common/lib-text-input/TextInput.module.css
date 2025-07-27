@@ -24,6 +24,10 @@
   border: 1px solid #ced4da;
 }
 
+.inputHolder:focus-within {
+  border-color: var(--intense-purple);
+}
+
 .inputHolder input {
   background-color: inherit;
   width: 100%;

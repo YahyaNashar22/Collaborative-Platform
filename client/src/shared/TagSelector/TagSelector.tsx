@@ -1,18 +1,17 @@
 import { useEffect, useState } from "react";
 import styles from "./TagSelector.module.css";
 import SelectInput from "../../libs/common/lib-select-input/SelectInput";
-import { multiSelectType } from "../../interfaces/registerSignup";
 
 interface TagSelectorProps {
   label: string;
   name: string;
   placeholder?: string;
   options: {
-    assigned: multiSelectType[];
-    unassigned: multiSelectType[];
+    assigned: { [key: string]: string }[];
+    unassigned: { [key: string]: string }[];
   };
   required?: boolean;
-  onReady?: (getAssigned: () => multiSelectType[]) => void;
+  onReady?: (getAssigned: () => { [key: string]: string }[]) => void;
 }
 
 const TagSelector = ({
@@ -23,20 +22,34 @@ const TagSelector = ({
   required = false,
   onReady,
 }: TagSelectorProps) => {
-  const [lockedAssigned, setLockedAssigned] = useState<multiSelectType[]>([]);
-  const [sessionAssigned, setSessionAssigned] = useState<multiSelectType[]>([]);
-  const [unassigned, setUnassigned] = useState<multiSelectType[]>([]);
+  const [lockedAssigned, setLockedAssigned] = useState<
+    { [key: string]: string }[]
+  >([]);
+  const [sessionAssigned, setSessionAssigned] = useState<
+    { [key: string]: string }[]
+  >([]);
+  const [unassigned, setUnassigned] = useState<{ [key: string]: string }[]>([]);
+  const [, setInitialAssigned] = useState<{ [key: string]: string }[]>([]);
 
   useEffect(() => {
-    setLockedAssigned(options.assigned || []);
+    const assigned = options.assigned || [];
+    const unassignedClean =
+      options.unassigned?.filter(
+        (u) => !assigned.some((a) => a.value === u.value)
+      ) || [];
+
+    setLockedAssigned(assigned);
+    setInitialAssigned(assigned);
     setSessionAssigned([]);
-    setUnassigned(options.unassigned || []);
+    setUnassigned(unassignedClean);
   }, [options]);
 
   useEffect(() => {
-    if (onReady) {
-      onReady(() => [...lockedAssigned, ...sessionAssigned]);
-    }
+    if (!onReady) return;
+
+    const currentAssigned = [...lockedAssigned, ...sessionAssigned];
+
+    onReady(() => currentAssigned);
   }, [lockedAssigned, sessionAssigned, onReady]);
 
   const handleAdd = (id: string, label: string) => {
@@ -55,6 +68,18 @@ const TagSelector = ({
     setUnassigned((prev) => [...prev, removed]);
   };
 
+  // const areTagListsEqual = (
+  //   a: { [key: string]: string }[],
+  //   b: { [key: string]: string }[]
+  // ) => {
+  //   if (a.length !== b.length) return false;
+
+  //   const aSorted = [...a].sort((x, y) => x.value.localeCompare(y.value));
+  //   const bSorted = [...b].sort((x, y) => x.value.localeCompare(y.value));
+
+  //   return aSorted.every((item, index) => item.value === bSorted[index].value);
+  // };
+
   return (
     <div className={styles.container}>
       <SelectInput
@@ -68,6 +93,14 @@ const TagSelector = ({
         required={required}
         disabled={unassigned.length === 0}
       />
+      {lockedAssigned.length === 0 &&
+        sessionAssigned.length === 0 &&
+        unassigned.length === 0 && (
+          <div className={styles.noProvidersMessage}>
+            There is no provider for this service yet.
+          </div>
+        )}
+
       <div className={styles.tags}>
         {/* 🔒 Locked assigned tags (non-removable) */}
         {lockedAssigned.map((item) => (

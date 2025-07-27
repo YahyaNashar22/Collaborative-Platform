@@ -13,6 +13,7 @@ type CardsProps = {
   onShowProposals: (id: string) => void;
   onAssignRequest: (id: string) => void;
   onSubmitProposal: (id: string) => void;
+  onCancelRequestByClient: (id: string) => void;
 };
 
 const Cards = ({
@@ -22,9 +23,9 @@ const Cards = ({
   onSubmitProposal,
   onShowProposals,
   onAssignRequest,
+  onCancelRequestByClient,
 }: CardsProps) => {
   const getAction = (id: string, action: string) => {
-    console.log(id, action);
     switch (action) {
       case "assignByAdmin":
         onAssignRequest(id);
@@ -41,74 +42,87 @@ const Cards = ({
       case "seeOfferByClient":
         onShowProposals(id);
         break;
+      case "cancelRequestByClient":
+        onCancelRequestByClient(id);
+        break;
     }
   };
 
   return (
     <div className={styles.cardsContainer}>
-      {data.map(
-        ({
-          _id: id,
-          title,
-          description,
-          projectDeadline,
-          stage,
-          providerIds,
-          approvedQuotations,
-          offerDeadline,
-        }) => {
-          const status = statusActions[stage]?.[userData?.role ?? ""] || {};
-          const message = status.msg;
-          const buttonLabel = status.button;
-          const action = status.action;
-          const secondButton = status.secondButton;
-          const secondAction = status.secondAction;
+      {data.length === 0 ? (
+        <div className={styles.emptyState}></div>
+      ) : (
+        data.map(
+          ({
+            _id: id,
+            title,
+            description,
+            projectDeadline,
+            stage,
+            status: requestStatus,
+            providerIds,
+            approvedQuotations,
+            offerDeadline,
+          }) => {
+            const status = statusActions[stage]?.[userData?.role ?? ""] || {};
+            const message = status.msg;
+            const buttonLabel = status.button;
+            const action = status.action;
+            const secondButton = status.secondButton;
+            const secondAction = status.secondAction;
 
-          return (
-            <Card
-              key={id}
-              name={title}
-              description={description}
-              projectDeadline={projectDeadline}
-              stage={stage}
-              offerDeadline={offerDeadline}
-              role={userData?.role}
-            >
-              <p className={styles.statusMessage}>{message}</p>
-              <div
-                className={`d-f ${
-                  secondButton ? "justify-between" : "justify-end"
-                }`}
+            return (
+              <Card
+                key={id}
+                name={title}
+                description={description}
+                projectDeadline={projectDeadline}
+                stage={stage}
+                requestStatus={requestStatus}
+                offerDeadline={offerDeadline}
+                role={userData?.role}
               >
-                {secondButton && (
-                  <LibButton
-                    label={secondButton}
-                    onSubmit={() => getAction(id, secondAction)}
-                    bold
-                    color="#825beb"
-                    hoverColor="#f3f0ff"
-                    outlined
-                  />
-                )}
-                {/* the first condition for the provider to check if he assign any offer before so the button will be disabled */}
-                {/* the second conidition for the admin so when select proposal the button disabled */}
-                {buttonLabel && (
-                  <LibButton
-                    label={buttonLabel}
-                    onSubmit={() => getAction(id, action)}
-                    bold
-                    disabled={
-                      (action === "submitProposal" &&
-                        providerIds.includes(userData?._id)) ||
-                      (action === "seeOfferByAdmin" &&
-                        approvedQuotations.length > 0)
-                    }
-                  />
-                )}
-              </div>
-            </Card>
-          );
-        }
+                <p className={styles.statusMessage}>{message}</p>
+                <div
+                  className={`d-f ${
+                    secondButton ? "justify-between" : "justify-end"
+                  }`}
+                >
+                  {secondButton && (
+                    <LibButton
+                      styleClass={
+                        secondAction === "cancelRequestByClient"
+                          ? "outlinedErrorBtn"
+                          : ""
+                      }
+                      label={secondButton}
+                      onSubmit={() => getAction(id, secondAction)}
+                      bold
+                      color="#825beb"
+                      hoverColor="#f3f0ff"
+                      outlined
+                      padding="0"
+                    />
+                  )}
+                  {buttonLabel && (
+                    <LibButton
+                      label={buttonLabel}
+                      onSubmit={() => getAction(id, action)}
+                      bold
+                      disabled={
+                        (action === "submitProposal" &&
+                          providerIds.includes(userData?._id)) ||
+                        (action === "seeOfferByAdmin" &&
+                          approvedQuotations.length > 0)
+                      }
+                    />
+                  )}
+                </div>
+              </Card>
+            );
+          }
+        )
       )}
     </div>
   );

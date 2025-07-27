@@ -9,6 +9,7 @@ import { proposalFormType } from "../../interfaces/Proposal";
 interface CreateProposalType {
   requestIndentifier: string;
   createProposalError: string;
+  requestBudget: number | null;
   onCreateProposal: (proposalForm: proposalFormType) => void;
   onBack: () => void;
 }
@@ -17,7 +18,7 @@ const CreateProposal = ({
   onCreateProposal,
   requestIndentifier,
   createProposalError,
-
+  requestBudget,
   onBack,
 }: CreateProposalType) => {
   const [proposalForm, setProposalForm] = useState<proposalFormType>({
@@ -26,13 +27,33 @@ const CreateProposal = ({
     file: new File([], ""),
     description: "",
   });
-  const [hasError, setHasError] = useState(false);
+  const [formErrors, setFormErrors] = useState<{
+    amount?: string;
+    estimatedDeadline?: string;
+  }>({});
 
   const handleSubmitProposal = () => {
-    if (proposalForm.amount <= 0) {
-      setHasError(true);
+    const errors: { amount?: string; estimatedDeadline?: string } = {};
+
+    if (proposalForm.amount < (requestBudget || 0)) {
+      errors.amount = `* Amount should be greater than ${requestBudget}$`;
+    }
+
+    const deadlineDate = new Date(proposalForm.estimatedDeadline);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (deadlineDate < today) {
+      errors.estimatedDeadline = "* Deadline cannot be in the past.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
       return;
     }
+
+    // No errors
+    setFormErrors({});
     console.log(proposalForm);
     onCreateProposal(proposalForm);
     resetStates();
@@ -45,7 +66,7 @@ const CreateProposal = ({
       file: new File([], ""),
       description: "",
     });
-    setHasError(false);
+    setFormErrors({});
   };
 
   const handelBack = () => {
@@ -64,10 +85,11 @@ const CreateProposal = ({
           <TextInput
             name="estimatedDeadline"
             label="Estimated deadline"
-            type="string"
+            type="date"
             placeholder="Ex: 3 weeks, 1 month ..."
             required={false}
             value={proposalForm["estimatedDeadline"]}
+            errorMessage={formErrors.estimatedDeadline || ""}
             onChange={(value: string) =>
               setProposalForm((prev) => ({
                 ...prev,
@@ -75,6 +97,7 @@ const CreateProposal = ({
               }))
             }
           />
+
           <TextInput
             name="amount"
             min={0}
@@ -82,16 +105,16 @@ const CreateProposal = ({
             label="Amount"
             type="number"
             placeholder="Amount"
-            required={true}
             value={proposalForm["amount"].toString()}
             onChange={(value: string) => {
-              setHasError(false);
+              setFormErrors((prev) => ({ ...prev, amount: undefined }));
               setProposalForm((prev) => ({
                 ...prev,
-                amount: Number(value),
+                amount: Number(value) || 0,
               }));
             }}
-            errorMessage={hasError ? "* This field is required" : ""}
+            required={false}
+            errorMessage={formErrors.amount || ""}
           />
         </div>
         <FileInput

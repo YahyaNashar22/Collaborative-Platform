@@ -1,0 +1,53 @@
+.background {
+  position: relative;
+  border-radius: 10px;
+  width: 150px;
+  height: 150px;
+  background-size: cover !important;
+  background-position: center !important;
+  background: var(--deep-purple);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-bottom: 2rem;
+  font-size: 3rem;
+  cursor: default;
+  transition: 0.2s ease;
+  overflow: hidden;
+}
+
+.background:hover .penHolder {
+  visibility: visible;
+  top: 4px;
+  transition: top 0.2s ease;
+}
+
+.penHolder {
+  position: absolute;
+  right: 4px;
+  top: -30px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.2s ease;
+}
+
+.fileInput {
+  display: none;
+}
+
+.penHolder:hover {
+  transition: top 0.2s ease;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.pen {
+  width: 12px;
+}

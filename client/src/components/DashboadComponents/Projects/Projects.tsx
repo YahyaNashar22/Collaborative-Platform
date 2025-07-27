@@ -1,441 +1,20 @@
-import { useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Projects.module.css";
 import Cards from "../Cards/Cards";
 import useDebounceSearch from "../../../hooks/useDebounceSearch";
 import ProjectConfiguration from "./ProjectConfiguration/ProjectConfiguration";
+import { useEffect, useMemo, useState } from "react";
+import { getAllProjects } from "../../../services/ProjectServices";
+import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
 
 const Projects = () => {
-  const mockData = [
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "1",
-      title: "Design a Landing Page",
-      description: "Need a clean and modern landing page for a SaaS product.",
-      deadline: "July 20, 2025",
-      offerDeadline: "July 15, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "2",
-      title: "Develop Mobile App",
-      description: "Build a cross-platform mobile app with React Native.",
-      deadline: "August 10, 2025",
-      offerDeadline: "August 1, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "3",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-    {
-      id: "4",
-      title: "SEO Optimization",
-      description: "Improve SEO rankings for an e-commerce website.",
-      deadline: "July 30, 2025",
-      offerDeadline: "July 25, 2025",
-      onClick: (id: string) => console.log("Clicked ID:", id),
-    },
-  ];
-
   const [searchValue, setSearchValue] = useState("");
-  const [openPoject, setOpenProject] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
-
-  const filteredData = mockData.filter(
-    (data) =>
-      data.title.toLowerCase().includes(debouncedSearchValue.toLowerCase()) ||
-      data.description
-        .toLowerCase()
-        .includes(debouncedSearchValue.toLowerCase())
-  );
+  const [projects, setProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [openPoject, setOpenProject] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isFiltering, setIsFiltering] = useState<boolean>(false);
 
   const handleSearch = (value: string) => {
     setSearchValue(value);
@@ -448,6 +27,45 @@ const Projects = () => {
   const toggleView = (id: string) => {
     console.log(id);
   };
+
+  const fetchProjects = async () => {
+    setIsLoading(true);
+    try {
+      const result = await getAllProjects();
+      if (result) {
+        setProjects(result);
+        setFilteredProjects(result);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  // Filter projects when search changes
+  useEffect(() => {
+    if (!debouncedSearchValue) {
+      setFilteredProjects(projects);
+      return;
+    }
+
+    setIsFiltering(true);
+
+    const search = debouncedSearchValue.toLowerCase();
+    const filtered = projects.filter(
+      (project) =>
+        project.title?.toLowerCase().includes(search) ||
+        project.description?.toLowerCase().includes(search)
+    );
+
+    setFilteredProjects(filtered);
+    setIsFiltering(false);
+  }, [debouncedSearchValue, projects]);
 
   return (
     <>
@@ -468,9 +86,14 @@ const Projects = () => {
               onChange={handleSearch}
             />
           </div>
-          <div className={styles.content}>
-            <Cards data={filteredData} onCardClick={handleCardClick} />
-          </div>
+
+          {isLoading || isFiltering ? (
+            <ServiceCardSkeletonGrid />
+          ) : (
+            <div className={styles.content}>
+              <Cards data={filteredProjects} onCardClick={handleCardClick} />
+            </div>
+          )}
         </main>
       )}
     </>

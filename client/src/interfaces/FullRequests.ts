@@ -20,7 +20,7 @@ export interface RequestData {
   serviceDetails: serviceDetails[];
   quotations: string[];
   approvedQuotations: string[];
-  selectedQuotation: string[];
+  selectedQuotation: string;
 }
 
 export interface Client {
