@@ -42,3 +42,26 @@ export interface serviceDetails {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface ProjectData {
+  _id: string;
+  title: string;
+  description: string;
+  amount: number;
+  availableHours: string[];
+  clientId: string;
+  providerId: string;
+  serviceId: string;
+  stage: string;
+  status: "in_progress" | "pending" | "accepted" | "completed" | string;
+  stages: string[];
+  timelines: string[];
+  currentTimeLine: string;
+  isRequestedFiles: boolean;
+  isUploadedFiles: boolean;
+  projectDeadline: Date;
+  projectEstimatedDeadline: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+}

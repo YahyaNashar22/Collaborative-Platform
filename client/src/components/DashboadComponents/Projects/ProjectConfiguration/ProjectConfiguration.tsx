@@ -5,14 +5,19 @@ import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import FileDrop from "../../../../libs/common/lib-file-dropper/FileDrop";
 import dayjs from "dayjs";
+import { ProjectData } from "../../../../interfaces/FullRequests";
 
 type ProjectConfigurationProps = {
+  projectsData: ProjectData[];
   onClickNode: (id: string) => void;
 };
 
 type NodeId = "timeline" | "files" | "quotation";
 
-const ProjectConfiguration = ({ onClickNode }: ProjectConfigurationProps) => {
+const ProjectConfiguration = ({
+  onClickNode,
+  projectsData,
+}: ProjectConfigurationProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const nodes = [

@@ -434,7 +434,7 @@ export const getProvidersForRequest = async (requestId, query) => {
 };
 
 export const generateStagesAndTimelines = (estimatedDeadline) => {
-  const stages = [
+  const stageNames = [
     "Mobilization",
     "Discovery",
     "Design",
@@ -449,41 +449,56 @@ export const generateStagesAndTimelines = (estimatedDeadline) => {
     (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)
   );
 
-  if (totalDays <= 0) {
-    return {
-      stages,
-      timelines: stages.map((_, idx) => `Week ${idx + 1}`),
-    };
-  }
-
-  const daysPerStage = Math.floor(totalDays / stages.length);
-  const remainder = totalDays % stages.length;
-
+  const stages = [];
   const timelines = [];
   let current = new Date(start);
 
-  for (let i = 0; i < stages.length; i++) {
-    const extra = i < remainder ? 1 : 0;
-    const next = new Date(current);
-    next.setDate(current.getDate() + daysPerStage + extra - 1);
+  if (totalDays <= 0) {
+    for (let i = 0; i < stageNames.length; i++) {
+      stages.push({
+        name: stageNames[i],
+        start: new Date(),
+        end: new Date(),
+        status: i === 0 ? "in_progress" : "not_started",
+      });
+      timelines.push(`Stage ${i + 1}`);
+    }
 
-    const label = `${current.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })} - ${next.toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })}`;
-
-    timelines.push(label);
-
-    current.setDate(next.getDate() + 1);
+    return { stages, timelines };
   }
 
-  return {
-    stages,
-    timelines,
-  };
+  const useFakeWeeks = totalDays <= 5;
+  const effectiveDays = useFakeWeeks ? totalDays * 4 : totalDays;
+  const daysPerStage = Math.floor(effectiveDays / stageNames.length);
+  const remainder = effectiveDays % stageNames.length;
+
+  for (let i = 0; i < stageNames.length; i++) {
+    const extraDay = i < remainder ? 1 : 0;
+    const stageStart = new Date(current);
+    const stageEnd = new Date(stageStart);
+    stageEnd.setDate(stageEnd.getDate() + daysPerStage + extraDay - 1);
+
+    stages.push({
+      name: stageNames[i],
+      start: stageStart,
+      end: stageEnd,
+      status: i === 0 ? "in_progress" : "not_started",
+    });
+
+    timelines.push(
+      `${stageStart.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })} - ${stageEnd.toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })}`
+    );
+
+    current.setDate(stageEnd.getDate() + 1);
+  }
+
+  return { stages, timelines };
 };

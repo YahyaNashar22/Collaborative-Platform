@@ -5,10 +5,12 @@ type CardProps = {
   name: string;
   description: string;
   projectDeadline: Date;
-  stage: number;
+  projectEstimatedDeadline?: Date;
+  stage: number | string;
   role?: string;
-  requestStatus: string;
-  offerDeadline: Date;
+  requestStatus?: string;
+  projectStatus?: string;
+  offerDeadline?: Date;
   onClick?: () => void;
   children?: ReactNode;
 };
@@ -52,12 +54,18 @@ const Card = ({
   projectDeadline,
   offerDeadline,
   children,
+  projectStatus,
   requestStatus,
+  projectEstimatedDeadline,
 }: CardProps) => {
   const status = getProjectStatus(projectDeadline);
   const statusLabel = getStatusLabel(status);
 
-  const isAccepted = requestStatus.toLowerCase() === "accepted";
+  const isAccepted = requestStatus?.toLowerCase() === "accepted";
+  const isCanceled = requestStatus?.toLowerCase() === "canceled";
+
+  const projectAccepted = projectStatus?.toLowerCase() === "completed";
+  const projectInProgress = projectStatus?.toLowerCase() === "in_progress";
 
   return (
     <div className={styles.card}>
@@ -65,25 +73,47 @@ const Card = ({
         <div className={`${styles.statusBadge} ${styles.accepted}`}>
           Accepted
         </div>
+      ) : isCanceled ? (
+        <div className={`${styles.statusBadge} ${styles.canceled}`}>
+          Canceled
+        </div>
+      ) : projectAccepted ? (
+        <div className={`${styles.statusBadge} ${styles.accepted}`}>
+          Completed
+        </div>
+      ) : projectInProgress ? (
+        <div className={`${styles.statusBadge} ${styles.upcoming}`}>
+          InProgress
+        </div>
       ) : (
         <div className={`${styles.statusBadge} ${styles[status]}`}>
           {statusLabel}
         </div>
       )}
-
       <header className={styles.cardHeader}>
-        <h3 className={styles.title}>{name}</h3>
+        <h3 className={styles.title}>{name || "No Title"}</h3>
       </header>
 
       <div className={styles.cardBody}>
-        <p className={styles.description}>{description}</p>
+        <p
+          className={`styles.description ${!description ? styles.noData : ""}`}
+        >
+          {description || "No Description"}
+        </p>
 
         <div className={styles.deadlineItem}>
           Project Deadline: {new Date(projectDeadline).toLocaleDateString()}
         </div>
-        <div className={styles.deadlineItem}>
-          Offer Deadline: {new Date(offerDeadline).toLocaleDateString()}
-        </div>
+        {offerDeadline ? (
+          <div className={styles.deadlineItem}>
+            Offer Deadline: {new Date(offerDeadline).toLocaleDateString()}
+          </div>
+        ) : (
+          <div className={styles.deadlineItem}>
+            Estimated Deadline:{" "}
+            {new Date(projectEstimatedDeadline).toLocaleDateString()}
+          </div>
+        )}
       </div>
 
       {children && <footer className={styles.cardFooter}>{children}</footer>}

@@ -71,7 +71,6 @@ const Cards = ({
             const action = status.action;
             const secondButton = status.secondButton;
             const secondAction = status.secondAction;
-
             return (
               <Card
                 key={id}
@@ -83,7 +82,15 @@ const Cards = ({
                 offerDeadline={offerDeadline}
                 role={userData?.role}
               >
-                <p className={styles.statusMessage}>{message}</p>
+                {stage === 4 && requestStatus === "canceled" ? (
+                  <p className={styles.statusMessage}>
+                    ❌ This request has been{" "}
+                    <strong style={{ color: "var(--error) " }}>canceled</strong>
+                  </p>
+                ) : (
+                  <p className={styles.statusMessage}>{message}</p>
+                )}
+
                 <div
                   className={`d-f ${
                     secondButton ? "justify-between" : "justify-end"

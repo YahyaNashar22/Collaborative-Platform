@@ -1,26 +1,24 @@
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Projects.module.css";
-import Cards from "../Cards/Cards";
-import useDebounceSearch from "../../../hooks/useDebounceSearch";
 import ProjectConfiguration from "./ProjectConfiguration/ProjectConfiguration";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllProjects } from "../../../services/ProjectServices";
 import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
+import ProjectCards from "../ProjectCards/ProjectCards";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
-  const debouncedSearchValue = useDebounceSearch(searchValue, 300);
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [openPoject, setOpenProject] = useState("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
-
+  const debounceRef = useRef(null);
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
-  const handleCardClick = (id: string) => {
+  const onStartProjectConfiguration = (id: string) => {
     setOpenProject(id);
   };
 
@@ -49,29 +47,36 @@ const Projects = () => {
 
   // Filter projects when search changes
   useEffect(() => {
-    if (!debouncedSearchValue) {
+    if (!searchValue) {
+      console.log(projects);
       setFilteredProjects(projects);
       return;
     }
 
     setIsFiltering(true);
 
-    const search = debouncedSearchValue.toLowerCase();
-    const filtered = projects.filter(
-      (project) =>
-        project.title?.toLowerCase().includes(search) ||
-        project.description?.toLowerCase().includes(search)
-    );
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    setFilteredProjects(filtered);
-    setIsFiltering(false);
-  }, [debouncedSearchValue, projects]);
+    debounceRef.current = setTimeout(() => {
+      const search = searchValue.toLowerCase();
+
+      const filtered = projects.filter((req) =>
+        req.title?.toLowerCase().includes(search)
+      );
+
+      setFilteredProjects(filtered);
+      setIsFiltering(false);
+    }, 300);
+  }, [searchValue, projects]);
 
   return (
     <>
       {openPoject ? (
-        <div className="w-100">
-          <ProjectConfiguration onClickNode={toggleView} />
+        <div className={`w-100 ${styles.projectContainer}`}>
+          <ProjectConfiguration
+            onClickNode={toggleView}
+            projectsData={projects}
+          />
         </div>
       ) : (
         <main className={`${styles.wrapper} w-100`}>
@@ -86,12 +91,31 @@ const Projects = () => {
               onChange={handleSearch}
             />
           </div>
-
+          {/* <div className={`${styles.buttons} d-f align-center justify-end`}>
+            <LibButton
+              label="Back"
+              onSubmit={console.log}
+              backgroundColor="#57417e"
+              hoverColor="#49356a"
+              padding="0 20px"
+            />
+            <LibButton
+              label="Submit"
+              onSubmit={console.log}
+              backgroundColor="#825beb"
+              hoverColor="#6c46d9"
+              padding="0 20px"
+            />
+          </div> */}
           {isLoading || isFiltering ? (
             <ServiceCardSkeletonGrid />
           ) : (
             <div className={styles.content}>
-              <Cards data={filteredProjects} onCardClick={handleCardClick} />
+              <ProjectCards
+                data={filteredProjects}
+                // userData={user}
+                onCardClick={onStartProjectConfiguration}
+              />
             </div>
           )}
         </main>

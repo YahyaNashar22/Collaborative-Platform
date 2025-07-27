@@ -222,34 +222,33 @@ export const selectQuotationAndStartProject = async (req, res) => {
       return res.status(404).json({ message: "Quotation Does Not Exist" });
     }
 
-    const newRequest = await Request.findByIdAndUpdate(
-      requestId,
-      { $set: { selectedQuotation: quotationId } },
-      { new: true }
-    );
-
     await changeRequestStageService(requestId, 4, "accepted");
 
     const result = generateStagesAndTimelines(quotation.estimatedDeadline);
-
+    console.log(result, "-------------");
     const project = new Project({
       clientId: request.clientId,
       providerId: quotation.providerId,
       serviceId: request.serviceId,
+      title: request.title,
+      description: request.description,
       amount: quotation.amount,
       stages: result.stages,
       timelines: result.timelines,
       projectDeadline: request.projectDeadline,
       projectEstimatedDeadline: quotation.estimatedDeadline,
-      stage: result.stages[0],
+      currentStage: result.stages[0].name,
       availableHours: quotation.availableHours || [],
     });
 
+    console.log("after-result", project);
+
     await project.save();
+    console.log("afetr - save");
 
     res.status(201).json({
       message: "Quotation selected and project started successfully",
-      payload: newRequest,
+      payload: project,
     });
   } catch (error) {
     res.status(500).json({

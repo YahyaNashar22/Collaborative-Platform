@@ -43,7 +43,7 @@ const DashboardHeader = () => {
       case "provider":
         return [
           { path: "/dashboard", label: "Dashboard" },
-          { path: "/dashboard/services", label: "Services" },
+          { path: "/dashboard/projects", label: "Projects" },
           { path: "/dashboard/requests", label: "Requests" },
         ];
       default:

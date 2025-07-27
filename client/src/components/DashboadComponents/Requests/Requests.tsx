@@ -119,7 +119,7 @@ const Requests = () => {
 
       setFilteredRequests(filtered);
       setIsFiltering(false);
-    }, 300); // debounce delay
+    }, 300);
   }, [searchValue, requests]);
 
   //*********** Admin section Function ************//
@@ -308,6 +308,8 @@ const Requests = () => {
   const handleCancelRequestByClient = async () => {
     try {
       const result = await cancelRequestByClient(canceldRequestId);
+      requestsMap[canceldRequestId].stage = 4;
+      requestsMap[canceldRequestId].status = "canceled";
     } catch (error) {
       console.error(error);
     } finally {

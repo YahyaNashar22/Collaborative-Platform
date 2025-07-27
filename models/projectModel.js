@@ -42,6 +42,14 @@ const projectSchema = new Schema(
       required: true,
       default: new Date(),
     },
+    title: {
+      type: String,
+      required: false,
+    },
+    description: {
+      type: String,
+      required: false,
+    },
     isUploadedFiles: {
       type: Boolean,
       required: true,
@@ -54,15 +62,19 @@ const projectSchema = new Schema(
       default: "in_progress",
     },
     stages: {
-      type: [String],
-      required: true,
-      default: [
-        "Mobilization",
-        "Discovery",
-        "Design",
-        "Execution",
-        "Reporting and Feedback",
+      type: [
+        {
+          name: { type: String, required: true },
+          start: { type: Date, required: true },
+          end: { type: Date, required: true },
+          status: {
+            type: String,
+            enum: ["not_started", "in_progress", "completed"],
+            default: "not_started",
+          },
+        },
       ],
+      required: true,
     },
     timelines: {
       type: [String],
@@ -80,13 +92,13 @@ const projectSchema = new Schema(
         return this.timelines[0];
       },
     },
-    stage: {
-      type: String,
-      required: true,
-      default: function () {
-        return this.stages[0];
-      },
-    },
+    // stage: {
+    //   type: String,
+    //   required: true,
+    //   default: function () {
+    //     return this.stages[0];
+    //   },
+    // },
     // meeting hours
     availableHours: [
       {
