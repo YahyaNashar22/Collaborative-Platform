@@ -3,16 +3,23 @@ import styles from "./FileDrop.module.css";
 import LibButton from "../lib-button/LibButton";
 
 type FileDropProps = {
-  phaseId: number;
+  phase: { [key: string]: string | File };
+  assignedStages: boolean;
+  isUploadedFiles: boolean;
+  userRole: string;
+  viewer: boolean;
   onFileChange?: (file: File) => void;
-  onUpload?: (file: File | null) => void;
-  onRequest?: (phaseId: number) => void;
+  onUpload?: (file: File | null, phaseId: string) => void;
+  onRequest?: (phaseId: string) => void;
 };
 
 const FileDrop = ({
-  phaseId,
+  phase,
   onFileChange,
+  userRole,
+  assignedStages,
   onUpload,
+  isUploadedFiles,
   onRequest,
 }: FileDropProps) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -29,10 +36,12 @@ const FileDrop = ({
   const handleClick = () => {
     fileInputRef.current?.click();
   };
-
+  setTimeout(() => {
+    console.log(isUploadedFiles);
+  }, 3000);
   return (
     <div className={styles.card}>
-      <h4>Phase {phaseId}</h4>
+      <h4>Phase {phase?.name}</h4>
 
       <input
         type="file"
@@ -41,7 +50,17 @@ const FileDrop = ({
         style={{ display: "none" }}
       />
 
-      <div className={styles.dropBox} onClick={handleClick}>
+      <div
+        className={`${styles.dropBox} ${
+          !assignedStages ||
+          userRole === "admin" ||
+          phase.status !== "in_progress" ||
+          isUploadedFiles
+            ? styles.disabled
+            : ""
+        }`}
+        onClick={handleClick}
+      >
         <span>+</span>
         <p>Drop your file here or click to upload</p>
         {selectedFile && (
@@ -50,20 +69,34 @@ const FileDrop = ({
       </div>
 
       <div className={`${styles.actions} d-f align-end justify-end`}>
-        <LibButton
-          label="Upload"
-          onSubmit={() => onUpload?.(selectedFile)}
-          backgroundColor="#825beb"
-          hoverColor="#6c46d9"
-          padding="0 1.5rem"
-        />
-        <LibButton
-          label="Request File"
-          onSubmit={() => onRequest?.(phaseId)}
-          backgroundColor="#57417e"
-          hoverColor="#49356a"
-          padding="0 1.5rem"
-        />
+        {userRole !== "admin" && (
+          <>
+            <LibButton
+              label="Upload"
+              onSubmit={() => onUpload?.(selectedFile, phase._id as string)}
+              backgroundColor="#825beb"
+              disabled={
+                !assignedStages ||
+                phase.status !== "in_progress" ||
+                isUploadedFiles
+              }
+              hoverColor="#6c46d9"
+              padding="0 1.5rem"
+            />
+            <LibButton
+              label="Request File"
+              onSubmit={() => onRequest?.(phase._id as string)}
+              backgroundColor="#57417e"
+              disabled={
+                !assignedStages ||
+                phase.status !== "in_progress" ||
+                isUploadedFiles
+              }
+              hoverColor="#49356a"
+              padding="0 1.5rem"
+            />
+          </>
+        )}
       </div>
     </div>
   );

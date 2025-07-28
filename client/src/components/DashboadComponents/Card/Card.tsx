@@ -6,7 +6,7 @@ type CardProps = {
   description: string;
   projectDeadline: Date;
   projectEstimatedDeadline?: Date;
-  stage: number | string;
+  // stage: number | string;
   role?: string;
   requestStatus?: string;
   projectStatus?: string;

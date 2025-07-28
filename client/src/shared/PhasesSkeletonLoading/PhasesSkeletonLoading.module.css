@@ -1,0 +1,88 @@
+.phaseCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.header,
+.dateRow,
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Reusable shimmer base */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: #e0e0e0;
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150px;
+  width: 150px;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  animation: shimmer 1.5s infinite;
+}
+
+/* Individual skeleton elements */
+.title {
+  height: 16px;
+  width: 120px;
+  border-radius: 4px;
+}
+.badge {
+  height: 24px;
+  width: 80px;
+  border-radius: 12px;
+}
+.lineShort {
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+}
+.textArea {
+  height: 60px;
+  width: 100%;
+  border-radius: 4px;
+}
+.dateField {
+  height: 36px;
+  flex: 1;
+  border-radius: 4px;
+}
+.status {
+  height: 14px;
+  width: 30%;
+  border-radius: 4px;
+}
+.button {
+  height: 32px;
+  width: 60px;
+  border-radius: 6px;
+}
+
+/* Shimmer animation */
+@keyframes shimmer {
+  0% {
+    left: -150px;
+  }
+  100% {
+    left: 100%;
+  }
+}

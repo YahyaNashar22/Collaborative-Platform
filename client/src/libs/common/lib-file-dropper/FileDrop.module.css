@@ -56,3 +56,17 @@
 .actions {
   gap: 1rem;
 }
+
+.dropBox.disabled {
+  background-color: #f0f0f0;
+  border-color: #ddd;
+  color: #999;
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.dropBox.disabled:hover {
+  background-color: #f0f0f0;
+  border-color: #ddd;
+}

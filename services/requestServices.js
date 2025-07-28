@@ -458,6 +458,8 @@ export const generateStagesAndTimelines = (estimatedDeadline) => {
       stages.push({
         name: stageNames[i],
         start: new Date(),
+        isUploadedFiles: false,
+        projectFiles: "",
         end: new Date(),
         status: i === 0 ? "in_progress" : "not_started",
       });

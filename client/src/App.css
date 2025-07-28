@@ -155,6 +155,10 @@ textarea {
   gap: 0.5rem;
 }
 
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
 .text-align-center {
   text-align: center;
 }
@@ -164,7 +168,7 @@ textarea {
   text-align-last: left;
 }
 
-d-b {
+.d-b {
   display: block;
 }
 

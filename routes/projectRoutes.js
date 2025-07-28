@@ -1,5 +1,23 @@
 import express from "express";
-import { changeProjectStage, deleteFiles, deleteProject, getAllClientProjects, getAllProjects, getAllProviderProjects, getProjectById, markProjectAsCompleted, requestFiles, requestProjectMeeting, sendProjectTicket, startProject, uploadFiles } from "../controllers/projectControllers.js";
+import {
+  changeProjectStage,
+  createStage,
+  deleteFiles,
+  deleteProject,
+  deleteStage,
+  getAllClientProjects,
+  getAllProjects,
+  getAllProviderProjects,
+  getProjectById,
+  //   markProjectAsCompleted,
+  requestFiles,
+  requestProjectMeeting,
+  sendProjectTicket,
+  markProjectAsCompleted,
+  startProject,
+  updateStages,
+  uploadFiles,
+} from "../controllers/projectControllers.js";
 import { upload } from "../middlewares/multer.js";
 import checkProjectFilesState from "../middlewares/checkProjectFileState.js";
 
@@ -10,17 +28,26 @@ projectRoutes.post("/get-all", getAllProjects);
 projectRoutes.post("/get-all-for-client", getAllClientProjects);
 projectRoutes.post("/get-all-for-provider", getAllProviderProjects);
 
-
-
 projectRoutes.post("/send-ticket/:id", sendProjectTicket);
 projectRoutes.post("/request-meeting/:id", requestProjectMeeting);
 
-
-projectRoutes.patch("/mark-as-complete/:id", markProjectAsCompleted);
+// projectRoutes.patch("/mark-as-complete/:id", markProjectAsCompleted);
 projectRoutes.patch("/change-stage/:id", changeProjectStage);
 projectRoutes.patch("/request-files/:id", requestFiles);
-projectRoutes.patch("/upload-files/:id", checkProjectFilesState, upload.single("projectFiles"), uploadFiles);
+projectRoutes.patch(
+  "/upload-files/:id/:stageId",
+  checkProjectFilesState,
+  upload.single("projectFiles"),
+  uploadFiles
+);
 projectRoutes.patch("/delete-files/:id", deleteFiles);
+projectRoutes.post("/create-stage/:projectId", createStage);
+projectRoutes.patch(
+  "/complete-stage/:projectId/:stageId",
+  markProjectAsCompleted
+);
+projectRoutes.patch("/update-stage/:projectId", updateStages);
+projectRoutes.delete("/delete-stage/:projectId/:stageId", deleteStage);
 
 projectRoutes.get("/get-single/:id", getProjectById);
 

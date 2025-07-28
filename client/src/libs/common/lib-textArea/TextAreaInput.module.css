@@ -19,6 +19,12 @@
   position: relative;
 }
 
+.inputHolder.disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .inputHolder:focus-within {
   border-color: var(--intense-purple);
 }

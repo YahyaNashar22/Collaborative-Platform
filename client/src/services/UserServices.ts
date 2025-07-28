@@ -23,7 +23,7 @@ export const signUpIndividualClient = async (payload: object) => {
 };
 
 export const signUpCompanyClient = async (payload: { [key: string]: any }) => {
-  const url = `${AuthBaseURL}/new-client`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/new-client`;
   const formData = new FormData();
 
   for (const key in payload) {
@@ -52,7 +52,7 @@ export const signUpCompanyClient = async (payload: { [key: string]: any }) => {
 };
 
 export const signUpProvider = async (payload: { [key: string]: any }) => {
-  const url = `${AuthBaseURL}/new-provider`;
+  const url = `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/new-provider`;
   const formData = new FormData();
 
   for (const key in payload) {
@@ -106,7 +106,7 @@ export const updateProfileData = async (
   });
 
   const response = await axiosInstance.patch(
-    `${AuthBaseURL}/update/${userId}`,
+    `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/update/${userId}`,
     formData
   );
 

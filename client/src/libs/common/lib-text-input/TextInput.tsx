@@ -19,6 +19,7 @@ type props = {
   required: boolean;
   maxLength?: number;
   minLength?: number;
+  disabled?: boolean;
   onChange: (value: string, name: string) => void;
   isShowPassword?: boolean;
   errorMessage?: string;
@@ -38,6 +39,7 @@ const TextInput = ({
   maxLength,
   minLength,
   onChange,
+  disabled = false,
   errorMessage,
   onBlur,
   min,
@@ -68,12 +70,15 @@ const TextInput = ({
         <div
           className={`${styles.inputHolder}  ${
             errorMessage ? styles.error : ""
-          } ${name === "phone" ? styles.phoneInput : ""} d-f align-center`}
+          } ${name === "phone" ? styles.phoneInput : ""} ${
+            disabled ? styles.disabled : ""
+          } d-f align-center`}
         >
           {name === "phone" ? (
             <PhoneInput
               name={name}
               style={{ width: "100%" }}
+              disabled={disabled}
               defaultCountry="lb"
               value={getStringValue(value)}
               required={required}
@@ -87,6 +92,7 @@ const TextInput = ({
                 type={inputType}
                 id={name}
                 placeholder={placeholder}
+                disabled={disabled}
                 name={name}
                 value={getStringValue(value)}
                 required={required}

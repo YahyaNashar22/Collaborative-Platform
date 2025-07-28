@@ -15,6 +15,10 @@
   background: #7b849c;
 }
 
+.line:last-of-type {
+  display: none;
+}
+
 .node {
   font-size: 16px;
   min-width: 65px;
@@ -169,4 +173,32 @@
   font-weight: 500;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.statusBadge {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
+  width: fit-content;
+  margin-top: 6px;
+}
+
+.not_started {
+  background-color: #e53935;
+  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.6);
+  color: white;
+}
+
+.in_progress {
+  background-color: #ff9800;
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.6);
+  color: white;
+}
+
+.completed {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.6);
 }

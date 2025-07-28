@@ -225,7 +225,6 @@ export const selectQuotationAndStartProject = async (req, res) => {
     await changeRequestStageService(requestId, 4, "accepted");
 
     const result = generateStagesAndTimelines(quotation.estimatedDeadline);
-    console.log(result, "-------------");
     const project = new Project({
       clientId: request.clientId,
       providerId: quotation.providerId,
@@ -235,6 +234,7 @@ export const selectQuotationAndStartProject = async (req, res) => {
       amount: quotation.amount,
       stages: result.stages,
       timelines: result.timelines,
+      assignedStage: false,
       projectDeadline: request.projectDeadline,
       projectEstimatedDeadline: quotation.estimatedDeadline,
       currentStage: result.stages[0].name,

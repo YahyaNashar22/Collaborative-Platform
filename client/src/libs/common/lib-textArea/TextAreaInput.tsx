@@ -7,6 +7,7 @@ type TextAreaInputProps = {
   required: boolean;
   value: string;
   maxLength?: number;
+  disabled?: boolean;
   errorMessage?: string;
   onChange: (value: string, name: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
@@ -18,6 +19,7 @@ const TextAreaInput = ({
   name,
   required,
   value,
+  disabled = false,
   onChange,
   errorMessage,
   maxLength = 1000,
@@ -35,15 +37,16 @@ const TextAreaInput = ({
         </span>
       </label>
       <div
-        className={`${styles.inputHolder} d-f align-center ${
-          errorMessage ? styles.error : ""
-        }`}
+        className={`${styles.inputHolder} ${
+          disabled ? styles.disabled : ""
+        } d-f align-center ${errorMessage ? styles.error : ""}`}
       >
         <textarea
           required={required}
           name={name}
           id={name}
           value={value}
+          disabled={disabled}
           placeholder={placeholder}
           rows={4}
           cols={50}

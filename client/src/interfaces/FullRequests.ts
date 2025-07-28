@@ -43,25 +43,36 @@ export interface serviceDetails {
   updatedAt: string;
 }
 
-export interface ProjectData {
+export interface Stage {
   _id: string;
-  title: string;
+  name: string;
   description: string;
-  amount: number;
-  availableHours: string[];
+  start: string;
+  isUploadedFiles: boolean;
+  projectFiles: File | "";
+  end: string;
+  status: "not_started" | "in_progress" | "completed";
+}
+
+export interface Project {
+  _id: string;
   clientId: string;
   providerId: string;
   serviceId: string;
-  stage: string;
-  status: "in_progress" | "pending" | "accepted" | "completed" | string;
-  stages: string[];
-  timelines: string[];
-  currentTimeLine: string;
+  amount: number;
   isRequestedFiles: boolean;
   isUploadedFiles: boolean;
+  assignedStage: boolean;
+  title: string;
+  description: string;
+  status: "in_progress" | "completed" | "pending" | string;
   projectDeadline: Date;
   projectEstimatedDeadline: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
+  stages: Stage[];
+  timelines: string[];
+  availableHours: string[];
+  currentTimeLine: string;
+  createdAt: string;
+  updatedAt: string;
+  __v?: number;
 }

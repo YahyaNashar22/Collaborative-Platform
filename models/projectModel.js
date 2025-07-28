@@ -65,6 +65,16 @@ const projectSchema = new Schema(
       type: [
         {
           name: { type: String, required: true },
+          description: {
+            type: String,
+            required: false,
+            default: "",
+          },
+          isUploadedFiles: { type: Boolean, required: false, default: false },
+          projectFiles: {
+            type: String,
+            default: "",
+          },
           start: { type: Date, required: true },
           end: { type: Date, required: true },
           status: {
@@ -76,21 +86,26 @@ const projectSchema = new Schema(
       ],
       required: true,
     },
-    timelines: {
-      type: [String],
-      validate: {
-        validator: function (value) {
-          return value.length === this.stages.length;
-        },
-        message: "Timelines array length must match stages array length.",
-      },
-    },
-    currentTimeLine: {
-      type: String,
+    // timelines: {
+    //   type: [String],
+    //   validate: {
+    //     validator: function (value) {
+    //       return value.length === this.stages.length;
+    //     },
+    //     message: "Timelines array length must match stages array length.",
+    //   },
+    // },
+    // currentTimeLine: {
+    //   type: String,
+    //   required: true,
+    //   default: function () {
+    //     return this.timelines[0];
+    //   },
+    // },
+    assignedStage: {
+      type: Boolean,
       required: true,
-      default: function () {
-        return this.timelines[0];
-      },
+      default: false,
     },
     // stage: {
     //   type: String,

@@ -5,21 +5,24 @@ import { useEffect, useRef, useState } from "react";
 import { getAllProjects } from "../../../services/ProjectServices";
 import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
 import ProjectCards from "../ProjectCards/ProjectCards";
+import authStore from "../../../store/AuthStore";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
-  const [openPoject, setOpenProject] = useState("");
+  const [openPoject, setOpenProject] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const debounceRef = useRef(null);
+  const { user } = authStore();
   const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
-  const onStartProjectConfiguration = (id: string) => {
-    setOpenProject(id);
+  const onStartProjectConfiguration = (index: number) => {
+    console.log(index);
+    setOpenProject(index);
   };
 
   const toggleView = (id: string) => {
@@ -69,13 +72,28 @@ const Projects = () => {
     }, 300);
   }, [searchValue, projects]);
 
+  const handleUpdateStage = async (
+    stageId: string,
+    projectId: string,
+    updateData: { [key: string]: string | Date }
+  ) => {
+    try {
+      const result = await updateStage(projectId, stageId, updateData);
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      {openPoject ? (
+      {openPoject !== null ? (
         <div className={`w-100 ${styles.projectContainer}`}>
           <ProjectConfiguration
             onClickNode={toggleView}
-            projectsData={projects}
+            projectData={projects[openPoject]}
+            updateStage={handleUpdateStage}
+            userData={user}
           />
         </div>
       ) : (
@@ -113,7 +131,6 @@ const Projects = () => {
             <div className={styles.content}>
               <ProjectCards
                 data={filteredProjects}
-                // userData={user}
                 onCardClick={onStartProjectConfiguration}
               />
             </div>

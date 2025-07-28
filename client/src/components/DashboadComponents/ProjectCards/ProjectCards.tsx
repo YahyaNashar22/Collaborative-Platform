@@ -1,12 +1,11 @@
-import { ProjectData } from "../../../interfaces/FullRequests";
+import { Project } from "../../../interfaces/FullRequests";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import Card from "../Card/Card";
 import styles from "./ProjectCards.module.css";
 
 type ProjectCardsProps = {
-  data: ProjectData[];
-  //   userData: User | null;
-  onCardClick: (id: string) => void;
+  data: Project[];
+  onCardClick: (index: number) => void;
 };
 
 const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
@@ -16,15 +15,18 @@ const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
         <div className={styles.emptyState}></div>
       ) : (
         data.map(
-          ({
-            _id: id,
-            title,
-            description,
-            projectDeadline,
-            stage,
-            status,
-            projectEstimatedDeadline,
-          }) => {
+          (
+            {
+              _id: id,
+              title,
+              description,
+              projectDeadline,
+              //   stages,
+              status,
+              projectEstimatedDeadline,
+            },
+            index: number
+          ) => {
             return (
               <Card
                 key={id}
@@ -32,14 +34,14 @@ const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
                 description={description}
                 projectDeadline={projectDeadline}
                 projectStatus={status}
-                stage={stage}
+                // stage={stages[index]}
                 projectEstimatedDeadline={projectEstimatedDeadline}
                 // role={userData?.role}
               >
                 <div className="d-f justify-end">
                   <LibButton
                     label={"Configure"}
-                    onSubmit={() => onCardClick(id)}
+                    onSubmit={() => onCardClick(index)}
                     bold
                   />
                 </div>
