@@ -25,7 +25,6 @@ export const updateStages = async (
   payload: { [key: string]: string | Date }
 ) => {
   const url = `${AuthBaseURL}/update-stage/${projectId}`;
-  console.log(payload);
   const result = await axiosInstance.patch(url, payload);
 
   return result.data.stages;
@@ -69,7 +68,25 @@ export const uploadFile = async (
 
     return response.data.stage;
   } catch (error) {
-    console.error("Upload error:", error);
+    toast.error(error?.response?.data?.message || "Error Occured!");
+
     throw error;
   }
+};
+
+export const requestFiles = async (
+  projectId: string,
+  payload: { [key: string]: string }
+) => {
+  const url = `${AuthBaseURL}/request-files/${projectId}`;
+
+  const result = await axiosInstance.patch(url, payload);
+  return result.data;
+};
+
+export const requestMeeting = async (projectId: string, payload: string) => {
+  const url = `${AuthBaseURL}/request-meeting/${projectId}`;
+
+  const result = await axiosInstance.post(url, { meetingLink: payload });
+  return result.data;
 };

@@ -1,6 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-
 import styles from "./DashboardHeader.module.css";
 import logo from "../../assets/icons/logo_fullWhite.png";
 import Avatar from "../Avatar/Avatar";
@@ -15,16 +14,23 @@ import LibButton from "../../libs/common/lib-button/LibButton";
 import { useAuth } from "../../hooks/useAuth";
 import { signOut } from "../../services/UserServices";
 import authStore from "../../store/AuthStore";
+import SidePanel from "../SidePanel/SidePanel";
+import { toast } from "react-toastify";
 
 const DashboardHeader = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [toggleDropDown, setToggleDropDown] = useState(false);
   const [toggleWindow, setToggleWindow] = useState<boolean>(false);
 
   const { user } = useAuth();
   const { setUser, setLoading } = authStore();
-  const links = (() => {
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const isTwoLevelPath = () => pathname.split("/").filter(Boolean).length === 2;
+
+  const navLinks = (() => {
     switch (user?.role) {
       case "admin":
         return [
@@ -50,11 +56,6 @@ const DashboardHeader = () => {
         return [];
     }
   })();
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const isTwoLevelPath = () => {
-    return pathname.split("/").filter(Boolean).length === 2;
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -72,9 +73,7 @@ const DashboardHeader = () => {
     };
   }, []);
 
-  const onSignOut = () => {
-    setToggleWindow(true);
-  };
+  const onSignOut = () => setToggleWindow(true);
 
   const handleSignOut = async () => {
     try {
@@ -82,12 +81,10 @@ const DashboardHeader = () => {
       if (response.status === 200) {
         setUser(null);
         setLoading(false);
-      }
-      {
         navigate("/");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
 
@@ -102,14 +99,13 @@ const DashboardHeader = () => {
           height={65}
           alt="logo"
           onClick={() => navigate("/")}
-          className="pointer"
+          className={`${styles.mainLogo} pointer`}
         />
 
         <ul className={`${styles.navLinks} w-100 d-f align-center`}>
-          {/* in the profile page remove the navbar */}
           {!pathname.includes("profile") &&
             !pathname.includes("auth") &&
-            links.map(({ path, label }) => (
+            navLinks.map(({ path, label }) => (
               <li
                 key={path}
                 className={`${styles.navLink} ${
@@ -122,7 +118,6 @@ const DashboardHeader = () => {
               </li>
             ))}
 
-          {/* Avatar at the end */}
           {!pathname.includes("auth") ? (
             <li className={`${styles.navLink} ${styles.last} pointer`}>
               <div className={`${styles.homeIconContainer} d-f align-center`}>
@@ -134,6 +129,14 @@ const DashboardHeader = () => {
                   onClick={() => setToggleDropDown(!toggleDropDown)}
                 />
               </div>
+              <div
+                className={styles.hamburger}
+                onClick={() => setIsMobileNavOpen(true)}
+              >
+                <div className={`${styles.line} ${styles.top}`}></div>
+                <div className={`${styles.line} ${styles.middle}`}></div>
+                <div className={`${styles.line} ${styles.bottom}`}></div>
+              </div>
               {toggleDropDown && (
                 <div className={styles.dropdownMenu} ref={dropdownRef}>
                   <div
@@ -144,36 +147,38 @@ const DashboardHeader = () => {
                       icon={faUser}
                       className={styles.profileIcon}
                     />
-                    <Link to={"profile"}>View Profile</Link>
+                    <Link to="profile">View Profile</Link>
                   </div>
                   <div
                     className={`${styles.menuItem} ${styles.home} d-f align-center`}
                     onClick={() => setToggleDropDown(false)}
                   >
                     <FontAwesomeIcon icon={faHouse} className={styles.icon} />
-                    <Link to={"/"}>Go Home</Link>
+                    <Link to="/">Go Home</Link>
                   </div>
                   <div
                     className={`${styles.menuItem} ${styles.signOutItem} d-f align-center`}
-                    onClick={() => setToggleDropDown(false)}
+                    onClick={() => {
+                      setToggleDropDown(false);
+                      onSignOut();
+                    }}
                   >
                     <FontAwesomeIcon
                       icon={faRightFromBracket}
                       className={styles.icon}
                     />
-                    <span onClick={onSignOut}>Sign Out</span>
+                    <span>Sign Out</span>
                   </div>
                 </div>
               )}
             </li>
           ) : (
-            <div className={`${styles.homeIcon}  d-f justify-end w-100 `}>
+            <div className={`${styles.homeIcon} d-f justify-end w-100`}>
               <Link
-                to={"/"}
-                className={`  ${
+                to="/"
+                className={`${
                   isTwoLevelPath() ? styles.whiteHome : styles.PurpleHome
                 } d-f align-baseline pointer`}
-                onClick={() => setToggleDropDown(false)}
               >
                 <FontAwesomeIcon icon={faHouse} className={styles.icon} />
                 <span>Home</span>
@@ -182,6 +187,32 @@ const DashboardHeader = () => {
           )}
         </ul>
       </header>
+
+      {/* Side Panel Backdrop */}
+      {isMobileNavOpen && (
+        <div
+          className={styles.backdrop}
+          onClick={() => setIsMobileNavOpen(false)}
+        ></div>
+      )}
+
+      {/* Side Panel with dynamic links */}
+      <SidePanel
+        isOpen={isMobileNavOpen}
+        onClose={() => setIsMobileNavOpen(false)}
+        navItems={navLinks}
+        isMainSidePanel={false}
+        onLogin={() => {
+          navigate("/profile");
+          setIsMobileNavOpen(false);
+        }}
+        onSignup={() => {
+          setIsMobileNavOpen(false);
+          onSignOut();
+        }}
+      />
+
+      {/* Sign Out Confirmation Modal */}
       {toggleWindow && (
         <Window
           title="Sign Out"
@@ -189,7 +220,6 @@ const DashboardHeader = () => {
           visible={toggleWindow}
         >
           <p>Are you sure you want to sign out?</p>
-
           <div className={`${styles.buttons} d-f align-center justify-end`}>
             <LibButton
               label="Sign Out"

@@ -1,8 +1,9 @@
-
 const Loading = () => {
   return (
-    <div>Loading</div>
-  )
-}
+    <div className="d-f align-center">
+      <small className="loader"></small>
+    </div>
+  );
+};
 
 export default Loading;

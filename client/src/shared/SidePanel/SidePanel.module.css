@@ -40,3 +40,17 @@
 .buttons {
   margin: 30px;
 }
+
+.closeIcon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+  color: #888;
+  transition: color 0.2s ease;
+  z-index: 10;
+}
+
+.closeIcon:hover {
+  color: #333;
+}

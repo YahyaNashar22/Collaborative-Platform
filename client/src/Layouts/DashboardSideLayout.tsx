@@ -10,8 +10,10 @@ const DashboardSideLayout = () => {
       <DashboardHeader />
       <div className={`${styles.wrapper} d-f w-100 justify-between`}>
         <DashboardSide />
-        <Outlet />
-        <div className="d-f align-end">
+        <div className={styles.container}>
+          <Outlet />
+        </div>
+        <div className={`${styles.rightLogo} d-f align-end`}>
           <img src={vector} alt="logo" />
         </div>
       </div>

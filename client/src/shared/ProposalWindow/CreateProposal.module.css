@@ -15,3 +15,9 @@
 .btnsContainer {
   gap: 10px;
 }
+
+@media (max-width: 428px) {
+  .wrapper {
+    padding: 0;
+  }
+}

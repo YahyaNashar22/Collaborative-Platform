@@ -4,7 +4,7 @@
 }
 
 .header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.7rem;
 }
 
 .header h1 {
@@ -15,4 +15,10 @@
 .content {
   overflow-y: auto;
   height: calc(100vh - 175px);
+}
+
+@media (max-width: 428px) {
+  .wrapper {
+    padding: 0;
+  }
 }

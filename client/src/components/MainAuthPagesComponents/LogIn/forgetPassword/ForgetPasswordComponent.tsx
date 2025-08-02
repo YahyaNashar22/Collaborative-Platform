@@ -6,7 +6,7 @@ import { Validate } from "../../../../utils/Validate";
 
 interface ForgetPasswordComponentType {
   moveBackward: () => void;
-  onReset: () => void;
+  onReset: (email: string) => void;
 }
 const ForgetPasswordComponent = ({
   moveBackward,
@@ -18,13 +18,13 @@ const ForgetPasswordComponent = ({
   const [touchedFields, setTouchedFields] = useState<{
     [key: string]: boolean;
   }>({});
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [errors, setErrors] = useState<string>("");
 
   const handleChange = (name: string, value: string, required: boolean) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
     if (touchedFields[name]) {
       const error = Validate(name, value, required, "email");
-      setErrors((prev) => ({ ...prev, [name]: error }));
+      setErrors(error);
     }
   };
 
@@ -36,7 +36,17 @@ const ForgetPasswordComponent = ({
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
     const error = Validate(name, value, required, type);
-    setErrors((prev) => ({ ...prev, [name]: error }));
+    setErrors(error);
+  };
+
+  const emitEmail = () => {
+    const error = Validate("email", formValues.email, true, "email");
+
+    if (error) {
+      setErrors(error);
+      return;
+    }
+    onReset(formValues.email);
   };
 
   return (
@@ -55,7 +65,7 @@ const ForgetPasswordComponent = ({
                 maxLength={30}
                 minLength={10}
                 onChange={(value, name) => handleChange(name, value, true)}
-                errorMessage={errors.email}
+                errorMessage={errors}
                 onBlur={() =>
                   handleBlur("email", formValues.email || "", true, "email")
                 }
@@ -73,7 +83,7 @@ const ForgetPasswordComponent = ({
 
             <LibButton
               label="Reset Password"
-              onSubmit={onReset}
+              onSubmit={emitEmail}
               backgroundColor="#825beb"
               hoverColor="#6c46d9"
               padding="0 20px"

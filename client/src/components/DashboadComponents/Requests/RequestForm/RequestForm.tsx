@@ -156,7 +156,6 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     }
 
     setErrors(newErrors);
-    console.log(formValues);
 
     if (isValid) {
       onSubmit(formValues);

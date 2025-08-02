@@ -65,7 +65,6 @@ const ContactForm = () => {
   ];
 
   const handleChange = (name: string, value: string) => {
-    console.log(name, value);
     const updatedFormData = {
       ...formData,
       [name]: value,
@@ -80,13 +79,12 @@ const ContactForm = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return !emailRegex.test(value);
       }
-      console.log(value.length);
       return value.trim().length === 0;
     });
   };
 
   const handleCLick = () => {
-    console.log(formData);
+    return;
   };
 
   return (

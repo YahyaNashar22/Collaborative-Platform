@@ -1,4 +1,40 @@
 .wrapper {
-  overflow-y: hidden;
-  max-height: 100vh;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.container {
+  margin-top: 95px;
+  margin-bottom: 1rem;
+  margin-left: 53px;
+  width: 100%;
+  overflow: auto;
+}
+
+@media (max-width: 950px) {
+  .container {
+    margin-left: 2rem;
+  }
+}
+@media (max-width: 810px) {
+  .container {
+    margin-left: 1rem;
+  }
+
+  .rightLogo {
+    width: 8rem;
+  }
+}
+
+@media (max-width: 630px) {
+  .container {
+    margin-top: 95px;
+  }
+  .rightLogo {
+    display: none;
+  }
+
+  .wrapper {
+    padding: 0 1rem;
+  }
 }

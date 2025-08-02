@@ -177,7 +177,7 @@ const Profile = ({ userData }: { userData: { [key: string]: string } }) => {
       navigate("/dashboard");
       setErrors({});
     } catch (error) {
-      console.error("Failed to update profile", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
 

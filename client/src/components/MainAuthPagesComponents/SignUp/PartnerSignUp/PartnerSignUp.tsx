@@ -76,7 +76,6 @@ const PartnerSignUp = ({
     setIsLoading(true);
     setIsVerifying(true);
     setError(""); // Clear any previous error
-    console.log("Sign-up payload:", payload);
 
     try {
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
@@ -87,13 +86,12 @@ const PartnerSignUp = ({
       }
 
       const result = await signUpProvider(payload, type);
-      console.log("Signup result:", result);
 
       setUser(result.payload);
       toast.success("Signed up successfully!");
-      navigate("/dashboard");
+      navigate("/dashboard/requests");
     } catch (error: any) {
-      console.error("Sign-up error:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
       setStep(0);
       setError(error?.response?.data?.message || "Sign-up failed");
     } finally {
@@ -177,7 +175,7 @@ const PartnerSignUp = ({
 
   return (
     <div className={styles.wrapper}>
-      <div className="d-f">
+      <div className="d-f gap-05 f-wrap">
         <h1>{title}</h1>
         <ProgressBar currentNode={step} nodes={formData.steps} />
       </div>

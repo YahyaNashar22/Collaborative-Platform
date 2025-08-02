@@ -50,7 +50,6 @@ const IndividualSignUp = ({
 
     try {
       const result = await sendOtp(email as string);
-      console.log(result);
       setOtpEmail(email as string);
       setError("");
       increaseStep();
@@ -75,7 +74,7 @@ const IndividualSignUp = ({
       setLoading(false);
       toast.success("Signed up successfully!");
       setError("");
-      navigate("/dashboard");
+      navigate("/dashboard/requests");
     } catch (error: any) {
       decreaseStep();
       setError(error?.response?.data?.message || "Sign-up failed");
@@ -122,7 +121,7 @@ const IndividualSignUp = ({
 
   return (
     <div className={styles.wrapper}>
-      <div className="d-f">
+      <div className="d-f gap-05 f-wrap">
         <h1>{title}</h1>
         <ProgressBar currentNode={step} nodes={formData.steps} />
       </div>

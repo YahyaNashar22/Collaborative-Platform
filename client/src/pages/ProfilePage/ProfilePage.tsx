@@ -28,7 +28,7 @@ const ProfilePage = ({ userId }: profileType) => {
           });
       }
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setIsLoading(false);
     }

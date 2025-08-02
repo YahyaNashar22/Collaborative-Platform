@@ -43,7 +43,6 @@ export const createRequest = async (
 };
 
 export const getAllRequestsBy = (role: string, userId: string) => {
-  console.log(role, "**************");
   switch (role) {
     case "admin":
       return getAllAdminRequests({ role: role });
@@ -63,7 +62,6 @@ export const getAllRequestsBy = (role: string, userId: string) => {
 export const getAllAdminRequests = async (query: {
   [key: string]: string | undefined;
 }) => {
-  console.log("query", query);
   const response = await axiosInstance.post(`${AuthBaseURL}/get-all`, query);
   return response.data.payload;
 };
@@ -146,4 +144,12 @@ export const cancelRequestByClient = async (requestId: string) => {
   });
 
   return response.data;
+};
+
+export const getRequestsForDashboard = async () => {
+  const response = await axiosInstance.get(
+    `${AuthBaseURL}/getRequestsForDashboard`
+  );
+
+  return response.data.result;
 };

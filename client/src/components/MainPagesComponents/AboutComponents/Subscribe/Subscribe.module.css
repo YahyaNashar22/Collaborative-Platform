@@ -83,3 +83,51 @@
   right: 0;
   top: 0;
 }
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 30px 20px;
+    column-gap: 5%;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  .subscribeContainer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .subscribeInput {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px 1rem;
+    text-align: left;
+    margin: 0;
+  }
+
+  .subscribeBtn {
+    width: 8rem;
+    margin-left: 0;
+    font-size: 1rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 500px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 20px;
+    padding: 20px 15px;
+  }
+
+  .title {
+    font-size: 1.3rem;
+  }
+
+  .subscribeInput::placeholder {
+    font-size: 11px;
+  }
+}

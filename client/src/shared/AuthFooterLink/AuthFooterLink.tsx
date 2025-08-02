@@ -1,5 +1,6 @@
+import useFormStore from "../../store/FormsStore";
 import styles from "./AuthFooterLink.module.css";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface AuthFooterLinkProps {
   text: string;
@@ -12,14 +13,23 @@ const AuthFooterLink: React.FC<AuthFooterLinkProps> = ({
   link,
   redirectTo,
 }) => {
+  const { resetForm, role, type, setStep } = useFormStore();
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    resetForm(role, type);
+    setStep(0);
+    navigate(redirectTo);
+  };
+
   return (
     <div className={styles.footer}>
       <span className={styles.line}></span>
       <p className="bold">
         {text}{" "}
-        <Link to={redirectTo} className="purple pointer">
+        <span className="purple pointer" onClick={handleClick}>
           {link}
-        </Link>
+        </span>
       </p>
     </div>
   );

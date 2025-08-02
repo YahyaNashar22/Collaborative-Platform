@@ -5,10 +5,10 @@ import {
   faEyeSlash,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
-import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
 import { getStringValue } from "../../../utils/CastToString";
 import { useState } from "react";
+import PhoneTextInput from "../lib-phoneNumber-input/PhoneTextInput";
 
 type props = {
   label?: string;
@@ -75,15 +75,13 @@ const TextInput = ({
           } d-f align-center`}
         >
           {name === "phone" ? (
-            <PhoneInput
+            <PhoneTextInput
               name={name}
-              style={{ width: "100%" }}
               disabled={disabled}
               defaultCountry="lb"
               value={getStringValue(value)}
               required={required}
-              onChange={(phone) => onChange(phone, name)}
-              className="custom-phone-input-wrapper"
+              onChange={onChange}
               onBlur={onBlur}
             />
           ) : (

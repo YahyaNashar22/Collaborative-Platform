@@ -1,11 +1,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./ProposalRow.module.css";
-import {
-  faCheckDouble,
-  faCircleCheck,
-  faCircleXmark,
-  faDownload,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCircleCheck, faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 
 type ProposalRowProps = {

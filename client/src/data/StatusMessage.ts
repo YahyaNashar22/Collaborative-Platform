@@ -85,7 +85,7 @@ export const statusActions = {
     },
     provider: {
       msg: "✅ Your offer was accepted",
-      button: "View Job Details",
+      button: "",
       action: "",
       secondButton: null,
       secondAction: null,

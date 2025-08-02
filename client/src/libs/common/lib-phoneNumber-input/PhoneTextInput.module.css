@@ -1,0 +1,102 @@
+.phoneContainer {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.dropdownWrapper {
+  position: relative;
+  z-index: 3;
+  background: transparent;
+}
+
+.flagSelector {
+  display: flex;
+  align-items: center;
+  border-right: 1px solid #ccc;
+  height: 38px;
+  background-color: transparent;
+  border-radius: 5px 0 0 5px;
+}
+
+.dialCode {
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--label-color);
+  margin-right: 4px;
+}
+
+.arrow {
+  font-size: 1rem;
+  color: #888;
+}
+
+.phoneInput {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 6px !important;
+  border-radius: 0 5px 5px 0;
+  background-color: #fff;
+  height: 38px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 105%;
+  left: 0;
+  width: 260px;
+  background: white;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.searchInput {
+  width: 100%;
+  padding: 8px 10px !important;
+  border: none;
+  border-bottom: 1px solid #eee;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.countryList {
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 8px 10px;
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.2s;
+}
+
+.dropdownItem:hover {
+  background-color: #f4f4f4;
+}
+
+.dial {
+  color: #555;
+  font-size: 0.85rem;
+}

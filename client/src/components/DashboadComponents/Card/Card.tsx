@@ -95,11 +95,7 @@ const Card = ({
       </header>
 
       <div className={styles.cardBody}>
-        <p
-          className={`styles.description ${!description ? styles.noData : ""}`}
-        >
-          {description || "No Description"}
-        </p>
+        <p className="styles.description">{description || "No Description"}</p>
 
         <div className={styles.deadlineItem}>
           Project Deadline: {new Date(projectDeadline).toLocaleDateString()}

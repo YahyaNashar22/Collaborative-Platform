@@ -1,13 +1,21 @@
 .avatarBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
   padding: 10px;
   border: 1px solid transparent;
-  min-width: 300px;
+  min-width: 260px;
+  width: 100%;
+  max-width: 320px;
   transition: 0.3s;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .avatarBox small {
   color: #fff !important;
+  font-size: 14px;
 }
 
 .avatarBox.allowHover:hover {
@@ -25,4 +33,42 @@
   width: 90px;
   height: 90px;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+  .avatarContainer {
+    gap: 30px;
+  }
+
+  .avatarBox {
+    min-width: clamp(240px, 45%, 320px);
+  }
+  .avatar {
+    width: 70px;
+    font-size: 20px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 550px) {
+  .avatarBox {
+    width: 100%;
+    min-width: fit-content;
+    margin-top: 0.3rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatarBox small {
+    font-size: 12px;
+  }
+
+  .avatar {
+    width: 60px;
+    height: 60px;
+  }
 }

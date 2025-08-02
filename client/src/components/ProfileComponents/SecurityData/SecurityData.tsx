@@ -6,6 +6,7 @@ import OTPForm from "../../MainAuthPagesComponents/SignUp/StepThreeForm/OTPForm"
 import { useNavigate } from "react-router-dom";
 import {
   changePassword,
+  resetPassword,
   sendOtp,
   verifyOtp,
 } from "../../../services/UserServices";
@@ -17,7 +18,7 @@ interface SecurityDataProps {
 const SecurityData = ({ email }: SecurityDataProps) => {
   const [securityTab, setSecurityTab] = useState<1 | 2 | 3>(1);
   const [isVerifying, setIsVerifying] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -81,17 +82,19 @@ const SecurityData = ({ email }: SecurityDataProps) => {
       setPasswordErrors(newErrors);
       return;
     }
-
+    setLoading(true);
     try {
-      await changePassword(email, {
+      await changePassword({
+        email,
         oldPassword,
         password: newPassword,
       });
       setPasswordErrors({});
       navigate("/dashboard");
     } catch (err) {
-      console.error("Failed to reset password", err);
       setPasswordErrors({ oldPassword: "Incorrect old password" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -110,7 +113,6 @@ const SecurityData = ({ email }: SecurityDataProps) => {
   }, [securityTab, email]);
 
   const handleOtpSubmit = async (otp: string) => {
-    console.log(otp);
     setIsVerifying(true);
     try {
       setOtpError(null);
@@ -154,14 +156,16 @@ const SecurityData = ({ email }: SecurityDataProps) => {
       setSecurityDataErrors(newErrors);
       return;
     }
-
+    setLoading(true);
     try {
-      await changePassword(email, { password: newPassword });
+      const payload = { email: email, password: newPassword };
+      await resetPassword(payload);
       setSecurityDataErrors({});
       navigate("/dashboard");
     } catch (err) {
-      console.error("Failed to reset password", err);
       setSecurityDataErrors({ newPassword: "Failed to reset password" });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -227,7 +231,7 @@ const SecurityData = ({ email }: SecurityDataProps) => {
           email={email}
           moveBackward={() => setSecurityTab(1)}
           onSubmit={handleOtpSubmit}
-          errorMessage={otpError || "Something went wrong!"}
+          errorMessage={otpError}
           isVerifying={isVerifying}
           allowResend={true}
           onResend={handleSendOtpAgain}
@@ -236,7 +240,7 @@ const SecurityData = ({ email }: SecurityDataProps) => {
       )}
 
       {/* Tab 3: Reset Password after OTP */}
-      {securityTab === 3 && (
+      {securityTab === 3 && !loading ? (
         <>
           <form className="d-f f-dir-col">
             <TextInput
@@ -265,7 +269,9 @@ const SecurityData = ({ email }: SecurityDataProps) => {
             <LibButton label="Save" onSubmit={handleSecurityDataSubmit} />
           </div>
         </>
-      )}
+      ) : loading ? (
+        <span className="loader"></span>
+      ) : null}
     </div>
   );
 };

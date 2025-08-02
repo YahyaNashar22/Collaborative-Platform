@@ -29,7 +29,7 @@
   border-radius: 8px;
   background: #fff;
   border: 1px solid #e5e7eb;
-  z-index: 1;
+  z-index: 999;
 }
 
 .header {

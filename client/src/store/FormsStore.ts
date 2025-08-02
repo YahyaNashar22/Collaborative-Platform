@@ -60,9 +60,8 @@ const useFormStore = create<FormState & FormActions>((set, get) => ({
   setStep: (step) => set({ step }),
   increaseStep: () => {
     const { role, type, step } = get();
-    console.log(role, type, step);
+
     const currentTypeData = registerFormData.roles[role]?.types[type];
-    console.log("moving...", currentTypeData);
 
     if (!currentTypeData) return;
 

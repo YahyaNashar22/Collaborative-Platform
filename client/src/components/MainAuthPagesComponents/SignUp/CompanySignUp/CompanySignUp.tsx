@@ -54,7 +54,8 @@ const CompanySignUp = ({
       setError("");
       increaseStep();
     } catch (err: any) {
-      console.error("Error sending OTP:", err);
+      toast.error(error?.response?.data?.message || "Error Sending OTP!");
+
       setError(err?.response?.data?.message || "Failed to send OTP");
     }
   };
@@ -63,6 +64,7 @@ const CompanySignUp = ({
     const payload = getFormValues(role, type);
     setIsLoading(true);
     setIsVerifying(true);
+
     try {
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
@@ -70,13 +72,13 @@ const CompanySignUp = ({
         setError("Invalid or expired OTP.");
         return;
       }
-      const result = await signUpCompanyClient(payload);
-      console.log(result);
-      setUser(result.payload);
+      const newPayload = { ...payload, accountType: "company" };
+      const result = await signUpCompanyClient(newPayload);
+      setUser(result);
       setLoading(false);
       toast.success("Signed up successfully!");
       setError("");
-      navigate("/dashboard");
+      navigate("/dashboard/requests");
     } catch (error: any) {
       setStep(0);
       setError(error?.response?.data?.message || "Sign-up failed");
@@ -114,6 +116,7 @@ const CompanySignUp = ({
           onSubmit={handleSignUp}
           moveBackward={decreaseStep}
           email={otpEmail}
+          errorMessage={error}
           isVerifying={isVerifying}
         />
       );
@@ -130,7 +133,7 @@ const CompanySignUp = ({
 
   return (
     <div className={styles.wrapper}>
-      <div className="d-f">
+      <div className="d-f gap-05 f-wrap">
         <h1>{title}</h1>
         <ProgressBar currentNode={step} nodes={formData.steps} />
       </div>

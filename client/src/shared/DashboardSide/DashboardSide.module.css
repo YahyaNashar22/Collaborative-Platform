@@ -28,3 +28,28 @@
   margin-top: 1rem;
   gap: 10px;
 }
+
+@media (max-width: 900px) {
+  .wrapper {
+    max-width: 17rem;
+  }
+
+  .wrapper p {
+    font-size: 25px;
+  }
+}
+@media (max-width: 728px) {
+  .wrapper {
+    max-width: 14rem;
+  }
+
+  .wrapper p {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    display: none;
+  }
+}

@@ -17,6 +17,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
   const [selectedRequest, setSelectedRequest] = useState<SelectOption | null>(
     null
   );
+  const [loading, setLoading] = useState<boolean>(false);
 
   const customStyles = {
     container: (provided: any) => ({
@@ -64,6 +65,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
   };
 
   const fetchServices = async () => {
+    setLoading(true);
     try {
       const result = await getAllServices();
       const options: SelectOption[] = result.map((service: any) => ({
@@ -72,7 +74,9 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
       }));
       setServiceOptions(options);
     } catch (error) {
-      console.error("Error fetching services:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,9 +100,10 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
         options={serviceOptions}
         onChange={handleChange}
         isSearchable={true}
-        placeholder="Select a request..."
+        placeholder={loading ? "Loading..." : "Select a request..."}
         value={selectedRequest}
         styles={customStyles}
+        isLoading={loading}
       />
     </div>
   );

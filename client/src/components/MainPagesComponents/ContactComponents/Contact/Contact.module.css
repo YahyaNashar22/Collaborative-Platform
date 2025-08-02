@@ -1,4 +1,25 @@
 .wrapper {
+  display: flex;
   margin: 80px 100px;
   gap: 100px;
+
+  align-items: flex-start;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    margin: 40px 20px;
+    gap: 40px;
+  }
+
+  .left {
+    width: 100%;
+    text-align: center;
+  }
+
+  .left img {
+    width: 100%;
+    height: auto;
+  }
 }

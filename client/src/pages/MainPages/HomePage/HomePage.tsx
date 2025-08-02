@@ -1,7 +1,6 @@
 import About from "../../../components/MainPagesComponents/HomeComponents/About/About";
 import Contact from "../../../components/MainPagesComponents/HomeComponents/Contact/Contact";
 import Hero from "../../../components/MainPagesComponents/HomeComponents/Hero/Hero";
-import Partners from "../../../components/MainPagesComponents/HomeComponents/Partners/Partners";
 import Quote from "../../../components/MainPagesComponents/HomeComponents/Quote/Quote";
 import Services from "../../../components/MainPagesComponents/HomeComponents/Services/Services";
 import Statistic from "../../../components/MainPagesComponents/HomeComponents/Statistic/Statistic";
@@ -14,7 +13,6 @@ const HomePage = () => {
       <div className="container">
         <Services />
         <About />
-        <Partners />
       </div>
       <Statistic />
       <Contact />

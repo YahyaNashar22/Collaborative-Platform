@@ -123,3 +123,88 @@
   bottom: -10px;
   left: -200px;
 }
+
+/* Base styles already defined above */
+
+@media (max-width: 1200px) {
+  .textContainer {
+    margin-right: 100px;
+  }
+
+  .heroText {
+    font-size: 36px;
+  }
+
+  .arrow {
+    width: 6rem;
+    height: 1.5rem;
+  }
+
+  .firstSentence {
+    margin-left: -1rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .textContainer {
+    margin-right: 40px;
+    text-align: center;
+  }
+
+  .heroText {
+    font-size: 32px;
+  }
+
+  .firstSentence {
+    margin-left: 0;
+  }
+
+  .arrow_container {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .textContainer {
+    margin-right: 0;
+    padding: 0 1rem;
+  }
+
+  .heroText {
+    font-size: 26px;
+  }
+
+  .arrow {
+    width: 5rem;
+    height: 1.2rem;
+  }
+
+  .last {
+    letter-spacing: 1px;
+  }
+}
+
+@media (max-width: 576px) {
+  .heroText {
+    font-size: 22px;
+  }
+
+  .arrow {
+    width: 4rem;
+    height: 1rem;
+  }
+
+  .textContainer {
+    row-gap: 12px;
+  }
+
+  .firstSentence {
+    font-size: 20px;
+  }
+
+  .strength,
+  .soft,
+  .last {
+    font-size: 18px;
+  }
+}

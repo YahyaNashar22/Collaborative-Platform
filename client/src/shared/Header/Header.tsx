@@ -94,6 +94,13 @@ const Header = ({ user }: { user: User | null }) => {
 
   const toggleSidePanel = () => setIsSidePanelOpen((prev) => !prev);
   const closeSidePanel = () => setIsSidePanelOpen(false);
+  const navItems = [
+    { path: "/", label: "HOME" },
+    { path: "/about", label: "ABOUT US" },
+    { path: "/FAQ", label: "FAQ" },
+    { path: "/terms", label: "TERMS" },
+    { path: "/contact", label: "CONTACT US" },
+  ];
 
   return (
     <>
@@ -103,8 +110,12 @@ const Header = ({ user }: { user: User | null }) => {
       )}
       <SidePanel
         isOpen={isSidePanelOpen}
-        onClose={toggleSidePanel}
-        openAuthWindow={(type) => openAuthWindow(type)}
+        onClose={() => setIsSidePanelOpen(false)}
+        logoSrc={logo}
+        navItems={navItems}
+        showButtons={true}
+        onLogin={() => openAuthWindow("login")}
+        onSignup={() => openAuthWindow("register")}
       />
       <header
         className={`${styles.wrapper} d-f align-center justify-between ${
@@ -166,9 +177,11 @@ const Header = ({ user }: { user: User | null }) => {
         </div>
 
         {/* Hamburger button */}
-        <button className={styles.hamburger} onClick={toggleSidePanel}>
-          <img width={40} src={hamburg} alt="hamburg menu" />
-        </button>
+        <div className={styles.hamburger} onClick={toggleSidePanel}>
+          <div className={`${styles.line} ${styles.top}`}></div>
+          <div className={`${styles.line} ${styles.middle}`}></div>
+          <div className={`${styles.line} ${styles.bottom}`}></div>
+        </div>
       </header>
       {onWindowOpen && (
         <Window
@@ -182,7 +195,7 @@ const Header = ({ user }: { user: User | null }) => {
             <div className={`${styles.header} d-f f-dir-col align-center`}>
               <h1 className={`${styles.title} purple`}>LET'S GET STARTED</h1>
               <p className={`${styles.description} bold`}>
-                Choose how you \d like to join us
+                Choose how you like to join us
               </p>
             </div>
             <main className={`${styles.boxContainer} d-f w-100`}>

@@ -3,7 +3,7 @@
   column-gap: 50px;
   background-size: 100% auto;
   background-position: center top;
-  background-image: url("../../assets//images/homePageBackground.png");
+  background-image: url("../../assets/images/homePageBackground.png");
   /* margin-top: 88px; */
   background-size: cover;
   height: calc(100vh + 143px);
@@ -12,5 +12,23 @@
 }
 
 .isAbout {
-  background-image: url("../../assets//images/About_Us.png");
+  background-image: url("../../assets/images/About_Us.png");
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    column-gap: 20px;
+    height: 50rem;
+    padding: 3rem 1rem;
+    background-size: cover;
+  }
+}
+
+@media (max-width: 500px) {
+  .wrapper {
+    column-gap: 20px;
+    height: 30rem;
+    padding: 3rem 1rem;
+    background-size: cover;
+  }
 }

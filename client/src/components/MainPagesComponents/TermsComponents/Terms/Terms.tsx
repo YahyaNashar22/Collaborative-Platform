@@ -2,15 +2,47 @@ import Menu from "../../../../shared/Menu/Menu";
 import styles from "./Terms.module.css";
 
 const Terms = () => {
-  const termsData: { label: string }[] = [
-    { label: "Scope of Application" },
-    { label: "Definitions" },
-    { label: "Tax Obligations" },
-    { label: "Account Creation and Platform Use" },
-    { label: "Registration and Access" },
-    { label: "Information Accuracy" },
-    { label: "Notifications and Communication" },
-    { label: "Client–Provider Interaction" },
+  const data: { label: string; content: string }[] = [
+    {
+      label: "Scope of Application",
+      content:
+        "These terms apply to all users of the Takatuf Platform, including clients and service providers. They cover service requests, quotes, and payments. Using the platform means you agree to these terms.",
+    },
+    {
+      label: "Definitions",
+      content:
+        "‘Client’ refers to any individual or entity requesting a service. ‘Service Provider’ means the individual or entity offering consultancy services. ‘Platform’ refers to the Takatuf digital system.",
+    },
+    {
+      label: "Tax Obligations",
+      content:
+        "Service providers are solely responsible for declaring and paying any applicable taxes. Takatuf does not deduct or handle tax payments on behalf of users. Users must comply with their local tax laws.",
+    },
+    {
+      label: "Account Creation and Platform Use",
+      content:
+        "Users must create an account to access services on the platform. Each user is responsible for maintaining the confidentiality of their account. Misuse or fraudulent activity may lead to suspension or termination.",
+    },
+    {
+      label: "Registration and Access",
+      content:
+        "Registration requires accurate and up-to-date information. Takatuf may verify identities and reject or revoke access if misuse is detected. Access is granted at the platform's discretion.",
+    },
+    {
+      label: "Information Accuracy",
+      content:
+        "All information provided by users must be truthful and accurate. Takatuf is not responsible for errors or false claims by users. Providing false data may result in account suspension.",
+    },
+    {
+      label: "Notifications and Communication",
+      content:
+        "Takatuf may send updates or service-related notifications via email or in-platform messages. Users are responsible for keeping their contact details current. All communication through the platform is considered official.",
+    },
+    {
+      label: "Client–Provider Interaction",
+      content:
+        "Clients and service providers must communicate clearly and professionally. Takatuf only facilitates the connection and does not manage the actual service delivery. Disputes should be handled respectfully or reported to support.",
+    },
   ];
   return (
     <div className={`${styles.wrapper} d-f `}>
@@ -31,7 +63,7 @@ const Terms = () => {
         </p>
       </div>
       <div className="w-100">
-        <Menu data={termsData} />
+        <Menu data={data} />
       </div>
     </div>
   );

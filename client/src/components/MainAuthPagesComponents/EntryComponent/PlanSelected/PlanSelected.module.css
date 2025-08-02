@@ -1,5 +1,17 @@
 .details {
   text-align: center;
-  font-size: 57px;
+  font-size: clamp(24px, 5vw, 57px);
   color: #fff;
+  line-height: 1.3;
+  font-weight: 600;
+  margin-top: 12px;
+  max-width: 90%;
+  word-break: break-word;
+}
+
+@media (max-width: 480px) {
+  .details {
+    font-size: 22px;
+    width: 100%;
+  }
 }

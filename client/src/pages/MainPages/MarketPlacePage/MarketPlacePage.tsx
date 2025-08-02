@@ -3,9 +3,7 @@ import styles from "./MarketPlacePage.module.css";
 
 const MarketPlacePage = () => {
   return (
-    <div
-      className={`${styles.wrapper} container d-f f-dir-col justify-between`}
-    >
+    <div className={`${styles.wrapper} d-f f-dir-col justify-between`}>
       <MarketPlace />
     </div>
   );

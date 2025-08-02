@@ -33,3 +33,75 @@
   left: -170px;
   top: -300px;
 }
+
+/* Base styles already look good for desktop */
+
+@media (max-width: 1024px) {
+  .content {
+    width: 90%;
+    row-gap: 40px;
+    padding: 2.5rem 0;
+  }
+
+  .header {
+    font-size: 34px;
+    text-align: center;
+  }
+
+  .bio {
+    font-size: 18px;
+    text-align: center;
+  }
+
+  .aboutImage {
+    width: 20rem;
+    align-self: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+
+  .header {
+    font-size: 30px;
+  }
+
+  .aboutImage {
+    width: 18rem;
+  }
+
+  .lines {
+    left: -100px;
+    top: -250px;
+    width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    width: 100%;
+    padding: 2rem 0;
+    row-gap: 30px;
+  }
+
+  .header {
+    font-size: 24px;
+  }
+
+  .bio {
+    font-size: 16px;
+  }
+
+  .aboutImage {
+    width: 15rem;
+  }
+
+  .lines {
+    display: none; /* Optional: hide lines decoration on very small screens */
+  }
+}

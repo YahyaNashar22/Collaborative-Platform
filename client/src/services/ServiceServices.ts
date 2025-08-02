@@ -6,10 +6,17 @@ export const createService = async (payload: {
   description: string;
 }) => {
   const response = await axiosInstance.post(`${AuthBaseURL}/create`, payload);
-  return response;
+  return response.data.payload;
 };
 
 export const getAllServices = async () => {
   const response = await axiosInstance.get(`${AuthBaseURL}/get-all`);
+  return response.data.payload;
+};
+
+export const deleteService = async (serviceId: string) => {
+  const response = await axiosInstance.delete(
+    `${AuthBaseURL}/delete/${serviceId}`
+  );
   return response.data.payload;
 };

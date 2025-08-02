@@ -3,7 +3,24 @@
 }
 
 .header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.content {
+  overflow-x: auto;
+  overflow-y: auto;
+  height: calc(100vh - 11rem);
+  padding-right: 0.1rem;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.table {
+  width: 100%;
+  min-width: 600px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
 }
 
 .table thead {
@@ -17,37 +34,11 @@
   font-weight: 600;
   color: var(--deep-purple);
   border-right: 1px solid #e2d7f3;
+  white-space: nowrap;
 }
 
 .table thead th:last-child {
   border-right: none;
-}
-
-.content {
-  overflow: auto;
-  height: calc(100vh - 11rem);
-  padding-right: 0.1rem;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.table thead {
-  background-color: #f5f0fc; /* soft purple tone */
-}
-
-.table thead th {
-  padding: 1rem;
-  text-align: left;
-  font-weight: 600;
-  color: var(--deep-purple);
-  border-bottom: 2px solid #e2d7f3;
 }
 
 .table tbody tr {
@@ -67,6 +58,8 @@
   padding: 0.9rem 1rem;
   color: #333;
   border-right: 1px solid #f0eaff;
+  vertical-align: top;
+  word-break: break-word;
 }
 
 .table td:last-child {
@@ -79,6 +72,7 @@
   font-size: 0.75rem;
   font-weight: 600;
   display: inline-block;
+  white-space: nowrap;
 }
 
 .status.active {
@@ -101,4 +95,52 @@
   background-color: #f7c6c6;
   color: #7a1e1e;
   box-shadow: 0 0 8px rgba(181, 48, 48, 0.5);
+}
+
+.noData {
+  text-align: center;
+  padding: 32px 0;
+  background-color: #fafafa;
+  color: #888;
+  font-size: 16px;
+}
+
+.noDataContent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table thead th,
+  .table td {
+    padding: 0.75rem;
+  }
+
+  .wrapper {
+    padding: 0 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .table {
+    font-size: 0.8rem;
+  }
+
+  .table td,
+  .table thead th {
+    padding: 0.6rem;
+  }
+
+  .status {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+  }
 }

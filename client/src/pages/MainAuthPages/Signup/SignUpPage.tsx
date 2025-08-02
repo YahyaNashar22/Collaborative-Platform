@@ -49,11 +49,7 @@ const SignUpPage = () => {
 
   return (
     <>
-      <div
-        className={`${styles.wrapper} d-f align-center justify-center w-100`}
-      >
-        {content}
-      </div>
+      <div className={`${styles.wrapper}  w-100`}>{content}</div>
     </>
   );
 };

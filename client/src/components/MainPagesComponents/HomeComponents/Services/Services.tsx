@@ -46,7 +46,6 @@ const Services = () => {
           />
         ))}
       </div>
-      <button className={styles.more}>SHOW MORE</button>
     </section>
   );
 };

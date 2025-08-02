@@ -32,3 +32,16 @@
   height: 2px;
   background-color: #fff;
 }
+
+@media (max-width: 768px) {
+  .content {
+    overflow: hidden;
+    gap: 10px;
+  }
+}
+@media (max-width: 480px) {
+  .content {
+    overflow: hidden;
+    gap: 5px;
+  }
+}

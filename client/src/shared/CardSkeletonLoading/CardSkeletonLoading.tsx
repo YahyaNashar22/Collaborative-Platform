@@ -1,26 +1,20 @@
 import styles from "./CardSkeletonLoading.module.css";
 
-const ServiceCardSkeletonGrid = () => {
+const CardSkeletonLoading = () => {
   return (
     <div className={styles.gridWrapper}>
       {Array.from({ length: 9 }).map((_, index) => (
         <div className={styles.skeletonCard} key={index}>
-          <div
-            className={`${styles.skeletonBox} ${styles.skeletonHeader}`}
-          ></div>
-          <div className={`${styles.skeletonBox} ${styles.skeletonBody}`}></div>
-          <div className={styles.skeletonFooter}>
-            <div
-              className={`${styles.skeletonBox} ${styles.skeletonDeadline}`}
-            ></div>
-            <div
-              className={`${styles.skeletonBox} ${styles.skeletonButton}`}
-            ></div>
-          </div>
+          <div className={`${styles.skeletonBox} ${styles.skeletonTooltip}`} />
+          <div className={`${styles.skeletonBox} ${styles.skeletonImage}`} />
+          <div className={`${styles.skeletonBox} ${styles.skeletonTitle}`} />
+          <div className={`${styles.skeletonBox} ${styles.skeletonText}`} />
+          <div className={`${styles.skeletonBox} ${styles.skeletonText}`} />
+          <div className={`${styles.skeletonBox} ${styles.skeletonButton}`} />
         </div>
       ))}
     </div>
   );
 };
 
-export default ServiceCardSkeletonGrid;
+export default CardSkeletonLoading;

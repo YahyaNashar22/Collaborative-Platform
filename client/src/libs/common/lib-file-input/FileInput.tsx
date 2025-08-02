@@ -38,7 +38,6 @@ const FileInput = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFileName(file?.name || "");
-    console.log(file, name);
     onChange(file, name);
   };
 

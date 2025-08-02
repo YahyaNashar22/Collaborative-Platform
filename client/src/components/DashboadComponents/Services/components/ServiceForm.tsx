@@ -3,15 +3,18 @@ import LibButton from "../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import styles from "./ServiceForm.module.css";
-import { createService } from "../../../../services/ServiceServices";
 
 interface ServiceFormProps {
   onBack: () => void;
-  emitCreateService: () => void;
+  error: string;
+  emitCreateService: (serviceData: { [key: string]: string }) => void;
 }
 
-const ServiceForm = ({ onBack, emitCreateService }: ServiceFormProps) => {
-  const [error, setError] = useState("");
+const ServiceForm = ({
+  onBack,
+  emitCreateService,
+  error,
+}: ServiceFormProps) => {
   const [requestForm, setRequestForm] = useState<{
     name: string;
     description: string;
@@ -20,15 +23,9 @@ const ServiceForm = ({ onBack, emitCreateService }: ServiceFormProps) => {
     description: "",
   });
 
-  const handleCreateService = async () => {
-    try {
-      await createService(requestForm);
-      setRequestForm({ name: "", description: "" });
-      emitCreateService();
-    } catch (error) {
-      console.error(error);
-      setError(error?.response?.data?.message || "create service failed!");
-    }
+  const handleCreateService = () => {
+    emitCreateService(requestForm);
+    setRequestForm({ name: "", description: "" });
   };
 
   return (

@@ -26,13 +26,13 @@ const Hero = () => {
               <Link to={"/auth/provider"} className="w-100 pointer">
                 BECOME A PARTNER
               </Link>
-              <div>Become a Partner In 6 Steps to grow your business</div>
+              <p>Become a Partner In 6 Steps to grow your business</p>
             </div>
             <div className={`${styles.box} d-f f-dir-col align-center w-100`}>
               <Link to={"/auth/client"} className="w-100 pointer">
                 BECOME A CLIENT
               </Link>
-              <div>Become a client In 3 Steps to Settle your project</div>
+              <p>Become a client In 3 Steps to Settle your project</p>
             </div>
           </div>
         )}

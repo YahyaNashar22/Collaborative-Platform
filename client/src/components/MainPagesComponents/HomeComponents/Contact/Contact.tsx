@@ -43,7 +43,7 @@ const Contact = () => {
         </small>
       </div>
 
-      <div className="d-f align-center">
+      <div className={`${styles.articleContainer} d-f align-center`}>
         {articles.map((elem: ContactItem, index: number) => (
           <article
             className={`${styles.article} d-f align-center f-dir-col`}

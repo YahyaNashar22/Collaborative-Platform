@@ -20,10 +20,6 @@ const AssignModal = ({ requestId, onClose }: AssignModalProps) => {
   const handleAssign = () => {
     if (!selectedProvider) return;
 
-    console.log(
-      `Assigned provider ${selectedProvider} to request ${requestId}`
-    );
-
     // TODO: call API to assign provider here
 
     onClose();

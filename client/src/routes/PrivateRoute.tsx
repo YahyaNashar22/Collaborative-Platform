@@ -11,7 +11,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   loading,
   redirectPath = "/",
 }) => {
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <small className="loader"></small>;
   if (!user) return <Navigate to={redirectPath} replace />;
   return <Outlet />;
 };

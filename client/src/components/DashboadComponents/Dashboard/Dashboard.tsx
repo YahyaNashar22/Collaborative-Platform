@@ -1,205 +1,219 @@
+import Chart from "react-apexcharts";
 import styles from "./Dashboard.module.css";
-
+import { useEffect, useState } from "react";
+import { getRequestsForDashboard } from "../../../services/RequestServices";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
-  Tooltip,
-  Legend,
-  RadialLinearScale,
-} from "chart.js";
-
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
-  ArcElement,
-  Tooltip,
-  Legend,
-  RadialLinearScale
-);
-
-import { Bar, Line, Doughnut, Radar, PolarArea, Pie } from "react-chartjs-2";
+  buildStageDonutChart,
+  buildStackedFilesChart,
+  buildStatusPieChart,
+  buildBoxChart,
+  buildProjectsCreatedPerDayChart,
+  buildProviderPieChart,
+  buildProviderLineChart,
+  buildProviderStatsBox,
+} from "./configurationDashboard";
+import { DashboardState } from "../../../interfaces/Dashboard";
+import { useAuth } from "../../../hooks/useAuth";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
-  const stats = [
-    { title: "Total Requests", value: 128, color: "var(--deep-purple)" },
-    { title: "Completed Projects", value: 42, color: "#36a2eb" },
-    { title: "Accepted Projects", value: 74, color: "#4bc0c0" },
-    { title: "Pending Files", value: 9, color: "#ffcd56" },
-    { title: "Meeting Requests", value: 12, color: "#ff6384" },
-    { title: "Total Quotation Value", value: "$48,000", color: "#9966ff" },
-  ];
-  const barData = {
-    labels: ["Phase 1", "Phase 2", "Phase 3", "Phase 4", "Phase 5"],
-    datasets: [
-      {
-        label: "Progress %",
-        data: [90, 60, 75, 30, 0],
-        backgroundColor: "#825beb",
-      },
-    ],
-  };
+  const { user } = useAuth();
+  const [data, setData] = useState<DashboardState>({
+    boxChart: [],
+    stackedFilesChart: null,
+    stageDonutChart: null,
+    pieChart: null,
+    lineChart: null,
+  });
 
-  const lineData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Project Timeline",
-        data: [10, 30, 50, 80, 100],
-        borderColor: "#36a2eb",
-        tension: 0.3,
-      },
-    ],
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const doughnutData = {
-    labels: ["PDF", "Images", "Docs", "Others"],
-    datasets: [
-      {
-        label: "File Type Distribution",
-        data: [12, 19, 5, 4],
-        backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0"],
-      },
-    ],
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  const radarData = {
-    labels: ["Design", "Development", "Testing", "Docs", "Delivery"],
-    datasets: [
-      {
-        label: "Team A",
-        data: [80, 70, 90, 60, 75],
-        backgroundColor: "rgba(130, 91, 235, 0.2)",
-        borderColor: "#825beb",
-        pointBackgroundColor: "#825beb",
-      },
-    ],
-  };
+  const fetchData = async () => {
+    setIsLoading(true);
+    try {
+      const result = await getRequestsForDashboard();
 
-  const polarData = {
-    labels: ["UI/UX", "Backend", "QA", "Consultation", "Training"],
-    datasets: [
-      {
-        label: "Service Requests",
-        data: [11, 16, 7, 3, 5],
-        backgroundColor: [
-          "#36a2eb",
-          "#ff6384",
-          "#ffcd56",
-          "#4bc0c0",
-          "#9966ff",
-        ],
-      },
-    ],
-  };
+      let boxChart = [];
+      let stackedFilesChart = null;
+      let stageDonutChart = null;
+      let pieChart = null;
+      let lineChart = null;
 
-  const pieData = {
-    labels: ["Completed", "In Progress", "Pending", "Blocked"],
-    datasets: [
-      {
-        label: "Project Status",
-        data: [18, 10, 4, 2],
-        backgroundColor: ["#4bc0c0", "#36a2eb", "#ffcd56", "#ff6384"],
-      },
-    ],
-  };
+      if (user?.role === "provider") {
+        pieChart = buildProviderPieChart({
+          wonQuotations: result.wonQuotations,
+          pendingQuotations: result.pendingQuotations,
+        });
 
-  const stackedBarData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "PDFs",
-        data: [5, 9, 6, 3, 7],
-        backgroundColor: "#825beb",
-        stack: "files",
-      },
-      {
-        label: "Images",
-        data: [2, 4, 3, 5, 2],
-        backgroundColor: "#36a2eb",
-        stack: "files",
-      },
-      {
-        label: "Docs",
-        data: [3, 6, 2, 4, 3],
-        backgroundColor: "#ffcd56",
-        stack: "files",
-      },
-    ],
+        lineChart = buildProviderLineChart(result.quotationsByDay);
+
+        boxChart = buildProviderStatsBox({
+          quotationNb: result.quotationNb,
+          wonQuotations: result.wonQuotations,
+          pendingQuotations: result.pendingQuotations,
+        });
+      } else {
+        boxChart = buildBoxChart(result);
+        stackedFilesChart = buildStackedFilesChart(result.fileUploadedByMonth);
+        stageDonutChart = buildStageDonutChart(result.totalRequestStages);
+        pieChart = buildStatusPieChart(result.totalProjectStatus);
+        lineChart = buildProjectsCreatedPerDayChart(
+          result.projectsCreatedByDay
+        );
+      }
+
+      setData({
+        boxChart,
+        stackedFilesChart,
+        stageDonutChart,
+        pieChart,
+        lineChart,
+      });
+    } catch (err) {
+      toast.error(err?.response?.data?.message || "Error with fetching!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <main className={`${styles.wrapper} w-100`}>
-      <div className={styles.header}>
-        <h2>Project Dashboard</h2>
-      </div>
-
-      <div className={styles.grid}>
-        <div className={styles.card}>
-          <h4>Phase Completion</h4>
-          <Bar data={barData} />
-        </div>
-
-        <div className={styles.card}>
-          <h4>Timeline Progress</h4>
-          <Line data={lineData} />
-        </div>
-        <div className={`${styles.smallChartContainer} d-f f-wrap`}>
-          <div className={`${styles.card} ${styles.smallChart}`}>
-            <h4>File Upload Types</h4>
-            <Doughnut data={doughnutData} />
+    <>
+      {isLoading ? (
+        <span className="loader"></span>
+      ) : (
+        <main className={`${styles.wrapper} w-100`}>
+          <div className={styles.header}>
+            <h2>Project Dashboard</h2>
           </div>
 
-          <div className={`${styles.card} ${styles.smallChart}`}>
-            <h4>Team Skills Overview</h4>
-            <Radar data={radarData} />
-          </div>
+          <div className={styles.grid}>
+            {user?.role === "provider" ? (
+              <>
+                <div className={styles.card}>
+                  <h4>Quotation Acceptance Rate</h4>
+                  {data.pieChart ? (
+                    <Chart
+                      options={data.pieChart.options}
+                      series={data.pieChart.series}
+                      type="pie"
+                      height={250}
+                    />
+                  ) : (
+                    <p>No data available</p>
+                  )}
+                </div>
 
-          <div className={`${styles.card} ${styles.smallChart}`}>
-            <h4>Requested Services</h4>
-            <PolarArea data={polarData} />
-          </div>
+                <div className={styles.card}>
+                  <h4>Quotations Submitted Over Time</h4>
+                  {data.lineChart ? (
+                    <Chart
+                      options={data.lineChart.options}
+                      series={data.lineChart.series}
+                      type="line"
+                      height={300}
+                    />
+                  ) : (
+                    <p>No data available</p>
+                  )}
+                </div>
 
-          <div className={`${styles.card} ${styles.smallChart}`}>
-            <h4>Project Status</h4>
-            <Pie data={pieData} />
-          </div>
-        </div>
-        <div className={styles.card}>
-          <h4>Files Uploaded per Month</h4>
-          <Bar
-            data={stackedBarData}
-            options={{
-              responsive: true,
-              plugins: { legend: { position: "bottom" } },
-              scales: { x: { stacked: true }, y: { stacked: true } },
-            }}
-          />
-        </div>
+                <div className={styles.statsGrid}>
+                  {data.boxChart.map((stat, idx) => (
+                    <div className={styles.statCard} key={idx}>
+                      <div
+                        className={styles.statCircle}
+                        style={{ backgroundColor: stat.color }}
+                      ></div>
+                      <div>
+                        <h5>{stat.label}</h5>
+                        <p>{stat.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.card}>
+                  <h4>Projects Created Over Time</h4>
+                  {data.lineChart ? (
+                    <Chart
+                      options={data.lineChart.options}
+                      series={data.lineChart.series}
+                      type="line"
+                      height={300}
+                    />
+                  ) : (
+                    <p>No projects created data available</p>
+                  )}
+                </div>
 
-        <div className={styles.statsGrid}>
-          {stats.map((stat, idx) => (
-            <div className={styles.statCard} key={idx}>
-              <div
-                className={styles.statCircle}
-                style={{ backgroundColor: stat.color }}
-              ></div>
-              <div>
-                <h5>{stat.title}</h5>
-                <p>{stat.value}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
+                <div className={styles.card}>
+                  <h4>Project Status</h4>
+                  {data.pieChart ? (
+                    <Chart
+                      options={data.pieChart.options}
+                      series={data.pieChart.series}
+                      type="pie"
+                      height={250}
+                    />
+                  ) : (
+                    <p>No project status data available</p>
+                  )}
+                </div>
+
+                <div className={styles.card}>
+                  <h4>Request Stages</h4>
+                  {data.stageDonutChart ? (
+                    <Chart
+                      options={data.stageDonutChart.options}
+                      series={data.stageDonutChart.series}
+                      type="donut"
+                      height={250}
+                    />
+                  ) : (
+                    <p>No stage data</p>
+                  )}
+                </div>
+
+                <div className={styles.card}>
+                  <h4>Files Uploaded per Month</h4>
+                  {data.stackedFilesChart ? (
+                    <Chart
+                      options={data.stackedFilesChart.options}
+                      series={data.stackedFilesChart.series}
+                      type="bar"
+                      height={300}
+                    />
+                  ) : (
+                    <p>No file data available</p>
+                  )}
+                </div>
+
+                <div className={styles.statsGrid}>
+                  {data.boxChart.map((stat, idx) => (
+                    <div className={styles.statCard} key={idx}>
+                      <div
+                        className={styles.statCircle}
+                        style={{ backgroundColor: stat.color }}
+                      ></div>
+                      <div>
+                        <h5>{stat.label}</h5>
+                        <p>{stat.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </main>
+      )}
+    </>
   );
 };
 

@@ -22,7 +22,6 @@ const DocumentsForm = ({
   moveForward,
   moveBackward,
 }: DocumentsFormViewProps) => {
-  const [drilledInput, setDrilledInput] = useState<boolean>(false);
   const { role, type } = useFormStore();
 
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
@@ -43,10 +42,10 @@ const DocumentsForm = ({
           {data.form.slice(0, 2).map((field: FormField, index: number) => (
             <div key={index}>
               <FileInput
-                label={field.label}
-                // value={fieldValues[field.name]}
-                placeholder={field.placeholder}
                 name={field.name}
+                label={field.label}
+                value={fieldValues[field.name]}
+                placeholder={field.placeholder}
                 required={field.required || false}
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false)

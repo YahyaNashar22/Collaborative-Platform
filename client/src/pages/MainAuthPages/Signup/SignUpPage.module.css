@@ -1,4 +1,21 @@
 .wrapper {
-  /* height: 100vh; */
-  overflow: hidden;
+  padding-left: 5rem;
+}
+
+@media (max-width: 950px) {
+  .wrapper {
+    padding-left: 3rem;
+  }
+}
+
+@media (max-width: 780px) {
+  .wrapper {
+    padding-left: 1rem;
+  }
+}
+
+@media (max-width: 630px) {
+  .wrapper {
+    padding: 0;
+  }
 }

@@ -62,7 +62,6 @@ const LogInComponent = ({
     const hasError = onNextValidation();
     if (Object.keys(hasError).length > 0) return;
     onLogin(formValues);
-    console.log("Form submitted", formValues);
   };
 
   const onNextValidation = () => {

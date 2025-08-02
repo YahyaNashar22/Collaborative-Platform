@@ -26,7 +26,6 @@ const SimpleFormView = ({
 
   const onNext = () => {
     const hasError = validateStep(data.form);
-    console.log(hasError);
 
     if (Object.keys(hasError).length > 0) return;
 

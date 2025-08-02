@@ -7,7 +7,7 @@ interface OTPFormProps {
   moveBackward: () => void;
   onSubmit: (otpCode: string) => void;
   email: string;
-  errorMessage: string;
+  errorMessage?: string;
   isVerifying: boolean;
   isResetPassword?: boolean;
 }
@@ -65,10 +65,9 @@ const OTPForm: React.FC<OTPFormProps> = ({
 
     try {
       await sendOtp(email);
-      console.log("OTP resent");
       setTimeLeft(5 * 60);
     } catch (err) {
-      console.error("Error resending OTP:", err);
+      toast.error(error?.response?.data?.message || "Error Resending OTP!");
     }
   };
 

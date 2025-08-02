@@ -1,20 +1,27 @@
 import { useEffect, useMemo, useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Services.module.css";
-import Cards from "../Cards/Cards";
 import useDebounceSearch from "../../../hooks/useDebounceSearch";
 import LibButton from "../../../libs/common/lib-button/LibButton";
-import { getAllServices } from "../../../services/ServiceServices";
-import ServiceCardSkeleton from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
+import {
+  createService,
+  deleteService,
+  getAllServices,
+} from "../../../services/ServiceServices";
+import ServiceCardSkeleton from "../../../shared/ServiceSkeletonLoading/ServiceSkeletonLoading";
 import ServiceForm from "./components/ServiceForm";
 import authStore from "../../../store/AuthStore";
 import { Service } from "../../../interfaces/service";
+import ServiceCards from "../ServiceCards/ServiceCards";
+import { toast } from "react-toastify";
 
 const Services = () => {
   const [searchValue, setSearchValue] = useState("");
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [step, setStep] = useState(0);
+  const [serviceError, setServiceError] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
 
   const { user } = authStore();
@@ -23,8 +30,38 @@ const Services = () => {
     setSearchValue(value);
   };
 
-  const handleCardClick = (id: string) => {
-    console.log("Card clicked with id:", id);
+  const handleDeleteService = async (id: string) => {
+    setLoading(true);
+    try {
+      await deleteService(id);
+      setServices((prevServices) =>
+        prevServices.filter((service) => service._id !== id)
+      );
+      setServiceError("");
+    } catch (error) {
+      toast.error("Problem While Deleting Service");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCreateService = async (serviceData: {
+    name: string;
+    description: string;
+  }) => {
+    setLoading(true);
+    try {
+      setStep(0);
+      const result = await createService(serviceData);
+      setServices((prevServices) => [result, ...prevServices]);
+    } catch (error) {
+      setServiceError(
+        error?.response?.data?.message || "Error with creating service"
+      );
+      toast.error("Problem While Deleting Service");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchServices = async () => {
@@ -33,7 +70,7 @@ const Services = () => {
       const result = await getAllServices();
       setServices(result);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -51,6 +88,20 @@ const Services = () => {
         service.description?.toLowerCase().includes(search)
     );
   }, [debouncedSearchValue, services]);
+
+  useEffect(() => {
+    if (debouncedSearchValue.trim() !== "") {
+      setSearchLoading(true);
+
+      const timer = setTimeout(() => {
+        setSearchLoading(false);
+      }, 300);
+
+      return () => clearTimeout(timer);
+    } else {
+      setSearchLoading(false);
+    }
+  }, [debouncedSearchValue]);
 
   return (
     <>
@@ -81,15 +132,22 @@ const Services = () => {
               )}
             </div>
             <div className={styles.content}>
-              <Cards data={filteredData} onCardClick={handleCardClick} />
-              {loading && <ServiceCardSkeleton />}
+              {loading || (searchLoading && searchValue.trim() !== "") ? (
+                <ServiceCardSkeleton />
+              ) : (
+                <ServiceCards
+                  data={filteredData}
+                  onDelete={handleDeleteService}
+                />
+              )}
             </div>
           </>
         )}
         {step === 1 && (
           <ServiceForm
             onBack={() => setStep(0)}
-            emitCreateService={() => setStep(0)}
+            emitCreateService={handleCreateService}
+            error={serviceError}
           />
         )}
       </main>

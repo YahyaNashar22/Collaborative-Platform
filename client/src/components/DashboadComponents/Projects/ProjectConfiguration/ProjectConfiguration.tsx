@@ -11,6 +11,8 @@ import PhasesSkeletonLoading from "../../../../shared/PhasesSkeletonLoading/Phas
 import { toast } from "react-toastify";
 import {
   createStage,
+  requestFiles,
+  requestMeeting,
   setStageComplete,
   updateStages,
   uploadFile,
@@ -18,22 +20,24 @@ import {
 import { User } from "../../../../interfaces/User";
 
 type ProjectConfigurationProps = {
-  onClickNode: (id: string) => void;
+  // onClickNode: (id: string) => void;
   projectData: Project;
   userData: User | null;
-  updateStage: (
-    stageId: string,
-    projectId: string,
-    updatedData: { [key: string]: string | Date }
-  ) => void;
+  onBack: () => void;
+  // updateStage: (
+  //   stageId: string,
+  //   projectId: string,
+  //   updatedData: { [key: string]: string | Date }
+  // ) => void;
 };
 
 type NodeId = "timeline" | "files" | "quotation";
 
 const ProjectConfiguration = ({
-  onClickNode,
+  // onClickNode,
   projectData,
-  updateStage,
+  onBack,
+  // updateStage,
   userData,
 }: ProjectConfigurationProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -49,6 +53,14 @@ const ProjectConfiguration = ({
   const [deleteWindow, setDeleteWindow] = useState(false);
   const [saveWindow, setSaveWindow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [requestFileWindow, setRequestFileWindow] = useState<boolean>(false);
+  const [requestMeetingWindow, setRequestMeetingWindow] =
+    useState<boolean>(false);
+  const [requestMeetingData, setRequestMeetingData] = useState("");
+  const [requestFileData, setRequestFileData] = useState<{
+    title: string;
+    description: string;
+  }>({ title: "", description: "" });
   const [phases, setPhases] = useState(
     projectData.stages.map((stage) => ({
       _id: stage._id,
@@ -64,7 +76,7 @@ const ProjectConfiguration = ({
 
   const handleSelect = (id: NodeId) => {
     setSelected(id);
-    onClickNode(id);
+    // onClickNode(id);
   };
 
   const handleCreatePhase = async () => {
@@ -89,24 +101,24 @@ const ProjectConfiguration = ({
         }
       }, 0);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error with Creation!");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const getPhaseColor = (to: string): string => {
-    if (!to) return "#fff";
+  // const getPhaseColor = (to: string): string => {
+  //   if (!to) return "#fff";
 
-    const now = dayjs();
-    const deadline = dayjs(to);
-    const diff = deadline.diff(now, "day");
+  //   const now = dayjs();
+  //   const deadline = dayjs(to);
+  //   const diff = deadline.diff(now, "day");
 
-    if (diff < 0) return "#ffe6e6";
-    if (diff <= 3) return "#fff3cd";
-    if (diff <= 7) return "#e0f7fa";
-    return "#f4f4f4";
-  };
+  //   if (diff < 0) return "#ffe6e6";
+  //   if (diff <= 3) return "#fff3cd";
+  //   if (diff <= 7) return "#e0f7fa";
+  //   return "#f4f4f4";
+  // };
 
   const handleChange = (
     value: string | Date | boolean,
@@ -128,11 +140,10 @@ const ProjectConfiguration = ({
     setIsLoading(true);
     try {
       const result = await setStageComplete(projectData._id, phases[index]._id);
-      console.log(result);
       // add it manually on the front end
       setPhases(result);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setIsLoading(false);
     }
@@ -142,13 +153,11 @@ const ProjectConfiguration = ({
     setIsLoading(true);
     try {
       const result = await updateStages(projectData._id, phases);
-      console.log(result);
       // update manualy
       setPhases(result);
       projectData.assignedStage = true;
       setSaveWindow(false);
     } catch (error) {
-      console.error(error);
       toast.error("Error With update!");
     } finally {
       setIsLoading(false);
@@ -157,7 +166,6 @@ const ProjectConfiguration = ({
 
   const handleDeleteStage = () => {
     setIsLoading(true);
-    console.log(phases, selectedStage);
     setPhases((prev) => prev.filter((_, index) => index !== selectedStage));
     setDeleteWindow(false);
     setTimeout(() => {
@@ -169,7 +177,6 @@ const ProjectConfiguration = ({
     userData?.role !== "provider" || projectData.assignedStage === true;
 
   const handleUploadFile = async (file: File, stageId: string) => {
-    console.log(stageId);
     if (!file) return;
     try {
       const result = await uploadFile(projectData._id, stageId, file);
@@ -189,58 +196,100 @@ const ProjectConfiguration = ({
 
       toast.success("File uploaded successfully.");
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
-  return (
-    <div className={styles.wrapper}>
-      <header className={`${styles.subNavbar} d-f `}>
-        {nodes.map(({ id, title }, index: number) => (
-          <>
-            <div
-              key={index}
-              className={`${styles.node} ${
-                selected === id ? styles.selected : ""
-              } d-f f-dir-col align-center justify-center pointer`}
-              onClick={() => handleSelect(id)}
-            >
-              <div
-                className={`${styles.step}  d-f align-center justify-center`}
-              >
-                {index + 1}
-              </div>
-              <div className={styles.title}>{title}</div>
-            </div>
-            {index + 1 !== nodes.length && <div className={styles.line}></div>}
-          </>
-        ))}
-      </header>
-      {/* timeline view */}
-      <main className={styles.content}>
-        {selected === "timeline" && (
-          <div className={`${styles.timelineContainer} d-f f-dir-col`}>
-            {!viewer && (
-              <div className={styles.addBtn}>
-                <LibButton
-                  label="+ Add Phase"
-                  onSubmit={handleCreatePhase}
-                  backgroundColor="transparent"
-                  color="#6550b4"
-                  bold={true}
-                  hoverColor="#563db11c"
-                />
-              </div>
-            )}
 
-            <div
-              className={`${styles.phasesWrapper} d-f f-dir-col gap-1`}
-              ref={contentRef}
-            >
-              {isLoading
-                ? Array(3)
-                    .fill(0)
-                    .map((_, idx) => <PhasesSkeletonLoading key={idx} />)
-                : phases.map((phase, i: number) => (
+  const handleRequestFile = async () => {
+    if (!requestFileData.title.trim()) {
+      toast.error("Title is required to send a file request.");
+      return;
+    }
+
+    try {
+      const result = await requestFiles(projectData._id, requestFileData);
+      toast.success("File request sent successfully.");
+      setRequestFileWindow(false);
+      setRequestFileData({ title: "", description: "" });
+    } catch (error) {
+      toast.error("Failed to send file request.");
+    }
+  };
+
+  const handleRequestMeeting = async () => {
+    if (!requestMeetingData.trim()) {
+      toast.error("Meeting url is required to send a meeting request.");
+      return;
+    }
+
+    try {
+      await requestMeeting(projectData._id, requestMeetingData);
+      toast.success("Meeting request sent successfully.");
+      setRequestMeetingWindow(false);
+      setRequestMeetingData("");
+    } catch (error) {
+      toast.error("Failed to send Meeting request.");
+    }
+  };
+
+  return (
+    <>
+      <div className={styles.wrapper}>
+        <div
+          className={`${styles.backWrapper} d-f align-center pointer`}
+          onClick={onBack}
+        >
+          <span className={styles.backArrow}>←</span>
+          <span className={styles.backText}>Back</span>
+        </div>
+        <header className={`${styles.subNavbar} d-f `}>
+          {nodes.map(({ id, title }, index: number) => (
+            <>
+              <div
+                key={index}
+                className={`${styles.node} ${
+                  selected === id ? styles.selected : ""
+                } d-f f-dir-col align-center justify-center pointer`}
+                onClick={() => handleSelect(id)}
+              >
+                <div
+                  className={`${styles.step}  d-f align-center justify-center`}
+                >
+                  {index + 1}
+                </div>
+                <div className={styles.title}>{title}</div>
+              </div>
+              {index + 1 !== nodes.length && (
+                <div className={styles.line}></div>
+              )}
+            </>
+          ))}
+        </header>
+        {/* timeline view */}
+        <main className={styles.content}>
+          {selected === "timeline" && (
+            <div className={`${styles.timelineContainer} d-f f-dir-col`}>
+              {!viewer && (
+                <div className={styles.addBtn}>
+                  <LibButton
+                    label="+ Add Phase"
+                    onSubmit={handleCreatePhase}
+                    backgroundColor="transparent"
+                    color="#6550b4"
+                    bold={true}
+                    hoverColor="#563db11c"
+                  />
+                </div>
+              )}
+
+              <div
+                className={`${styles.phasesWrapper} d-f f-dir-col gap-1`}
+                ref={contentRef}
+              >
+                {isLoading ? (
+                  <PhasesSkeletonLoading />
+                ) : (
+                  phases.map((phase, i: number) => (
                     <div key={phase._id} className={styles.phaseCard}>
                       <div className="d-f align-center justify-between">
                         <h4>{phase.name}</h4>
@@ -363,97 +412,98 @@ const ProjectConfiguration = ({
                         )}
                       </div>
                     </div>
-                  ))}
-            </div>
+                  ))
+                )}
+              </div>
 
-            <div className={`${styles.buttons} d-f align-center justify-end`}>
-              {!viewer && (
-                <LibButton
-                  label="Save"
-                  disabled={viewer}
-                  onSubmit={() => {
-                    setSaveWindow(true);
-                  }}
-                  backgroundColor="#825beb"
-                  hoverColor="#6c46d9"
-                  padding="0"
-                />
-              )}
-              {userData?.role !== "admin" && (
-                <LibButton
-                  label="Request Meeting"
-                  onSubmit={console.log}
-                  backgroundColor="#57417e"
-                  hoverColor="#49356a"
-                  padding="0 20px"
-                />
-              )}
+              <div className={`${styles.buttons} d-f align-center justify-end`}>
+                {!viewer && (
+                  <LibButton
+                    label="Save"
+                    disabled={viewer}
+                    onSubmit={() => {
+                      setSaveWindow(true);
+                    }}
+                    backgroundColor="#825beb"
+                    hoverColor="#6c46d9"
+                    padding="0"
+                  />
+                )}
+                {userData?.role !== "admin" && (
+                  <LibButton
+                    label="Request Meeting"
+                    onSubmit={() => setRequestMeetingWindow(true)}
+                    backgroundColor="#57417e"
+                    hoverColor="#49356a"
+                    padding="0 20px"
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        )}
-        {/* files view */}
-        {selected === "files" && (
-          <div className={`${styles.filesContainer} d-f f-dir-col`}>
-            {phases.map((phase, index: number) => (
-              <FileDrop
-                key={index}
-                phase={phase}
-                userRole={userData?.role}
-                assignedStages={projectData.assignedStage}
-                isUploadedFiles={phase.isUploadedFiles}
-                onFileChange={(file) =>
-                  console.log("File selected for Phase", phase._id, file)
-                }
-                onUpload={(file, stageId) => handleUploadFile(file, stageId)}
-                onRequest={(id) => console.log("Requesting file for Phase", id)}
-              />
-            ))}
-          </div>
-        )}
+          )}
+          {/* files view */}
+          {selected === "files" && (
+            <div className={`${styles.filesContainer} d-f f-dir-col`}>
+              {phases.map((phase, index: number) => (
+                <FileDrop
+                  key={index}
+                  phase={phase}
+                  userRole={userData?.role as string}
+                  assignedStages={projectData.assignedStage}
+                  // isUploadedFiles={phase.isUploadedFiles}
 
-        {/* quotation view */}
-        {selected === "quotation" && (
-          <div className={styles.quotationContainer}>
-            <div className={styles.dataGroup}>
-              <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Project Title</span>
-                <div className={styles.dataValue}>{projectData?.title}</div>
-              </div>
-              <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Project Description</span>
-                <div className={styles.dataValue}>
-                  {projectData.description || "No Description"}
+                  onUpload={(file, stageId) => handleUploadFile(file, stageId)}
+                  onRequest={() => setRequestFileWindow(true)}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* quotation view */}
+          {selected === "quotation" && (
+            <div className={styles.quotationContainer}>
+              <div className={styles.dataGroup}>
+                <div className={styles.dataItem}>
+                  <span className={styles.dataLabel}>Project Title</span>
+                  <div className={styles.dataValue}>{projectData?.title}</div>
                 </div>
-              </div>
-              <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Project Deadline</span>
-                <div className={styles.dataValue}>
-                  {
-                    new Date(projectData?.projectDeadline)
-                      .toISOString()
-                      .split("T")[0]
-                  }
+                <div className={styles.dataItem}>
+                  <span className={styles.dataLabel}>Project Description</span>
+                  <div className={styles.dataValue}>
+                    {projectData.description || "No Description"}
+                  </div>
                 </div>
-              </div>
-              <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Estimated Deadline</span>
-                <div className={styles.dataValue}>
-                  {
-                    new Date(projectData?.projectEstimatedDeadline)
-                      .toISOString()
-                      .split("T")[0]
-                  }
+                <div className={styles.dataItem}>
+                  <span className={styles.dataLabel}>Project Deadline</span>
+                  <div className={styles.dataValue}>
+                    {
+                      new Date(projectData?.projectDeadline)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                  </div>
                 </div>
-              </div>
-              {/* <div className={styles.dataItem}>
+                <div className={styles.dataItem}>
+                  <span className={styles.dataLabel}>Estimated Deadline</span>
+                  <div className={styles.dataValue}>
+                    {
+                      new Date(projectData?.projectEstimatedDeadline)
+                        .toISOString()
+                        .split("T")[0]
+                    }
+                  </div>
+                </div>
+                {/* <div className={styles.dataItem}>
                 <span className={styles.dataLabel}>Service</span>
                 <div className={styles.dataValue}>UI/UX Design</div>
               </div> */}
-              <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Project Cost</span>
-                <div className={styles.dataValue}>{projectData?.amount} $</div>
-              </div>
-              {/* <div className={styles.dataItem}>
+                <div className={styles.dataItem}>
+                  <span className={styles.dataLabel}>Project Cost</span>
+                  <div className={styles.dataValue}>
+                    {projectData?.amount} $
+                  </div>
+                </div>
+                {/* <div className={styles.dataItem}>
                 <span className={styles.dataLabel}>Attached File</span>
                 <div className={styles.dataValue}>
                   <a href="#" className={styles.fileLink}>
@@ -461,72 +511,162 @@ const ProjectConfiguration = ({
                   </a>
                 </div>
               </div> */}
+              </div>
+            </div>
+          )}
+        </main>
+
+        {deleteWindow && (
+          <Window
+            title="Delete Stage"
+            visible={deleteWindow}
+            onClose={() => setDeleteWindow(false)}
+            isErrorWindow="true"
+          >
+            <small className="mb-1 d-b">
+              are you sure do you want to delete this stage ?
+            </small>
+            <div className={`${styles.btns} d-f align-center justify-between`}>
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setDeleteWindow(false)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Confirm"
+                onSubmit={handleDeleteStage}
+                bold={true}
+                padding="0"
+                backgroundColor="#e53935"
+                hoverColor="#c62828"
+              />
+            </div>
+          </Window>
+        )}
+        {saveWindow && (
+          <Window
+            title="Save Stage"
+            visible={saveWindow}
+            onClose={() => setSaveWindow(false)}
+            isErrorWindow="true"
+          >
+            <small className="mb-1 d-b">
+              are you sure do you want to Save these stages ?
+            </small>
+            <div className={`${styles.btns} d-f align-center justify-between`}>
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setSaveWindow(false)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Confirm"
+                onSubmit={handleSavePhases}
+                bold={true}
+                padding="0"
+              />
+            </div>
+          </Window>
+        )}
+      </div>
+      {requestFileWindow && (
+        <Window
+          title="Request Files"
+          visible={requestFileWindow}
+          onClose={() => setRequestFileWindow(false)}
+        >
+          <div className="d-f f-dir-col gap-1">
+            <TextInput
+              name="title"
+              label="Title"
+              type="text"
+              placeholder="Enter a title for the file request"
+              value={requestFileData.title}
+              required={true}
+              onChange={(value: string) =>
+                setRequestFileData((prev) => ({ ...prev, title: value }))
+              }
+            />
+            <TextInput
+              name="description"
+              label="Description"
+              type="text"
+              placeholder="Enter description"
+              value={requestFileData.description}
+              required={true}
+              onChange={(value: string) =>
+                setRequestFileData((prev) => ({ ...prev, description: value }))
+              }
+            />
+
+            <div className="d-f align-center justify-between mt-1">
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setRequestFileWindow(false)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Send Request"
+                onSubmit={handleRequestFile}
+                bold={true}
+                backgroundColor="#825beb"
+                hoverColor="#6c46d9"
+              />
             </div>
           </div>
-        )}
-      </main>
+        </Window>
+      )}
+      {requestMeetingWindow && (
+        <Window
+          title="Request Meeting"
+          visible={requestMeetingWindow}
+          onClose={() => setRequestMeetingWindow(false)}
+        >
+          <div className="d-f f-dir-col gap-1">
+            <TextInput
+              name="meeting"
+              label="Meeting Link"
+              type="url"
+              placeholder="Enter meeting link"
+              value={requestMeetingData}
+              required={true}
+              onChange={(value: string) => setRequestMeetingData(value)}
+            />
 
-      {deleteWindow && (
-        <Window
-          title="Delete Stage"
-          visible={deleteWindow}
-          onClose={() => setDeleteWindow(false)}
-          isErrorWindow="true"
-        >
-          <small className="mb-1 d-b">
-            are you sure do you want to delete this stage ?
-          </small>
-          <div className={`${styles.btns} d-f align-center justify-between`}>
-            <LibButton
-              label="Cancel"
-              onSubmit={() => setDeleteWindow(false)}
-              bold={true}
-              padding="0"
-              outlined
-              color="var(--deep-purple)"
-              hoverColor="#8563c326"
-            />
-            <LibButton
-              label="Confirm"
-              onSubmit={handleDeleteStage}
-              bold={true}
-              padding="0"
-              backgroundColor="#e53935"
-              hoverColor="#c62828"
-            />
+            <div className="d-f align-center justify-between mt-1">
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setRequestMeetingWindow(false)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Send Request"
+                onSubmit={handleRequestMeeting}
+                bold={true}
+                backgroundColor="#825beb"
+                hoverColor="#6c46d9"
+              />
+            </div>
           </div>
         </Window>
       )}
-      {saveWindow && (
-        <Window
-          title="Save Stage"
-          visible={saveWindow}
-          onClose={() => setSaveWindow(false)}
-          isErrorWindow="true"
-        >
-          <small className="mb-1 d-b">
-            are you sure do you want to Save these stages ?
-          </small>
-          <div className={`${styles.btns} d-f align-center justify-between`}>
-            <LibButton
-              label="Cancel"
-              onSubmit={() => setSaveWindow(false)}
-              bold={true}
-              padding="0"
-              outlined
-              color="var(--deep-purple)"
-              hoverColor="#8563c326"
-            />
-            <LibButton
-              label="Confirm"
-              onSubmit={handleSavePhases}
-              bold={true}
-              padding="0"
-            />
-          </div>
-        </Window>
-      )}
-    </div>
+    </>
   );
 };
 export default ProjectConfiguration;

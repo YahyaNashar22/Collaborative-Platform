@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 export const downloadFile = async (fileName: string): Promise<void> => {
   try {
-    const fileUrl = `${import.meta.env.VITE_BACKEND_URL}uploads/${fileName}`;
+    const fileUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${fileName}`;
 
     const res = await fetch(fileUrl, {
       method: "GET",
@@ -24,7 +24,6 @@ export const downloadFile = async (fileName: string): Promise<void> => {
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   } catch (error) {
-    console.error("File download failed:", error);
     toast.error("Unable to download the file.");
   }
 };

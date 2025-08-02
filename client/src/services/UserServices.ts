@@ -39,16 +39,14 @@ export const signUpCompanyClient = async (payload: { [key: string]: any }) => {
       formData.append(key, value);
     }
   }
-
-  console.log(formData);
-
   const response = await axios.post(url, formData, {
+    withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
 
-  return response.data.payload;
+  return response.data.payload.payload;
 };
 
 export const signUpProvider = async (payload: { [key: string]: any }) => {
@@ -70,6 +68,7 @@ export const signUpProvider = async (payload: { [key: string]: any }) => {
   }
 
   const response = await axios.post(url, formData, {
+    withCredentials: true,
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -113,14 +112,37 @@ export const updateProfileData = async (
   return response.data;
 };
 
-export const changePassword = async (
-  userId: string,
-  payload: { [key: string]: string }
-) => {
+export const changePassword = async (payload: { [key: string]: string }) => {
   const result = await axiosInstance.patch(
-    `${AuthBaseURL}/change-password/${userId}`,
+    `${AuthBaseURL}/change-password`,
     payload
   );
 
   return result.data.payload;
+};
+
+export const getALlUsers = async () => {
+  const result = await axiosInstance.post(`${AuthBaseURL}/get-all`);
+  return result.data.payload;
+};
+
+export const changeUserBannedStatus = async (
+  userId: string,
+  isBanned: boolean
+) => {
+  const result = await axiosInstance.patch(`${AuthBaseURL}/ban/${userId}`, {
+    banned: isBanned,
+  });
+  return result.data.payload;
+};
+
+export const resetPassword = async (payload: {
+  email: string;
+  password: string;
+}) => {
+  const result = await axiosInstance.patch(
+    `${AuthBaseURL}/reset-password`,
+    payload
+  );
+  return result.data;
 };

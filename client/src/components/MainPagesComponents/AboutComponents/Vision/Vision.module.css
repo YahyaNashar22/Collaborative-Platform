@@ -118,3 +118,91 @@
   font-weight: 500;
   letter-spacing: 1rem;
 }
+
+@media (max-width: 1024px) {
+  .wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+    padding: 0.5rem;
+    margin-top: 0;
+  }
+
+  .left {
+    flex-direction: row;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .right {
+    width: 100%;
+    border-left: none;
+    padding-left: 0;
+    align-items: flex-start;
+  }
+
+  .block::before {
+    display: none;
+  }
+
+  .consultingText {
+    writing-mode: horizontal-tb;
+    font-size: 2.5rem;
+    letter-spacing: 0.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .leftText {
+    font-size: 1.5rem;
+    line-height: 1.8rem;
+    text-align: center;
+  }
+
+  .left {
+    align-items: center;
+  }
+
+  .right {
+    row-gap: 30px;
+  }
+
+  .blockTitle {
+    font-size: 1.2rem;
+  }
+
+  .blockText {
+    font-size: 0.95rem;
+  }
+
+  .consultingText {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .left {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .leftText {
+    font-size: 1.3rem;
+  }
+
+  .logoContainer {
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+  }
+
+  .blockText {
+    font-size: 0.9rem;
+  }
+
+  .consultingText {
+    font-size: 1.5rem;
+    letter-spacing: 0.3rem;
+  }
+}

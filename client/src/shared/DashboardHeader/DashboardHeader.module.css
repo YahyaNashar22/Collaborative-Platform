@@ -129,5 +129,167 @@
 }
 
 .whiteHome span {
-  color: v#fff;
+  color: #fff;
+}
+
+@media (max-width: 800px) {
+  .mainLogo {
+    filter: brightness(0) saturate(100%) invert(24%) sepia(24%) saturate(1866%)
+      hue-rotate(222deg) brightness(150%) contrast(86%);
+  }
+}
+
+@media (max-width: 1028px) {
+  .navLinks {
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 948px) {
+  .navLinks {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .wrapper {
+    gap: 9.5rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .wrapper {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 400px) {
+  .wrapper {
+    padding: 0.5rem;
+  }
+}
+
+.hamburger {
+  display: none;
+}
+
+.line {
+  height: 5px;
+  background-color: var(--deep-purple);
+  border-radius: 2px;
+}
+
+.top,
+.bottom {
+  width: 60%;
+}
+
+.middle {
+  width: 100%;
+  align-self: flex-end;
+}
+
+.bottom {
+  align-self: end;
+}
+
+.backdrop {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  transition: 0.3s;
+}
+
+@media (max-width: 700px) {
+  .navLink:last-of-type {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 1rem;
+  }
+  .navLinks .navLink:not(:last-of-type) {
+    display: none !important;
+  }
+
+  .hamburger {
+    width: 40px;
+    height: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+
+  .mobileSidePanel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70%;
+    height: 100vh;
+    background-color: #fff;
+    z-index: 9999;
+    padding: 1rem;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.3s ease-in-out forwards;
+  }
+
+  .mobilePanelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .mobileLogo {
+    height: 40px;
+    cursor: pointer;
+  }
+
+  .closeButton {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .mobileNavLinks {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .mobileNavLinks li a {
+    color: var(--deep-purple);
+    font-size: 1rem;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .mobileSignOut {
+    color: var(--error);
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0%);
+    }
+  }
 }

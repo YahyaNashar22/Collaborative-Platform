@@ -85,7 +85,7 @@ const Requests = () => {
       );
       setRequests(result);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -128,7 +128,6 @@ const Requests = () => {
   const fetchProviders = async (requestId: string) => {
     setLoadingProviders(true);
     try {
-      console.log(requestsMap[requestId]);
       const result = await getAllUnassignedProvider(
         requestId,
         requestsMap[requestId].serviceId
@@ -136,7 +135,7 @@ const Requests = () => {
 
       setProviders(result);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoadingProviders(false);
     }
@@ -155,7 +154,6 @@ const Requests = () => {
         providerIds,
         requestId: assignedRequest as string,
       };
-      console.log(payload);
 
       const result = await assignToProvider(payload);
       if (result && assignedRequest) {
@@ -166,7 +164,7 @@ const Requests = () => {
         );
       }
     } catch (error) {
-      console.error("Failed to assign providers:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -192,7 +190,7 @@ const Requests = () => {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -208,7 +206,7 @@ const Requests = () => {
         toast.info(error?.response?.data?.message);
         setIsShowAllProposals(false);
       }
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
 
@@ -222,7 +220,6 @@ const Requests = () => {
     // to show the skeleton loading so it cast like i refatch the data
     setIsCreateProposalStep(false);
     setLoading(true);
-    console.log(requestsMap[assignedRequest], "before");
     try {
       const payload: { [key: string]: string | File } = {
         providerId: user?._id as string,
@@ -271,7 +268,7 @@ const Requests = () => {
 
       setRequests((prev) => [...prev, configureResult]);
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -294,7 +291,7 @@ const Requests = () => {
       requestsMap[requestId].selectedQuotation = quotationId;
       requestsMap[requestId].status = "accepted";
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -311,7 +308,7 @@ const Requests = () => {
       requestsMap[canceldRequestId].stage = 4;
       requestsMap[canceldRequestId].status = "canceled";
     } catch (error) {
-      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     } finally {
       setIsCancelRequestWindow(false);
     }
@@ -367,19 +364,25 @@ const Requests = () => {
                 />
               )}
             </div>
-            {(loading || isFiltering) && <ServiceCardSkeletonGrid />}
-
-            <div className={styles.content}>
-              <Cards
-                data={filteredRequests}
-                userData={user ?? user}
-                onShowDetails={handleShowDetails}
-                onShowProposals={handleShowProposals}
-                onAssignRequest={handleAssignRequest}
-                onSubmitProposal={handleSubmitProposal}
-                onCancelRequestByClient={handleClickCancelRequestButton}
-              />
-            </div>
+            {loading || isFiltering ? (
+              <ServiceCardSkeletonGrid />
+            ) : (
+              <div className={styles.content}>
+                {filteredRequests.length > 0 ? (
+                  <Cards
+                    data={filteredRequests}
+                    userData={user ?? user}
+                    onShowDetails={handleShowDetails}
+                    onShowProposals={handleShowProposals}
+                    onAssignRequest={handleAssignRequest}
+                    onSubmitProposal={handleSubmitProposal}
+                    onCancelRequestByClient={handleClickCancelRequestButton}
+                  />
+                ) : (
+                  <div className="empty-data">No Data!</div>
+                )}
+              </div>
+            )}
           </>
         )}
 
@@ -437,7 +440,7 @@ const Requests = () => {
           isErrorWindow="true"
         >
           <small>
-            are you sure do you want to delete
+            are you sure do you want to delete {""}
             {requestsMap[canceldRequestId].title} ?
           </small>
           <div className={`${styles.btns} d-f align-center justify-between`}>

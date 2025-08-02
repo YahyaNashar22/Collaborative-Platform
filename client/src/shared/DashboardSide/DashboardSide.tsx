@@ -5,6 +5,7 @@ import Window from "../../libs/common/lib-window/Window";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import authStore from "../../store/AuthStore";
 import { signOut } from "../../services/UserServices";
+import { toast } from "react-toastify";
 
 const DashboardSide = () => {
   const navigate = useNavigate();
@@ -23,7 +24,7 @@ const DashboardSide = () => {
         navigate("/");
       }
     } catch (error) {
-      console.error("Logout failed:", error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
 

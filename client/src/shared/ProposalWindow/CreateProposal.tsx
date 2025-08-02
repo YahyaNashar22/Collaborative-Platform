@@ -54,7 +54,6 @@ const CreateProposal = ({
 
     // No errors
     setFormErrors({});
-    console.log(proposalForm);
     onCreateProposal(proposalForm);
     resetStates();
   };

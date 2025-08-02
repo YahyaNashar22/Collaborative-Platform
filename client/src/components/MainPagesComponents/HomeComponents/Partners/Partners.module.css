@@ -8,3 +8,9 @@
   font-size: 40px;
   letter-spacing: 2px;
 }
+
+@media (max-width: 500px) {
+  .wrapper {
+    margin-top: 20px;
+  }
+}

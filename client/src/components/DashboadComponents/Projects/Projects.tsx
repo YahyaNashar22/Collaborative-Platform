@@ -6,6 +6,7 @@ import { getAllProjects } from "../../../services/ProjectServices";
 import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
 import ProjectCards from "../ProjectCards/ProjectCards";
 import authStore from "../../../store/AuthStore";
+import CardSkeletonLoading from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -21,12 +22,7 @@ const Projects = () => {
   };
 
   const onStartProjectConfiguration = (index: number) => {
-    console.log(index);
     setOpenProject(index);
-  };
-
-  const toggleView = (id: string) => {
-    console.log(id);
   };
 
   const fetchProjects = async () => {
@@ -51,7 +47,6 @@ const Projects = () => {
   // Filter projects when search changes
   useEffect(() => {
     if (!searchValue) {
-      console.log(projects);
       setFilteredProjects(projects);
       return;
     }
@@ -72,28 +67,29 @@ const Projects = () => {
     }, 300);
   }, [searchValue, projects]);
 
-  const handleUpdateStage = async (
-    stageId: string,
-    projectId: string,
-    updateData: { [key: string]: string | Date }
-  ) => {
-    try {
-      const result = await updateStage(projectId, stageId, updateData);
-      console.log(result);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleUpdateStage = async (
+  //   stageId: string,
+  //   projectId: string,
+  //   updateData: { [key: string]: string | Date }
+  // ) => {
+  //   try {
+  //     const result = await updateStage(projectId, stageId, updateData);
+  //     console.log(result);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <>
       {openPoject !== null ? (
         <div className={`w-100 ${styles.projectContainer}`}>
           <ProjectConfiguration
-            onClickNode={toggleView}
+            // onClickNode={toggleView}
             projectData={projects[openPoject]}
-            updateStage={handleUpdateStage}
+            // updateStage={handleUpdateStage}
             userData={user}
+            onBack={() => setOpenProject(null)}
           />
         </div>
       ) : (
@@ -109,31 +105,22 @@ const Projects = () => {
               onChange={handleSearch}
             />
           </div>
-          {/* <div className={`${styles.buttons} d-f align-center justify-end`}>
-            <LibButton
-              label="Back"
-              onSubmit={console.log}
-              backgroundColor="#57417e"
-              hoverColor="#49356a"
-              padding="0 20px"
-            />
-            <LibButton
-              label="Submit"
-              onSubmit={console.log}
-              backgroundColor="#825beb"
-              hoverColor="#6c46d9"
-              padding="0 20px"
-            />
-          </div> */}
+
           {isLoading || isFiltering ? (
-            <ServiceCardSkeletonGrid />
+            <CardSkeletonLoading />
           ) : (
-            <div className={styles.content}>
-              <ProjectCards
-                data={filteredProjects}
-                onCardClick={onStartProjectConfiguration}
-              />
-            </div>
+            <>
+              {filteredProjects.length > 0 ? (
+                <div className={styles.content}>
+                  <ProjectCards
+                    data={filteredProjects}
+                    onCardClick={onStartProjectConfiguration}
+                  />
+                </div>
+              ) : (
+                <div className="empty-data">No Data!</div>
+              )}
+            </>
           )}
         </main>
       )}

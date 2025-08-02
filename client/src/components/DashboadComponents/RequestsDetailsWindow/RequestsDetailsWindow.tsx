@@ -10,7 +10,6 @@ type Props = {
 const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
   let client;
   if (isAdmin) client = request?.client[0];
-  console.log(request);
 
   return (
     <div className={styles.scrollable}>

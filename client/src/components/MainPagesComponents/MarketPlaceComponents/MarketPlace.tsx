@@ -150,7 +150,6 @@ const MarketPlace = () => {
     const selectedItem = serviceProviders.find((service) => service.id === id);
     if (!selectedItem) return;
     setOpenWindow(selectedItem);
-    console.log(selectedItem);
   };
 
   return (
@@ -191,7 +190,7 @@ const MarketPlace = () => {
             />
           </div>
 
-          <div className={`${styles.servicesContainer} d-f f-wrap`}>
+          <div className={`${styles.servicesContainer}`}>
             {serviceProviders
               .filter(
                 (service) =>

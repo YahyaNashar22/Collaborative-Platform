@@ -50,7 +50,7 @@
 }
 
 .content {
-  margin: 1rem 0;
+  margin: 0.2rem 0;
 }
 /* 
 .phasesWrapper,
@@ -65,7 +65,7 @@
 
 .timelineContainer,
 .filesContainer {
-  gap: 1.5rem;
+  gap: 0.5rem;
 }
 
 .phaseCard {
@@ -201,4 +201,21 @@
   background-color: #28a745;
   color: white;
   box-shadow: 0 2px 6px rgba(40, 167, 69, 0.6);
+}
+
+.backWrapper {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #a9abae;
+  width: fit-content;
+  transition: color 0.2s ease;
+}
+
+.backWrapper:hover {
+  color: #563db1;
+}
+
+.backArrow {
+  margin-right: 0.1rem;
+  font-size: 1.2rem;
 }

@@ -7,8 +7,6 @@ import { useAuth } from "../../hooks/useAuth";
 const MainLayout = () => {
   const { user } = useAuth();
 
-  console.log(user, "from layout");
-
   return (
     <>
       <Header user={user} />
