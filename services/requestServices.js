@@ -4,6 +4,8 @@ import Request from "../models/requestModel.js";
 import mongoose from "mongoose";
 import Service from "../models/serviceModel.js";
 import User from "../models/userModel.js";
+import Quotation from "../models/quotationModel.js";
+import Project from "../models/projectModel.js";
 
 // Create request
 export const createRequestService = async ({
@@ -503,4 +505,372 @@ export const generateStagesAndTimelines = (estimatedDeadline) => {
   }
 
   return { stages, timelines };
+};
+
+export const getRequestsForDashboardService = async (userData) => {
+  const response = {};
+
+  if (userData.role === "admin") {
+    const allRequests = await Request.find({});
+    if (!allRequests) throw new Error("No Request Found!");
+
+    // Basic counts
+    response.requestNb = allRequests.length;
+    response.completedRequest = await Request.countDocuments({
+      status: "accepted",
+    });
+    response.canceledRequest = await Request.countDocuments({
+      status: "canceled",
+    });
+    response.pendingRequest = await Request.countDocuments({
+      status: { $nin: ["accepted", "canceled"] },
+    });
+
+    // Budget calculation
+    response.totalBudget = allRequests.reduce(
+      (sum, req) => sum + (req.budget || 0),
+      0
+    );
+
+    // Total quotations
+    response.totalQuotations = await Quotation.countDocuments({});
+
+    // Stage counts
+    const stageAggregation = await Request.aggregate([
+      {
+        $group: {
+          _id: "$stage",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    response.totalRequestStages = {
+      stage1: 0,
+      stage2: 0,
+      stage3: 0,
+      stage4: 0,
+    };
+
+    stageAggregation.forEach((item) => {
+      if (item._id === 1) response.totalRequestStages.stage1 = item.count;
+      if (item._id === 2) response.totalRequestStages.stage2 = item.count;
+      if (item._id === 3) response.totalRequestStages.stage3 = item.count;
+      if (item._id === 4) response.totalRequestStages.stage4 = item.count;
+    });
+
+    // Files uploaded by extension
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    response.fileUploadedByMonth = await Request.aggregate([
+      {
+        $match: {
+          createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+          document: { $exists: true, $type: "string", $ne: "" },
+        },
+      },
+      {
+        $project: {
+          extension: {
+            $let: {
+              vars: { dotIndex: { $indexOfBytes: ["$document", "."] } },
+              in: {
+                $cond: [
+                  { $gte: ["$$dotIndex", 0] },
+                  {
+                    $substrBytes: [
+                      "$document",
+                      { $add: ["$$dotIndex", 1] },
+                      -1,
+                    ],
+                  },
+                  "",
+                ],
+              },
+            },
+          },
+        },
+      },
+      { $match: { extension: { $ne: "" } } },
+      {
+        $group: {
+          _id: "$extension",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          type: "$_id",
+          count: 1,
+        },
+      },
+    ]);
+
+    // Total projects
+    response.totalProjects = await Project.countDocuments({});
+
+    response.totalProjectStatus = await Project.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    response.projectsCreatedByDay = await Project.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startOfMonth,
+            $lt: endOfMonth,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          month: "$_id.month",
+          day: "$_id.day",
+          count: 1,
+        },
+      },
+    ]);
+  } else if (userData.role === "client") {
+    const allRequests = await Request.find({ clientId: userData._id });
+    if (!allRequests || allRequests.length === 0)
+      throw new Error("No Request Found!");
+
+    response.requestNb = allRequests.length;
+
+    response.completedRequest = allRequests.filter(
+      (req) => req.status === "accepted"
+    ).length;
+    response.canceledRequest = allRequests.filter(
+      (req) => req.status === "canceled"
+    ).length;
+    response.pendingRequest = allRequests.filter(
+      (req) => !["accepted", "canceled"].includes(req.status)
+    ).length;
+
+    response.totalBudget = allRequests.reduce(
+      (sum, req) => sum + (req.budget || 0),
+      0
+    );
+
+    const requestIds = allRequests.map((req) => req._id);
+
+    const allQuotations = await Quotation.find({
+      requestId: { $in: requestIds },
+    });
+
+    response.totalQuotations = allQuotations.length;
+
+    const stageAggregation = await Request.aggregate([
+      {
+        $match: {
+          clientId: new mongoose.Types.ObjectId(userData._id),
+        },
+      },
+      {
+        $group: {
+          _id: "$stage",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    response.totalRequestStages = {
+      stage1: 0,
+      stage2: 0,
+      stage3: 0,
+      stage4: 0,
+    };
+
+    stageAggregation.forEach((item) => {
+      if (item._id === 1) response.totalRequestStages.stage1 = item.count;
+      if (item._id === 2) response.totalRequestStages.stage2 = item.count;
+      if (item._id === 3) response.totalRequestStages.stage3 = item.count;
+      if (item._id === 4) response.totalRequestStages.stage4 = item.count;
+    });
+
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+    response.fileUploadedByMonth = await Request.aggregate([
+      {
+        $match: {
+          clientId: new mongoose.Types.ObjectId(userData._id),
+          createdAt: { $gte: startOfMonth, $lt: endOfMonth },
+          document: { $exists: true, $type: "string", $ne: "" },
+        },
+      },
+      {
+        $project: {
+          extension: {
+            $let: {
+              vars: { dotIndex: { $indexOfBytes: ["$document", "."] } },
+              in: {
+                $cond: [
+                  { $gte: ["$$dotIndex", 0] },
+                  {
+                    $substrBytes: [
+                      "$document",
+                      { $add: ["$$dotIndex", 1] },
+                      -1,
+                    ],
+                  },
+                  "",
+                ],
+              },
+            },
+          },
+        },
+      },
+      { $match: { extension: { $ne: "" } } },
+      {
+        $group: {
+          _id: "$extension",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          type: "$_id",
+          count: 1,
+        },
+      },
+    ]);
+
+    response.totalProjectStatus = await Project.aggregate([
+      {
+        $match: {
+          clientId: new mongoose.Types.ObjectId(userData._id),
+        },
+      },
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    response.projectsCreatedByDay = await Project.aggregate([
+      {
+        $match: {
+          clientId: new mongoose.Types.ObjectId(userData._id),
+          createdAt: {
+            $gte: startOfMonth,
+            $lt: endOfMonth,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          month: "$_id.month",
+          day: "$_id.day",
+          count: 1,
+        },
+      },
+    ]);
+  } else {
+    const providerId = userData._id;
+
+    const allRequests = await Request.find({ providerId: providerId });
+    response.requestNb = allRequests.length;
+
+    const allQuotations = await Quotation.find({ providerId });
+    response.quotationNb = allQuotations.length;
+
+    const quotationRequestIds = allQuotations.map((q) => q.requestId);
+    const relatedRequests = await Request.find({
+      _id: { $in: quotationRequestIds },
+    });
+
+    response.totalRequestStages = {
+      stage1: 0,
+      stage2: 0,
+      stage3: 0,
+      stage4: 0,
+    };
+    relatedRequests.forEach((req) => {
+      if (req.stage === 1) response.totalRequestStages.stage1++;
+      else if (req.stage === 2) response.totalRequestStages.stage2++;
+      else if (req.stage === 3) response.totalRequestStages.stage3++;
+      else if (req.stage === 4) response.totalRequestStages.stage4++;
+    });
+
+    const wonQuotationIds = relatedRequests
+      .map((r) => r.selectedQuotation?.toString())
+      .filter(Boolean);
+
+    response.wonQuotations = allQuotations.filter((q) =>
+      wonQuotationIds.includes(q._id.toString())
+    ).length;
+
+    response.pendingQuotations = response.quotationNb - response.wonQuotations;
+
+    const quotationsByDay = await Quotation.aggregate([
+      { $match: { providerId: new mongoose.Types.ObjectId(providerId) } },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$createdAt" },
+            month: { $month: "$createdAt" },
+            day: { $dayOfMonth: "$createdAt" },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          year: "$_id.year",
+          month: "$_id.month",
+          day: "$_id.day",
+          count: 1,
+        },
+      },
+      { $sort: { year: 1, month: 1, day: 1 } },
+    ]);
+
+    response.quotationsByDay = quotationsByDay;
+  }
+
+  return response;
 };
