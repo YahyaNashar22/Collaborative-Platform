@@ -7,7 +7,6 @@ import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
 import FileInput from "../../../../../libs/common/lib-file-input/FileInput";
 import LibButton from "../../../../../libs/common/lib-button/LibButton";
 import styles from "./DocumentsForm.module.css";
-import { useState } from "react";
 
 type DocumentsFormViewProps = {
   data: FormStepData;

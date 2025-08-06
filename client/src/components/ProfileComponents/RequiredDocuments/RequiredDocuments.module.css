@@ -1,0 +1,68 @@
+.uploadedSection {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f9fb;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+}
+
+.uploadedTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--deep-purple);
+}
+
+.uploadedList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.uploadedItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #e1e1e1;
+  transition: box-shadow 0.2s;
+  margin-bottom: 1rem;
+}
+
+.uploadedItem:hover {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.fileDetails {
+  flex: 1;
+  color: #333;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.downloadLink {
+  font-size: 0.85rem;
+  color: #825beb;
+  background-color: transparent;
+  border: 1px solid #825beb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.downloadLink:hover {
+  background-color: #825beb;
+  color: white;
+}
+
+.fileName {
+  font-size: 0.9rem;
+  color: green;
+  margin-top: 0.5rem;
+}

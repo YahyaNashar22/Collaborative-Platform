@@ -1,0 +1,35 @@
+.buttons {
+  margin-top: calc(1rem + 5px);
+}
+
+.customTag {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 16px;
+  margin: 2px;
+}
+
+.removeIcon {
+  margin-left: 6px;
+  cursor: pointer;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  background-color: #f0ebff;
+  color: #6550b4;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}

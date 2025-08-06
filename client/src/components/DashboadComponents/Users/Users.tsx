@@ -7,6 +7,7 @@ import {
 } from "../../../services/UserServices";
 import UsersRawSkeleton from "../../../shared/UsersRawSkeleton/UsersRawSkeleton";
 import { toast } from "react-toastify";
+import ProfilePage from "../../../pages/ProfilePage/ProfilePage";
 
 type User = {
   _id: string;
@@ -25,6 +26,7 @@ const Users = () => {
   const [users, setUsers] = useState<User[]>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   const handleSearch = (userData: string) => {
     setSearchValue(userData);
@@ -94,62 +96,78 @@ const Users = () => {
       user.email.toLowerCase().includes(searchValue.toLowerCase())
   );
 
-  return (
-    <main className={`${styles.wrapper} w-100`}>
-      <div className={styles.header}>
-        <TextInput
-          placeholder="Search"
-          type="text"
-          value={searchValue}
-          name="search_projects"
-          required={false}
-          hasIcon={true}
-          onChange={(e) => handleSearch(e)}
-        />
-      </div>
+  const handleRowClick = (user) => {
+    setCurrentUserId(user._id);
+  };
 
-      <div className={styles.content}>
-        <table className={`${styles.table} w-100`}>
-          <thead>
-            <tr>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Phone Number</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading || isSearching ? (
-              UsersRawSkeleton(11)
-            ) : filteredUsers && filteredUsers.length > 0 ? (
-              filteredUsers.map((user, index) => (
-                <tr key={`${user._id}-${index}`} className="pointer">
-                  <td>{`${user.firstName} ${user.lastName}`}</td>
-                  <td>{user.email}</td>
-                  <td>{user.phone}</td>
-                  <td>
-                    <span
-                      onClick={() => toggleBlockStatus(user._id)}
-                      className={`${styles.status} ${
-                        user.banned ? styles.blocked : styles.active
-                      }`}
-                    >
-                      {user.banned ? "Blocked" : "Active"}
-                    </span>
-                  </td>
+  return (
+    <>
+      {currentUserId ? (
+        <ProfilePage userId={currentUserId} isViewer={true} />
+      ) : (
+        <main className={`${styles.wrapper} w-100`}>
+          <div className={styles.header}>
+            <TextInput
+              placeholder="Search"
+              type="text"
+              value={searchValue}
+              name="search_projects"
+              required={false}
+              hasIcon={true}
+              onChange={(e) => handleSearch(e)}
+            />
+          </div>
+
+          <div className={styles.content}>
+            <table className={`${styles.table} w-100`}>
+              <thead>
+                <tr>
+                  <th>Full Name</th>
+                  <th>Email</th>
+                  <th>Phone Number</th>
+                  <th>Status</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={3} className={styles.noData}>
-                  <div className={styles.noDataContent}>🙁 No users found</div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </main>
+              </thead>
+              <tbody>
+                {isLoading || isSearching ? (
+                  UsersRawSkeleton(11)
+                ) : filteredUsers && filteredUsers.length > 0 ? (
+                  filteredUsers.map((user, index) => (
+                    <tr
+                      key={`${user._id}-${index}`}
+                      className="pointer"
+                      onClick={() => handleRowClick(user)}
+                    >
+                      <td>{`${user.firstName} ${user.lastName}`}</td>
+                      <td>{user.email}</td>
+                      <td>{user.phone}</td>
+                      <td>
+                        <span
+                          onClick={() => toggleBlockStatus(user._id)}
+                          className={`${styles.status} ${
+                            user.banned ? styles.blocked : styles.active
+                          }`}
+                        >
+                          {user.banned ? "Blocked" : "Active"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={3} className={styles.noData}>
+                      <div className={styles.noDataContent}>
+                        🙁 No users found
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      )}
+    </>
   );
 };
 

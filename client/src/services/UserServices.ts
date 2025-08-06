@@ -101,12 +101,22 @@ export const updateProfileData = async (
   const formData = new FormData();
 
   Object.entries(payload).forEach(([key, value]) => {
-    formData.append(key, value);
+    if (Array.isArray(value)) {
+      value.forEach((v) => formData.append(`${key}[]`, v));
+    } else {
+      formData.append(key, value);
+    }
   });
 
-  const response = await axiosInstance.patch(
+  const response = await axios.patch(
     `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/update/${userId}`,
-    formData
+    formData,
+    {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
   );
 
   return response.data;

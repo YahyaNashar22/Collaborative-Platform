@@ -55,6 +55,7 @@ const TextInput = ({
 
   const inputType =
     type === "password" ? (showPassword ? "text" : "password") : type;
+
   return (
     <div
       className={`${styles.inputContainer} ${
@@ -92,7 +93,9 @@ const TextInput = ({
                 placeholder={placeholder}
                 disabled={disabled}
                 name={name}
-                value={getStringValue(value)}
+                value={
+                  type === "number" ? Number(value) : getStringValue(value)
+                }
                 required={required}
                 maxLength={maxLength}
                 minLength={minLength || 0}

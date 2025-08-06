@@ -13,9 +13,10 @@ import {
 
 interface SecurityDataProps {
   email: string;
+  isViewer?: boolean;
 }
 
-const SecurityData = ({ email }: SecurityDataProps) => {
+const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
   const [securityTab, setSecurityTab] = useState<1 | 2 | 3>(1);
   const [isVerifying, setIsVerifying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -184,6 +185,7 @@ const SecurityData = ({ email }: SecurityDataProps) => {
               value={passwordData.oldPassword}
               onChange={handlePasswordChange}
               errorMessage={passwordErrors.oldPassword}
+              disabled={isViewer}
             />
             <TextInput
               name="newPassword"
@@ -194,6 +196,7 @@ const SecurityData = ({ email }: SecurityDataProps) => {
               value={passwordData.newPassword}
               onChange={handlePasswordChange}
               errorMessage={passwordErrors.newPassword}
+              disabled={isViewer}
             />
             <TextInput
               name="confirmPassword"
@@ -204,24 +207,26 @@ const SecurityData = ({ email }: SecurityDataProps) => {
               value={passwordData.confirmPassword}
               onChange={handlePasswordChange}
               errorMessage={passwordErrors.confirmPassword}
+              disabled={isViewer}
             />
           </form>
-
-          <div
-            className={`${styles.resetPasswordHolder} d-f align-center justify-between`}
-          >
-            <p
-              className={styles.switchMethod}
-              onClick={() => setSecurityTab(2)}
+          {!isViewer && (
+            <div
+              className={`${styles.resetPasswordHolder} d-f align-center justify-between`}
             >
-              Forgot password? Reset via email
-            </p>
-            <LibButton
-              label="Save"
-              onSubmit={handleChangePasswordSubmit}
-              padding="0"
-            />
-          </div>
+              <p
+                className={styles.switchMethod}
+                onClick={() => setSecurityTab(2)}
+              >
+                Forgot password? Reset via email
+              </p>
+              <LibButton
+                label="Save"
+                onSubmit={handleChangePasswordSubmit}
+                padding="0"
+              />
+            </div>
+          )}
         </>
       )}
 
@@ -264,10 +269,12 @@ const SecurityData = ({ email }: SecurityDataProps) => {
               errorMessage={SecurityDataErrors.confirmPassword}
             />
           </form>
-          <div className={`${styles.buttons} d-f align-center justify-end`}>
-            <LibButton label="Back" onSubmit={() => setSecurityTab(1)} />
-            <LibButton label="Save" onSubmit={handleSecurityDataSubmit} />
-          </div>
+          {!isViewer && (
+            <div className={`${styles.buttons} d-f align-center justify-end`}>
+              <LibButton label="Back" onSubmit={() => setSecurityTab(1)} />
+              <LibButton label="Save" onSubmit={handleSecurityDataSubmit} />
+            </div>
+          )}
         </>
       ) : loading ? (
         <span className="loader"></span>

@@ -5,6 +5,13 @@
   cursor: pointer;
   margin: 0.5rem 1rem 1.5rem 0;
   border-bottom: 1px solid #ccc;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.navBar::-webkit-scrollbar {
+  width: 4px;
+  height: 0;
 }
 
 .tabWrapper {

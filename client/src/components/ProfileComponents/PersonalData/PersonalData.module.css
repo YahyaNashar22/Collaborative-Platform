@@ -17,6 +17,11 @@
   overflow: hidden;
 }
 
+.background.isViewer {
+  user-select: none;
+  pointer-events: none;
+}
+
 .background:hover .penHolder {
   visibility: visible;
   top: 4px;
