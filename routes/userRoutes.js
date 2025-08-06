@@ -28,6 +28,7 @@ import {
   registerClient,
   registerProvider,
   registerSuper,
+  resetPassword,
   sendEmail,
   sendSMS,
   updateUserData,
@@ -52,18 +53,23 @@ userRoutes.post("/log-out", logout);
 
 userRoutes.post("/verify-password/:id", verifyPassword);
 
-userRoutes.patch(
-  "/update/:id",
-  upload.single("profilePicture"),
-  updateUserData
-);
-userRoutes.patch("/change-password/:id", changePassword);
+userRoutes.patch("/update/:id", uploadProviderFiles, updateUserData);
+userRoutes.patch("/change-password", changePassword);
+userRoutes.patch("/reset-password", resetPassword);
 userRoutes.patch("/ban/:id", changeUserBannedStatus);
 userRoutes.patch("/change-availability/:id", changeProviderAvailability);
 
 userRoutes.patch("/edit-super/:id", editSuperProfile);
-userRoutes.patch("/edit-client/:id", editClientProfile);
-userRoutes.patch("/edit-provider/:id", editProviderProfile);
+userRoutes.patch(
+  "/edit-client/:id",
+  upload.single("profilePicture"),
+  editClientProfile
+);
+userRoutes.patch(
+  "/edit-provider/:id",
+  uploadProviderFiles,
+  editProviderProfile
+);
 userRoutes.patch("/add-client-to-admin/:id", addExistingClientToAdmin);
 
 userRoutes.patch(

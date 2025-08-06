@@ -15,6 +15,7 @@ import {
   getAllRequestsService,
   getProvidersForRequest,
   getRequestByIdService,
+  getRequestsForDashboardService,
 } from "../services/requestServices.js";
 
 // Create request
@@ -32,7 +33,6 @@ export const createRequest = async (req, res) => {
     } = req.body;
 
     const document = req.file ? req.file.path : "";
-    console.log(document, "*-**-*--*-*-*-");
 
     const request = await createRequestService({
       clientId,
@@ -241,10 +241,7 @@ export const selectQuotationAndStartProject = async (req, res) => {
       availableHours: quotation.availableHours || [],
     });
 
-    console.log("after-result", project);
-
     await project.save();
-    console.log("afetr - save");
 
     res.status(201).json({
       message: "Quotation selected and project started successfully",
@@ -471,4 +468,20 @@ export const requestRequestMeeting = async (req, res) => {
   }
 };
 
-// TODO: Add reminder logic
+export const getRequestsForDashboard = async (req, res) => {
+  try {
+    const currentUser = req.user;
+
+    if (!currentUser)
+      return res.status(404).json({ message: "Error with fetching" });
+    const result = await getRequestsForDashboardService(currentUser);
+
+    if (!result) return res.status(404).json({ message: "No Result Found!" });
+    return res
+      .status(200)
+      .json({ message: "result retrieve successfuly", result });
+  } catch (error) {
+    console.error("Error getting requests for dashboard:", error.message);
+    res.status(404).json({ message: error.message || "Something went wrong" });
+  }
+};

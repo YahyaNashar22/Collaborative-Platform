@@ -46,10 +46,11 @@ export const verifyEmailOtp = async (req, res) => {
     const otp = await findOtpByEmailService(email);
 
     if (!otp)
-      return res.status(404).json({ message: "OTP not found!", sucess: false });
+      return res
+        .status(404)
+        .json({ message: "OTP not found!", success: false });
 
     const currentTime = Date.now();
-    console.log(otp.emailOtp, emailOtp, otp.emailOtpExpiresAt, currentTime);
     // verify otp
     if (otp.emailOtp != emailOtp || otp.emailOtpExpiresAt < currentTime) {
       return res
@@ -83,8 +84,6 @@ export const createAndSendPhoneOtp = async (req, res) => {
     // Generate OTP
     const phoneOtp = generateOtp();
     const expiryDate = generateExpiryDate();
-
-    console.log(phoneOtp);
 
     // add otp to db
     const otp = createPhoneOtpService(phone, phoneOtp, expiryDate);

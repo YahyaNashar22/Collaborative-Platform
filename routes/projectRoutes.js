@@ -19,6 +19,7 @@ import {
   uploadFiles,
 } from "../controllers/projectControllers.js";
 import { upload } from "../middlewares/multer.js";
+import { authMiddleware } from "../middlewares/checkAuth.js";
 import checkProjectFilesState from "../middlewares/checkProjectFileState.js";
 
 const projectRoutes = express.Router();
@@ -33,11 +34,11 @@ projectRoutes.post("/request-meeting/:id", requestProjectMeeting);
 
 // projectRoutes.patch("/mark-as-complete/:id", markProjectAsCompleted);
 projectRoutes.patch("/change-stage/:id", changeProjectStage);
-projectRoutes.patch("/request-files/:id", requestFiles);
+projectRoutes.patch("/request-files/:id", authMiddleware, requestFiles);
 projectRoutes.patch(
   "/upload-files/:id/:stageId",
-  checkProjectFilesState,
-  upload.single("projectFiles"),
+  // checkProjectFilesState,
+  upload.array("projectFiles", 5),
   uploadFiles
 );
 projectRoutes.patch("/delete-files/:id", deleteFiles);

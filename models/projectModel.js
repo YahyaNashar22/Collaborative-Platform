@@ -72,8 +72,8 @@ const projectSchema = new Schema(
           },
           isUploadedFiles: { type: Boolean, required: false, default: false },
           projectFiles: {
-            type: String,
-            default: "",
+            type: [String],
+            default: [],
           },
           start: { type: Date, required: true },
           end: { type: Date, required: true },

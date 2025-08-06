@@ -55,7 +55,7 @@ const userSchema = new Schema(
     companyName: {
       type: String,
       required: function () {
-        return this.company === "company";
+        return this.company === "company" || this.role === "provider";
       },
     },
     companyDescription: {
@@ -71,6 +71,12 @@ const userSchema = new Schema(
       type: String,
       required: function () {
         return this.company === "company";
+      },
+    },
+    country: {
+      type: String,
+      required: function () {
+        return this.company === "company" || this.role === "provider";
       },
     },
     liscence: {
@@ -93,58 +99,31 @@ const userSchema = new Schema(
       default: false,
     },
 
-    // ------ Attributes for role == client Block ------
-    // howSoonServices: {
-    //   type: String,
-    //   enum: [
-    //     "immediately",
-    //     "within a month",
-    //     "in the next 2-3 months",
-    //     "in the next 4-6 months",
-    //     "in the next 6-12 months",
-    //     "others",
-    //   ],
-    //   required: function () {
-    //     return this.role == "client";
-    //   },
-    // },
-    // estimatedBudget: {
-    //   type: Number,
-    //   required: function () {
-    //     return this.role == "client";
-    //   },
-    // },
-    // scopeOfWork: {
-    //   // File
-    //   type: String,
-    //   required: function () {
-    //     return this.role == "client";
-    //   },
-    // },
-
     // ------ Attributes for role == provider block ------
-    // experience: {
-    //   // Text Field
-    //   type: String,
-    //   required: function () {
-    //     return this.role == "provider";
-    //   },
-    // },
-    // cvOrCompanyProfile: {
-    //   // File
-    //   type: String,
-    //   required: function () {
-    //     return this.role == "provider";
-    //   },
-    // },
-    // availability: {
-    //   type: Boolean,
-    //   required: function () {
-    //     return this.role == "provider";
-    //   },
-    //   default: true,
-    // },
-    // aka - Area of expertise
+    crNumber: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    yearsExperience: {
+      type: Number,
+      required: function () {
+        return this.role === "provider";
+      },
+    },
+    expertise: {
+      type: String,
+      required: function () {
+        return this.role === "provider";
+      },
+    },
+    industry: {
+      type: String,
+      required: false,
+    },
+    industry: {
+      type: String,
+    },
     services: [
       {
         type: Schema.Types.ObjectId,
@@ -154,6 +133,80 @@ const userSchema = new Schema(
         },
       },
     ],
+    city: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    street: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    POBox: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    bankName: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    bankCountry: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    bankAccountName: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    bankAccountNumber: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    IBNNumber: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    swiftBank: {
+      type: String,
+      required: function () {
+        return this.role == "provider";
+      },
+    },
+    companyProfile: {
+      type: String,
+      required: false,
+    },
+    crDocument: {
+      type: String,
+      required: false,
+    },
+    establishmentContract: {
+      type: String,
+      required: false,
+    },
+    certificate: {
+      type: String,
+      required: false,
+    },
+    otherDocuments: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

@@ -161,14 +161,13 @@ export const registerClient = async (req, res) => {
       companyName,
       companyDescription,
       companyWebsite,
+      country,
       industry,
       banned,
-      //   estimatedBudget,
     } = req.body;
 
     const profilePicture =
       req.files?.profilePicture?.[0]?.filename || "default";
-    const scopeOfWork = req.files?.scopeOfWork?.[0]?.filename || null;
     const liscence = req.files?.liscence?.[0]?.filename || null;
 
     // Check if email already exists
@@ -191,31 +190,29 @@ export const registerClient = async (req, res) => {
       job,
       accountType,
       role,
-      companyName,
-      companyDescription,
-      companyWebsite,
-      industry,
-      banned,
-
-      // for company client type
-      ...(accountType === "company" && {
-        companyName,
-        companyDescription,
-        companyWebsite,
-        industry,
-      }),
+      profilePicture,
+      banned: banned ?? false,
     });
+
+    // Include company fields if accountType is "company"
+    if (accountType === "company") {
+      newUser.companyName = companyName;
+      newUser.companyDescription = companyDescription;
+      newUser.companyWebsite = companyWebsite;
+      newUser.industry = industry;
+      newUser.liscence = liscence;
+      newUser.country = country;
+    }
     await newUser.save();
 
     // sign in after registration
     const token = createToken(newUser);
     const decoded = verifyToken(token);
-
     // Set cookie with the token
     res.cookie("authToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 24 * 60 * 60 * 1000, // expires in one day
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -239,22 +236,59 @@ export const registerProvider = async (req, res) => {
       lastName,
       email,
       recoveryEmail,
-      password,
       phone,
-      company,
-      address,
-      country,
-      language,
-      experience,
+      job,
+      password,
+      companyName,
+      companyDescription,
+      companyWebsite,
+      yearsExperience,
+      expertise,
+      crNumber,
+      industry,
       services,
+      country,
+      city,
+      street,
+      POBox,
+      bankName,
+      bankCountry,
+      bankAccountName,
+      bankAccountNumber,
+      IBNNumber,
+      swiftBank,
     } = req.body;
 
-    // const profilePicture = req.files.profilePicture
-    //   ? req.files.profilePicture[0].filename
-    //   : "default";
-    // const cvOrCompanyProfile = req.files.cvOrCompanyProfile
-    //   ? req.files.cvOrCompanyProfile[0].filename
-    //   : null;
+    let servicesArray = [];
+    if (typeof services === "string") {
+      try {
+        servicesArray = JSON.parse(services);
+      } catch (err) {
+        return res.status(400).json({ message: "Invalid services format" });
+      }
+    } else if (Array.isArray(services)) {
+      servicesArray = services;
+    }
+
+    const profilePicture = req.files.profilePicture
+      ? req.files.profilePicture[0].filename
+      : "default";
+
+    const companyProfile = req.files.companyProfile
+      ? req.files.companyProfile[0].filename
+      : "";
+    const crDocument = req.files.crDocument
+      ? req.files.crDocument[0].filename
+      : "";
+    const establishmentContract = req.files.establishmentContract
+      ? req.files.establishmentContract[0].filename
+      : "";
+    const certificate = req.files.certificate
+      ? req.files.certificate[0].filename
+      : "";
+    const otherDocuments = req.files.otherDocuments
+      ? req.files.otherDocuments[0].filename
+      : "";
 
     // Check if email already exists
     const existingUser = await getUserByEmailService(email);
@@ -273,14 +307,32 @@ export const registerProvider = async (req, res) => {
       recoveryEmail,
       password: hashedPassword,
       phone,
-      company,
-      address,
+      job,
+      companyName,
+      companyDescription,
+      companyWebsite,
+      yearsExperience,
+      expertise,
+      crNumber,
+      industry,
+      services: servicesArray,
       country,
-      language,
-      experience,
-      services,
-      // profilePicture,
-      // cvOrCompanyProfile,
+      city,
+      street,
+      POBox,
+      bankName,
+      bankCountry,
+      bankAccountName,
+      bankAccountNumber,
+      IBNNumber,
+      swiftBank,
+      profilePicture,
+      companyProfile,
+      crDocument,
+      establishmentContract,
+      certificate,
+      otherDocuments,
+
       role: "provider",
     });
     await newProvider.save();
@@ -376,34 +428,32 @@ export const logout = async (req, res) => {
 // Change Password
 export const changePassword = async (req, res) => {
   try {
-    const id = req.params.id;
-    const { password, oldPassword } = req.body;
+    const { email, password, oldPassword } = req.body;
 
-    // get user
-    const user = await getUserByIdService(id);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    const user = await getUserByEmailService(email);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    // Compare oldPassword with hashed password
     const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: "Old password is incorrect" });
+    }
 
-    // hash password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // update user
+    // update the user's password
     await User.findByIdAndUpdate(
-      id,
+      user._id,
       { password: hashedPassword },
       { new: true }
     );
 
-    res.status(200).json({ message: "password changed successfully" });
+    res.status(200).json({ message: "Password changed successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Problem Changing Password",
+      message: "Problem changing password",
       error: error.message,
     });
   }
@@ -427,6 +477,29 @@ export const verifyPassword = async (req, res) => {
     return res.status(200).json({ message: "Password Match" });
   } catch (error) {
     console.error(error);
+    res.status(500).json({
+      message: "Problem Verifying Password",
+      error: error.message,
+    });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // get user
+    const user = await getUserByEmailService(email);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    user.password = hashedPassword;
+    await user.save();
+    res
+      .status(200)
+      .json({ message: "Password reset successful", success: true });
+  } catch (error) {
     res.status(500).json({
       message: "Problem Verifying Password",
       error: error.message,
@@ -935,9 +1008,23 @@ export const updateUserData = async (req, res) => {
       updates.password = bcrypt.hashSync(req.body.password, salt);
     }
 
-    if (req.file) {
-      updates.profilePicture = req.file.filename;
-    }
+    const files = req.files || {};
+
+    const fileFields = [
+      "profilePicture",
+      "liscence",
+      "companyProfile",
+      "crDocument",
+      "establishmentContract",
+      "certificate",
+      "otherDocuments",
+    ];
+
+    fileFields.forEach((field) => {
+      if (files[field] && files[field][0]) {
+        updates[field] = files[field][0].filename;
+      } else updates[field] = "";
+    });
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, {
       new: true,

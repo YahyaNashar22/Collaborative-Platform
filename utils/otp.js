@@ -1,7 +1,6 @@
 export const generateOtp = () => {
   // Generate a 6-digit OTP
   const otp = Math.floor(1000 + Math.random() * 9000).toString();
-  console.log(otp);
   return otp;
 };
 

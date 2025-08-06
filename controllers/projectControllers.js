@@ -10,6 +10,12 @@ import {
   updateProjectStages,
 } from "../services/projectServices.js";
 import removeFile from "../utils/removeFile.js";
+import {
+  sendFilesRequestedEmail,
+  requestMeetingTemplate,
+} from "../utils/emailTemplates.js";
+import User from "../models/userModel.js";
+import transporter from "../utils/nodemailerTransporter.js";
 
 // Start a project
 export const startProject = async (req, res) => {
@@ -130,22 +136,63 @@ export const changeProjectStage = async (req, res) => {
 export const requestFiles = async (req, res) => {
   try {
     const id = req.params.id;
+    const { title, description } = req.body;
+    const user = req.user;
 
-    // get project
     const project = await getProjectByIdService(id);
     if (!project)
       return res.status(404).json({ message: "Project Not Found!" });
 
+    const client = await User.findById(project.clientId);
+    const provider = await User.findById(project.providerId);
+
+    if (!client || !provider)
+      return res.status(404).json({ message: "Client or Provider Not Found!" });
+
+    let receiverUser;
+    if (user._id.toString() === client._id.toString()) {
+      receiverUser = provider;
+    } else if (user._id.toString() === provider._id.toString()) {
+      receiverUser = client;
+    } else {
+      return res
+        .status(403)
+        .json({ message: "User not authorized for this project" });
+    }
+
     if (project.isRequestedFiles)
       return res.status(400).json({ message: "Files already requested" });
 
+    // Send email
+
+    await sendFilesRequestedEmail({
+      receiverEmail: receiverUser.email,
+      projectName: project.title,
+      title: title || "Please upload project files",
+      description:
+        description || "We need the final design files for approval.",
+      client: {
+        name: `${client.firstName} ${client.lastName}`,
+        email: client.email,
+        phone: client.phone,
+      },
+      provider: {
+        name: `${provider.firstName} ${provider.lastName}`,
+        email: provider.email,
+        phone: provider.phone,
+      },
+    });
+
+    // Update flag
     await Project.findByIdAndUpdate(
       id,
       { $set: { isRequestedFiles: true } },
       { new: true }
     );
 
-    res.status(200).json({ message: "Files Requested Successfully" });
+    res.status(200).json({
+      message: "Files Requested & Email Sent Successfully",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Problem Requesting Files",
@@ -158,20 +205,21 @@ export const requestFiles = async (req, res) => {
 export const uploadFiles = async (req, res) => {
   try {
     const { id, stageId } = req.params;
-    const projectFiles = req.file?.filename;
+    const uploadedFiles = req.files?.map((file) => file.filename) || [];
 
     // get project
     const project = await getProjectByIdService(id);
     if (!project)
       return res.status(404).json({ message: "Project Not Found!" });
 
+    // get stage
     const stage = project.stages.id(stageId);
     if (!stage) {
       return res.status(404).json({ message: "Stage Not Found!" });
     }
 
     stage.isUploadedFiles = true;
-    stage.projectFiles = projectFiles;
+    stage.projectFiles = [...(stage.projectFiles || []), ...uploadedFiles];
     await project.save();
 
     res
@@ -238,21 +286,43 @@ export const sendProjectTicket = async (req, res) => {
   }
 };
 
-// Request Project Meeting
 export const requestProjectMeeting = async (req, res) => {
   try {
     const id = req.params.id;
-    const { selectedTime } = req.body;
+    const { meetingLink } = req.body;
 
-    // get project
     const project = await getProjectByIdService(id);
     if (!project)
       return res.status(404).json({ message: "Project Not Found!" });
 
-    // TODO: Add Request Meeting Template Here ( email )
+    const client = project.clientId;
+    const provider = project.providerId;
 
-    res.status(200).json({ message: "Meeting Requested Successfully " });
+    if (!client || !provider)
+      return res
+        .status(400)
+        .json({ message: "Missing client or provider information." });
+
+    // Format email content
+    const emailHtml = requestMeetingTemplate({
+      client,
+      provider,
+      projectName: project.title,
+      meetingTime: new Date(),
+      meetingLink,
+    });
+
+    const emailsToSend = [client.email, provider.email];
+    await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: emailsToSend,
+      subject: "📅 New Meeting Request – Collaborative Platform",
+      html: emailHtml,
+    });
+
+    res.status(200).json({ message: "Meeting Requested Successfully" });
   } catch (error) {
+    console.error("Email error:", error);
     res.status(500).json({
       message: "Problem Requesting Meeting",
       error: error.message,
@@ -492,7 +562,7 @@ export const deleteStage = async (req, res) => {
         message: "Stage Not Found",
       });
     }
-    console.log(stage);
+
     stage.remove();
 
     await project.save();

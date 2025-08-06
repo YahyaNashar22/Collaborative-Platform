@@ -15,7 +15,9 @@ import {
   requestRequestMeeting,
   selectQuotationAndStartProject,
   sendBackToClient,
+  getRequestsForDashboard,
 } from "../controllers/requestControllers.js";
+import { authMiddleware } from "../middlewares/checkAuth.js";
 
 const requestRoutes = express.Router();
 
@@ -36,5 +38,11 @@ requestRoutes.get("/get-all-providers/:requestId", getAllProvidersByRequestId);
 requestRoutes.post("/get-all-client", getAllClientRequests);
 
 requestRoutes.delete("/delete/:id", deleteRequest);
+
+requestRoutes.get(
+  "/getRequestsForDashboard",
+  authMiddleware,
+  getRequestsForDashboard
+);
 
 export default requestRoutes;
