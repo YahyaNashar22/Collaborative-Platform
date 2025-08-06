@@ -1,0 +1,6 @@
+import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import styles from "./About.module.css";
+const About = () => {
+    return (_jsx("section", { className: "d-f align-center justify-center", children: _jsxs("main", { className: `${styles.wrapper} d-f f-dir-col `, children: [_jsxs("h1", { className: styles.header, children: [_jsx("span", { className: "purple", children: "TAKATUF" }), " ", _jsx("span", { className: "bold", children: "IS A PLATFORM DEDICATED TO CONNECTING CLIENTS" }), " ", _jsx("span", { className: "thin", children: "WITH CONSULTANCY SERVICE" })] }), _jsx("small", { className: "align-text", children: "providers across various fields, including financial, managerial, marketing, information technology, and digital consulting. We offer innovative solutions that assist businesses and individuals in Saudi Arabia to access high-quality global expertise at competitive prices. Our platform also enables international companies to enter the Saudi market and build a strong customer base that supports their expansion and future investments, aligning with the Kingdom's Vision 2030 to promote innovation and attract both startups and global enterprises." })] }) }));
+};
+export default About;

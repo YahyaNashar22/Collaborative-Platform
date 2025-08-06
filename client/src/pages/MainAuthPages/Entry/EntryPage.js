@@ -1,0 +1,46 @@
+import { jsx as _jsx, jsxs as _jsxs, Fragment as _Fragment } from "react/jsx-runtime";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import PlanBoxes from "../../../components/MainAuthPagesComponents/EntryComponent/PlanBoxes/PlanBoxes";
+import PlanButton from "../../../components/MainAuthPagesComponents/EntryComponent/planButtons/PlanButton";
+import styles from "./EntryPage.module.css";
+import PlanSelected from "../../../components/MainAuthPagesComponents/EntryComponent/PlanSelected/PlanSelected";
+import LibButton from "../../../libs/common/lib-button/LibButton";
+import useFormStore from "../../../store/FormsStore";
+const EntryPage = () => {
+    const [selectedPlan, setSelectedPlan] = useState("");
+    const [step, setStep] = useState(0);
+    const navigate = useNavigate();
+    const { role } = useParams();
+    const { resetForm } = useFormStore();
+    const moveForward = () => {
+        setStep(1);
+    };
+    const moveBack = () => {
+        setStep(0);
+    };
+    const handleSelectBox = (label) => {
+        if (step === 0)
+            setSelectedPlan(label);
+    };
+    const redirectToSignUp = () => {
+        const planId = role === "client"
+            ? selectedPlan === "BOX-1"
+                ? "individual"
+                : "company"
+            : role === "provider"
+                ? "default"
+                : "";
+        if (role)
+            resetForm(role, planId);
+        if (role === "provider") {
+            navigate("register");
+        }
+        else {
+            const planId = selectedPlan === "BOX-1" ? "individual" : "company";
+            navigate(`register/${planId}`, { relative: "path" });
+        }
+    };
+    return (_jsx("div", { className: `${styles.wrapper} d-f align-center justify-center`, children: _jsx("div", { className: `${styles.content} ${step === 0 ? "gap-10" : "gap-5"} d-f f-dir-col align-center justify-center`, children: role === "client" ? (_jsxs(_Fragment, { children: [_jsx(PlanSelected, { step: step, role: role, authSteps: selectedPlan === "BOX-1" ? 2 : 3 }), _jsxs("div", { className: "d-f f-dir-col align-center gap-5", children: [_jsx(PlanBoxes, { query: step === 1 ? selectedPlan : null, step: step, selected: selectedPlan, onSelect: handleSelectBox }), _jsx(PlanButton, { step: step, onBack: moveBack, onContinue: step === 1 ? redirectToSignUp : moveForward, disabled: selectedPlan === "" })] })] })) : (_jsxs("div", { className: "d-f f-dir-col align-center gap-5", children: [_jsx(PlanSelected, { step: 1, authSteps: 6, role: role || "provider" }), _jsx(LibButton, { label: "Continue", onSubmit: redirectToSignUp, backgroundColor: "#57417e", hoverColor: "#49356a", padding: "0 30px" })] })) }) }));
+};
+export default EntryPage;
