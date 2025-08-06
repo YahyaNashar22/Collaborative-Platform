@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { statusActions } from "../../../data/StatusMessage";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import Card from "../Card/Card";
-import styles from "./cards.module.css";
+import styles from "./Cards.module.css";
 const Cards = ({ data, userData, onShowDetails, onSubmitProposal, onShowProposals, onAssignRequest, onCancelRequestByClient, }) => {
     const getAction = (id, action) => {
         switch (action) {
