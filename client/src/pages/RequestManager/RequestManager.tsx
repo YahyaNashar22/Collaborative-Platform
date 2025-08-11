@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import EmptyDashboard from "../../components/homePage/EmptyDashboard/EmptyDashboard";
 import styles from "./RequestManager.module.css";
+import EmptyDashboard from "../../shared/EmptyDashboard/EmptyDashboard";
 
 const RequestManager = () => {
   const navigate = useNavigate();
