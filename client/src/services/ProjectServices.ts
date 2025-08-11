@@ -3,9 +3,20 @@ import axiosInstance from "../Config/axiosInstence";
 
 const AuthBaseURL = "/projects";
 
-export const getAllProjects = async () => {
-  const url = `${AuthBaseURL}/get-all`;
-  const result = await axiosInstance.post(url);
+export const getAllProjects = async (user) => {
+  let url;
+  if (user.role === "provider") {
+    url = `${AuthBaseURL}/get-all-for-provider`;
+  } else if (user.role === "client") {
+    url = `${AuthBaseURL}/get-all-for-client`;
+  } else {
+    url = `${AuthBaseURL}/get-all`;
+  }
+
+  const result = await axiosInstance.post(
+    url,
+    user.role !== "admin" ? { userId: user._id } : {}
+  );
   return result.data.payload;
 };
 

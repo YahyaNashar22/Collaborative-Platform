@@ -29,16 +29,6 @@ const LoginPage = lazy(
   () => import("../pages/MainAuthPages/Login/LoginPage.tsx")
 );
 
-const ActiveProjectsPage = lazy(
-  () => import("../pages/ActiveProjects/ActiveProjects.tsx")
-);
-const RequestManagerPage = lazy(
-  () => import("../pages/RequestManager/RequestManager.tsx")
-);
-const ManageServicesPage = lazy(
-  () => import("../pages/ManageServices/ManageServices.tsx")
-);
-
 const ServicesPagePage = lazy(
   () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx")
 );
@@ -69,7 +59,7 @@ const AppRoutes = () => {
           <Route path="/contact" element={<ContactPage />} />
         </Route>
 
-        {/* AUthorization routes */}
+        {/* Authorization routes */}
         {/* Layout for EntryPage without sidebar */}
         <Route path="auth/:role" element={<DashboardEntryLayout />}>
           <Route index element={<EntryPage />} />
@@ -97,18 +87,6 @@ const AppRoutes = () => {
             <Route
               path="profile"
               element={<ProfilePage userId={user?._id} />}
-            />
-            <Route
-              path="/dashboard/active-projects"
-              element={<ActiveProjectsPage />}
-            />
-            <Route
-              path="/dashboard/request-manager"
-              element={<RequestManagerPage />}
-            />
-            <Route
-              path="/dashboard/manage-services"
-              element={<ManageServicesPage />}
             />
 
             <Route path="/dashboard/services" element={<ServicesPagePage />} />
