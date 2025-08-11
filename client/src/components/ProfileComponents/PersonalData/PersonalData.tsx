@@ -141,7 +141,7 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
     <div className={styles.personalData}>
       {/* Profile Picture Upload */}
       <div
-        className={`${styles.background} ${styles.isViewer} `}
+        className={`${styles.background} ${isViewer ? styles.isViewer : ""}`}
         style={{
           backgroundImage:
             updatedData.profilePicture || userData.profilePicture
@@ -170,8 +170,9 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
           )}
         </label>
 
-        {!updatedData.profilePicture &&
-          !userData.profilePicture &&
+        {(!updatedData.profilePicture ||
+          updatedData.profilePicture === "default") &&
+          (!userData.profilePicture || userData.profilePicture === "default") &&
           userData.firstName &&
           userData.lastName && (
             <div className={styles.initials}>

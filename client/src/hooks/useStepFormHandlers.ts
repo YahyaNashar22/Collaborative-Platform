@@ -1,4 +1,3 @@
-// hooks/useStepFormHandlers.ts
 import { useState } from "react";
 import { Validate } from "../utils/Validate";
 import useFormStore from "../store/FormsStore";
@@ -47,6 +46,29 @@ export const useStepFormHandlers = (role: string, type: string) => {
 
       setErrors((prev) => ({ ...prev, confirmPassword: confirmError }));
     }
+
+    if (
+      (name === "email" || name === "recoveryEmail") &&
+      touchedFields["recoveryEmail"]
+    ) {
+      const mainEmail = (name === "email" ? value : fieldValues["email"])
+        ?.toString()
+        .trim()
+        .toLowerCase();
+      const recoveryEmail = (
+        name === "recoveryEmail" ? value : fieldValues["recoveryEmail"]
+      )
+        ?.toString()
+        .trim()
+        .toLowerCase();
+
+      const recoveryError =
+        mainEmail && recoveryEmail && mainEmail === recoveryEmail
+          ? "* Recovery email must be different from your main email"
+          : "";
+
+      setErrors((prev) => ({ ...prev, recoveryEmail: recoveryError }));
+    }
   };
 
   const handleBlur = (
@@ -56,7 +78,16 @@ export const useStepFormHandlers = (role: string, type: string) => {
     type: string
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value ?? "", required, type);
+    let error = Validate(name, value ?? "", required, type);
+
+    if (name === "recoveryEmail") {
+      const mainEmail = fieldValues["email"]?.toString().trim().toLowerCase();
+      const recoveryEmail = value.trim().toLowerCase();
+      if (mainEmail && recoveryEmail && mainEmail === recoveryEmail) {
+        error = "* Recovery email must be different from your main email";
+      }
+    }
+
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
@@ -67,12 +98,21 @@ export const useStepFormHandlers = (role: string, type: string) => {
     fields.forEach((field) => {
       const value =
         fieldValues[field.name] || (field.type === "multiSelect" ? [] : "");
-      const error = Validate(
+      let error = Validate(
         field.name,
         value,
         field.required || false,
         field.type
       );
+
+      if (field.name === "recoveryEmail") {
+        const mainEmail = fieldValues["email"]?.toString().trim().toLowerCase();
+        const recoveryEmail = value?.toString().trim().toLowerCase();
+        if (mainEmail && recoveryEmail && mainEmail === recoveryEmail) {
+          error = "* Recovery email must be different from your main email";
+        }
+      }
+
       if (error) {
         newErrors[field.name] = error;
         newTouched[field.name] = true;
