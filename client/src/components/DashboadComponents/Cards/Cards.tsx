@@ -3,7 +3,7 @@ import { RequestData } from "../../../interfaces/FullRequests";
 import { User } from "../../../interfaces/User";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import Card from "../Card/Card";
-import styles from "./cards.module.css";
+import styles from "./Cards.module.css";
 
 type CardsProps = {
   data: RequestData[];
