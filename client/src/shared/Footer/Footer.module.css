@@ -80,6 +80,7 @@
 .newsLetterForm {
   background-color: var(--intense-purple);
   padding: 25px 40px;
+  border-radius: 8px;
 }
 
 .newsletterLabel {
@@ -90,6 +91,7 @@
   position: relative;
   row-gap: 20px;
   font-size: 0.9rem;
+  color: #fff;
 }
 
 .newsletterLabel > input {

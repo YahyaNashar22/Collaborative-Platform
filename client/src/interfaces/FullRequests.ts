@@ -13,6 +13,7 @@ export interface RequestData {
   projectDeadline: Date;
   createdAt: string;
   updatedAt: string;
+  interestedBy: string[];
   __v: number;
   client: Client[];
   provider: string[];

@@ -1,19 +1,37 @@
 import Multiselect from "multiselect-react-dropdown";
 import styles from "./SelectInput.module.css";
-import Select from "react-select";
+import Select, { components } from "react-select";
+
+type OptionType = { label: string; value: string };
+
 type SelectInputProps = {
   label: string;
   name: string;
   type: string;
-  value: string | { [key: string]: string }[];
+  value: string | OptionType[];
   required?: boolean;
   placeholder?: string;
-  options: { [key: string]: string }[];
+  options: OptionType[];
   errorMessage?: string;
   disabled?: boolean;
-  onChange: (value: string | { [key: string]: string }[], name: string) => void;
+  interestedProviders?: string[];
+  onChange: (value: string | OptionType[], name: string) => void;
   onBlur?: () => void;
-  onRemove?: (items: { [key: string]: string }[]) => void;
+  onRemove?: (items: OptionType[]) => void;
+};
+
+const CustomOption = (props: any) => {
+  const { data, selectProps } = props;
+  const interestedProviders: string[] = selectProps.interestedProviders || [];
+  const isInterested = interestedProviders.includes(data.value);
+  return (
+    <components.Option {...props}>
+      <div style={{ gap: "8px" }} className="d-f align-center justify-between">
+        {props.label}
+        {isInterested && <small className="purple bold">Interested</small>}
+      </div>
+    </components.Option>
+  );
 };
 
 const SelectInput = ({
@@ -26,6 +44,7 @@ const SelectInput = ({
   disabled,
   options,
   errorMessage,
+  interestedProviders = [],
   onChange,
   onRemove,
 }: SelectInputProps) => {
@@ -84,27 +103,30 @@ const SelectInput = ({
     }),
   });
 
-  const getSelectedOption = (value, options) => {
-    return options.find((opt) => opt.value === value) || null;
+  const getSelectedOption = (
+    value: string | OptionType[],
+    options: OptionType[]
+  ) => {
+    if (typeof value === "string") {
+      return options.find((opt) => opt.value === value) || null;
+    }
+    return value;
   };
+
   return (
     <div className={`${styles.inputContainer} d-f f-dir-col`}>
       <label htmlFor={name} className="bold">
         {label} {required && <span className={styles.required}>*</span>}
       </label>
+
       {type === "select" ? (
-        // <div
-        //   className={`${styles.inputHolder}  ${
-        //     errorMessage && styles.error
-        //   } pointer d-f`}
-        // >
         <Select
           id={name}
           name={name}
           options={options}
           value={getSelectedOption(value, options)}
-          onChange={(selectedOption) => {
-            onChange(selectedOption?.value, selectedOption?.label);
+          onChange={(selectedOptions) => {
+            onChange(selectedOptions?.value, selectedOptions?.label);
           }}
           isDisabled={disabled}
           isClearable={!required}
@@ -117,9 +139,10 @@ const SelectInput = ({
           }
           menuPosition="fixed"
           menuShouldScrollIntoView={false}
+          components={{ Option: CustomOption }}
+          interestedProviders={interestedProviders}
         />
       ) : (
-        // </div>
         <Multiselect
           options={options}
           onSelect={(items) => onChange(items, name)}
@@ -129,6 +152,7 @@ const SelectInput = ({
           className={`multiSelect pointer ${errorMessage && "specialError"}`}
         />
       )}
+
       {errorMessage && <small className="error">{errorMessage}</small>}
     </div>
   );

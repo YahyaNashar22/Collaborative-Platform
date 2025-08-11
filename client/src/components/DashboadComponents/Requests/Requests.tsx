@@ -203,7 +203,6 @@ const Requests = () => {
       setIsShowAllProposals(true);
     } catch (error) {
       if (error?.response?.data?.message) {
-        toast.info(error?.response?.data?.message);
         setIsShowAllProposals(false);
       }
       toast.error(error?.response?.data?.message || "Error Occured!");
@@ -426,6 +425,7 @@ const Requests = () => {
               onReady={(getterFn) => {
                 assignedProvidersRef.current = getterFn;
               }}
+              interestedProviders={requestsMap[assignedRequest].interestedBy}
               required
             />
           )}

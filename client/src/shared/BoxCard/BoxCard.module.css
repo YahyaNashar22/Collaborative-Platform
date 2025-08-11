@@ -27,14 +27,27 @@
 .status,
 .subTitle {
   font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .status {
-  background-color: var(--light-purple);
-  color: #fff;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  text-align: center;
   width: fit-content;
-  padding: 3px 7px;
-  margin-bottom: 2px;
+  background-color: var(--deep-purple);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(125, 40, 167, 0.6);
+}
+
+.status.accepted {
+  background-color: #28a745;
+  color: white;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.6);
 }
 
 .subTitle {
@@ -60,7 +73,8 @@
 }
 
 .small .subBox {
-  padding: 1rem;
+  padding: 0.7rem 1rem;
+  height: 7rem;
 }
 
 .small .subBox p {

@@ -119,7 +119,7 @@ const Cards = ({
                       bold
                       disabled={
                         (action === "submitProposal" &&
-                          providerIds.includes(userData?._id)) ||
+                          providerIds?.includes(userData?._id)) ||
                         (action === "seeOfferByAdmin" &&
                           approvedQuotations.length > 0)
                       }

@@ -83,21 +83,18 @@ const Profile = ({
 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) return;
-    console.log(payload, "**************");
     try {
       await updateProfileData(userData._id, payload);
       toast.success("User updated successfuly");
       navigate("/dashboard");
       setErrors({});
     } catch (error) {
-      console.log(error);
       if (error?.response?.statusText === "Payload Too Large") {
         toast.error("Picture is too Large! Please upload a smaller image.");
       } else toast.error(error?.response?.data?.message || "Error Occured!");
     }
   };
 
-  console.log(isViewer);
   return (
     <div className={styles.wrapper}>
       <div className={styles.navBar}>

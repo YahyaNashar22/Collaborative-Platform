@@ -18,6 +18,14 @@ const requestSchema = new Schema(
         default: [],
       },
     ],
+    interestedBy: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+        default: [],
+      },
+    ],
     serviceId: {
       type: Schema.Types.ObjectId,
       ref: "Service",

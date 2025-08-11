@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Loading from "../shared/Loading/Loading.tsx";
 
@@ -54,7 +54,16 @@ const AppRoutes = () => {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
           <Route path="/about" element={<AboutPage />} />
-          <Route path="/Market_place" element={<MarketPlacePage />} />
+          <Route
+            path="/Market_place"
+            element={
+              user && user?.role !== "client" ? (
+                <MarketPlacePage userId={user?._id} />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/FAQ" element={<FAQPage />} />
           <Route path="/contact" element={<ContactPage />} />

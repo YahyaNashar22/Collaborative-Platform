@@ -134,20 +134,26 @@ const Header = ({ user }: { user: User | null }) => {
             {[
               { path: "/", label: "HOME" },
               { path: "/about", label: "ABOUT US" },
-              { path: "/market_place", label: "MARKET PLACE" },
+              user &&
+                user?.role !== "client" && {
+                  path: "/market_place",
+                  label: "MARKET PLACE",
+                },
               { path: "/FAQ", label: "FAQ" },
               { path: "/terms", label: "TERMS" },
               { path: "/contact", label: "CONTACT US" },
-            ].map(({ path, label }) => (
-              <li
-                key={path}
-                className={`${styles.navLink}  ${
-                  pathname === path ? styles.active : ""
-                } pointer`}
-              >
-                <Link to={path}>{label}</Link>
-              </li>
-            ))}
+            ]
+              .filter(Boolean)
+              .map(({ path, label }) => (
+                <li
+                  key={path}
+                  className={`${styles.navLink}  ${
+                    pathname === path ? styles.active : ""
+                  } pointer`}
+                >
+                  <Link to={path}>{label}</Link>
+                </li>
+              ))}
           </ul>
         </div>
 

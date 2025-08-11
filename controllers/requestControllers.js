@@ -16,6 +16,7 @@ import {
   getProvidersForRequest,
   getRequestByIdService,
   getRequestsForDashboardService,
+  interestBy,
 } from "../services/requestServices.js";
 
 // Create request
@@ -484,4 +485,17 @@ export const getRequestsForDashboard = async (req, res) => {
     console.error("Error getting requests for dashboard:", error.message);
     res.status(404).json({ message: error.message || "Something went wrong" });
   }
+};
+
+export const interestedRequest = async (req, res) => {
+  const { userId } = req.body;
+  const { requestId } = req.params;
+
+  const result = await interestBy(requestId, userId);
+
+  res.status(200).json({
+    message: "User marked as interested successfully",
+    data: result,
+  });
+  return result;
 };
