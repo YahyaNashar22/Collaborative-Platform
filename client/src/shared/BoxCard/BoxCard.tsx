@@ -4,23 +4,38 @@ type BoxCardProps = {
   image: string;
   alt: string;
   title: string;
-  status?: string;
-  providerName?: string;
+  createdAt?: string;
+  status: string;
+  description?: string;
   duration?: string;
-  size?: string;
+  size?: "small" | "default";
+};
+
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "Invalid date";
+
+  return date.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 };
 
 const BoxCard = ({
   image,
   alt,
   title,
-  status = "OPEN",
-  providerName = "Provider name",
+  createdAt = "",
+  description = "Description",
   duration,
-  size,
+  status,
+  size = "default",
 }: BoxCardProps) => {
+  const formattedDate = createdAt ? formatDate(createdAt) : "N/A";
+
   return (
-    <div className={`${styles.box} ${styles[size ?? "default"]}`}>
+    <div className={`${styles.box} ${styles[size]}`}>
       <img
         src={image}
         width={size === "small" ? 300 : 350}
@@ -29,9 +44,18 @@ const BoxCard = ({
         alt={alt}
       />
       <div className={styles.subBox}>
-        <div className={styles.status}>{status}</div>
+        <div className={`${styles.createdAt} d-f justify-between`}>
+          <div>{formattedDate}</div>
+          <div
+            className={`${styles.status} ${
+              status === "accepted" ? styles.accepted : ""
+            }`}
+          >
+            {status === "accepted" ? "Completed" : "Pending"}
+          </div>
+        </div>
         <h1 className={styles.boxTitle}>{title}</h1>
-        <div className={styles.subTitle}>{providerName}</div>
+        <div className={styles.subTitle}>{description}</div>
         <p className="purple intense">{duration}</p>
       </div>
     </div>

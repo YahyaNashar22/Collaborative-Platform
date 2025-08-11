@@ -46,3 +46,7 @@
     font-size: 10px;
   }
 }
+
+.element small {
+  color: #fff !important;
+}

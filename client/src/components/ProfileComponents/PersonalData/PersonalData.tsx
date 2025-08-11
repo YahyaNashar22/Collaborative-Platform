@@ -137,7 +137,6 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
     });
   };
 
-  console.log(isViewer);
   return (
     <div className={styles.personalData}>
       {/* Profile Picture Upload */}

@@ -16,6 +16,7 @@ import {
   selectQuotationAndStartProject,
   sendBackToClient,
   getRequestsForDashboard,
+  interestedRequest,
 } from "../controllers/requestControllers.js";
 import { authMiddleware } from "../middlewares/checkAuth.js";
 
@@ -25,6 +26,8 @@ requestRoutes.post("/create", upload.single("document"), createRequest);
 requestRoutes.post("/request-meeting/:id", requestRequestMeeting);
 
 requestRoutes.get("/get-single/:id", getSingleRequest);
+
+requestRoutes.post("/interested/:requestId", interestedRequest);
 
 requestRoutes.patch("/pass-request-to-provider", passRequestToProviders);
 requestRoutes.patch("/approve-quotation", approveQuotation);

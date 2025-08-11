@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import styles from "./SidePanel.module.css";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import LibButton from "../../libs/common/lib-button/LibButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
@@ -29,6 +29,7 @@ const SidePanel = ({
 }: SidePanelProps) => {
   const { pathname } = useLocation();
   const panelRef = useRef<HTMLDivElement>(null);
+  const navigator = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -67,7 +68,7 @@ const SidePanel = ({
       </div>
 
       <div className={styles.logo}>
-        <img src={logo} alt="logo" />
+        <img src={logo} alt="logo" onClick={() => navigator("/")} />
       </div>
 
       <ul className={`${styles.navLinks} d-f f-dir-col bold`}>

@@ -6,6 +6,7 @@ import Service from "../models/serviceModel.js";
 import User from "../models/userModel.js";
 import Quotation from "../models/quotationModel.js";
 import Project from "../models/projectModel.js";
+import res from "express/lib/response.js";
 
 // Create request
 export const createRequestService = async ({
@@ -140,6 +141,17 @@ export const getAllRequestsService = async ({
           localField: "serviceId",
           foreignField: "_id",
           as: "serviceDetails",
+        },
+      },
+      {
+        $set: {
+          interestedBy: {
+            $map: {
+              input: "$interestedBy",
+              as: "id",
+              in: { $toString: "$$id" },
+            },
+          },
         },
       },
       {
@@ -873,4 +885,26 @@ export const getRequestsForDashboardService = async (userData) => {
   }
 
   return response;
+};
+
+export const interestBy = async (requestId, userId) => {
+  try {
+    const request = await Request.findById(requestId);
+
+    if (!request) {
+      throw new Error("Request not found");
+    }
+
+    const updatedRequest = await Request.findByIdAndUpdate(
+      requestId,
+      {
+        $addToSet: { interestedBy: new mongoose.Types.ObjectId(userId) },
+      },
+      { new: true }
+    );
+
+    return updatedRequest;
+  } catch (error) {
+    throw error;
+  }
 };

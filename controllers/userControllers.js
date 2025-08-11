@@ -1008,6 +1008,15 @@ export const updateUserData = async (req, res) => {
       updates.password = bcrypt.hashSync(req.body.password, salt);
     }
 
+    // Merge services instead of replacing
+    if (req.body.services && Array.isArray(req.body.services)) {
+      const existingServices = userExist.services || [];
+      const newServices = req.body.services;
+      updates.services = Array.from(
+        new Set([...existingServices, ...newServices])
+      );
+    }
+
     const files = req.files || {};
 
     const fileFields = [
@@ -1023,8 +1032,10 @@ export const updateUserData = async (req, res) => {
     fileFields.forEach((field) => {
       if (files[field] && files[field][0]) {
         updates[field] = files[field][0].filename;
-      } else updates[field] = "";
+      }
     });
+
+    console.log("Updates:", updates);
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, {
       new: true,

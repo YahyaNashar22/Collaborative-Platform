@@ -56,12 +56,9 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
   };
 
   const handleSave = () => {
-    console.log("errors: ", errors);
-    console.log(updatedData);
     if (Object.keys(errors).length === 0) onSave(updatedData);
   };
 
-  console.log(userData, "-=-=-=-=-=-=-=-=-=-=");
   return (
     <div className={styles.companyDataTab}>
       <form className={`${styles.form} d-f f-dir-col `}>

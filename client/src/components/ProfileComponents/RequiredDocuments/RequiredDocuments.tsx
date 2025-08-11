@@ -50,7 +50,6 @@ const RequiredDocuments = ({
       });
       return;
     }
-    console.log(name, value);
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
     const error = Validate(name, value, required, type);
@@ -63,8 +62,6 @@ const RequiredDocuments = ({
   };
 
   const handleSave = () => {
-    console.log("errors: ", errors);
-    console.log(updatedData);
     if (Object.keys(errors).length === 0) onSave(updatedData);
   };
   return (

@@ -66,6 +66,11 @@ export const getAllAdminRequests = async (query: {
   return response.data.payload;
 };
 
+export const getAllRequests = async () => {
+  const response = await axiosInstance.post(`${AuthBaseURL}/get-all`);
+  return response.data.payload;
+};
+
 export const getAllClientRequests = async (query: {
   [key: string]: string | undefined;
 }) => {
@@ -152,4 +157,15 @@ export const getRequestsForDashboard = async () => {
   );
 
   return response.data.result;
+};
+
+export const interestBy = async (requestId: string, userId: string) => {
+  const response = await axiosInstance.post(
+    `${AuthBaseURL}/interested/${requestId}`,
+    {
+      userId,
+    }
+  );
+
+  return response.data;
 };

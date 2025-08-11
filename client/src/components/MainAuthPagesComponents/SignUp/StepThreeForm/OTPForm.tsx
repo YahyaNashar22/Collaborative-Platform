@@ -88,7 +88,10 @@ const OTPForm: React.FC<OTPFormProps> = ({
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
       <h1>Enter Verification Code</h1>
-      <small>Verification code has been sent to your email</small>
+      <small>
+        Verification code has been sent to:{" "}
+        <span className="purple bold">{email}</span>
+      </small>
 
       <form className={`${styles.form} d-f align-center`}>
         {Array.from({ length: 4 }).map((_, index) => (

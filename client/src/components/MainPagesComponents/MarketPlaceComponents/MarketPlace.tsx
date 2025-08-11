@@ -1,266 +1,231 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./MarketPlace.module.css";
 import BoxCard from "../../../shared/BoxCard/BoxCard";
 import box_1 from "../../../assets/images/box_1.png";
 import Window from "../../../libs/common/lib-window/Window";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { toast } from "react-toastify";
+import { getAllRequests, interestBy } from "../../../services/RequestServices";
+import { RequestData } from "../../../interfaces/FullRequests";
 
-type ServiceProvider = {
-  id: string;
-  label: string;
-  value: string;
-  isChecked: boolean;
-  status: "open" | "closed";
-  duration: string;
-  providerName: string;
-};
+interface MarketPlaceProps {
+  userId: string;
+}
 
-const MarketPlace = () => {
-  const serviceProvidersData: ServiceProvider[] = [
-    {
-      id: "1",
-      label: "Web Design Co.",
-      value: "web-design",
-      isChecked: false,
-      status: "open",
-      duration: "3 weeks",
-      providerName: "PixelCraft Agency",
-    },
-    {
-      id: "2",
-      label: "SEO Experts",
-      value: "seo-experts",
-      isChecked: false,
-      status: "closed",
-      duration: "2 weeks",
-      providerName: "RankBoosters Ltd.",
-    },
-    {
-      id: "3",
-      label: "Cloud Solutions Ltd.",
-      value: "cloud-solutions",
-      isChecked: true,
-      status: "open",
-      duration: "4 weeks",
-      providerName: "NimbusTech",
-    },
-    {
-      id: "4",
-      label: "Mobile App Gurus",
-      value: "mobile-app",
-      isChecked: true,
-      status: "open",
-      duration: "5 weeks",
-      providerName: "Appsmiths",
-    },
-    {
-      id: "5",
-      label: "E-Commerce Pros",
-      value: "ecommerce",
-      isChecked: false,
-      status: "closed",
-      duration: "3 weeks",
-      providerName: "ShopCore Inc.",
-    },
-    {
-      id: "6",
-      label: "Digital Marketing Hub",
-      value: "digital-marketing",
-      isChecked: true,
-      status: "open",
-      duration: "2 weeks",
-      providerName: "BuzzReach Media",
-    },
-    {
-      id: "7",
-      label: "CyberSec Experts",
-      value: "cybersecurity",
-      isChecked: false,
-      status: "closed",
-      duration: "6 weeks",
-      providerName: "ShieldNet Solutions",
-    },
-    {
-      id: "8",
-      label: "UI/UX Studios",
-      value: "ui-ux",
-      isChecked: true,
-      status: "open",
-      duration: "2 weeks",
-      providerName: "DesignFlow Studio",
-    },
-    {
-      id: "9",
-      label: "Data Analytics Firm",
-      value: "data-analytics",
-      isChecked: true,
-      status: "open",
-      duration: "3 weeks",
-      providerName: "InsightBridge",
-    },
-    {
-      id: "10",
-      label: "DevOps Solutions",
-      value: "devops",
-      isChecked: true,
-      status: "closed",
-      duration: "4 weeks",
-      providerName: "OpsWave",
-    },
-    {
-      id: "11",
-      label: "CRM Integrators",
-      value: "crm",
-      isChecked: true,
-      status: "open",
-      duration: "2 weeks",
-      providerName: "ConnectSuite",
-    },
-    {
-      id: "12",
-      label: "AI Automation Inc.",
-      value: "ai-automation",
-      isChecked: true,
-      status: "open",
-      duration: "3 weeks",
-      providerName: "NeuralLabs AI",
-    },
-  ];
-
+const MarketPlace = ({ userId }: MarketPlaceProps) => {
   const [searchValue, setSearchValue] = useState<string>("");
-  const [serviceProviders, setServiceProviders] =
-    useState<ServiceProvider[]>(serviceProvidersData);
-  const [openWindow, setOpenWindow] = useState({});
+  const [requests, setRequests] = useState<RequestData[]>([]);
+  const [openWindow, setOpenWindow] = useState<RequestData | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSearch = (e: string) => {
-    const value = e;
+  // New: track selected categories
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+
+  const handleSearch = (value: string) => {
     setSearchValue(value);
   };
 
-  const handleFilterChange = (index: number) => {
-    setServiceProviders((prev) =>
-      prev.map((service, i) =>
-        i === index ? { ...service, isChecked: !service.isChecked } : service
-      )
+  const handleCategoryToggle = (category: string) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
     );
   };
 
   const handleBoxClick = (id: string) => {
-    const selectedItem = serviceProviders.find((service) => service.id === id);
-    if (!selectedItem) return;
-    setOpenWindow(selectedItem);
+    const selectedItem = requests.find((request) => request._id === id);
+    if (selectedItem) {
+      setOpenWindow(selectedItem);
+    }
+  };
+
+  const fetchRequests = async () => {
+    setLoading(true);
+    try {
+      const result = await getAllRequests();
+      const withCheckState = result.map((r: RequestData) => ({
+        ...r,
+        isChecked: true,
+      }));
+      setRequests(withCheckState);
+    } catch (error) {
+      toast.error("Failed to fetch requests");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRequests();
+  }, []);
+
+  // Create unique category list from serviceDetails[0].name
+  const categories = Array.from(
+    new Set(
+      requests.map((r) => r.serviceDetails?.[0]?.name).filter(Boolean) // remove undefined/null
+    )
+  );
+
+  // Filter requests by search + category
+  const filteredRequests = requests.filter((r) => {
+    const matchesSearch =
+      r.title?.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+      r.description?.toLowerCase().includes(searchValue.trim().toLowerCase());
+
+    const matchesCategory =
+      selectedCategories.length === 0 ||
+      selectedCategories.includes(r.serviceDetails?.[0]?.name);
+
+    return matchesSearch && matchesCategory;
+  });
+
+  const formatDate = (dateString: Date | string): string => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return "Invalid date";
+
+    return date.toLocaleDateString("en-US", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const handleInterestBy = async (requestId: string) => {
+    try {
+      const response = await interestBy(requestId, userId);
+      setOpenWindow(null);
+    } catch (error) {
+      toast.error("Error Occured!");
+    }
   };
 
   return (
     <>
-      <div className={`${styles.wrapper} container d-f `}>
-        <div className={`${styles.leftSidePanel} d-f f-dir-col`}>
-          <h2>Category</h2>
-          <div className={styles.category}>
-            {serviceProviders.map((service: ServiceProvider, index: number) => (
-              <div
-                key={service.id}
-                className={`${styles.serviceItem} d-f align-center bold pointer`}
-                onClick={() => handleFilterChange(index)}
-              >
-                <input
-                  type="checkbox"
-                  name={service.label}
-                  value={service.value}
-                  id={service.id}
-                  checked={serviceProviders[index].isChecked}
-                  className="pointer"
-                />
-                <label className="pointer">{service.label}</label>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className={styles.content}>
-          <div className={styles.header}>
-            <TextInput
-              placeholder="Search"
-              type="text"
-              value={searchValue}
-              name="search_projects"
-              required={false}
-              hasIcon={true}
-              onChange={(e) => handleSearch(e)}
-            />
-          </div>
-
-          <div className={`${styles.servicesContainer}`}>
-            {serviceProviders
-              .filter(
-                (service) =>
-                  service.isChecked &&
-                  service.label
-                    .toLowerCase()
-                    .includes(searchValue.toLowerCase())
-              )
-              .map((service) => (
+      {loading ? (
+        <span className="loader"></span>
+      ) : (
+        <div className={`${styles.wrapper} container d-f`}>
+          {/* Left Side Panel */}
+          <div className={`${styles.leftSidePanel} d-f f-dir-col`}>
+            <h2>Category</h2>
+            <div className={styles.category}>
+              {categories.map((category) => (
                 <div
-                  key={service.id}
-                  className={`${styles.serviceItem} pointer`}
-                  onClick={() => handleBoxClick(service.id)}
+                  key={category}
+                  className={`${styles.serviceItem} d-f align-center bold pointer`}
+                  onClick={() => handleCategoryToggle(category)}
                 >
-                  <BoxCard
-                    size="small"
-                    image={box_1}
-                    alt={service.label}
-                    title={service.label}
-                    duration={service.duration}
-                    providerName={service.providerName}
-                    status={service.status}
+                  <input
+                    type="checkbox"
+                    checked={selectedCategories.includes(category)}
+                    className="pointer"
+                    readOnly
                   />
+                  <label className="pointer ml-1">{category}</label>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className={styles.content}>
+            <div className={styles.header}>
+              <TextInput
+                placeholder="Search"
+                type="text"
+                value={searchValue}
+                name="search_projects"
+                required={false}
+                hasIcon={true}
+                onChange={(value) => handleSearch(value)}
+              />
+            </div>
+
+            <div className={styles.servicesContainer}>
+              {filteredRequests.length === 0 && searchValue ? (
+                <div className={styles.emptyState}>
+                  <p className={styles.noData}>
+                    No results found for "{searchValue}"
+                  </p>
+                </div>
+              ) : (
+                filteredRequests.map((request) => (
+                  <div
+                    key={request._id}
+                    className={`${styles.requestItem} pointer`}
+                    onClick={() => handleBoxClick(request._id)}
+                  >
+                    <BoxCard
+                      size="small"
+                      image={box_1}
+                      status={request.status}
+                      alt={request.title}
+                      title={request.title}
+                      duration={`${request.budget} $`}
+                      description={request.description}
+                      createdAt={request.createdAt}
+                    />
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
       <Window
-        title={openWindow?.label || "Service Details"}
-        visible={Object.values(openWindow).length > 0}
-        onClose={() => setOpenWindow({})}
+        title={openWindow?.title || "Request Details"}
+        visible={!!openWindow}
+        onClose={() => setOpenWindow(null)}
       >
-        <div className={`${styles.boxDetails} d-f f-dir-col`}>
-          <div>
-            <h3>Published Date:</h3>
-            <p>18th Jun</p>
+        {openWindow && (
+          <div className={`${styles.boxDetails} d-f f-dir-col`}>
+            <div>
+              <h3>Created Date:</h3>
+              <p>{formatDate(openWindow.createdAt) || "N/A"}</p>
+            </div>
+            <div>
+              <h3>Project Deadline:</h3>
+              <p>{formatDate(openWindow.projectDeadline) || "N/A"}</p>
+            </div>
+            <div>
+              <h3>Offer Deadline:</h3>
+              <p>{formatDate(openWindow.offerDeadline) || "N/A"}</p>
+            </div>
+            <div>
+              <h3>Title:</h3>
+              <p>{openWindow.title}</p>
+            </div>
+            <div>
+              <h3>Description:</h3>
+              <p>{openWindow.description}</p>
+            </div>
+
+            <div>
+              <h3>Budget:</h3>
+              <p>{openWindow.budget}$</p>
+            </div>
+            <div>
+              <h3>Services Name:</h3>
+              <p>{openWindow.serviceDetails[0].name}</p>
+            </div>
+            <div>
+              <h3>Services Description:</h3>
+              <p>{openWindow.serviceDetails[0].description}</p>
+            </div>
+            {openWindow.status !== "accepted" && (
+              <div className="d-f justify-end align-center mt-3">
+                <LibButton
+                  label="Interested"
+                  onSubmit={() => handleInterestBy(openWindow._id)}
+                  disabled={openWindow.interestedBy.includes(userId)}
+                />
+              </div>
+            )}
           </div>
-          <div>
-            <h3>Category:</h3>
-            <p>{openWindow?.label}</p>
-          </div>
-          <div>
-            <h3>Provider Name:</h3>
-            <p>{openWindow?.providerName}</p>
-          </div>
-          <div>
-            <h3>Status:</h3>
-            <p
-              style={{
-                color: openWindow?.status === "open" ? "green" : "gray",
-              }}
-            >
-              {openWindow?.status}
-            </p>
-          </div>
-          <div>
-            <h3>Duration:</h3>
-            <p>{openWindow?.duration}</p>
-          </div>
-          <div className="d-f justify-between align-center mt-3">
-            <LibButton
-              label="Not Interested"
-              backgroundColor="var(--light-grey)"
-              hoverColor="#d1d1d1"
-              onSubmit={() => {}}
-            />
-            <LibButton label="Interested" onSubmit={() => {}} />
-          </div>
-        </div>
+        )}
       </Window>
     </>
   );

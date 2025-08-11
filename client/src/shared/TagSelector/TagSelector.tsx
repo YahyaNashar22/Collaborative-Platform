@@ -11,6 +11,7 @@ interface TagSelectorProps {
     unassigned: { [key: string]: string }[];
   };
   required?: boolean;
+  interestedProviders?: string[];
   onReady?: (getAssigned: () => { [key: string]: string }[]) => void;
 }
 
@@ -20,6 +21,7 @@ const TagSelector = ({
   placeholder,
   options,
   required = false,
+  interestedProviders = [],
   onReady,
 }: TagSelectorProps) => {
   const [lockedAssigned, setLockedAssigned] = useState<
@@ -92,6 +94,7 @@ const TagSelector = ({
         onChange={(id, label) => handleAdd(id as string, label)}
         required={required}
         disabled={unassigned.length === 0}
+        interestedProviders={interestedProviders}
       />
       {lockedAssigned.length === 0 &&
         sessionAssigned.length === 0 &&

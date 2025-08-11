@@ -91,16 +91,15 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
   };
 
   const handleSave = () => {
-    console.log("errors: ", errors);
-    console.log(updatedData);
-    if (Object.keys(errors).length === 0) onSave(updatedData);
+    if (Object.keys(errors).length === 0) {
+      onSave(updatedData);
+    }
   };
 
   useEffect(() => {
     if (services.length === 0) fetchServices();
   }, []);
 
-  console.log(userData.services);
   return (
     <div className={styles.companyDataTab}>
       <form className={`${styles.form} d-f f-dir-col `}>
