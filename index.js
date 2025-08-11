@@ -13,7 +13,12 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import quotationRoutes from "./routes/quotationRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
 import otpRoutes from "./routes/otpRoutes.js";
+import { fileURLToPath } from 'url';
 import path from "path";
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Declaration
 dotenv.config();
@@ -42,6 +47,15 @@ app.use("/feedbacks", feedbackRoutes);
 app.use("/quotations", quotationRoutes);
 app.use("/requests", requestRoutes);
 app.use("/otp", otpRoutes);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'client', 'dist')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
 
 // Connect to server
 app.listen(process.env.PORT, (error) => {
