@@ -28,7 +28,7 @@ const Projects = () => {
   const fetchProjects = async () => {
     setIsLoading(true);
     try {
-      const result = await getAllProjects();
+      const result = await getAllProjects(user);
       if (result) {
         setProjects(result);
         setFilteredProjects(result);
