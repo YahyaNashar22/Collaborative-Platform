@@ -205,6 +205,39 @@ export const getAllProviderProjectsService = async ({
           ],
         },
       },
+
+      {
+        $addFields: {
+          allStagesCompleted: {
+            $cond: {
+              if: { $gt: [{ $size: "$stages" }, 0] },
+              then: {
+                $allElementsTrue: [
+                  {
+                    $map: {
+                      input: "$stages",
+                      as: "stage",
+                      in: { $eq: ["$$stage.status", "completed"] },
+                    },
+                  },
+                ],
+              },
+              else: false,
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          status: {
+            $cond: {
+              if: "$allStagesCompleted",
+              then: "completed",
+              else: "$status",
+            },
+          },
+        },
+      },
       {
         $sort: { createdAt: -1 },
       },

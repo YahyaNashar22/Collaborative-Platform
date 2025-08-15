@@ -13,6 +13,7 @@ import {
   createStage,
   requestFiles,
   requestMeeting,
+  sendTicket,
   setStageComplete,
   updateStages,
   uploadFile,
@@ -49,11 +50,14 @@ const ProjectConfiguration = ({
   ] as const;
 
   const [selected, setSelected] = useState<NodeId>("timeline");
+  const [message, setMessage] = useState<string>("");
   const [selectedStage, setSelectedStage] = useState<number>();
   const [deleteWindow, setDeleteWindow] = useState(false);
   const [saveWindow, setSaveWindow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorSendTicket, setErrorSendTicket] = useState("");
   const [requestFileWindow, setRequestFileWindow] = useState<boolean>(false);
+  const [sendTicketWindow, setSendTicketWindow] = useState<boolean>(false);
   const [requestMeetingWindow, setRequestMeetingWindow] =
     useState<boolean>(false);
   const [requestMeetingData, setRequestMeetingData] = useState("");
@@ -106,19 +110,6 @@ const ProjectConfiguration = ({
       setIsLoading(false);
     }
   };
-
-  // const getPhaseColor = (to: string): string => {
-  //   if (!to) return "#fff";
-
-  //   const now = dayjs();
-  //   const deadline = dayjs(to);
-  //   const diff = deadline.diff(now, "day");
-
-  //   if (diff < 0) return "#ffe6e6";
-  //   if (diff <= 3) return "#fff3cd";
-  //   if (diff <= 7) return "#e0f7fa";
-  //   return "#f4f4f4";
-  // };
 
   const handleChange = (
     value: string | Date | boolean,
@@ -229,6 +220,26 @@ const ProjectConfiguration = ({
       setRequestMeetingData("");
     } catch (error) {
       toast.error("Failed to send Meeting request.");
+    }
+  };
+
+  const handleSendTicket = async () => {
+    if (message.length === 0) {
+      setErrorSendTicket("Message is required to send a ticket.");
+      return;
+    }
+    console.log(projectData, userData);
+    const payload = {
+      senderId: userData?._id,
+      projectId: projectData._id,
+      clientId: projectData.clientId,
+      providerId: projectData.providerId,
+    };
+    try {
+      const result = await sendTicket(payload);
+      toast.success("Ticket request sent successfully.");
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -430,13 +441,26 @@ const ProjectConfiguration = ({
                   />
                 )}
                 {userData?.role !== "admin" && (
-                  <LibButton
-                    label="Request Meeting"
-                    onSubmit={() => setRequestMeetingWindow(true)}
-                    backgroundColor="#57417e"
-                    hoverColor="#49356a"
-                    padding="0 20px"
-                  />
+                  <div className="buttons d-f align-center gap-05">
+                    <LibButton
+                      label="Request Meeting"
+                      onSubmit={() => setRequestMeetingWindow(true)}
+                      backgroundColor="#57417e"
+                      hoverColor="#49356a"
+                      padding="0 20px"
+                    />
+                    <LibButton
+                      label="Send ticket"
+                      onSubmit={() => {
+                        setErrorSendTicket("");
+                        setMessage("");
+                        setSendTicketWindow(true);
+                      }}
+                      backgroundColor="#57417e"
+                      hoverColor="#49356a"
+                      padding="0 20px"
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -554,7 +578,7 @@ const ProjectConfiguration = ({
             onClose={() => setSaveWindow(false)}
             isErrorWindow="true"
           >
-            <small className="mb-1 d-b">
+            <small className="mb-1 d-b f-12">
               are you sure do you want to Save these stages ?
             </small>
             <div className={`${styles.btns} d-f align-center justify-between`}>
@@ -620,6 +644,46 @@ const ProjectConfiguration = ({
               <LibButton
                 label="Send Request"
                 onSubmit={handleRequestFile}
+                bold={true}
+                backgroundColor="#825beb"
+                hoverColor="#6c46d9"
+              />
+            </div>
+          </div>
+        </Window>
+      )}
+
+      {sendTicketWindow && (
+        <Window
+          title="Send Ticket"
+          visible={sendTicketWindow}
+          onClose={() => setSendTicketWindow(false)}
+        >
+          <div className="d-f f-dir-col gap-1">
+            <TextInput
+              name="message"
+              label="Message"
+              type="text"
+              placeholder="Enter your message"
+              value={message}
+              errorMessage={errorSendTicket}
+              required={true}
+              onChange={(value: string) => setMessage(value)}
+            />
+
+            <div className="d-f align-center justify-between mt-1">
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setSendTicketWindow(false)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Send Ticket"
+                onSubmit={handleSendTicket}
                 bold={true}
                 backgroundColor="#825beb"
                 hoverColor="#6c46d9"

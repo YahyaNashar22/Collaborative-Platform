@@ -66,6 +66,10 @@ textarea {
   resize: none;
 }
 
+.f-12 {
+  font-size: 12px;
+}
+
 .circled {
   border-radius: 100%;
   border: 5px solid var(--deep-purple);

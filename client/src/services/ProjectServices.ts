@@ -101,3 +101,10 @@ export const requestMeeting = async (projectId: string, payload: string) => {
   const result = await axiosInstance.post(url, { meetingLink: payload });
   return result.data;
 };
+
+export const sendTicket = async (payload) => {
+  const url = `${AuthBaseURL}/send-ticket`;
+
+  const result = await axiosInstance.post(url, payload);
+  return result.data;
+};

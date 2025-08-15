@@ -21,7 +21,7 @@ export const createAndSendEmailOtp = async (req, res) => {
 
     // add otp to db
     const otp = createEmailOtpService(email, emailOtp, expiryDate);
-
+    console.log("--------------", emailOtp, "-------------");
     // send email
     otpTemplate(email, emailOtp);
 
