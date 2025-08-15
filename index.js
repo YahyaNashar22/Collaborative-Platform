@@ -15,6 +15,7 @@ import requestRoutes from "./routes/requestRoutes.js";
 import otpRoutes from "./routes/otpRoutes.js";
 import { fileURLToPath } from 'url';
 import path from "path";
+import ticketRoutes from "./routes/ticketRoutes.js";
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +48,7 @@ app.use("/feedbacks", feedbackRoutes);
 app.use("/quotations", quotationRoutes);
 app.use("/requests", requestRoutes);
 app.use("/otp", otpRoutes);
+app.use("/ticket", ticketRoutes);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
