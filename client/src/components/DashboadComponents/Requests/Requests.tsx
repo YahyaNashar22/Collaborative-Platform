@@ -60,6 +60,7 @@ const Requests = () => {
   );
   const [filteredRequests, setFilteredRequests] = useState<RequestData[]>([]);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
+  const [statusFilter, setStatusFilter] = useState<string>("");
   const debounceRef = useRef(null);
 
   const { user } = authStore();
@@ -101,26 +102,52 @@ const Requests = () => {
   }, []);
 
   useEffect(() => {
-    if (!searchValue) {
-      setFilteredRequests(requests);
-      return;
-    }
-
     setIsFiltering(true);
-
     if (debounceRef.current) clearTimeout(debounceRef.current);
-
     debounceRef.current = setTimeout(() => {
-      const search = searchValue.toLowerCase();
-
-      const filtered = requests.filter((req) =>
-        req.title?.toLowerCase().includes(search)
-      );
-
+      let filtered = requests;
+      if (searchValue) {
+        const search = searchValue.toLowerCase();
+        filtered = filtered.filter((req) =>
+          req.title?.toLowerCase().includes(search)
+        );
+      }
+      if (statusFilter) {
+        filtered = filtered.filter((req) => {
+          // Map request.status to Card.tsx statuses
+          const status = req.status?.toLowerCase();
+          if (statusFilter === "accepted") return status === "accepted";
+          if (statusFilter === "canceled") return status === "canceled";
+          if (statusFilter === "completed") return status === "completed";
+          if (statusFilter === "in_progress") return status === "in_progress";
+          // For deadline-based statuses, you may need to calculate as in Card.tsx
+          if (
+            ["onTrack", "dueSoon", "upcoming", "urgent", "overdue"].includes(
+              statusFilter
+            )
+          ) {
+            // Use the same logic as getProjectStatus in Card.tsx
+            const now = new Date();
+            const deadline = new Date(req.projectDeadline);
+            const diffInDays = Math.ceil(
+              (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+            );
+            if (statusFilter === "overdue") return diffInDays < 0;
+            if (statusFilter === "urgent")
+              return diffInDays <= 3 && diffInDays >= 0;
+            if (statusFilter === "upcoming")
+              return diffInDays <= 7 && diffInDays > 3;
+            if (statusFilter === "dueSoon")
+              return diffInDays <= 14 && diffInDays > 7;
+            if (statusFilter === "onTrack") return diffInDays > 14;
+          }
+          return true;
+        });
+      }
       setFilteredRequests(filtered);
       setIsFiltering(false);
     }, 300);
-  }, [searchValue, requests]);
+  }, [searchValue, requests, statusFilter]);
 
   //*********** Admin section Function ************//
 
@@ -337,6 +364,20 @@ const Requests = () => {
     );
   }
 
+  // Status options based on Card.tsx
+  const statusOptions = [
+    { value: "", label: "All Statuses" },
+    { value: "accepted", label: "Accepted" },
+    { value: "canceled", label: "Canceled" },
+    { value: "completed", label: "Completed" },
+    { value: "in_progress", label: "In Progress" },
+    { value: "onTrack", label: "On Track" },
+    { value: "dueSoon", label: "Due Soon" },
+    { value: "upcoming", label: "Upcoming" },
+    { value: "urgent", label: "Urgent" },
+    { value: "overdue", label: "Overdue" },
+  ];
+
   return (
     <>
       <main className={`${styles.wrapper} w-100`}>
@@ -352,6 +393,23 @@ const Requests = () => {
                 hasIcon={true}
                 onChange={handleSearch}
               />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                style={{
+                  marginLeft: "1rem",
+                  minWidth: "140px",
+                  height: "36px",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                }}
+              >
+                {statusOptions.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
               {user?.role === "client" && (
                 <LibButton
                   label="+ Add New"

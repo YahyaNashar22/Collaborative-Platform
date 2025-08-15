@@ -7,6 +7,12 @@ export const sendFeedback = async (req, res) => {
     try {
         const { projectId, userId, satisfactionAsPartnerCCC, professionalismOfTheCompany, technicalSupport, responsivenessToNeeds, serviceQuality, deliveryTime, performanceOfProvider, satisfactionWithProviderExpertise, expertiseKnowledge, addressedMyConcerns, clearCommunication, responsiveTimely, insightsRecommendation, HowStronglyRecommend, comparedToCompetitors, continueOurServices, customMessage } = req.body;
 
+        const prevFeedback = await Feedback.findOne({ projectId, userId });
+
+        if (prevFeedback) return req.status(400).json({
+            message: "Feedback Already Sent!"
+        });
+
         const feedback = new Feedback({ projectId, userId, satisfactionAsPartnerCCC, professionalismOfTheCompany, technicalSupport, responsivenessToNeeds, serviceQuality, deliveryTime, performanceOfProvider, satisfactionWithProviderExpertise, expertiseKnowledge, addressedMyConcerns, clearCommunication, responsiveTimely, insightsRecommendation, HowStronglyRecommend, comparedToCompetitors, continueOurServices, customMessage });
 
         await feedback.save();
