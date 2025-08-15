@@ -1,11 +1,12 @@
 import express from "express";
-import { ticketTemplate } from "../utils/emailTemplates";
+import { ticketTemplate } from "../utils/emailTemplates.js";
+import User from "../models/userModel.js";
 
 
 
 const ticketRoutes = express.Router();
 
-ticketRoutes.post('/send-ticket', (req, res) => {
+ticketRoutes.post('/send-ticket', async (req, res) => {
     const {
         senderId,
         projectId,
@@ -13,6 +14,9 @@ ticketRoutes.post('/send-ticket', (req, res) => {
         providerId,
         message
     } = req.body;
+
+    const client = await User.findById(clientId);
+    const provider = await User.findById(providerId);
 
     try {
         ticketTemplate(senderId,

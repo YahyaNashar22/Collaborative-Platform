@@ -20,8 +20,7 @@ const userSchema = new Schema(
     recoveryEmail: {
       type: String,
       required: false,
-      unique: true,
-      sparse: true,
+      unique: false,
     },
     phone: {
       type: String,

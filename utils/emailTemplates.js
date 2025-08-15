@@ -60,7 +60,7 @@ export const ticketTemplate = (senderId,
   transporter.sendMail(
     {
       from: process.env.SENDER_EMAIL,
-      to: receiverEmail, // Recipient's email address
+      to: "info@collaborative-cc.com", // Recipient's email address
       subject: `Ticket For Project #${projectId}`, // Subject line
       html: htmlBody, // HTML body
     },

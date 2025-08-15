@@ -143,7 +143,10 @@ const Users = () => {
                       <td>{user.phone}</td>
                       <td>
                         <span
-                          onClick={() => toggleBlockStatus(user._id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleBlockStatus(user._id);
+                          }}
                           className={`${styles.status} ${
                             user.banned ? styles.blocked : styles.active
                           }`}
