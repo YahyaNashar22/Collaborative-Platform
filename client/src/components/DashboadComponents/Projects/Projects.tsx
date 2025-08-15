@@ -3,7 +3,6 @@ import styles from "./Projects.module.css";
 import ProjectConfiguration from "./ProjectConfiguration/ProjectConfiguration";
 import { useEffect, useRef, useState } from "react";
 import { getAllProjects } from "../../../services/ProjectServices";
-import ServiceCardSkeletonGrid from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
 import ProjectCards from "../ProjectCards/ProjectCards";
 import authStore from "../../../store/AuthStore";
 import CardSkeletonLoading from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
