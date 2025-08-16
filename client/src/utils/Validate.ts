@@ -9,7 +9,8 @@ export const Validate = (
   value: string | multiSelectType[] | File | File[] | Date,
   required: boolean = false,
   type: string = "text",
-  isFutureDate: boolean = false
+  isFutureDate: boolean = false,
+  isLogin: boolean = false
 ): string => {
   if (required) {
     if (type === "multiSelect") {
@@ -45,6 +46,15 @@ export const Validate = (
     const onlyDigits = value.replace(/\D/g, "");
     if (onlyDigits.length < 8) {
       return "* Please enter a valid phone number";
+    }
+  }
+
+  if (!isLogin && name === "password") {
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+    if (typeof value === "string" && !strongPasswordRegex.test(value)) {
+      return "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.";
     }
   }
 

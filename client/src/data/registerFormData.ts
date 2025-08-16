@@ -457,9 +457,9 @@ export const registerFormData: RegisterFormData = {
                 {
                   name: "industry",
                   label: "Industry",
-                  value: "",
+                  value: [],
                   placeholder: "Industry",
-                  type: "select",
+                  type: "multiSelect",
                   options: [
                     {
                       label: "Information Technology",
@@ -723,7 +723,7 @@ export const registerFormData: RegisterFormData = {
                   placeholder: "123456789",
                   type: "text",
                   maxLength: 30,
-                  required: false,
+                  required: true,
                   errorMsg: "* This Field is Required",
                 },
                 {
@@ -760,9 +760,9 @@ export const registerFormData: RegisterFormData = {
                 {
                   name: "expertise",
                   label: "Expertise",
-                  value: "",
+                  value: [],
                   placeholder: "Expertise",
-                  type: "select",
+                  type: "multiSelect",
                   options: [
                     { label: "Web Development", value: "web_development" },
                     {
@@ -963,9 +963,9 @@ export const registerFormData: RegisterFormData = {
                 {
                   name: "industry",
                   label: "Industry",
-                  value: "",
+                  value: [],
                   placeholder: "Industry",
-                  type: "select",
+                  type: "multiSelect",
                   options: [
                     {
                       label: "Information Technology",
@@ -1232,7 +1232,7 @@ export const registerFormData: RegisterFormData = {
                   value: "",
                   placeholder: "Attachment",
                   type: "file",
-                  required: false,
+                  required: true,
                   errorMsg: "* This Field is Required",
                 },
                 {
@@ -1241,7 +1241,7 @@ export const registerFormData: RegisterFormData = {
                   value: "",
                   placeholder: "Attachment",
                   type: "file",
-                  required: false,
+                  required: true,
                   errorMsg: "* This Field is Required",
                 },
                 {

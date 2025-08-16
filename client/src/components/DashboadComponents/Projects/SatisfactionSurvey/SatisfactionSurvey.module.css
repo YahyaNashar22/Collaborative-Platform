@@ -1,0 +1,237 @@
+/* Main container */
+.satisfactionSurvey {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 1.5rem;
+  background-color: white;
+}
+
+.surveyContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Star Rating Section */
+.starRatingSection {
+  margin-bottom: 2rem;
+}
+
+.starRatingTitle {
+  color: #7c3aed;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.starRatingContainer {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.starButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+tbody {
+  border: 1px solid;
+}
+
+.starIcon {
+  width: 2rem;
+  height: 2rem;
+  transition: colors 0.2s ease;
+}
+
+.starFilled {
+  fill: #7c3aed;
+  color: #7c3aed;
+}
+
+.starEmpty {
+  color: #d1d5db;
+}
+
+.starEmpty:hover {
+  color: #a855f7;
+}
+
+/* Table Section */
+.tableSection {
+  margin-bottom: 2rem;
+}
+
+.tableTitle {
+  color: #7c3aed;
+  font-size: 1.125rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.tableContainer {
+  overflow-x: auto;
+}
+
+.satisfactionTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table Headers */
+.tableHeader {
+  padding: 1rem;
+  text-align: center;
+  color: white;
+  font-weight: 500;
+  border-right: 1px solid #9ca3af;
+}
+
+.tableHeader:last-child {
+  border-right: none;
+}
+
+.criteriaHeader {
+  background-color: #673695;
+  text-align: left;
+  width: 20rem;
+}
+
+.levelHeader {
+  width: 8rem;
+}
+
+.notSatisfied {
+  background-color: #673695;
+}
+
+.somewhatSatisfied {
+  background-color: #673695;
+}
+
+.satisfied {
+  background-color: #673695;
+}
+
+.verySatisfied {
+  background-color: #673695;
+}
+
+.notApplicable {
+  background-color: #673695;
+}
+
+/* Table Rows */
+.tableRow {
+  border-top: 1px solid #673695;
+}
+
+.rowEven {
+  background-color: white;
+}
+
+.rowOdd {
+  background-color: #f9fafb;
+}
+
+/* Table Cells */
+.criteriaCell {
+  background-color: #673695;
+  color: white;
+  padding: 1rem;
+  font-weight: 500;
+  border-right: 1px solid #9ca3af;
+}
+
+.responseCell {
+  padding: 1rem;
+  text-align: center;
+  border-right: 1px solid #9ca3af;
+}
+
+.responseCell:last-child {
+  border-right: none;
+}
+
+.radioContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.radioInput {
+  width: 1.25rem;
+  height: 1.25rem;
+  cursor: pointer;
+  accent-color: #7c3aed;
+  transform: scale(1.25);
+}
+
+/* Submit Section */
+.submitSection {
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+}
+
+.submitButton {
+  background-color: #6d28d9;
+  color: white;
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submitButton:hover {
+  background-color: #673695;
+}
+
+.textArea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.textArea:focus {
+  outline: none;
+  border-color: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .satisfactionSurvey {
+    padding: 1rem;
+  }
+
+  .criteriaHeader,
+  .criteriaCell {
+    width: auto;
+    min-width: 12rem;
+  }
+
+  .levelHeader {
+    width: auto;
+    min-width: 6rem;
+  }
+
+  .starIcon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+.firstCell {
+  opacity: 0;
+  border: none;
+}

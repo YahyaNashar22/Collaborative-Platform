@@ -70,7 +70,14 @@ const LogInComponent = ({
 
     data.forEach((field) => {
       const value = formValues[field.name] || "";
-      const error = Validate(field.name, value, field.required, field.type);
+      const error = Validate(
+        field.name,
+        value,
+        field.required,
+        field.type,
+        false,
+        true
+      );
       if (error) {
         newErrors[field.name] = error;
         newTouched[field.name] = true;
@@ -90,7 +97,9 @@ const LogInComponent = ({
         name,
         value,
         required,
-        data.find((f) => f.name === name)?.type || ""
+        data.find((f) => f.name === name)?.type || "",
+        false,
+        true
       );
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
@@ -103,7 +112,7 @@ const LogInComponent = ({
     type: string
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type);
+    const error = Validate(name, value, required, type, false, true);
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 

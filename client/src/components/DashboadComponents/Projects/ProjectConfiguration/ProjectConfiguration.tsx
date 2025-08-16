@@ -228,7 +228,6 @@ const ProjectConfiguration = ({
       setErrorSendTicket("Message is required to send a ticket.");
       return;
     }
-    console.log(projectData, userData);
     const payload = {
       senderId: userData?._id,
       projectId: projectData._id,
@@ -239,7 +238,7 @@ const ProjectConfiguration = ({
       const result = await sendTicket(payload);
       toast.success("Ticket request sent successfully.");
     } catch (error) {
-      console.log(error);
+      error;
     }
   };
 

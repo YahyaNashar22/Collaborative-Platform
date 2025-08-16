@@ -113,6 +113,7 @@ const SelectInput = ({
     return value;
   };
 
+  value;
   return (
     <div className={`${styles.inputContainer} d-f f-dir-col`}>
       <label htmlFor={name} className="bold">
@@ -145,8 +146,12 @@ const SelectInput = ({
       ) : (
         <Multiselect
           options={options}
+          selectedValues={Array.isArray(value) ? value : []}
           onSelect={(items) => onChange(items, name)}
-          onRemove={(items) => onRemove?.(items)}
+          onRemove={(items) => {
+            onChange(items, name);
+            onRemove?.(items);
+          }}
           displayValue="label"
           placeholder={placeholder}
           className={`multiSelect pointer ${errorMessage && "specialError"}`}

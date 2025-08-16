@@ -6,6 +6,11 @@ import { getAllProjects } from "../../../services/ProjectServices";
 import ProjectCards from "../ProjectCards/ProjectCards";
 import authStore from "../../../store/AuthStore";
 import CardSkeletonLoading from "../../../shared/CardSkeletonLoading/CardSkeletonLoading";
+import Window from "../../../libs/common/lib-window/Window";
+import SatisfactionSurvey from "./SatisfactionSurvey/SatisfactionSurvey";
+import { Feedback } from "../../../interfaces/Project";
+import { toast } from "react-toastify";
+import { submitFedback } from "../../../services/Feedback";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -88,7 +93,7 @@ const Projects = () => {
   // ) => {
   //   try {
   //     const result = await updateStage(projectId, stageId, updateData);
-  //     console.log(result);
+  //     (result);
   //   } catch (error) {
   //     console.error(error);
   //   }
@@ -151,6 +156,8 @@ const Projects = () => {
                   <ProjectCards
                     data={filteredProjects}
                     onCardClick={onStartProjectConfiguration}
+                    userRole={user.role}
+                    onAddFeedback={handleAddFeedback}
                   />
                 </div>
               ) : (
@@ -159,6 +166,23 @@ const Projects = () => {
             </>
           )}
         </main>
+      )}
+
+      {feedbackWindow !== null && (
+        <Window
+          size="large"
+          title=" "
+          visible={feedbackWindow !== null}
+          onClose={() => setFeedbackWindow(null)}
+        >
+          <SatisfactionSurvey
+            projectId={filteredProjects[feedbackWindow]?._id}
+            userId={filteredProjects[feedbackWindow]?.clientId}
+            onSubmit={(feedbackData: Feedback) => {
+              handleSubmitFeedback(feedbackData);
+            }}
+          />
+        </Window>
       )}
     </>
   );

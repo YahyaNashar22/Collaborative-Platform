@@ -1,5 +1,6 @@
 import axios from "axios";
 import axiosInstance from "../Config/axiosInstence";
+import { Feedback } from "../interfaces/Project";
 
 const AuthBaseURL = "/projects";
 

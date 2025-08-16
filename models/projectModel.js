@@ -61,6 +61,11 @@ const projectSchema = new Schema(
       required: false,
       default: "in_progress",
     },
+    isFeedbackSubmit: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
     stages: {
       type: [
         {

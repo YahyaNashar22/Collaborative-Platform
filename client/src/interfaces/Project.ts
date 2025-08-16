@@ -1,0 +1,21 @@
+export type Feedback = {
+  HowStronglyRecommend: number;
+  addressedMyConcerns: number;
+  clearCommunication: number;
+  comparedToCompetitors: number;
+  continueOurServices: number;
+  customMessage: string;
+  deliveryTime: number;
+  expertiseKnowledge: number;
+  insightsRecommendation: number;
+  performanceOfProvider: number;
+  professionalismOfTheCompany: number;
+  projectId: string;
+  responsiveTimely: number;
+  responsivenessToNeeds: number;
+  satisfactionAsPartnerCCC: number;
+  satisfactionWithProviderExpertise: number;
+  serviceQuality: number;
+  technicalSupport: number;
+  userId: string;
+};
