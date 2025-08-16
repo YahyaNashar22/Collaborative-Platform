@@ -96,15 +96,19 @@ export const getUserData = async (userId: string) => {
 
 export const updateProfileData = async (
   userId: string,
-  payload: { [key: string]: string | File }
+  payload: { [key: string]: string | File | any[] }
 ) => {
   const formData = new FormData();
 
   Object.entries(payload).forEach(([key, value]) => {
+    if (!value) return;
+
     if (Array.isArray(value)) {
-      value.forEach((v) => formData.append(`${key}[]`, v));
-    } else {
+      formData.append(key, JSON.stringify(value));
+    } else if (value instanceof File) {
       formData.append(key, value);
+    } else {
+      formData.append(key, String(value));
     }
   });
 

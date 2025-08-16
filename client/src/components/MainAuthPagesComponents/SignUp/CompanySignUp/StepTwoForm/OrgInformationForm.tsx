@@ -38,11 +38,12 @@ const OrgInformationForm = ({
     moveForward();
   };
 
+  fieldValues;
+
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
       <h1 className="purple">{title}</h1>
       <form className={`${styles.form} d-f f-dir-col `}>
-        {/* Group First Name and Last Name */}
         {data.form.slice(0, 3).map((field: FormField, index: number) => {
           return (
             <div key={index}>
@@ -103,7 +104,7 @@ const OrgInformationForm = ({
                 required={field.required}
                 placeholder={field.placeholder}
                 options={field.options || []}
-                onChange={(value, name) =>
+                onChange={(value) =>
                   handleChange(field.name, value, field.required || false)
                 }
                 errorMessage={errors[field.name]}

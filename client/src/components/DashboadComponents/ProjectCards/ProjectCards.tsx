@@ -5,10 +5,18 @@ import styles from "./ProjectCards.module.css";
 
 type ProjectCardsProps = {
   data: Project[];
+  userRole: string;
   onCardClick: (index: number) => void;
+  onAddFeedback: (index: number) => void;
 };
 
-const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
+const ProjectCards = ({
+  data,
+  userRole,
+  onCardClick,
+  onAddFeedback,
+}: ProjectCardsProps) => {
+  data;
   return (
     <div className={styles.cardsContainer}>
       {data.length === 0 ? (
@@ -23,6 +31,7 @@ const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
               projectDeadline,
               //   stages,
               status,
+              isFeedbackSubmit,
               projectEstimatedDeadline,
             },
             index: number
@@ -38,12 +47,27 @@ const ProjectCards = ({ data, onCardClick }: ProjectCardsProps) => {
                 projectEstimatedDeadline={projectEstimatedDeadline}
                 // role={userData?.role}
               >
-                <div className="d-f justify-end">
+                <div
+                  className={`d-f ${
+                    userRole === "client" && status === "completed"
+                      ? "justify-between"
+                      : "justify-end"
+                  }`}
+                >
                   <LibButton
-                    label={"Configure"}
+                    label="Configure"
                     onSubmit={() => onCardClick(index)}
                     bold
                   />
+
+                  {userRole === "client" && status === "completed" && (
+                    <LibButton
+                      label="Add Feedback"
+                      onSubmit={() => onAddFeedback(index)}
+                      disabled={isFeedbackSubmit}
+                      bold
+                    />
+                  )}
                 </div>
               </Card>
             );

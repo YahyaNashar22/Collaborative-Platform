@@ -54,6 +54,7 @@ const CompanyForm = ({
   };
 
   useEffect(() => {
+    "------", fieldValues;
     if (!serviceOptions.length) fetchAllServices();
   }, []);
 

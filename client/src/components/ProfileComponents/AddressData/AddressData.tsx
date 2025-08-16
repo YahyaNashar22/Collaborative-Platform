@@ -86,7 +86,7 @@ const AddressData = ({
             padding="0"
           />
           <LibButton
-            label="Next"
+            label="Save"
             onSubmit={handleSave}
             backgroundColor="#825beb"
             hoverColor="#6c46d9"

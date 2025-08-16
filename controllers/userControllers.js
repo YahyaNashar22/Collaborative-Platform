@@ -162,9 +162,23 @@ export const registerClient = async (req, res) => {
       companyDescription,
       companyWebsite,
       country,
-      industry,
+      industry: rawIndustry,
       banned,
     } = req.body;
+
+    let industry = rawIndustry;
+
+    if (typeof industry === "string") {
+      try {
+        console.log("Parsing industry string:", industry);
+        industry = JSON.parse(industry);
+      } catch (parseError) {
+        return res.status(400).json({
+          message: "Invalid industry format",
+          error: parseError.message,
+        });
+      }
+    }
 
     const profilePicture =
       req.files?.profilePicture?.[0]?.filename || "default";
@@ -243,9 +257,9 @@ export const registerProvider = async (req, res) => {
       companyDescription,
       companyWebsite,
       yearsExperience,
-      expertise,
+      expertise: rawExpertise,
       crNumber,
-      industry,
+      industry: rawIndustry,
       services,
       country,
       city,
@@ -268,6 +282,34 @@ export const registerProvider = async (req, res) => {
       }
     } else if (Array.isArray(services)) {
       servicesArray = services;
+    }
+
+    let industry = rawIndustry;
+
+    if (typeof industry === "string") {
+      try {
+        console.log("Parsing industry string:", industry);
+        industry = JSON.parse(industry);
+      } catch (parseError) {
+        return res.status(400).json({
+          message: "Invalid industry format",
+          error: parseError.message,
+        });
+      }
+    }
+
+    let expertise = rawExpertise;
+
+    if (typeof expertise === "string") {
+      try {
+        console.log("Parsing expertise string:", expertise);
+        expertise = JSON.parse(expertise);
+      } catch (parseError) {
+        return res.status(400).json({
+          message: "Invalid industry format",
+          error: parseError.message,
+        });
+      }
     }
 
     const profilePicture = req.files.profilePicture
@@ -641,38 +683,31 @@ export const editClientProfile = async (req, res) => {
 export const editProviderProfile = async (req, res) => {
   try {
     const id = req.params.id;
-    const {
-      firstName,
-      lastName,
-      company,
-      address,
-      country,
-      language,
-      experience,
-      services,
-    } = req.body;
 
-    // get user
+    const fieldsToParseAsJSON = ["services", "expertise", "industry"];
+
+    fieldsToParseAsJSON.forEach((field) => {
+      if (req.body[field] && typeof req.body[field] === "string") {
+        try {
+          req.body[field] = JSON.parse(req.body[field]);
+        } catch (parseError) {
+          console.warn(`Failed to parse ${field}:`, parseError.message);
+        }
+      }
+    });
+
     const user = await getUserByIdService(id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // update user
-    await User.findByIdAndUpdate(
-      id,
-      {
-        firstName,
-        lastName,
-        company,
-        address,
-        country,
-        language,
-        experience,
-        services,
-      },
-      { new: true, runValidators: true }
-    );
+    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
 
-    res.status(200).json({ message: `provider ${id} edited successfully` });
+    res.status(200).json({
+      message: `Provider ${id} edited successfully`,
+      user: updatedUser,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({
@@ -692,7 +727,6 @@ export const changeProfilePicture = async (req, res) => {
     const user = await getUserByIdService(id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // delete previous picture
     if (
       user &&
       user.profilePicture &&
@@ -702,7 +736,6 @@ export const changeProfilePicture = async (req, res) => {
       removeFile(user.profilePicture);
     }
 
-    // update profile picture
     await User.findByIdAndUpdate(id, { profilePicture }, { new: true });
 
     res.status(200).json({ message: "profile picture updated successfully" });
@@ -991,7 +1024,6 @@ export const deleteUser = async (req, res) => {
     });
   }
 };
-
 export const updateUserData = async (req, res) => {
   const { id } = req.params;
 
@@ -1001,6 +1033,19 @@ export const updateUserData = async (req, res) => {
       return res.status(404).json({ message: "User doesn't exist!" });
     }
 
+    const fieldsToParseAsJSON = ["industry", "services", "expertise"];
+
+    fieldsToParseAsJSON.forEach((field) => {
+      if (req.body[field] && typeof req.body[field] === "string") {
+        try {
+          req.body[field] = JSON.parse(req.body[field]);
+          console.log(`Successfully parsed ${field}:`, req.body[field]);
+        } catch (parseError) {
+          console.warn(`Failed to parse ${field}:`, parseError.message);
+        }
+      }
+    });
+
     const updates = { ...req.body };
 
     if (req.body.password) {
@@ -1008,13 +1053,16 @@ export const updateUserData = async (req, res) => {
       updates.password = bcrypt.hashSync(req.body.password, salt);
     }
 
-    // Merge services instead of replacing
     if (req.body.services && Array.isArray(req.body.services)) {
       const existingServices = userExist.services || [];
       const newServices = req.body.services;
       updates.services = Array.from(
         new Set([...existingServices, ...newServices])
       );
+    }
+
+    if (req.body.industry && Array.isArray(req.body.industry)) {
+      updates.industry = req.body.industry;
     }
 
     const files = req.files || {};
@@ -1035,7 +1083,8 @@ export const updateUserData = async (req, res) => {
       }
     });
 
-    console.log("Updates:", updates);
+    console.log("Final updates:", updates);
+    console.log("Industry type:", typeof updates.industry);
 
     const updatedUser = await User.findByIdAndUpdate(id, updates, {
       new: true,
@@ -1045,7 +1094,10 @@ export const updateUserData = async (req, res) => {
     res.status(200).json(updatedUser);
   } catch (err) {
     console.error("Update error:", err);
-    res.status(500).json({ message: "Server error during update." });
+    res.status(500).json({
+      message: "Server error during update.",
+      error: err.message,
+    });
   }
 };
 

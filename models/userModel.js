@@ -68,9 +68,20 @@ const userSchema = new Schema(
     },
 
     industry: {
-      type: String,
+      type: [
+        {
+          label: {
+            type: String,
+            required: true,
+          },
+          value: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
       required: function () {
-        return this.company === "company";
+        return this.accountType === "company";
       },
     },
     country: {
@@ -112,18 +123,23 @@ const userSchema = new Schema(
       },
     },
     expertise: {
-      type: String,
+      type: [
+        {
+          label: {
+            type: String,
+            required: true,
+          },
+          value: {
+            type: String,
+            required: true,
+          },
+        },
+      ],
       required: function () {
-        return this.role === "provider";
+        return this.accountType === "provider";
       },
     },
-    industry: {
-      type: String,
-      required: false,
-    },
-    industry: {
-      type: String,
-    },
+
     services: [
       {
         type: Schema.Types.ObjectId,

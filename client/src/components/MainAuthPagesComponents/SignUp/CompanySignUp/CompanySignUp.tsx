@@ -72,6 +72,8 @@ const CompanySignUp = ({
         setError("Invalid or expired OTP.");
         return;
       }
+
+      payload;
       const newPayload = { ...payload, accountType: "company" };
       const result = await signUpCompanyClient(newPayload);
       setUser(result);
