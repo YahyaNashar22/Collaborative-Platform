@@ -262,6 +262,11 @@
     display: none;
   }
 
+  .right.hasAccess {
+    display: flex;
+    margin-right: 1rem;
+  }
+
   .hamburger {
     display: flex;
   }

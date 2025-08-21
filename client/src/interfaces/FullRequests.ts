@@ -64,6 +64,7 @@ export interface Project {
   isRequestedFiles: boolean;
   isUploadedFiles: boolean;
   assignedStage: boolean;
+  isFeedbackSubmit: boolean;
   title: string;
   description: string;
   status: "in_progress" | "completed" | "pending" | string;

@@ -11,11 +11,12 @@ import SatisfactionSurvey from "./SatisfactionSurvey/SatisfactionSurvey";
 import { Feedback } from "../../../interfaces/Project";
 import { toast } from "react-toastify";
 import { submitFedback } from "../../../services/Feedback";
+import { Project } from "../../../interfaces/FullRequests";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
   const [projects, setProjects] = useState([]);
-  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [openPoject, setOpenProject] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
@@ -93,7 +94,6 @@ const Projects = () => {
   const handleSubmitFeedback = async (feedbackData: Feedback) => {
     try {
       const result = await submitFedback(feedbackData);
-      result;
       if (result) {
         setFilteredProjects((prev) =>
           prev.map((project, i) =>
