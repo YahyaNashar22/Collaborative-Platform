@@ -18,6 +18,18 @@ import { submitFedback } from "../../../services/Feedback";
 import { Project } from "../../../interfaces/FullRequests";
 
 const Projects = () => {
+  const statusOptions = [
+    { value: "", label: "All Statuses" },
+    { value: "accepted", label: "Accepted" },
+    { value: "canceled", label: "Canceled" },
+    { value: "completed", label: "Completed" },
+    { value: "in_progress", label: "In Progress" },
+    { value: "onTrack", label: "On Track" },
+    { value: "dueSoon", label: "Due Soon" },
+    { value: "upcoming", label: "Upcoming" },
+    { value: "urgent", label: "Urgent" },
+    { value: "overdue", label: "Overdue" },
+  ];
   const [searchValue, setSearchValue] = useState("");
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
@@ -73,14 +85,23 @@ const Projects = () => {
           if (statusFilter === "completed") return status === "completed";
           if (statusFilter === "in_progress") return status === "in_progress";
           // For deadline-based statuses, use Card.tsx logic
-          if (["onTrack", "dueSoon", "upcoming", "urgent", "overdue"].includes(statusFilter)) {
+          if (
+            ["onTrack", "dueSoon", "upcoming", "urgent", "overdue"].includes(
+              statusFilter
+            )
+          ) {
             const now = new Date();
             const deadline = new Date(req.projectDeadline);
-            const diffInDays = Math.ceil((deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+            const diffInDays = Math.ceil(
+              (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+            );
             if (statusFilter === "overdue") return diffInDays < 0;
-            if (statusFilter === "urgent") return diffInDays <= 3 && diffInDays >= 0;
-            if (statusFilter === "upcoming") return diffInDays <= 7 && diffInDays > 3;
-            if (statusFilter === "dueSoon") return diffInDays <= 14 && diffInDays > 7;
+            if (statusFilter === "urgent")
+              return diffInDays <= 3 && diffInDays >= 0;
+            if (statusFilter === "upcoming")
+              return diffInDays <= 7 && diffInDays > 3;
+            if (statusFilter === "dueSoon")
+              return diffInDays <= 14 && diffInDays > 7;
             if (statusFilter === "onTrack") return diffInDays > 14;
           }
           return true;
@@ -142,7 +163,15 @@ const Projects = () => {
         </div>
       ) : (
         <main className={`${styles.wrapper} w-100`}>
-          <div className={styles.header} style={{ display: "flex", alignItems: "center", gap: "1rem", justifyContent: "space-between" }}>
+          <div
+            className={styles.header}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "1rem",
+              justifyContent: "space-between",
+            }}
+          >
             <TextInput
               placeholder="Search"
               type="text"
@@ -156,10 +185,18 @@ const Projects = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              style={{ minWidth: "140px", height: "36px", borderRadius: "6px", border: "1px solid #ccc", marginLeft: "auto" }}
+              style={{
+                minWidth: "140px",
+                height: "36px",
+                borderRadius: "6px",
+                border: "1px solid #ccc",
+                marginLeft: "auto",
+              }}
             >
               {statusOptions.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
           </div>
