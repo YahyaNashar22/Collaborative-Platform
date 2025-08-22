@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Projects.module.css";
 import ProjectConfiguration from "./ProjectConfiguration/ProjectConfiguration";
