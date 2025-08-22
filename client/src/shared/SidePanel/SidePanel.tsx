@@ -80,7 +80,9 @@ const SidePanel = ({
             } pointer`}
             onClick={onClose}
           >
-            <Link to={path}>{label}</Link>
+            <Link className="d-b w-100" to={path}>
+              {label}
+            </Link>
           </li>
         ))}
       </ul>

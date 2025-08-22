@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import styles from "./SatisfactionSurvey.module.css";
 import { Feedback } from "../../../../interfaces/Project";
@@ -7,12 +7,16 @@ type SatisfactionSurveyProps = {
   projectId?: string;
   userId?: string;
   onSubmit?: (formData: Feedback) => void;
+  viewOnly?: boolean;
+  initialData?: Partial<Feedback>;
 };
 
 const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   projectId,
   userId,
   onSubmit,
+  viewOnly = false,
+  initialData,
 }) => {
   const [formData, setFormData] = useState({
     projectId: projectId || "",
@@ -35,6 +39,15 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
     continueOurServices: 1,
     customMessage: "",
   });
+
+  useEffect(() => {
+    if (initialData) {
+      setFormData((prev) => ({
+        ...prev,
+        ...initialData,
+      }));
+    }
+  }, [initialData]);
 
   const satisfactionCriteria = [
     {
@@ -102,6 +115,7 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   ];
 
   const handleRatingChange = (field, rating) => {
+    if (viewOnly) return;
     setFormData((prev) => ({
       ...prev,
       [field]: rating,
@@ -109,6 +123,7 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   };
 
   const handleTableResponseChange = (criterion, value) => {
+    if (viewOnly) return;
     setFormData((prev) => ({
       ...prev,
       [criterion]: value,
@@ -116,6 +131,7 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   };
 
   const handleTextChange = (e) => {
+    if (viewOnly) return;
     setFormData((prev) => ({
       ...prev,
       customMessage: e.target.value,
@@ -123,7 +139,8 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   };
 
   const handleSubmit = () => {
-    // Validate required fields
+    if (viewOnly) return;
+
     const requiredFields = [
       "satisfactionAsPartnerCCC",
       "professionalismOfTheCompany",
@@ -144,16 +161,14 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
 
     const missingFields = requiredFields.filter((field) => !formData[field]);
 
-    // if (missingFields.length > 0) {
-    //   alert("Please complete all required fields before submitting.");
-    //   return;
-    // }
+    if (missingFields.length > 0) {
+      alert("Please complete all required fields before submitting.");
+      return;
+    }
 
     // Call onSubmit prop or default behavior
     if (onSubmit) {
       onSubmit(formData);
-    } else {
-      "Feedback Data:", formData;
       alert("Feedback submitted successfully!");
     }
   };
@@ -165,9 +180,13 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
         {[1, 2, 3, 4, 5].map((star) => (
           <button
             key={star}
-            onClick={() => setRating(star)}
-            className={styles.starButton}
+            onClick={() => !viewOnly && setRating(star)} // Disable onClick in view-only mode
+            className={`${styles.starButton} ${
+              viewOnly ? styles.disabled : ""
+            }`}
             type="button"
+            disabled={viewOnly} // Disable button in view-only mode
+            style={{ cursor: viewOnly ? "default" : "pointer" }}
           >
             <Star
               size={32}
@@ -248,9 +267,12 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
                         value={level.value}
                         checked={formData[criterion.key] === level.value}
                         onChange={() =>
+                          !viewOnly &&
                           handleTableResponseChange(criterion.key, level.value)
                         }
                         className={styles.radioInput}
+                        disabled={viewOnly} // Disable input in view-only mode
+                        style={{ cursor: viewOnly ? "default" : "pointer" }}
                       />
                     </div>
                   </td>
@@ -264,9 +286,18 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
   );
 
   return (
-    <div className={styles.satisfactionSurvey}>
+    <div
+      className={`${styles.satisfactionSurvey} ${
+        viewOnly ? styles.viewOnly : ""
+      }`}
+    >
       <div className={styles.surveyContent}>
-        {/* Overall Satisfaction with CCC */}
+        {viewOnly && (
+          <div className={styles.viewOnlyHeader}>
+            <h2>Survey Response - View Only</h2>
+          </div>
+        )}
+
         <StarRating
           rating={formData.satisfactionAsPartnerCCC}
           setRating={(rating) =>
@@ -275,13 +306,11 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
           question="Overall, How satisfied are you with CCC as a consulting partner?"
         />
 
-        {/* Company Satisfaction Table */}
         <SatisfactionTable
           criteria={satisfactionCriteria}
           title="Please rate how strongly you satisfied with each of the statements."
         />
 
-        {/* Provider Expertise Rating */}
         <StarRating
           rating={formData.satisfactionWithProviderExpertise}
           setRating={(rating) =>
@@ -290,19 +319,16 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
           question="Overall, How satisfied are you with the expertise and professionalism of the service provider assigned to your project?"
         />
 
-        {/* Provider Performance Table */}
         <SatisfactionTable
           criteria={providerCriteria}
           title="Please rate the service provider on the following aspects:"
         />
 
-        {/* Additional Questions Table */}
         <SatisfactionTable
           criteria={additionalQuestions}
           title="Additional feedback:"
         />
 
-        {/* Custom Message */}
         <div className={styles.textSection}>
           <h3 className={styles.textTitle}>
             Do you want to add or suggest something?
@@ -310,22 +336,30 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
           <textarea
             value={formData.customMessage}
             onChange={handleTextChange}
-            placeholder="Please share any additional comments or suggestions..."
+            placeholder={
+              viewOnly
+                ? ""
+                : "Please share any additional comments or suggestions..."
+            }
             className={styles.textArea}
             rows={4}
+            disabled={viewOnly}
+            readOnly={viewOnly}
+            style={{ cursor: viewOnly ? "default" : "text" }}
           />
         </div>
 
-        {/* Submit Button */}
-        <div className={styles.submitSection}>
-          <button
-            onClick={handleSubmit}
-            className={styles.submitButton}
-            type="button"
-          >
-            Submit Feedback
-          </button>
-        </div>
+        {!viewOnly && (
+          <div className={styles.submitSection}>
+            <button
+              onClick={handleSubmit}
+              className={styles.submitButton}
+              type="button"
+            >
+              Submit Feedback
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

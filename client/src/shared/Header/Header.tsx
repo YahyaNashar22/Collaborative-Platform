@@ -111,9 +111,8 @@ const Header = ({ user }: { user: User | null }) => {
       <SidePanel
         isOpen={isSidePanelOpen}
         onClose={() => setIsSidePanelOpen(false)}
-        logoSrc={logo}
         navItems={navItems}
-        showButtons={true}
+        isMainSidePanel={user ? false : true}
         onLogin={() => openAuthWindow("login")}
         onSignup={() => openAuthWindow("register")}
       />
@@ -157,7 +156,7 @@ const Header = ({ user }: { user: User | null }) => {
           </ul>
         </div>
 
-        <div className={styles.right}>
+        <div className={`${styles.right} ${user && styles.hasAccess}`}>
           {user ? (
             <Avatar
               currentUser={{

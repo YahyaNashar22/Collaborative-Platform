@@ -11,11 +11,12 @@ import SatisfactionSurvey from "./SatisfactionSurvey/SatisfactionSurvey";
 import { Feedback } from "../../../interfaces/Project";
 import { toast } from "react-toastify";
 import { submitFedback } from "../../../services/Feedback";
+import { Project } from "../../../interfaces/FullRequests";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
   const [projects, setProjects] = useState([]);
-  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [openPoject, setOpenProject] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
@@ -99,17 +100,29 @@ const Projects = () => {
   //   }
   // };
 
-  // Status options based on Card.tsx
-  const statusOptions = [
-    { value: "", label: "All Statuses" },
-    { value: "completed", label: "Completed" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "onTrack", label: "On Track" },
-    { value: "dueSoon", label: "Due Soon" },
-    { value: "upcoming", label: "Upcoming" },
-    { value: "urgent", label: "Urgent" },
-    { value: "overdue", label: "Overdue" },
-  ];
+  const handleAddFeedback = (index) => {
+    filteredProjects[index];
+    setFeedbackWindow(index);
+  };
+
+  const handleSubmitFeedback = async (feedbackData: Feedback) => {
+    try {
+      const result = await submitFedback(feedbackData);
+      if (result) {
+        setFilteredProjects((prev) =>
+          prev.map((project, i) =>
+            i === feedbackWindow
+              ? { ...project, isFeedbackSubmit: true }
+              : project
+          )
+        );
+        setFeedbackWindow(null);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error?.response?.data?.message || "Error Occured!");
+    }
+  };
 
   return (
     <>
