@@ -8,7 +8,7 @@ export const otpTemplate = (receiverEmail, otp) => {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Collaborative Platform</title>
+    <title>Takatouf Platform</title>
   </head>
   <body style="background-color: black; color: white">
     <table
@@ -44,7 +44,7 @@ export const otpTemplate = (receiverEmail, otp) => {
       <tr>
         <td style="padding: 10px 20px">
           <p>Best wishes,</p>
-          <p style="font-weight: bold">Collaborative Platform CCC</p>
+          <p style="font-weight: bold">Takatouf Platform</p>
         </td>
       </tr>
     </table>
@@ -56,7 +56,7 @@ export const otpTemplate = (receiverEmail, otp) => {
     {
       from: process.env.SENDER_EMAIL,
       to: receiverEmail, // Recipient's email address
-      subject: "Collaborative Platform OTP", // Subject line
+      subject: "Takatouf Platform OTP", // Subject line
       html: htmlBody, // HTML body
     },
     (error, info) => {
@@ -122,7 +122,7 @@ export const filesRequestedTemplate = ({
       <tr>
         <td style="padding: 10px 20px;">
           <p>Best wishes,</p>
-          <p style="font-weight: bold;">Collaborative Platform CCC</p>
+          <p style="font-weight: bold;">Takatouf Platform</p>
         </td>
       </tr>
     </table>
@@ -150,7 +150,7 @@ export const sendFilesRequestedEmail = async ({
     {
       from: process.env.SENDER_EMAIL,
       to: receiverEmail,
-      subject: "File Request – Collaborative Platform",
+      subject: "File Request – Takatouf Platform",
       html,
     },
     (error, info) => {
@@ -220,7 +220,7 @@ export const requestMeetingTemplate = ({
       <tr>
         <td style="padding: 10px 20px;">
           <p>Looking forward to your presence!</p>
-          <p style="font-weight: bold;">Collaborative Platform CCC</p>
+          <p style="font-weight: bold;">Takatouf Platform</p>
         </td>
       </tr>
     </table>

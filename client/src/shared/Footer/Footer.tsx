@@ -45,8 +45,8 @@ const Footer = () => {
               </li>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={mail} width={16} height={16} alt="mail" />
-                <a href="mailto:info@collaborative-cc.com">
-                  info@collaborative-cc.com
+                <a href="mailto:info@takatouf.com">
+                  info@takatouf.com
                 </a>
               </li>
             </ul>
@@ -59,7 +59,7 @@ const Footer = () => {
               <Link to="/faq">FAQ</Link>
             </li>
             <li className={styles.supportItem}>
-              <a href="mailto:info@collaborative-cc.com">Contact</a>
+              <a href="mailto:info@takatouf.com">Contact</a>
             </li>
           </ul>
         </div>
@@ -88,7 +88,7 @@ const Footer = () => {
       </div>
 
       <div className={styles.lower}>
-        <p>&copy; 2025 Collaborative Platform. All rights reserved.</p>
+        <p>&copy; 2025 Takatouf Platform. All rights reserved.</p>
         <ul className={styles.links}>
           <li className={styles.link}>
             <a href="https://x.com/">

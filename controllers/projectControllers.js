@@ -316,7 +316,7 @@ export const requestProjectMeeting = async (req, res) => {
     await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: emailsToSend,
-      subject: "📅 New Meeting Request – Collaborative Platform",
+      subject: "📅 New Meeting Request – Takatouf Platform",
       html: emailHtml,
     });
 

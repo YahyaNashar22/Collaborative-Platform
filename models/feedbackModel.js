@@ -17,7 +17,7 @@ const feedbackSchema = new Schema(
       ref: "User",
       required: true,
     },
-    // Overall, How satisfied are you with CCC as a consulting partner?
+    // Overall, How satisfied are you with Takatouf Platform as a consulting partner?
     satisfactionAsPartnerCCC: {
       type: Number,
       enum: ratingEnum,

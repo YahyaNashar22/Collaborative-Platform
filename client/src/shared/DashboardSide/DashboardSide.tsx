@@ -69,14 +69,17 @@ const DashboardSide = () => {
         className={`${styles.wrapper} d-f f-dir-col align-start justify-between`}
       >
         <p>
-          TAKATUP IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH CONSULTANCY
-          SERVICE PROVIDERS
+          TAKATOUF IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH
+          CONSULTANCY SERVICE PROVIDERS
         </p>
         <div className="d-f f-dir-col align-start">
           {getLinkTo()}
           <Link to={"/contact"} className={`${styles.redirectBtn} pointer`}>
             Having troubles? Get Help
           </Link>
+          <span className={"betaRibbon"} style={{ marginTop: "12px" }}>
+            BETA
+          </span>
         </div>
       </div>
       <Window

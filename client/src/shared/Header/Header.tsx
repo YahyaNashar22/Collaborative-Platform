@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import styles from "./Header.module.css";
 import logo from "../../assets/icons/Logo.png";
-import hamburg from "../../assets/icons/menu-icon.png";
 import Window from "../../libs/common/lib-window/Window";
 import { faBriefcase, faCircleUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -122,7 +121,11 @@ const Header = ({ user }: { user: User | null }) => {
         }`}
       >
         <div className={`${styles.left}`}>
-          <img src={logo} alt="logo" onClick={() => navigator("/")} />
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <img src={logo} alt="logo" onClick={() => navigator("/")} />
+            <span className={'betaRibbon'}>BETA</span>
+          </div>
 
           {/* Nav Links */}
           <ul

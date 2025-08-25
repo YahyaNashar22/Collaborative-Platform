@@ -363,3 +363,23 @@ li {
   font-weight: 500;
   letter-spacing: 0.3em;
 }
+
+.betaRibbon {
+  background: linear-gradient(
+    90deg,
+    var(--intense-purple) 60%,
+    var(--soft-purple) 100%
+  );
+  color: var(--white);
+  font-weight: 900;
+  font-size: 0.85rem;
+  padding: 2px 16px;
+  border-radius: 16px;
+  letter-spacing: 0.15em;
+  box-shadow: 0 2px 8px 0 rgba(101, 80, 180, 0.15);
+  margin-left: 2px;
+  position: relative;
+  top: -2px;
+  border: 2px solid var(--button-purple);
+  z-index: 1;
+}

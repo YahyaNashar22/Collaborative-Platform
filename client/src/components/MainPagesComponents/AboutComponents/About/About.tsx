@@ -15,16 +15,19 @@ const About = () => {
           ASPECTS OF OUR WORK
         </h2>
         <p className={`align-text ${styles.bio}`}>
-          Takatuf is a platform specializing in connecting clients with
-          consultancy service providers across various fields, including
-          financial, managerial, marketing, information technology, and digital
-          consulting. We offer innovative solutions that assist businesses and
-          individuals in Saudi Arabia to access high-quality global expertise at
-          competitive prices. Our platform also enables international companies
-          to enter the Saudi market and build a strong customer base that
-          supports their expansion and future investments, aligning with the
-          Kingdom's Vision 2030 to promote innovation and attract both startups
-          and global enterprises.
+          Takatouf is an AI-driven platform that connects clients with
+          consultancy service providers across financial, managerial, marketing,
+          IT, and digital domains. Using Artificial Intelligence, we precisely
+          match customer needs with the right partners, delivering tailored and
+          efficient solutions. Powered by Blockchain technology, Takatouf
+          ensures secure, transparent, and reliable data management, building
+          trust between clients and partners while, we offer innovative
+          solutions that assist businesses and individuals in Saudi Arabia to
+          access high-quality global expertise at competitive prices. Our
+          platform also enables international companies to enter the Saudi
+          market and build a strong customer base that supports their expansion
+          and future investments, aligning with the Kingdom's Vision 2030 to
+          promote innovation and attract both startups and global enterprises
         </p>
       </div>
       <img src={laptop} className={styles.aboutImage} alt="laptop" />
