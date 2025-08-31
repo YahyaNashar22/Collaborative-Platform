@@ -22,7 +22,7 @@ import { authMiddleware } from "../middlewares/checkAuth.js";
 
 const requestRoutes = express.Router();
 
-requestRoutes.post("/create", upload.single("document"), createRequest);
+requestRoutes.post("/create", upload.array("requestFiles", 5), createRequest);
 requestRoutes.post("/request-meeting/:id", requestRequestMeeting);
 
 requestRoutes.get("/get-single/:id", getSingleRequest);

@@ -17,7 +17,7 @@ export const createRequestService = async ({
   offerDeadline,
   projectDeadline,
   description,
-  document,
+  requestFiles,
 }) => {
   try {
     const request = new Request({
@@ -28,7 +28,7 @@ export const createRequestService = async ({
       offerDeadline: new Date(offerDeadline),
       projectDeadline: new Date(projectDeadline),
       description,
-      document,
+      requestFiles,
     });
     await request.save();
 
@@ -59,18 +59,35 @@ export const createRequestService = async ({
 };
 
 // add quotation to request
-export const addQuotationToRequestService = async (requestId, quotationId) => {
+export const addQuotationToRequestService = async (
+  requestId,
+  quotationId,
+  isFromMarketPlace,
+  providerId
+) => {
   try {
-    await Request.findByIdAndUpdate(requestId, {
+    const updateQuery = {
       $addToSet: { quotations: quotationId },
-    });
+    };
+
+    if (isFromMarketPlace && providerId) {
+      updateQuery.$addToSet = {
+        ...updateQuery.$addToSet,
+        providerId: providerId,
+      };
+    }
+
+    await Request.findByIdAndUpdate(requestId, updateQuery);
+
     console.log(
       chalk.green.bold(
-        `Quotation ${quotationId} Added To Request ${requestId} Successfully`
+        `Quotation ${quotationId} added to Request ${requestId} successfully${
+          isFromMarketPlace ? ` (with provider ${providerId})` : ""
+        }`
       )
     );
   } catch (error) {
-    console.log(chalk.red.bold("Failed To Add Quotation To Request!"));
+    console.log(chalk.red.bold("Failed to add Quotation to Request!"));
     console.error(error);
   }
 };
@@ -580,20 +597,23 @@ export const getRequestsForDashboardService = async (userData) => {
       {
         $match: {
           createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-          document: { $exists: true, $type: "string", $ne: "" },
+          requestFiles: { $exists: true, $ne: [] },
         },
+      },
+      {
+        $unwind: "$requestFiles",
       },
       {
         $project: {
           extension: {
             $let: {
-              vars: { dotIndex: { $indexOfBytes: ["$document", "."] } },
+              vars: { dotIndex: { $indexOfBytes: ["$requestFiles", "."] } },
               in: {
                 $cond: [
                   { $gte: ["$$dotIndex", 0] },
                   {
                     $substrBytes: [
-                      "$document",
+                      "$requestFiles",
                       { $add: ["$$dotIndex", 1] },
                       -1,
                     ],
@@ -732,20 +752,23 @@ export const getRequestsForDashboardService = async (userData) => {
         $match: {
           clientId: new mongoose.Types.ObjectId(userData._id),
           createdAt: { $gte: startOfMonth, $lt: endOfMonth },
-          document: { $exists: true, $type: "string", $ne: "" },
+          requestFiles: { $exists: true, $ne: [] },
         },
+      },
+      {
+        $unwind: "$requestFiles",
       },
       {
         $project: {
           extension: {
             $let: {
-              vars: { dotIndex: { $indexOfBytes: ["$document", "."] } },
+              vars: { dotIndex: { $indexOfBytes: ["$requestFiles", "."] } },
               in: {
                 $cond: [
                   { $gte: ["$$dotIndex", 0] },
                   {
                     $substrBytes: [
-                      "$document",
+                      "$requestFiles",
                       { $add: ["$$dotIndex", 1] },
                       -1,
                     ],

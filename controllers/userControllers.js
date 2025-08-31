@@ -9,7 +9,7 @@ import {
   getUserByIdService,
 } from "../services/userServices.js";
 import removeFile from "../utils/removeFile.js";
-import { otpTemplate } from "../utils/emailTemplates.js";
+import { emailTemplate, otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
 // TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
@@ -528,16 +528,24 @@ export const verifyPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, recoveryEmail, password } = req.body;
 
-    // get user
+    // get user by email
     const user = await getUserByEmailService(email);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
+    // check recovery email matches
+    if (user.recoveryEmail !== recoveryEmail) {
+      return res.status(400).json({ message: "Invalid recovery email" });
+    }
+
+    // hash and update password
     const hashedPassword = await bcrypt.hash(password, 10);
-
     user.password = hashedPassword;
     await user.save();
+
     res
       .status(200)
       .json({ message: "Password reset successful", success: true });
@@ -1033,6 +1041,21 @@ export const updateUserData = async (req, res) => {
       return res.status(404).json({ message: "User doesn't exist!" });
     }
 
+    // Check if the email is already in use by another user
+    if (req.body.email) {
+      const existingUserWithEmail = await User.findOne({
+        email: req.body.email,
+      });
+      if (
+        existingUserWithEmail &&
+        existingUserWithEmail._id.toString() !== id
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Email is already in use by another user!" });
+      }
+    }
+
     const fieldsToParseAsJSON = ["industry", "services", "expertise"];
 
     fieldsToParseAsJSON.forEach((field) => {
@@ -1101,13 +1124,71 @@ export const updateUserData = async (req, res) => {
   }
 };
 
+// For registration flow
+export const checkEmailForRegister = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const existingUser = await getUserByEmailService(email);
+
+    if (existingUser) {
+      return res.status(400).json({
+        exists: true,
+        message: "Email already in use",
+      });
+    }
+
+    return res.status(200).json({
+      exists: false,
+      message: "Email is available",
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+// For reset password flow
+export const checkEmailForReset = async (req, res) => {
+  try {
+    const { email, role } = req.body;
+
+    const existingUser = await getUserByEmailService(email);
+
+    if (!existingUser) {
+      return res.status(404).json({
+        exists: false,
+        message: "User not found",
+      });
+    }
+
+    if (role) {
+      const invalidRole =
+        existingUser.role !== role && existingUser.role !== "admin";
+      if (invalidRole) {
+        return res.status(403).json({ message: "Invalid credentials" });
+      }
+    }
+
+    return res.status(200).json({
+      exists: true,
+      message: "User found",
+      data: {
+        email: existingUser.email,
+        recoveryEmail: existingUser.recoveryEmail,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
 // ----------------------------------------------------------------------
 // TEST EMAIL CONTROLLER
 // ----------------------------------------------------------------------
 export const sendEmail = (req, res) => {
   try {
-    otpTemplate("2silentninja2@gmail.com", "124232");
-    res.status(201).json({ message: "Email Sent Successfully" });
+    emailTemplate(req.body.receiverEmail, req.body.title, req.body.description);
+    res.status(201).json({ success: true, message: "Email Sent Successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Something Went Wrong" });

@@ -9,7 +9,6 @@ import {
   getAllProjects,
   getAllProviderProjects,
   getProjectById,
-  //   markProjectAsCompleted,
   requestFiles,
   requestProjectMeeting,
   sendProjectTicket,

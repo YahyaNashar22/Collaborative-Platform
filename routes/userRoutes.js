@@ -15,6 +15,8 @@ import {
   changeProviderAvailability,
   changeScopeOfWork,
   changeUserBannedStatus,
+  checkEmailForRegister,
+  checkEmailForReset,
   deleteUser,
   editClientProfile,
   editProviderProfile,
@@ -52,6 +54,8 @@ userRoutes.post("/log-in", login);
 userRoutes.post("/log-out", logout);
 
 userRoutes.post("/verify-password/:id", verifyPassword);
+userRoutes.post("/verify-email-register", checkEmailForRegister);
+userRoutes.post("/verify-email-reset", checkEmailForReset);
 
 userRoutes.patch("/update/:id", uploadProviderFiles, updateUserData);
 userRoutes.patch("/change-password", changePassword);
@@ -93,7 +97,7 @@ userRoutes.post("/get-all", getAllUsers);
 userRoutes.get("/get-single/:id", getUserById);
 userRoutes.delete("/delete/:id", deleteUser);
 
-userRoutes.post("/test-email", sendEmail);
+userRoutes.post("/send-email", sendEmail);
 userRoutes.post("/test-sms", sendSMS);
 
 userRoutes.get("/me", authMiddleware, getCurrentUser);
