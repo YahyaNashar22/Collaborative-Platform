@@ -155,6 +155,8 @@ const SelectInput = ({
           displayValue="label"
           placeholder={placeholder}
           className={`multiSelect pointer ${errorMessage && "specialError"}`}
+          disable={disabled}
+          disablePreSelectedValues={disabled}
         />
       )}
 

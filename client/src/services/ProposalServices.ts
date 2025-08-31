@@ -14,18 +14,15 @@ export const createProposal = async (data: {
   formData.append("description", data.description);
 
   if (data.file) formData.append("uploadedFile", data.file);
+  formData.append(
+    "isFromMarketPlace",
+    data.isFromMarketPlace ? "true" : "false"
+  );
   const response = await axios.post(
     `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/create`,
-    formData,
-    {
-      //   onUploadProgress: (e) => {
-      //     if (onProgress && e.total) {
-      //       const percent = Math.round((e.loaded * 100) / e.total);
-      //       onProgress(percent);
-      //     }
-      //   },
-    }
+    formData
   );
+
   return response.data.quotation;
 };
 

@@ -7,6 +7,7 @@ import { Validate } from "../../../../utils/Validate";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { RequestDataType } from "../../../../interfaces/request";
 import RequestDropdown from "./components/RequestDropdown";
+import { downloadFile } from "../../../../services/FileUpload";
 
 type FormField = {
   label: string;
@@ -24,7 +25,7 @@ type ErrorFields = {
   title: string;
   description: string;
   serviceId: string;
-  document: string;
+  requestFiles: string;
   offerDeadline: string;
   projectDeadline: string;
   budget: string;
@@ -42,7 +43,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     title: "",
     serviceId: "",
     description: "",
-    document: null,
+    requestFiles: [],
     offerDeadline: "",
     projectDeadline: "",
     budget: "",
@@ -52,7 +53,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     title: "",
     description: "",
     serviceId: "",
-    document: "",
+    requestFiles: "",
     offerDeadline: "",
     projectDeadline: "",
     budget: "",
@@ -63,7 +64,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       title: "",
       serviceId: "",
       description: "",
-      document: null,
+      requestFiles: [],
       offerDeadline: "",
       projectDeadline: "",
       budget: "",
@@ -72,7 +73,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       title: "",
       serviceId: "",
       description: "",
-      document: "",
+      requestFiles: "",
       offerDeadline: "",
       projectDeadline: "",
       budget: "",
@@ -117,10 +118,19 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       ...prev,
       [name]: customError || validationError,
     }));
-    setFormValues((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    if (name === "requestFiles" && value instanceof File) {
+      console.log(value);
+      setFormValues((prev) => ({
+        ...prev,
+        requestFiles: [...(prev.requestFiles || []), value],
+      }));
+    } else {
+      setFormValues((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = () => {
@@ -131,7 +141,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       const value = formValues[field.name];
       const error = Validate(
         field.name,
-        value,
+        value as any,
         field.required ?? false,
         field.type,
         field.type === "date"
@@ -176,22 +186,49 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
         {data.map((input, index: number) => {
           if (input.type === "file") {
             return (
-              <FileInput
-                key={index}
-                {...input}
-                value={formValues[input.name]}
-                onChange={(value, name) =>
-                  handleChange(name, value, input.required, input.type)
-                }
-                errorMessage={errors[input.name]}
-              />
+              <>
+                <FileInput
+                  key={index}
+                  {...input}
+                  value={formValues[input.name] as any}
+                  onChange={(value, name) =>
+                    handleChange(
+                      name,
+                      value as any,
+                      input.required as any,
+                      input.type
+                    )
+                  }
+                  errorMessage={errors[input.name]}
+                />
+                {console.log(formValues)}
+                <ul className={styles.uploadedList}>
+                  {(formValues.requestFiles as File[])?.map((file, i) => (
+                    <li key={i} className={styles.uploadedItem}>
+                      <div className={styles.fileDetails}>
+                        <span className={styles.fileName}>{file.name}</span>
+                      </div>
+                      <div
+                        className={`${styles.downloadLink} pointer`}
+                        rel="noopener noreferrer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          downloadFile(file.name);
+                        }}
+                      >
+                        ⬇ Download
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
             );
           } else if (input.type === "textarea") {
             return (
               <TextAreaInput
                 key={index}
                 {...input}
-                value={formValues[input.name]}
+                value={formValues[input.name] as any}
                 required={input.required ?? false}
                 onChange={(value, name) =>
                   handleChange(name, value, input.required ?? false, input.type)
@@ -218,7 +255,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
               <TextInput
                 key={index}
                 {...input}
-                value={formValues[input.name]}
+                value={formValues[input.name] as any}
                 required={input.required ?? false}
                 onChange={(value, name) =>
                   handleChange(name, value, input.required ?? false, input.type)

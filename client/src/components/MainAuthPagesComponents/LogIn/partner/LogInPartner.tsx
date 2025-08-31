@@ -31,12 +31,12 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       setUser(response.payload);
 
       if (response.success === true) {
-        navigate("/dashboard/requests");
+        navigate("/dashboard");
         toast.success("Welcome back");
       }
     } catch (error: any) {
-      if (error?.response?.data?.message)
-        setError(error?.response?.data?.message);
+      if ((error as any)?.data?.message)
+        setError((error as any)?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -45,6 +45,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
   const handlePasswordReset = async (payload: {
     email: string;
     password: string;
+    recoveryEmail: string;
   }) => {
     try {
       setLoading(true);
@@ -89,6 +90,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
               <ResetPasswordFlow
                 onSubmit={handlePasswordReset}
                 onCancel={() => {
+                  setError("");
                   setStep(0);
                 }}
                 isSubmitting={authStore.getState().loading}

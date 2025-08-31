@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styles from "./SecurityData.module.css";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import LibButton from "../../../libs/common/lib-button/LibButton";
@@ -10,14 +10,22 @@ import {
   sendOtp,
   verifyOtp,
 } from "../../../services/UserServices";
+import { toast } from "react-toastify";
+import ResetPasswordBy from "../../MainAuthPagesComponents/ResetPasswordBy/ResetPasswordBy";
+import { Validate } from "../../../utils/Validate";
 
 interface SecurityDataProps {
   email: string;
+  recoveryEmail: string;
   isViewer?: boolean;
 }
 
-const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
-  const [securityTab, setSecurityTab] = useState<1 | 2 | 3>(1);
+const SecurityData = ({
+  email,
+  recoveryEmail,
+  isViewer = false,
+}: SecurityDataProps) => {
+  const [securityTab, setSecurityTab] = useState<1 | 2 | 3 | 4>(1);
   const [isVerifying, setIsVerifying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
@@ -25,64 +33,35 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
     newPassword: "",
     confirmPassword: "",
   });
-  const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>(
-    {}
-  );
 
-  // For OTP tab
-  const [otpError, setOtpError] = useState<string | null>(null);
-
-  const validateNewPasswords = (
-    newPassword: string,
-    confirmPassword: string
-  ): Record<string, string> => {
-    const errors: Record<string, string> = {};
-    if (!newPassword) errors.newPassword = "New password is required";
-    if (!confirmPassword)
-      errors.confirmPassword = "Please confirm new password";
-    if (newPassword && confirmPassword && newPassword !== confirmPassword)
-      errors.confirmPassword = "Passwords do not match";
-    return errors;
-  };
-
-  // For tab 3 (Reset password after OTP)
-  const [SecurityDataData, setSecurityDataData] = useState({
+  const [securityData, setSecurityData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
-  const [SecurityDataErrors, setSecurityDataErrors] = useState<
-    Record<string, string>
-  >({});
+  const [otpEmail, setOtpEmail] = useState("");
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  // For OTP tab
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [isSendingOtp, setIsSendingOtp] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
-  const handlePasswordChange = (value: string, name: string) => {
-    setPasswordData((prev) => ({ ...prev, [name]: value }));
-    let error = "";
-    if (!value) error = "This field is required";
-    else if (name === "confirmPassword" && value !== passwordData.newPassword)
-      error = "Passwords do not match";
-
-    setPasswordErrors((prev) => ({ ...prev, [name]: error }));
-  };
-
   const handleChangePasswordSubmit = async () => {
     const { oldPassword, newPassword, confirmPassword } = passwordData;
-    const passwordValidationErrors = validateNewPasswords(
-      newPassword,
-      confirmPassword
-    );
 
-    const newErrors: Record<string, string> = {
-      ...passwordValidationErrors,
+    const passwordValidationErrors = {
+      oldPassword: Validate("oldPassword", oldPassword, true),
+      newPassword: Validate("newPassword", newPassword, true),
+      confirmPassword:
+        Validate("confirmPassword", confirmPassword, true) ||
+        (newPassword !== confirmPassword ? "Passwords do not match" : ""),
     };
 
-    if (!oldPassword) newErrors.oldPassword = "Old password is required";
-
-    if (Object.keys(newErrors).length > 0) {
-      setPasswordErrors(newErrors);
+    if (Object.values(passwordValidationErrors).some((error) => error)) {
+      setErrors(passwordValidationErrors);
       return;
     }
+
     setLoading(true);
     try {
       await changePassword({
@@ -90,81 +69,100 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
         oldPassword,
         password: newPassword,
       });
-      setPasswordErrors({});
+      setErrors({});
       navigate("/dashboard");
     } catch (err) {
-      setPasswordErrors({ oldPassword: "Incorrect old password" });
+      console.error(err);
+      setErrors({ oldPassword: "Incorrect old password" });
     } finally {
       setLoading(false);
     }
   };
 
-  // ---- Handlers for Tab 2 (OTP) ----
-  useEffect(() => {
-    if (securityTab === 2) {
-      (async () => {
-        try {
-          await sendOtp(email);
-          setOtpError(null);
-        } catch (error) {
-          setOtpError("Failed to send OTP. Please try again.");
-        }
-      })();
+  const handleSendOtp = async (email: string) => {
+    if (!email) {
+      return;
     }
-  }, [securityTab, email]);
+    setOtpError("");
+    try {
+      setIsSendingOtp(true);
+      await sendOtp(email);
+      setOtpEmail(email);
+      setSecurityTab(3);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to send OTP");
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
 
-  const handleOtpSubmit = async (otp: string) => {
+  const handleVerifyOtp = async (otp: string) => {
     setIsVerifying(true);
     try {
       setOtpError(null);
-      await verifyOtp(email, otp);
-      setSecurityTab(3);
+      const result = await verifyOtp(otpEmail, otp);
+      if (!result.success) {
+        return;
+      }
+      setErrors({});
+      setSecurityData({ newPassword: "", confirmPassword: "" });
+      setSecurityTab(4);
     } catch (error) {
+      console.error(error);
       setOtpError("Invalid or expired OTP. Please try again.");
     } finally {
       setIsVerifying(false);
     }
   };
 
-  const handleSendOtpAgain = async () => {
-    try {
-      await sendOtp(email);
-      setOtpError(null);
-    } catch {
-      setOtpError("Failed to resend OTP. Please try later.");
-    }
-  };
-
   // ---- Handlers for Tab 3 (Reset password after OTP) ----
-  const handleSecurityDataChange = (value: string, name: string) => {
-    setSecurityDataData((prev) => ({ ...prev, [name]: value }));
-    let error = "";
-    if (!value) error = "This field is required";
-    else if (
-      name === "confirmPassword" &&
-      value !== SecurityDataData.newPassword
-    )
-      error = "Passwords do not match";
+  const handleChange = (
+    value: string,
+    name: string,
+    isPasswordData: boolean = true
+  ) => {
+    console.log(name, value);
+    const targetState = isPasswordData ? passwordData : securityData;
+    const setTargetState = isPasswordData ? setPasswordData : setSecurityData;
 
-    setSecurityDataErrors((prev) => ({ ...prev, [name]: error }));
+    setTargetState((prev) => ({ ...prev, [name]: value }));
+
+    let error = Validate(name, value, true, "text");
+
+    if (name === "confirmPassword" && value !== targetState.newPassword) {
+      error = "Passwords do not match";
+    }
+
+    setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
   const handleSecurityDataSubmit = async () => {
-    const { newPassword, confirmPassword } = SecurityDataData;
-    const newErrors = validateNewPasswords(newPassword, confirmPassword);
+    const { newPassword, confirmPassword } = securityData;
 
-    if (Object.keys(newErrors).length > 0) {
-      setSecurityDataErrors(newErrors);
+    const securityValidationErrors = {
+      newPassword: Validate("newPassword", newPassword, true),
+      confirmPassword:
+        Validate("confirmPassword", confirmPassword, true) ||
+        (newPassword !== confirmPassword ? "Passwords do not match" : ""),
+    };
+
+    if (Object.values(securityValidationErrors).some((error) => error)) {
+      setErrors(securityValidationErrors);
       return;
     }
+
     setLoading(true);
     try {
-      const payload = { email: email, password: newPassword };
+      const payload = {
+        email: email,
+        password: newPassword,
+        recoveryEmail: recoveryEmail,
+      };
       await resetPassword(payload);
-      setSecurityDataErrors({});
+      setErrors({});
       navigate("/dashboard");
     } catch (err) {
-      setSecurityDataErrors({ newPassword: "Failed to reset password" });
+      toast.error("Failed to reset password");
     } finally {
       setLoading(false);
     }
@@ -183,8 +181,8 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
               type="text"
               required
               value={passwordData.oldPassword}
-              onChange={handlePasswordChange}
-              errorMessage={passwordErrors.oldPassword}
+              onChange={(value, name) => handleChange(value, name, true)}
+              errorMessage={errors.oldPassword}
               disabled={isViewer}
             />
             <TextInput
@@ -194,8 +192,8 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
               type="text"
               required
               value={passwordData.newPassword}
-              onChange={handlePasswordChange}
-              errorMessage={passwordErrors.newPassword}
+              onChange={(value, name) => handleChange(value, name, true)}
+              errorMessage={errors.newPassword}
               disabled={isViewer}
             />
             <TextInput
@@ -205,11 +203,12 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
               type="text"
               required
               value={passwordData.confirmPassword}
-              onChange={handlePasswordChange}
-              errorMessage={passwordErrors.confirmPassword}
+              onChange={(value, name) => handleChange(value, name, true)}
+              errorMessage={errors.confirmPassword}
               disabled={isViewer}
             />
           </form>
+
           {!isViewer && (
             <div
               className={`${styles.resetPasswordHolder} d-f align-center justify-between`}
@@ -231,21 +230,40 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
       )}
 
       {/* Tab 2: OTP */}
-      {securityTab === 2 && (
-        <OTPForm
-          email={email}
-          moveBackward={() => setSecurityTab(1)}
-          onSubmit={handleOtpSubmit}
-          errorMessage={otpError}
-          isVerifying={isVerifying}
-          allowResend={true}
-          onResend={handleSendOtpAgain}
-          isResetPassword={true}
+      {securityTab === 2 && !isSendingOtp ? (
+        <ResetPasswordBy
+          moveBackward={() => {
+            setErrors({});
+            setPasswordData({
+              oldPassword: "",
+              newPassword: "",
+              confirmPassword: "",
+            });
+            setSecurityTab(1);
+          }}
+          moveForward={(email: string) => {
+            handleSendOtp(email);
+          }}
+          userEmail={email || ""}
+          recoveryEmail={recoveryEmail || ""}
         />
+      ) : isSendingOtp ? (
+        <span className="loader"></span>
+      ) : null}
+
+      {securityTab === 3 && (
+        <>
+          <OTPForm
+            email={otpEmail}
+            onSubmit={handleVerifyOtp}
+            moveBackward={() => setSecurityTab(2)}
+            errorMessage={otpError || ""}
+            isVerifying={isVerifying}
+          />
+        </>
       )}
 
-      {/* Tab 3: Reset Password after OTP */}
-      {securityTab === 3 && !loading ? (
+      {securityTab === 4 && (
         <>
           <form className="d-f f-dir-col">
             <TextInput
@@ -254,9 +272,9 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
               placeholder="New Password"
               type="text"
               required
-              value={SecurityDataData.newPassword}
-              onChange={handleSecurityDataChange}
-              errorMessage={SecurityDataErrors.newPassword}
+              value={securityData.newPassword}
+              onChange={(value, name) => handleChange(value, name, false)}
+              errorMessage={errors.newPassword}
             />
             <TextInput
               name="confirmPassword"
@@ -264,21 +282,30 @@ const SecurityData = ({ email, isViewer = false }: SecurityDataProps) => {
               placeholder="Confirm Password"
               type="text"
               required
-              value={SecurityDataData.confirmPassword}
-              onChange={handleSecurityDataChange}
-              errorMessage={SecurityDataErrors.confirmPassword}
+              value={securityData.confirmPassword}
+              onChange={(value, name) => handleChange(value, name, false)}
+              errorMessage={errors.confirmPassword}
             />
           </form>
           {!isViewer && (
-            <div className={`${styles.buttons} d-f align-center justify-end`}>
-              <LibButton label="Back" onSubmit={() => setSecurityTab(1)} />
+            <div
+              className={`${styles.buttons} d-f align-center justify-between`}
+            >
+              <LibButton
+                label="Cancel"
+                onSubmit={() => setSecurityTab(1)}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
               <LibButton label="Save" onSubmit={handleSecurityDataSubmit} />
             </div>
           )}
+          {}
         </>
-      ) : loading ? (
-        <span className="loader"></span>
-      ) : null}
+      )}
     </div>
   );
 };

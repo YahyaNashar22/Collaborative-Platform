@@ -105,7 +105,7 @@ const ProjectConfiguration = ({
         }
       }, 0);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error with Creation!");
+      toast.error((error as any)?.data?.message || "Error with Creation!");
     } finally {
       setIsLoading(false);
     }
@@ -134,7 +134,7 @@ const ProjectConfiguration = ({
       // add it manually on the front end
       setPhases(result);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     } finally {
       setIsLoading(false);
     }
@@ -187,7 +187,7 @@ const ProjectConfiguration = ({
 
       toast.success("File uploaded successfully.");
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
 
@@ -198,12 +198,14 @@ const ProjectConfiguration = ({
     }
 
     try {
-      const result = await requestFiles(projectData._id, requestFileData);
+      await requestFiles(projectData._id, requestFileData);
       toast.success("File request sent successfully.");
       setRequestFileWindow(false);
       setRequestFileData({ title: "", description: "" });
     } catch (error) {
-      toast.error("Failed to send file request.");
+      toast.error(
+        (error as any)?.data?.message || "Failed to send file request."
+      );
     }
   };
 
@@ -235,10 +237,10 @@ const ProjectConfiguration = ({
       providerId: projectData.providerId,
     };
     try {
-      const result = await sendTicket(payload);
+      await sendTicket(payload);
       toast.success("Ticket request sent successfully.");
     } catch (error) {
-      error;
+      toast.error((error as any)?.data?.message || "Failed to send ticket.");
     }
   };
 

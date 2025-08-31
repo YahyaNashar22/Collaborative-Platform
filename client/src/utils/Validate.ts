@@ -44,12 +44,19 @@ export const Validate = (
 
   if (name === "phone" && typeof value === "string") {
     const onlyDigits = value.replace(/\D/g, "");
+    console.log(value);
+    const plusCount = (value.match(/\+/g) || []).length;
+    if (plusCount > 1) {
+      return "* Phone number cannot contain more than one '+' sign";
+    }
+
+    // Check for length
     if (onlyDigits.length < 8) {
       return "* Please enter a valid phone number";
     }
   }
 
-  if (!isLogin && name === "password") {
+  if (!isLogin && (name === "password" || name === "newPassword")) {
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 

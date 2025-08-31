@@ -33,8 +33,10 @@ const PartnerSignUp = ({
   const [, setIsLoading] = useState(false);
   const { increaseStep, role, type, decreaseStep, getFormValues, setStep } =
     useFormStore();
-  const { setUser, setLoading } = authStore();
+  const { setUser } = authStore();
   const [error, setError] = useState("");
+  const [otpError, setOtpError] = useState("");
+
   const [otpEmail, setOtpEmail] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const navigate = useNavigate();
@@ -56,13 +58,14 @@ const PartnerSignUp = ({
       await sendOtp(email as string);
       setOtpEmail(email as string);
       setError("");
+      setOtpError("");
       increaseStep();
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to send OTP");
     }
   };
 
-  const handleSignUp = async (otpCode: number): Promise<void> => {
+  const handleSignUp = async (otpCode: string): Promise<void> => {
     const rawPayload = getFormValues(role, type);
 
     // Transform services field (if it exists and is an array)
@@ -76,12 +79,13 @@ const PartnerSignUp = ({
     setIsLoading(true);
     setIsVerifying(true);
     setError(""); // Clear any previous error
+    setOtpError("");
 
     try {
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
       if (!isVerified?.success) {
-        setError("Invalid or expired OTP.");
+        setOtpError("Invalid or expired OTP.");
         return;
       }
 
@@ -89,11 +93,13 @@ const PartnerSignUp = ({
 
       setUser(result.payload);
       toast.success("Signed up successfully!");
-      navigate("/dashboard/requests");
+      navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
-      setStep(0);
-      setError(error?.response?.data?.message || "Sign-up failed");
+      if (error?.response?.data?.message === "Invalid or expired email OTP") {
+        setOtpError("Invalid or expired OTP.");
+      } else {
+        setOtpError(error?.response?.data?.message || "Sign-up failed");
+      }
     } finally {
       setIsLoading(false);
       setIsVerifying(false);
@@ -164,7 +170,7 @@ const PartnerSignUp = ({
           moveBackward={decreaseStep}
           email={otpEmail}
           isVerifying={isVerifying}
-          errorMessage={error}
+          errorMessage={otpError}
         />
       );
       break;

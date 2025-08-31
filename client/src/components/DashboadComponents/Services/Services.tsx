@@ -56,7 +56,7 @@ const Services = () => {
       setServices((prevServices) => [result, ...prevServices]);
     } catch (error) {
       setServiceError(
-        error?.response?.data?.message || "Error with creating service"
+        (error as any)?.data?.message || "Error with creating service"
       );
       toast.error("Problem While Deleting Service");
     } finally {
@@ -70,7 +70,7 @@ const Services = () => {
       const result = await getAllServices();
       setServices(result);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }

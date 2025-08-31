@@ -119,15 +119,15 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                 required={field.required}
                 placeholder={field.placeholder}
                 options={field.options || []}
-                onChange={(value, name) =>
+                onChange={(value) =>
                   handleChange(
                     field.name,
-                    value,
+                    value as any,
                     field.required || false,
                     field.type
                   )
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={(errors as any)[field.name]}
                 disabled={isViewer}
               />
             </div>
@@ -150,7 +150,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                     field.type
                   )
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={(errors as any)[field.name]}
                 disabled={isViewer}
               />
 

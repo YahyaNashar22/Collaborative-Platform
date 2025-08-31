@@ -4,6 +4,7 @@ import styles from "./ContactForm.module.css";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
+import { toast } from "react-toastify";
 
 interface formType {
   label: string;
@@ -70,7 +71,7 @@ const ContactForm = () => {
       [name]: value,
     };
     setFormData(updatedFormData);
-    const hasError = checkingValidation(updatedFormData);
+    checkingValidation(updatedFormData);
   };
 
   const checkingValidation = (data: typeof formData) => {
@@ -84,7 +85,14 @@ const ContactForm = () => {
   };
 
   const handleCLick = () => {
-    return;
+    toast.success("Form submitted successfully!");
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phoneNumber: "",
+      description: "",
+    });
   };
 
   return (
@@ -138,8 +146,10 @@ const ContactForm = () => {
               handleChange(name, value)
             }
           />
-          <LibButton label="Submit" onSubmit={handleCLick} />
         </form>
+        <div className="self-end">
+          <LibButton label="Submit" onSubmit={handleCLick} />
+        </div>
       </div>
     </div>
   );

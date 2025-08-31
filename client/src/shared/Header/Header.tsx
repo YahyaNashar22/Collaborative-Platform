@@ -44,7 +44,7 @@ const Header = ({ user }: { user: User | null }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > window.innerHeight / 2 - 50) {
+      if (window.scrollY > window.innerHeight / 2 - 300) {
         setIsDarkNav(true);
       } else {
         setIsDarkNav(false);
@@ -172,10 +172,12 @@ const Header = ({ user }: { user: User | null }) => {
                 backgroundColor="#868788"
                 hoverColor="#6f7071"
                 onSubmit={() => openAuthWindow("login")}
+                styleClass="rounded"
               ></LibButton>
               <LibButton
                 label="SIGN UP"
                 onSubmit={() => openAuthWindow("register")}
+                styleClass="rounded"
               ></LibButton>
             </>
           )}

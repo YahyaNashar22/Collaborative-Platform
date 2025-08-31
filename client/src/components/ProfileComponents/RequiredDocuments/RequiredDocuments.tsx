@@ -17,11 +17,12 @@ interface Props extends RequiredDocumentsProps {
     required: boolean,
     type: string
   ) => void;
+  isViewer?: boolean;
 }
 
 const RequiredDocuments = ({
   userData,
-
+  isViewer = false,
   onCancel,
   onSave,
 }: Props) => {
@@ -105,23 +106,25 @@ const RequiredDocuments = ({
           </div>
         ))}
       </form>
-      <div className={`${styles.buttons} d-f align-center justify-between`}>
-        <LibButton
-          label="Cancel"
-          onSubmit={onCancel}
-          outlined
-          color="var(--deep-purple)"
-          hoverColor="#8563c326"
-          padding="0"
-        />
-        <LibButton
-          label="Save"
-          onSubmit={handleSave}
-          backgroundColor="#825beb"
-          hoverColor="#6c46d9"
-          padding="0"
-        />
-      </div>
+      {!isViewer && (
+        <div className={`${styles.buttons} d-f align-center justify-between`}>
+          <LibButton
+            label="Cancel"
+            onSubmit={onCancel}
+            outlined
+            color="var(--deep-purple)"
+            hoverColor="#8563c326"
+            padding="0"
+          />
+          <LibButton
+            label="Save"
+            onSubmit={handleSave}
+            backgroundColor="#825beb"
+            hoverColor="#6c46d9"
+            padding="0"
+          />
+        </div>
+      )}
     </div>
   );
 };

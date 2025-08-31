@@ -85,3 +85,42 @@ strong {
   width: 140px;
   color: var(--dark-blue);
 }
+
+.uploadedItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 0.7rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #e1e1e1;
+  transition: box-shadow 0.2s;
+  margin: 0.8rem 0;
+}
+
+.uploadedItem:hover {
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+}
+
+.fileDetails {
+  flex: 1;
+  color: #333;
+  font-size: 0.95rem;
+  word-break: break-word;
+}
+
+.downloadLink {
+  font-size: 0.85rem;
+  color: #825beb;
+  background-color: transparent;
+  border: 1px solid #825beb;
+  padding: 0.3rem 0.8rem;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.downloadLink:hover {
+  background-color: #825beb;
+  color: white;
+}

@@ -111,7 +111,7 @@ const Proposals = ({
                 isAdmin ? styles.withProvider : styles.noProvider
               } d-f`}
             >
-              <h4>Title</h4>
+              {/* <h4>Title</h4> */}
               <h4>Deadline</h4>
               <h4>Amount</h4>
               <h4>File</h4>
@@ -130,7 +130,7 @@ const Proposals = ({
                   }  ${isAdmin ? styles.withProvider : styles.noProvider}`}
                 >
                   <div className={`${styles.proposalInfo} d-f f-dir-col`}>
-                    <p
+                    {/* <p
                       title={proposal.title}
                       onClick={(e) => toggleDescription(e, proposal._id)}
                       className={`${
@@ -139,8 +139,8 @@ const Proposals = ({
                           : styles.expanded
                       } ${styles.cell}`}
                     >
-                      {proposal.description || "—"}
-                    </p>
+                      {proposal.title || "—"}
+                    </p> */}
                     {shouldShowToggle(proposal.description) && (
                       <span
                         onClick={(e) => toggleDescription(e, proposal._id)}

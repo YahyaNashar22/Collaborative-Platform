@@ -44,3 +44,36 @@
     flex-direction: column;
   }
 }
+
+.contactUsBtn {
+  background-color: #6550b4;
+  border-width: 3px !important;
+  border-radius: 90px;
+  padding: 3px 15px;
+}
+
+.flagWave {
+  display: inline-block !important;
+  animation: titTit 1.5s infinite;
+}
+
+@keyframes titTit {
+  0% {
+    transform: translateX(0);
+  }
+  10% {
+    transform: translateX(6px);
+  }
+  20% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(6px);
+  }
+  40% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}

@@ -29,8 +29,9 @@ const IndividualSignUp = ({
   const { setUser, setLoading } = authStore();
   const { increaseStep, decreaseStep, getFormValues, type, role } =
     useFormStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [otpEmail, setOtpEmail] = useState("");
   const navigate = useNavigate();
@@ -49,16 +50,17 @@ const IndividualSignUp = ({
     }
 
     try {
-      const result = await sendOtp(email as string);
+      await sendOtp(email as string);
       setOtpEmail(email as string);
       setError("");
+      setOtpError("");
       increaseStep();
     } catch (err: any) {
       setError(err?.response?.data?.message || "Failed to send OTP.");
     }
   };
 
-  const handleSignUp = async (otpCode: number) => {
+  const handleSignUp = async (otpCode: string) => {
     const payload = getFormValues(role, type);
     setIsLoading(true);
     setIsVerifying(true);
@@ -66,18 +68,21 @@ const IndividualSignUp = ({
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
       if (!isVerified.success) {
-        setError("Invalid or expired OTP.");
+        setOtpError("Invalid or expired OTP.");
         return;
       }
       const result = await signUpIndividualClient(payload);
       setUser(result.payload);
       setLoading(false);
       toast.success("Signed up successfully!");
-      setError("");
-      navigate("/dashboard/requests");
+      setOtpError("");
+      navigate("/dashboard");
     } catch (error: any) {
-      decreaseStep();
-      setError(error?.response?.data?.message || "Sign-up failed");
+      if (error?.response?.data?.message === "Invalid or expired email OTP") {
+        setOtpError("Invalid or expired OTP.");
+      } else {
+        setOtpError(error?.response?.data?.message || "Sign-up failed");
+      }
     } finally {
       setIsLoading(false);
       setIsVerifying(false);
@@ -104,6 +109,7 @@ const IndividualSignUp = ({
           moveBackward={decreaseStep}
           email={otpEmail}
           isVerifying={isVerifying}
+          errorMessage={otpError}
         />
       );
       break;

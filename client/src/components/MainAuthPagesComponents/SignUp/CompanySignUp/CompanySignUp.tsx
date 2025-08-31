@@ -32,6 +32,7 @@ const CompanySignUp = ({
     useFormStore();
   const { setUser, setLoading } = authStore();
   const [error, setError] = useState("");
+  const [otpError, setOtpError] = useState("");
   const [otpEmail, setOtpEmail] = useState<string>("");
   const [isVerifying, setIsVerifying] = useState(false);
   const navigate = useNavigate();
@@ -52,15 +53,15 @@ const CompanySignUp = ({
       await sendOtp(email as string);
       setOtpEmail(email as string);
       setError("");
+      setOtpError("");
       increaseStep();
     } catch (err: any) {
-      toast.error(error?.response?.data?.message || "Error Sending OTP!");
-
+      toast.error((error as any)?.data?.message || "Error Sending OTP!");
       setError(err?.response?.data?.message || "Failed to send OTP");
     }
   };
 
-  const handleSignUp = async (otpCode: number) => {
+  const handleSignUp = async (otpCode: string) => {
     const payload = getFormValues(role, type);
     setIsLoading(true);
     setIsVerifying(true);
@@ -69,21 +70,22 @@ const CompanySignUp = ({
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
       if (!isVerified.success) {
-        setError("Invalid or expired OTP.");
+        setOtpError("Invalid or expired OTP.");
         return;
       }
-
-      payload;
       const newPayload = { ...payload, accountType: "company" };
       const result = await signUpCompanyClient(newPayload);
       setUser(result);
       setLoading(false);
       toast.success("Signed up successfully!");
-      setError("");
-      navigate("/dashboard/requests");
+      setOtpError("");
+      navigate("/dashboard");
     } catch (error: any) {
-      setStep(0);
-      setError(error?.response?.data?.message || "Sign-up failed");
+      if ((error as any)?.data?.message === "Invalid or expired email OTP") {
+        setOtpError("Invalid or expired OTP.");
+      } else {
+        setOtpError(error?.response?.data?.message || "Sign-up failed");
+      }
     } finally {
       setIsLoading(false);
       setIsVerifying(false);
@@ -118,7 +120,7 @@ const CompanySignUp = ({
           onSubmit={handleSignUp}
           moveBackward={decreaseStep}
           email={otpEmail}
-          errorMessage={error}
+          errorMessage={otpError}
           isVerifying={isVerifying}
         />
       );
