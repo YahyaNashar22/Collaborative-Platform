@@ -162,6 +162,7 @@ export const registerClient = async (req, res) => {
       companyDescription,
       companyWebsite,
       country,
+      state,
       industry: rawIndustry,
       banned,
     } = req.body;
@@ -216,6 +217,7 @@ export const registerClient = async (req, res) => {
       newUser.industry = industry;
       newUser.liscence = liscence;
       newUser.country = country;
+      newUser.state = state;
     }
     await newUser.save();
 
@@ -374,7 +376,6 @@ export const registerProvider = async (req, res) => {
       establishmentContract,
       certificate,
       otherDocuments,
-
       role: "provider",
     });
     await newProvider.save();

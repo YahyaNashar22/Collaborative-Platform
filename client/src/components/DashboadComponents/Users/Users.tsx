@@ -159,7 +159,6 @@ const Users = ({
         title: emailData.title,
         description: emailData.description,
       });
-      console.log(response);
       if (response.success) {
         toast.success("Email sent successfully!");
         setError("");

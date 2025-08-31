@@ -28,7 +28,7 @@ const ProfilePage = ({ userId, isViewer = false }: profileType) => {
     }
   };
 
-  const configureUserData = (userData) => {
+  const configureUserData = (userData: any) => {
     if (userData.role === "provider") {
       setUserData({
         role: userData.role,
@@ -101,6 +101,7 @@ const ProfilePage = ({ userId, isViewer = false }: profileType) => {
           companyDescription: userData.companyDescription,
           companyWebsite: userData.companyWebsite,
           country: userData.country,
+          state: userData.state,
           industry: userData.industry,
           liscence: userData.liscence,
         },

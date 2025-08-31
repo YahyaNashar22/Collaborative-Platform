@@ -121,11 +121,10 @@ const SecurityData = ({
     name: string,
     isPasswordData: boolean = true
   ) => {
-    console.log(name, value);
     const targetState = isPasswordData ? passwordData : securityData;
     const setTargetState = isPasswordData ? setPasswordData : setSecurityData;
 
-    setTargetState((prev) => ({ ...prev, [name]: value }));
+    setTargetState((prev: any) => ({ ...prev, [name]: value }));
 
     let error = Validate(name, value, true, "text");
 
@@ -161,7 +160,7 @@ const SecurityData = ({
       await resetPassword(payload);
       setErrors({});
       navigate("/dashboard");
-    } catch (err) {
+    } catch (err: any) {
       toast.error("Failed to reset password");
     } finally {
       setLoading(false);

@@ -11,6 +11,7 @@ import FileInput from "../../../libs/common/lib-file-input/FileInput";
 import { OrganizationDataProps } from "../../../interfaces/Profile";
 import { Validate } from "../../../utils/Validate";
 import { downloadFile } from "../../../services/FileUpload";
+import { getStatesForCountry } from "../../../utils/getStateByCountry";
 
 const fields: FormField[] =
   registerFormData.roles.client.types.company.formData[1].form;
@@ -30,15 +31,15 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
     required: boolean,
     type: string
   ) => {
-    if (value === userData[name]) {
+    if (value === (userData as any)[name]) {
       setUpdatedData((prev) => {
         const newData = { ...prev };
-        delete newData[name];
+        delete (newData as any)[name];
         return newData;
       });
       setErrors((prev) => {
         const newErrors = { ...prev };
-        delete newErrors[name];
+        delete (newErrors as any)[name];
         return newErrors;
       });
       return;
@@ -46,11 +47,11 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
 
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value, required, type);
+    const error = Validate(name, value as any, required, type);
     setErrors((prev) => {
       const newErrors = { ...prev };
-      if (error) newErrors[name] = error;
-      else delete newErrors[name];
+      if (error) (newErrors as any)[name] = error;
+      else delete (newErrors as any)[name];
       return newErrors;
     });
   };
@@ -70,7 +71,11 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                   label={field.label}
                   placeholder={field.placeholder}
                   name={field.name}
-                  value={updatedData[field.name] ?? userData[field.name] ?? ""}
+                  value={
+                    (updatedData as any)[field.name] ??
+                    (userData as any)[field.name] ??
+                    ""
+                  }
                   required={field.required || false}
                   onChange={(value, name) =>
                     handleChange(
@@ -88,7 +93,11 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                   type={field.type}
                   placeholder={field.placeholder}
                   name={field.name}
-                  value={updatedData[field.name] ?? userData[field.name] ?? ""}
+                  value={
+                    (updatedData as any)[field.name] ??
+                    (userData as any)[field.name] ??
+                    ""
+                  }
                   required={field.required || false}
                   maxLength={Number(field.maxLength)}
                   minLength={Number(field.minLength)}
@@ -101,7 +110,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                       field.type
                     )
                   }
-                  errorMessage={errors[field.name]}
+                  errorMessage={(errors as any)[field.name]}
                   disabled={isViewer}
                 />
               )}
@@ -115,10 +124,21 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                 label={field.label}
                 name={field.name}
                 type={field.type}
-                value={updatedData[field.name] ?? userData[field.name] ?? ""}
+                value={
+                  (updatedData as any)[field.name] ??
+                  (userData as any)[field.name] ??
+                  ""
+                }
                 required={field.required}
                 placeholder={field.placeholder}
-                options={field.options || []}
+                options={
+                  index === 0
+                    ? (field.options as any)
+                    : getStatesForCountry(
+                        (updatedData as any)["country"] ||
+                          (userData as any)["country"]
+                      )
+                }
                 onChange={(value) =>
                   handleChange(
                     field.name,
@@ -133,19 +153,49 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
             </div>
           ))}
         </div>
-        {fields.slice(5).map((field: FormField, index: number) => {
+        {fields.slice(5, 6).map((field: FormField, index: number) => (
+          <SelectInput
+            key={index}
+            label={field.label}
+            name={field.name}
+            type={field.type}
+            value={
+              (updatedData as any)[field.name] ??
+              (userData as any)[field.name] ??
+              ""
+            }
+            required={field.required}
+            placeholder={field.placeholder}
+            options={field.options || []}
+            onChange={(value) =>
+              handleChange(
+                field.name,
+                value as any,
+                field.required || false,
+                field.type
+              )
+            }
+            errorMessage={(errors as any)[field.name]}
+            disabled={isViewer}
+          />
+        ))}
+        {fields.slice(6).map((field: FormField, index: number) => {
           return (
             <div key={index}>
               <FileInput
                 label={field.label}
                 placeholder={field.placeholder}
                 name={field.name}
-                value={updatedData[field.name] ?? userData[field.name] ?? ""}
+                value={
+                  (updatedData as any)[field.name] ??
+                  (userData as any)[field.name] ??
+                  ""
+                }
                 required={field.required || false}
                 onChange={(value) =>
                   handleChange(
                     field.name,
-                    value,
+                    value as any,
                     field.required || false,
                     field.type
                   )
@@ -157,7 +207,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
               <li className={styles.uploadedItem}>
                 <div className={styles.fileDetails}>
                   <span className={styles.fileName}>
-                    {userData[field.name] || "No File Uploaded"}
+                    {(userData as any)[field.name] || "No File Uploaded"}
                   </span>
                 </div>
                 <div
@@ -165,7 +215,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                   rel="noopener noreferrer"
                   onClick={(e) => {
                     e.stopPropagation();
-                    downloadFile(userData[field.name]);
+                    downloadFile((userData as any)[field.name]);
                   }}
                 >
                   ⬇ Download

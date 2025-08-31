@@ -120,7 +120,6 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
     }));
 
     if (name === "requestFiles" && value instanceof File) {
-      console.log(value);
       setFormValues((prev) => ({
         ...prev,
         requestFiles: [...(prev.requestFiles || []), value],
@@ -201,7 +200,6 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
                   }
                   errorMessage={errors[input.name]}
                 />
-                {console.log(formValues)}
                 <ul className={styles.uploadedList}>
                   {(formValues.requestFiles as File[])?.map((file, i) => (
                     <li key={i} className={styles.uploadedItem}>

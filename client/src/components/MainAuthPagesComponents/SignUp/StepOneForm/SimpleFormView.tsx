@@ -40,13 +40,11 @@ const SimpleFormView = ({
     }
     try {
       const result = await verifyEmailRegister(fieldValues.email as string);
-      console.log(result);
       setLocalError("");
       setOtpError("");
       moveForward();
     } catch (error) {
-      console.log(error, "******");
-      if (error?.response.data.exists) {
+      if ((error as any)?.response.data.exists) {
         setLocalError("Email already exists");
       }
     }

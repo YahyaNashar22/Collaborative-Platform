@@ -44,7 +44,6 @@ export const Validate = (
 
   if (name === "phone" && typeof value === "string") {
     const onlyDigits = value.replace(/\D/g, "");
-    console.log(value);
     const plusCount = (value.match(/\+/g) || []).length;
     if (plusCount > 1) {
       return "* Phone number cannot contain more than one '+' sign";

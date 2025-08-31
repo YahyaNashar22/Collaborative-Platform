@@ -90,6 +90,12 @@ const userSchema = new Schema(
         return this.company === "company" || this.role === "provider";
       },
     },
+    state: {
+      type: String,
+      required: function () {
+        return this.company === "company";
+      },
+    },
     liscence: {
       type: String,
       required: false,

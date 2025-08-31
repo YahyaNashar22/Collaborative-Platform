@@ -117,7 +117,6 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
   };
 
   const handleSave = () => {
-    console.log(errors);
     if (Object.keys(errors).length === 0) onSave(updatedData);
   };
 
@@ -128,7 +127,7 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
     type: string
   ) => {
     // If value hasn’t changed compared to original userData → remove from updates/errors
-    if (value === userData[name]) {
+    if (value === (userData as any)[name]) {
       setUpdatedData((prev) => {
         const { [name]: _, ...rest } = prev;
         return rest;
@@ -150,7 +149,6 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
         ? value
         : updatedData?.recoveryEmail ?? userData.recoveryEmail;
 
-    console.log(email, recoveryEmail);
     if (email && recoveryEmail && email === recoveryEmail) {
       error = "Email and recovery email cannot be the same.";
     } else {
@@ -166,12 +164,11 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
       });
     }
 
-    console.log(errors);
     // Update errors
     setErrors((prev) => {
       const newErrors = { ...prev };
-      if (error) newErrors[name] = error;
-      else delete newErrors[name];
+      if (error) (newErrors as any)[name] = error;
+      else delete (newErrors as any)[name];
       return newErrors;
     });
   };
@@ -189,7 +186,6 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
         title: emailData.title,
         description: emailData.description,
       });
-      console.log(response);
       if (response.success) {
         toast.success("Email sent successfully!");
         setError("");
@@ -270,7 +266,9 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
                         placeholder={field.placeholder}
                         name={field.name}
                         value={
-                          updatedData[field.name] ?? userData[field.name] ?? ""
+                          updatedData[field.name] ??
+                          (userData as any)[field.name] ??
+                          ""
                         }
                         required={field.required}
                         maxLength={field.maxLength}
@@ -283,7 +281,7 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
                             field.type
                           )
                         }
-                        errorMessage={errors[field.name]}
+                        errorMessage={(errors as any)[field.name]}
                         disabled={isViewer}
                       />
                     </div>

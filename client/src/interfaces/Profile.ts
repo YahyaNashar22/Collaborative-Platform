@@ -25,6 +25,7 @@ export interface PersonalInformation {
 }
 
 export interface CompanyInformation {
+  _id?: string;
   companyName?: string;
   companyDescription?: string;
   companyWebsite?: string;
@@ -32,6 +33,9 @@ export interface CompanyInformation {
   yearsExperience?: string | number;
   expertise?: string;
   industry?: string;
+  country?: string;
+  state?: string;
+  liscence?: any;
   services?: Service[];
 }
 

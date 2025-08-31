@@ -47,7 +47,6 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
     recoveryEmail: string;
     password: string;
   }) => {
-    console.log(payload);
     try {
       setLoading(true);
       const response = await resetPassword(payload);
