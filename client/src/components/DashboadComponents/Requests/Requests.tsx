@@ -85,7 +85,7 @@ const Requests = () => {
       );
       setRequests(result);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -135,7 +135,7 @@ const Requests = () => {
 
       setProviders(result);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoadingProviders(false);
     }
@@ -164,7 +164,7 @@ const Requests = () => {
         );
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -190,7 +190,7 @@ const Requests = () => {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -202,10 +202,10 @@ const Requests = () => {
       setProposalsData(result);
       setIsShowAllProposals(true);
     } catch (error) {
-      if (error?.response?.data?.message) {
+      if ((error as any)?.data?.message) {
         setIsShowAllProposals(false);
       }
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     }
   };
 
@@ -236,7 +236,7 @@ const Requests = () => {
       }
     } catch (error) {
       setCreateProposalError(
-        error?.response?.data.message || "create Proposal failed!"
+        (error as any)?.data.message || "create Proposal failed!"
       );
     } finally {
       setLoading(false);
@@ -267,7 +267,7 @@ const Requests = () => {
 
       setRequests((prev) => [...prev, configureResult]);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -290,7 +290,7 @@ const Requests = () => {
       requestsMap[requestId].selectedQuotation = quotationId;
       requestsMap[requestId].status = "accepted";
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setLoading(false);
     }
@@ -303,11 +303,11 @@ const Requests = () => {
 
   const handleCancelRequestByClient = async () => {
     try {
-      const result = await cancelRequestByClient(canceldRequestId);
+      await cancelRequestByClient(canceldRequestId);
       requestsMap[canceldRequestId].stage = 4;
       requestsMap[canceldRequestId].status = "canceled";
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occured!");
     } finally {
       setIsCancelRequestWindow(false);
     }

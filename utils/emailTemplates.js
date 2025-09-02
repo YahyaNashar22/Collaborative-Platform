@@ -228,6 +228,61 @@ export const requestMeetingTemplate = ({
 </html>
 `;
 
+export const emailTemplate = (receiverEmail, title, description) => {
+  const htmlBody = `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>${title}</title>
+    </head>
+    <body style="background-color: #f8f8f8; color: #333; font-family: Arial, sans-serif; margin: 0; padding: 0;">
+      <table style="width: 100%; max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+        <tr>
+          <td style="text-align: center; padding-bottom: 20px; font-size: 24px; font-weight: bold; color: #6b21a8;">
+            ${title}
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; font-size: 16px; line-height: 1.5;">
+            Hello ${receiverEmail},
+          </td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 0; font-size: 16px; line-height: 1.5;">
+            ${description}
+          </td>
+        </tr>
+        
+     
+        <tr>
+          <td style="padding-top: 20px; font-size: 14px; color: #888888; border-top: 1px solid #eee; text-align: center;">
+            &copy; ${new Date().getFullYear()} Collaborative Platform CCC
+          </td>
+        </tr>
+      </table>
+    </body>
+  </html>
+  `;
+
+  transporter.sendMail(
+    {
+      from: process.env.SENDER_EMAIL,
+      to: receiverEmail,
+      subject: title,
+      html: htmlBody,
+    },
+    (error, info) => {
+      if (error) {
+        throw new Error("Error sending email:", error);
+      } else {
+        console.log("Email sent successfully:", info.response);
+      }
+    }
+  );
+};
+
 // TODO: Add files uploaded template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id.
 // TODO: Add reminder template -- should have project id or request id, reminder message.
 // TODO: Add Ticket template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id, subject and body.

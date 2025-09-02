@@ -53,7 +53,8 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
 
       setServices(unselectedOptions);
       setSelectedServices(selected);
-      toast.error(error?.response?.data?.message || "Error fetching services");
+    } catch (error) {
+      toast.error((error as any)?.data?.message || "Error fetching services");
     } finally {
       setLoading(false);
     }
@@ -198,6 +199,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                   "multiselect"
                 );
               }}
+              disablePreSelectedValues={loading || isViewer}
               disable={loading || isViewer}
               displayValue="label"
               placeholder="Select services"
@@ -205,7 +207,6 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                 errors["services"] && "specialError"
               }`}
             />
-
             <div className={styles.tags}>
               {/* 🔒 Locked assigned tags (non-removable) */}
               {userData?.services.map((item) => (

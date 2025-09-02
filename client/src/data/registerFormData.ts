@@ -455,6 +455,14 @@ export const registerFormData: RegisterFormData = {
                   ],
                 },
                 {
+                  name: "state",
+                  label: "State",
+                  value: "",
+                  placeholder: "State",
+                  type: "select",
+                  options: [],
+                },
+                {
                   name: "industry",
                   label: "Industry",
                   value: [],
@@ -597,7 +605,7 @@ export const registerFormData: RegisterFormData = {
                 },
                 {
                   name: "liscence",
-                  label: "Add Licenses ",
+                  label: "Add Liscenses ",
                   value: "",
                   placeholder: "Attachement ",
                   type: "file",

@@ -10,8 +10,14 @@ import { addQuotationToRequestService } from "../services/requestServices.js";
 // Add Quotation to request
 export const addQuotationToRequest = async (req, res) => {
   try {
-    const { providerId, amount, description, estimatedDeadline, requestId } =
-      req.body;
+    const {
+      providerId,
+      amount,
+      description,
+      estimatedDeadline,
+      requestId,
+      isFromMarketPlace,
+    } = req.body;
     const uploadedFile = req.file?.filename;
 
     // create quotation
@@ -25,7 +31,12 @@ export const addQuotationToRequest = async (req, res) => {
     });
 
     // add quotation to request
-    await addQuotationToRequestService(requestId, quotation._id);
+    await addQuotationToRequestService(
+      requestId,
+      quotation._id,
+      isFromMarketPlace,
+      providerId
+    );
 
     return res.status(201).json({
       message: "Quotation Created And Added To Request Successfully",

@@ -32,7 +32,7 @@ export const findOtpByEmailService = async (email) => {
     const otp = await Otp.findOne({ email });
 
     console.log(
-      chalk.yellow.bold(`otp for email: ${email} found successfully`)
+      chalk.yellow.bold(`otp for email: ${email} found successfully ${otp}`)
     );
 
     return otp;

@@ -95,8 +95,14 @@ const SidePanel = ({
             hoverColor="#6f7071"
             padding="0 20px"
             onSubmit={onLogin}
+            styleClass="rounded"
           />
-          <LibButton label="SIGN UP" padding="0 20px" onSubmit={onSignup} />
+          <LibButton
+            label="SIGN UP"
+            padding="0 20px"
+            onSubmit={onSignup}
+            styleClass="rounded"
+          />
         </div>
       )}
     </div>

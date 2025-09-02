@@ -22,13 +22,13 @@ const ProfilePage = ({ userId, isViewer = false }: profileType) => {
         if (response) configureUserData(response);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     } finally {
       setIsLoading(false);
     }
   };
 
-  const configureUserData = (userData) => {
+  const configureUserData = (userData: any) => {
     if (userData.role === "provider") {
       setUserData({
         role: userData.role,
@@ -101,6 +101,7 @@ const ProfilePage = ({ userId, isViewer = false }: profileType) => {
           companyDescription: userData.companyDescription,
           companyWebsite: userData.companyWebsite,
           country: userData.country,
+          state: userData.state,
           industry: userData.industry,
           liscence: userData.liscence,
         },

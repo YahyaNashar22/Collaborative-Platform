@@ -1,4 +1,5 @@
 import { RequestData } from "../../../interfaces/FullRequests";
+import { downloadFile } from "../../../services/FileUpload";
 import Avatar from "../../../shared/Avatar/Avatar";
 import styles from "./RequestsDetailsWindow.module.css";
 
@@ -69,6 +70,31 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
         <p>
           <strong>Budget:</strong> ${request.budget}
         </p>
+        <div>
+          <p>
+            <strong>Request Files:</strong>
+          </p>
+          <ul>
+            {request?.requestFiles?.length > 0 &&
+              request.requestFiles.map((file, i) => (
+                <li key={i} className={styles.uploadedItem}>
+                  <div className={styles.fileDetails}>
+                    <span className={styles.fileName}>{file}</span>
+                  </div>
+                  <div
+                    className={`${styles.downloadLink} pointer`}
+                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      downloadFile(file);
+                    }}
+                  >
+                    ⬇ Download
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </div>
       </section>
 
       <section className={styles.section}>

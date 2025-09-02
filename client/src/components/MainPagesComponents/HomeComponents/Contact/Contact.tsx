@@ -1,6 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Contact.module.css";
-import { faEnvelope, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faEnvelope,
+  IconDefinition,
+} from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebook,
   faInstagram,
@@ -8,6 +12,8 @@ import {
   faTwitter,
   faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
+import LibButton from "../../../../libs/common/lib-button/LibButton";
+import { useNavigate } from "react-router-dom";
 
 interface ContactItem {
   icon: IconDefinition;
@@ -17,6 +23,7 @@ interface ContactItem {
 }
 
 const Contact = () => {
+  const navigate = useNavigate();
   const articles: ContactItem[] = [
     {
       icon: faEnvelope,
@@ -60,6 +67,21 @@ const Contact = () => {
             </a>
           </article>
         ))}
+      </div>
+      <div className={`d-f align-center pointer ${styles.contactUsBtn}`}>
+        <LibButton
+          label="Contact Us"
+          onSubmit={() => navigate("/contact")}
+          bold={true}
+          styleClass="rounded"
+          hoverColor="transparent"
+        />
+        <FontAwesomeIcon
+          icon={faArrowRight}
+          size="lg"
+          style={{ color: "#ffffff" }}
+          className={styles.flagWave}
+        />
       </div>
       <ul className={`${styles.links} d-f align-center`}>
         <li>

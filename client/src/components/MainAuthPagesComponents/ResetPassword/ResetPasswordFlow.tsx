@@ -1,15 +1,26 @@
 import { useState } from "react";
 
 import styles from "./ResetPasswordFlow.module.css";
-import { sendOtp, verifyOtp } from "../../../services/UserServices";
+import {
+  sendOtp,
+  verifyEmailReset,
+  verifyOtp,
+} from "../../../services/UserServices";
 import { Validate } from "../../../utils/Validate";
 import ForgetPasswordComponent from "../LogIn/forgetPassword/ForgetPasswordComponent";
 import OTPForm from "../SignUp/StepThreeForm/OTPForm";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { toast } from "react-toastify";
+import ResetPasswordBy from "../ResetPasswordBy/ResetPasswordBy";
+import { useLocation } from "react-router-dom";
 
 interface ResetPasswordFlowProps {
-  onSubmit: (data: { email: string; password: string }) => void;
+  onSubmit: (data: {
+    email: string;
+    recoveryEmail: string;
+    password: string;
+  }) => void;
   onCancel?: () => void;
   isSubmitting?: boolean;
 }
@@ -23,6 +34,13 @@ const ResetPasswordFlow = ({
   const [otpEmail, setOtpEmail] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [resetEmailsData, setResetEmailsData] = useState<{
+    email: string;
+    recoveryEmail: string;
+  }>({
+    email: "",
+    recoveryEmail: "",
+  });
 
   const [passwordError, setPasswordError] = useState({
     password: "",
@@ -33,6 +51,24 @@ const ResetPasswordFlow = ({
     confirmPassword: "",
   });
 
+  const { pathname } = useLocation();
+
+  const checkEmailExist = async (email: string) => {
+    const role = pathname.split("/")[2];
+    try {
+      const response = await verifyEmailReset(email, role);
+      if (!response.exists) {
+        toast.error("Email does not exist");
+        return false;
+      }
+      setResetEmailsData(response.data);
+      setStep(2);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to check email");
+      return false;
+    }
+  };
+
   const handleSendOtp = async (email: string) => {
     if (!email) {
       return;
@@ -42,8 +78,9 @@ const ResetPasswordFlow = ({
       setIsSendingOtp(true);
       await sendOtp(email);
       setOtpEmail(email);
-      setStep(2);
+      setStep(3);
     } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to send OTP");
     } finally {
       setIsSendingOtp(false);
     }
@@ -56,9 +93,9 @@ const ResetPasswordFlow = ({
       if (!result.success) {
         return;
       }
-      setStep(3);
+      setStep(4);
     } catch (err: any) {
-      //   setStep(1);
+      toast.error(err?.response?.data?.message || "Failed to verify OTP");
     } finally {
       setIsVerifying(false);
     }
@@ -105,30 +142,44 @@ const ResetPasswordFlow = ({
     if (hasError) return;
 
     setPasswordError({ password: "", confirmPassword: "" });
-    onSubmit({ email: otpEmail, password: password });
+    onSubmit({
+      email: resetEmailsData.email,
+      recoveryEmail: resetEmailsData.recoveryEmail,
+      password: password,
+    });
   };
 
   return (
     <div className={styles.resetPasswordFlow}>
       {step === 1 && !isSendingOtp ? (
         <ForgetPasswordComponent
-          moveBackward={onCancel}
-          onReset={handleSendOtp}
+          moveBackward={onCancel || (() => {})}
+          onReset={checkEmailExist}
         />
       ) : isSendingOtp ? (
         <span className="loader"></span>
       ) : null}
 
       {step === 2 && (
+        <ResetPasswordBy
+          moveBackward={() => setStep(1)}
+          moveForward={(email: string) => {
+            handleSendOtp(email);
+          }}
+          userEmail={resetEmailsData.email || ""}
+          recoveryEmail={resetEmailsData.recoveryEmail || ""}
+        />
+      )}
+      {step === 3 && (
         <OTPForm
           email={otpEmail}
           onSubmit={handleVerifyOtp}
-          moveBackward={() => setStep(1)}
+          moveBackward={() => setStep(2)}
           isVerifying={isVerifying}
         />
       )}
 
-      {step === 3 && (
+      {step === 4 && (
         <>
           <TextInput
             name="password"
@@ -151,7 +202,16 @@ const ResetPasswordFlow = ({
             errorMessage={passwordError.confirmPassword}
           />
 
-          <div className={styles.btn}>
+          <div className={`${styles.buttons} d-f align-center justify-between`}>
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setStep(1)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+            />
             <LibButton
               label={isSubmitting ? "Resetting..." : "Reset Password"}
               onSubmit={handleSubmit}

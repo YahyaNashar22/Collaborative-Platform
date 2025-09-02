@@ -20,14 +20,14 @@ export const createAndSendEmailOtp = async (req, res) => {
     const expiryDate = generateExpiryDate();
 
     // add otp to db
-    const otp = createEmailOtpService(email, emailOtp, expiryDate);
-    "--------------", emailOtp, "-------------";
+    const otp = await createEmailOtpService(email, emailOtp, expiryDate);
+
     // send email
+    console.log("--------------", emailOtp, "-------------");
     otpTemplate(email, emailOtp);
 
     res.status(201).json({
       message: "Email OTP Sent Successfully",
-      payload: otp,
     });
   } catch (error) {
     console.error(error);
@@ -44,7 +44,6 @@ export const verifyEmailOtp = async (req, res) => {
     const { email, emailOtp } = req.body;
 
     const otp = await findOtpByEmailService(email);
-
     if (!otp)
       return res
         .status(404)

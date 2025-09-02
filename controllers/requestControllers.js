@@ -33,14 +33,14 @@ export const createRequest = async (req, res) => {
       budget,
     } = req.body;
 
-    const document = req.file ? req.file.path : "";
+    const requestFiles = req.files ? req.files.map((file) => file.path) : [];
 
     const request = await createRequestService({
       clientId,
       serviceId,
       title,
       description,
-      document,
+      requestFiles,
       offerDeadline,
       projectDeadline,
       budget,

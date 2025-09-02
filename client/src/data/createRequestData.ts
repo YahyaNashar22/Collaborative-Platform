@@ -25,7 +25,6 @@ export const FormData: FormField[] = [
     type: "searchableSelect",
     placeholder: "Service Name",
     name: "serviceName",
-
     required: true,
     maxLength: 50,
     minLength: 0,
@@ -44,7 +43,7 @@ export const FormData: FormField[] = [
     label: "Attach document",
     type: "file",
     placeholder: "Attach document",
-    name: "document",
+    name: "requestFiles",
     required: false,
   },
   {

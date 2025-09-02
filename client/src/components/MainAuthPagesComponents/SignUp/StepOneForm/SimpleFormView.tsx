@@ -6,6 +6,8 @@ import useFormStore from "../../../../store/FormsStore";
 import { FormField, FormStepData } from "../../../../interfaces/registerSignup";
 import { useStepFormHandlers } from "../../../../hooks/useStepFormHandlers";
 import { getStringValue } from "../../../../utils/CastToString";
+import { verifyEmailRegister } from "../../../../services/UserServices";
+import { useState } from "react";
 
 type SimpleFormViewProps = {
   data: FormStepData;
@@ -24,12 +26,28 @@ const SimpleFormView = ({
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
     useStepFormHandlers(role, type);
 
-  const onNext = () => {
+  const [localError, setLocalError] = useState("");
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [otpError, setOtpError] = useState("");
+
+  const onNext = async () => {
     const hasError = validateStep(data.form);
 
     if (Object.keys(hasError).length > 0) return;
-
-    moveForward();
+    if (!agreedToTerms) {
+      setOtpError("* You must agree to the subscription terms.");
+      return;
+    }
+    try {
+      const result = await verifyEmailRegister(fieldValues.email as string);
+      setLocalError("");
+      setOtpError("");
+      moveForward();
+    } catch (error) {
+      if ((error as any)?.response.data.exists) {
+        setLocalError("Email already exists");
+      }
+    }
   };
 
   return (
@@ -93,10 +111,32 @@ const SimpleFormView = ({
           </div>
         ))}
       </form>
-      {error && (
-        <small className="errorMsg d-f align-center error">{error}</small>
+      {(error || localError) && (
+        <small className="errorMsg d-f align-center error">
+          {error || localError}
+        </small>
       )}
       <div className={`${styles.buttons} d-f align-center justify-end`}>
+        <div className={` ${styles.terms} d-f align-center w-100`}>
+          <input
+            type="checkbox"
+            name="terms"
+            id="terms"
+            className="pointer"
+            checked={agreedToTerms}
+            onChange={(e) => {
+              setAgreedToTerms(e.target.checked);
+              setOtpError("");
+            }}
+          />
+          <label htmlFor="terms" className="pointer">
+            I agree to the{" "}
+            <span className="purple pointer bold">
+              Takatuf Subscription Agreement
+            </span>
+          </label>
+        </div>
+
         <LibButton
           label="Next"
           onSubmit={onNext}
@@ -105,6 +145,7 @@ const SimpleFormView = ({
           padding="0 20px"
         />
       </div>
+      {otpError && <small className="d-b error">{otpError}</small>}
     </div>
   );
 };

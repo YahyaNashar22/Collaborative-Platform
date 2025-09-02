@@ -11,6 +11,9 @@
   margin: 2px;
 }
 
+.multiSelectContainer.disabled {
+  background-color: red;
+}
 .removeIcon {
   margin-left: 6px;
   cursor: pointer;

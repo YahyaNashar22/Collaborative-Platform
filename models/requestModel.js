@@ -87,10 +87,10 @@ const requestSchema = new Schema(
       type: String,
       required: false,
     },
-    document: {
-      type: String,
+    requestFiles: {
+      type: [String],
       required: false,
-      default: "no-document.pdf",
+      default: []
     },
     offerDeadline: {
       type: Date,

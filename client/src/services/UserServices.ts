@@ -135,8 +135,10 @@ export const changePassword = async (payload: { [key: string]: string }) => {
   return result.data.payload;
 };
 
-export const getALlUsers = async () => {
-  const result = await axiosInstance.post(`${AuthBaseURL}/get-all`);
+export const getALlUsers = async (query?: string) => {
+  const result = await axiosInstance.post(`${AuthBaseURL}/get-all`, {
+    role: query,
+  });
   return result.data.payload;
 };
 
@@ -158,5 +160,33 @@ export const resetPassword = async (payload: {
     `${AuthBaseURL}/reset-password`,
     payload
   );
+  return result.data;
+};
+
+export const verifyEmailRegister = async (email: string) => {
+  const result = await axiosInstance.post(
+    `${AuthBaseURL}/verify-email-register`,
+    {
+      email: email,
+    }
+  );
+  return result.data;
+};
+
+export const verifyEmailReset = async (email: string, role?: string) => {
+  const payload = role ? { email: email, role: role } : { email: email };
+  const result = await axiosInstance.post(
+    `${AuthBaseURL}/verify-email-reset`,
+    payload
+  );
+  return result.data;
+};
+
+export const sendEmail = async (payload: {
+  receiverEmail: string;
+  title: string;
+  description: string;
+}) => {
+  const result = await axiosInstance.post(`${AuthBaseURL}/send-email`, payload);
   return result.data;
 };

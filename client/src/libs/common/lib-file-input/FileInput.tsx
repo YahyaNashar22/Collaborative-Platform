@@ -9,6 +9,7 @@ type FileInputProps = {
   required?: boolean;
   errorMessage?: string;
   placeholder: string;
+  disabled?: boolean;
   value?: File | null;
   onChange: (file: File | null, name: string) => void;
   onBlur?: () => void;
@@ -23,6 +24,7 @@ const FileInput = ({
   onBlur,
   placeholder,
   value,
+  disabled = false,
 }: FileInputProps) => {
   const [fileName, setFileName] = useState<string>("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -53,7 +55,9 @@ const FileInput = ({
         <div className={`${styles.inputHolder} d-f align-center`}>
           <label
             htmlFor={name}
-            className={`${styles.customFileLabel} d-f w-100 align-center pointer bold`}
+            className={`${styles.customFileLabel} ${
+              disabled ? "" : "pointer"
+            }  d-f w-100 align-center  bold`}
           >
             <FontAwesomeIcon icon={faFolderPlus} size="xl" color="#495057" />
             <span className={styles.placeholderText}>
@@ -70,6 +74,7 @@ const FileInput = ({
             required={required}
             onChange={handleFileChange}
             onBlur={onBlur}
+            disabled={disabled}
           />
         </div>
       </div>

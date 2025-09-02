@@ -1,6 +1,6 @@
 import axios from "axios";
 import axiosInstance from "../Config/axiosInstence";
-import { Feedback } from "../interfaces/Project";
+import { toast } from "react-toastify";
 
 const AuthBaseURL = "/projects";
 
@@ -80,7 +80,7 @@ export const uploadFile = async (
 
     return response.data.stage;
   } catch (error) {
-    toast.error(error?.response?.data?.message || "Error Occured!");
+    toast.error((error as any)?.data?.message || "Error Occured!");
 
     throw error;
   }

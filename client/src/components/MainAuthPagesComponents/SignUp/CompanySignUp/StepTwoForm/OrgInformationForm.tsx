@@ -12,6 +12,7 @@ import FileInput from "../../../../../libs/common/lib-file-input/FileInput";
 import TextAreaInput from "../../../../../libs/common/lib-textArea/TextAreaInput";
 import { getStringValue } from "../../../../../utils/CastToString";
 import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
+import { getStatesForCountry } from "../../../../../utils/getStateByCountry";
 
 type OrgInformationFormViewProps = {
   data: FormStepData;
@@ -37,8 +38,6 @@ const OrgInformationForm = ({
     if (Object.keys(hasError).length > 0) return;
     moveForward();
   };
-
-  fieldValues;
 
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
@@ -103,16 +102,41 @@ const OrgInformationForm = ({
                 value={fieldValues[field.name]}
                 required={field.required}
                 placeholder={field.placeholder}
-                options={field.options || []}
+                options={
+                  index === 0
+                    ? (field.options as any)
+                    : getStatesForCountry(fieldValues["country"] as string)
+                }
                 onChange={(value) =>
                   handleChange(field.name, value, field.required || false)
                 }
                 errorMessage={errors[field.name]}
+                disabled={
+                  field.name === "state" && (!fieldValues["country"] as any)
+                }
               />
             </div>
           ))}
         </div>
-        {data.form.slice(5).map((field: FormField, index: number) => {
+        {data.form.slice(5, 6).map((field: FormField) => {
+          return (
+            <SelectInput
+              label={field.label}
+              name={field.name}
+              type={field.type}
+              value={fieldValues[field.name]}
+              required={field.required}
+              placeholder={field.placeholder}
+              options={field.options || []}
+              onChange={(value) =>
+                handleChange(field.name, value, field.required || false)
+              }
+              errorMessage={errors[field.name]}
+            />
+          );
+        })}
+
+        {data.form.slice(6).map((field: FormField, index: number) => {
           return (
             <div key={index}>
               <FileInput

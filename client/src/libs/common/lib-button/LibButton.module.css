@@ -38,9 +38,9 @@
   padding: 0 50px;
 }
 
-.rounded:hover {
+/* .rounded:hover {
   background-color: #00000029 !important;
-}
+} */
 
 .requestBtn {
   font-size: 12px;

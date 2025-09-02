@@ -15,6 +15,9 @@ const UsersRawSkeleton = (count: number) => {
       <td>
         <div className={styles.shimmerBox}></div>
       </td>
+      <td>
+        <div className={styles.shimmerBox}></div>
+      </td>
     </tr>
   ));
 };

@@ -24,7 +24,7 @@ const DashboardSide = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
 

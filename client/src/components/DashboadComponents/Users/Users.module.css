@@ -113,6 +113,26 @@
   font-weight: 500;
 }
 
+.sendEmailBtn {
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  white-space: nowrap;
+  background-color: #ffe5b4; /* light orange */
+  color: #d97706; /* deep orange */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.sendEmailBtn:hover {
+  background-color: #ffd27f; /* slightly darker orange */
+  color: #b45309; /* darker orange */
+  box-shadow: 0 0 8px rgba(217, 119, 6, 0.5);
+}
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {
   .table {

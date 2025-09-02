@@ -23,10 +23,11 @@ export const createRequest = async (
     new Date(data.projectDeadline).toISOString()
   );
 
-  if (data.document) {
-    formData.append("document", data.document);
+  if (data.requestFiles && Array.isArray(data.requestFiles)) {
+    data.requestFiles.forEach((file) => {
+      formData.append("requestFiles", file);
+    });
   }
-
   const response = await axios.post(
     `${import.meta.env.VITE_BACKEND_URL}${AuthBaseURL}/create`,
     formData,

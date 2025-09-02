@@ -2,9 +2,9 @@ export interface RequestDataType {
   title: string;
   serviceId: string;
   description: string;
-  document: File | null;
+  requestFiles: File[] | null;
   offerDeadline: string;
   projectDeadline: string;
   budget: string;
-  [key: string]: string | File | null;
+  [key: string]: string | File[] | null;
 }

@@ -21,3 +21,21 @@
 .formContainer {
   gap: 15px;
 }
+
+.terms {
+  gap: 5px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-self: start;
+}
+
+.terms label {
+  color: var(--label-color);
+}
+
+.terms input {
+  width: 20px;
+  height: 20px;
+}

@@ -92,7 +92,7 @@
   transition: all 0.2s ease;
 }
 
-tbody {
+.satisfactionTable tbody {
   border: 1px solid;
 }
 

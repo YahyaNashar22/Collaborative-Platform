@@ -8,7 +8,7 @@ export interface RequestData {
   serviceId: string;
   stage: number;
   status: string;
-  document: string;
+  requestFiles: File[];
   offerDeadline: Date;
   projectDeadline: Date;
   createdAt: string;

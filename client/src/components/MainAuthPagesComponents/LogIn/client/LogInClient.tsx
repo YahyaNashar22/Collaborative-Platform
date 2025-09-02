@@ -31,11 +31,11 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
       const response = await logIn(payload);
       if (response.success === true) {
         setUser(response.payload);
-        navigate("/dashboard/requests", { replace: true });
+        navigate("/dashboard", { replace: true });
         toast.success("Welcome back");
       }
     } catch (error: any) {
-      setError(error?.response?.data?.message || "Login failed");
+      setError((error as any)?.data?.message || "Login failed");
       toast.error("Login failed");
     } finally {
       setLoading(false);
@@ -44,6 +44,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
 
   const handlePasswordReset = async (payload: {
     email: string;
+    recoveryEmail: string;
     password: string;
   }) => {
     try {
@@ -78,6 +79,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
               <LogInComponent
                 onLogin={handleLogin}
                 onForgetPassword={() => {
+                  setError("");
                   setStep(1);
                 }}
               >

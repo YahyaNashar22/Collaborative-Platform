@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
 import styles from "./Profile.module.css";
 import { useNavigate } from "react-router-dom";
-import { Validate } from "../../utils/Validate";
 import { updateProfileData } from "../../services/UserServices";
 import SecurityData from "./SecurityData/SecurityData";
 import PersonalDataTab from "./PersonalData/PersonalData";
@@ -42,7 +41,6 @@ const Profile = ({
   }, [userData.role, isViewer]);
 
   const [selectedTab, setSelectedTab] = useState("Personal Data");
-  const [updateData] = useState<{ [key: string]: string }>({});
   const [, setErrors] = useState<Record<string, string>>({});
 
   const navigate = useNavigate();
@@ -62,27 +60,10 @@ const Profile = ({
     return changed;
   };
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    Object.entries(updateData).forEach(([key, value]) => {
-      const error = Validate(
-        key,
-        value,
-        inputConfig.required,
-        inputConfig.type
-      );
-      if (error) newErrors[key] = error;
-    });
-    setErrors(newErrors);
-    return newErrors;
-  };
-
-  const handleUpdateData = async (updatedData) => {
+  const handleUpdateData = async (updatedData: { [key: string]: string }) => {
     const payload = getChangedFields(userData, updatedData);
     if (Object.keys(payload).length === 0) return;
 
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) return;
     try {
       await updateProfileData(userData._id, payload);
       toast.success("User updated successfuly");
@@ -145,7 +126,8 @@ const Profile = ({
 
       {selectedTab === "Address Data" &&
         userData.companyInformation &&
-        userData.role === "provider" && (
+        userData.role === "provider" &&
+        userData.addressInformation && (
           <AddressData
             userData={userData.addressInformation}
             onCancel={() => navigate("/dashboard")}
@@ -167,7 +149,11 @@ const Profile = ({
 
       {selectedTab === "Security Data" && !isViewer && (
         <div className={styles.securityData}>
-          <SecurityData email={userData.email} isViewer={isViewer} />
+          <SecurityData
+            email={userData.personalInformation?.email ?? ""}
+            recoveryEmail={userData.personalInformation?.recoveryEmail ?? ""}
+            isViewer={isViewer}
+          />
         </div>
       )}
       {selectedTab === "Required Documents" && (

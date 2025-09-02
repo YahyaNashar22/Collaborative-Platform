@@ -106,7 +106,7 @@ const Projects = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
 

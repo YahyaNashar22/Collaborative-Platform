@@ -35,7 +35,8 @@ const DashboardHeader = () => {
       case "admin":
         return [
           { path: "/dashboard", label: "Dashboard" },
-          { path: "/dashboard/users", label: "Users" },
+          { path: "/dashboard/clients", label: "Clients" },
+          { path: "/dashboard/providers", label: "Providers" },
           { path: "/dashboard/services", label: "Services" },
           { path: "/dashboard/projects", label: "Projects" },
           { path: "/dashboard/requests", label: "Requests" },
@@ -84,7 +85,7 @@ const DashboardHeader = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
 

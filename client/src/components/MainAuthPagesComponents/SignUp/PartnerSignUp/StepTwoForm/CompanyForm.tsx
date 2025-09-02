@@ -13,6 +13,7 @@ import { getStringValue } from "../../../../../utils/CastToString";
 import { useStepFormHandlers } from "../../../../../hooks/useStepFormHandlers";
 import { useEffect, useState } from "react";
 import { getAllServices } from "../../../../../services/ServiceServices";
+import { toast } from "react-toastify";
 
 type CompanyFormViewProps = {
   data: FormStepData;
@@ -49,12 +50,11 @@ const CompanyForm = ({
       }));
       setServiceOptions(transformed);
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
 
   useEffect(() => {
-    "------", fieldValues;
     if (!serviceOptions.length) fetchAllServices();
   }, []);
 
@@ -86,7 +86,7 @@ const CompanyForm = ({
                     label={field.label}
                     placeholder={field.placeholder}
                     name={field.name}
-                    value={getStringValue(fieldValues[field.name])}
+                    value={getStringValue((fieldValues as any)[field.name])}
                     required={field.required || false}
                     onChange={(value, name) =>
                       handleChange(name, value, field.required || false)
@@ -98,7 +98,7 @@ const CompanyForm = ({
                     type={field.type}
                     placeholder={field.placeholder}
                     name={field.name}
-                    value={getStringValue(fieldValues[field.name])}
+                    value={getStringValue((fieldValues as any)[field.name])}
                     required={field.required || false}
                     maxLength={Number(field.maxLength)}
                     minLength={Number(field.minLength)}
@@ -110,7 +110,7 @@ const CompanyForm = ({
                     onBlur={() =>
                       handleBlur(
                         field.name,
-                        getStringValue(fieldValues[field.name]),
+                        getStringValue((fieldValues as any)[field.name]),
                         field.required || false,
                         field.type
                       )

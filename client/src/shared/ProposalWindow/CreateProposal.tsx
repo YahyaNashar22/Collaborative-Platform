@@ -155,8 +155,11 @@ const CreateProposal = ({
         <LibButton
           label="Back"
           onSubmit={handelBack}
-          backgroundColor="#57417e"
-          hoverColor="#49356a"
+          bold={true}
+          padding="0"
+          outlined
+          color="var(--deep-purple)"
+          hoverColor="#8563c326"
         />
         <LibButton label="Submit" onSubmit={handleSubmitProposal} />
       </div>

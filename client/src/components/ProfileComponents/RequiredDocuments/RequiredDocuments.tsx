@@ -17,11 +17,12 @@ interface Props extends RequiredDocumentsProps {
     required: boolean,
     type: string
   ) => void;
+  isViewer?: boolean;
 }
 
 const RequiredDocuments = ({
   userData,
-
+  isViewer = false,
   onCancel,
   onSave,
 }: Props) => {
@@ -37,26 +38,26 @@ const RequiredDocuments = ({
     required: boolean,
     type: string
   ) => {
-    if (value === userData[name]) {
+    if (value === (userData as any)[name]) {
       setUpdatedData((prev) => {
         const newData = { ...prev };
-        delete newData[name];
+        delete (newData as any)[name];
         return newData;
       });
       setErrors((prev) => {
         const newErrors = { ...prev };
-        delete newErrors[name];
+        delete (newErrors as any)[name];
         return newErrors;
       });
       return;
     }
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value, required, type);
+    const error = Validate(name, value as any, required, type);
     setErrors((prev) => {
       const newErrors = { ...prev };
-      if (error) newErrors[name] = error;
-      else delete newErrors[name];
+      if (error) (newErrors as any)[name] = error;
+      else delete (newErrors as any)[name];
       return newErrors;
     });
   };
@@ -80,15 +81,21 @@ const RequiredDocuments = ({
               placeholder={field.placeholder}
               required={field.required || false}
               onChange={(value, name) =>
-                handleChange(name, value, field.required || false, field.type)
+                handleChange(
+                  name,
+                  value as any,
+                  field.required || false,
+                  field.type
+                )
               }
-              errorMessage={errors[field.name]}
+              errorMessage={(errors as any)[field.name]}
+              disabled={isViewer}
             />
 
             <li className={styles.uploadedItem}>
               <div className={styles.fileDetails}>
                 <span className={styles.fileName}>
-                  {userData[field.name] || "No File Uploaded"}
+                  {(userData as any)[field.name] || "No File Uploaded"}
                 </span>
               </div>
               <div
@@ -96,7 +103,7 @@ const RequiredDocuments = ({
                 rel="noopener noreferrer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  downloadFile(userData[field.name]);
+                  downloadFile((userData as any)[field.name]);
                 }}
               >
                 ⬇ Download
@@ -105,23 +112,25 @@ const RequiredDocuments = ({
           </div>
         ))}
       </form>
-      <div className={`${styles.buttons} d-f align-center justify-between`}>
-        <LibButton
-          label="Cancel"
-          onSubmit={onCancel}
-          outlined
-          color="var(--deep-purple)"
-          hoverColor="#8563c326"
-          padding="0"
-        />
-        <LibButton
-          label="Save"
-          onSubmit={handleSave}
-          backgroundColor="#825beb"
-          hoverColor="#6c46d9"
-          padding="0"
-        />
-      </div>
+      {!isViewer && (
+        <div className={`${styles.buttons} d-f align-center justify-between`}>
+          <LibButton
+            label="Cancel"
+            onSubmit={onCancel}
+            outlined
+            color="var(--deep-purple)"
+            hoverColor="#8563c326"
+            padding="0"
+          />
+          <LibButton
+            label="Save"
+            onSubmit={handleSave}
+            backgroundColor="#825beb"
+            hoverColor="#6c46d9"
+            padding="0"
+          />
+        </div>
+      )}
     </div>
   );
 };
