@@ -39,7 +39,7 @@ const Proposals = ({
   const [confirmedIds, setConfirmedIds] = useState<string[]>([]);
 
   const isExpanded = (id: string) => expandedIds.includes(id);
-  const shouldShowToggle = (desc: string) => desc.length > 100;
+  // const shouldShowToggle = (desc: string) => desc.length > 100;
 
   const toggleDescription = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
