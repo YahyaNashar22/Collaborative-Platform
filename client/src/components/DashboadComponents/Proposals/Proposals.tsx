@@ -112,6 +112,7 @@ const Proposals = ({
               } d-f`}
             >
               {/* <h4>Title</h4> */}
+              <h4>Description</h4>
               <h4>Deadline</h4>
               <h4>Amount</h4>
               <h4>File</h4>
@@ -130,8 +131,8 @@ const Proposals = ({
                   }  ${isAdmin ? styles.withProvider : styles.noProvider}`}
                 >
                   <div className={`${styles.proposalInfo} d-f f-dir-col`}>
-                    {/* <p
-                      title={proposal.title}
+                    <p
+                      title={proposal.description}
                       onClick={(e) => toggleDescription(e, proposal._id)}
                       className={`${
                         !isExpanded(proposal._id)
@@ -139,20 +140,12 @@ const Proposals = ({
                           : styles.expanded
                       } ${styles.cell}`}
                     >
-                      {proposal.title || "—"}
-                    </p> */}
-                    {shouldShowToggle(proposal.description) && (
-                      <span
-                        onClick={(e) => toggleDescription(e, proposal._id)}
-                        className={`${styles.toggleText} bold pointer`}
-                      >
-                        {isExpanded(proposal._id) ? "Show less" : "Show more"}
-                      </span>
-                    )}
+                      {proposal.description || "—"}
+                    </p>
                   </div>
 
                   <p className={styles.cell}>
-                    {proposal.estimatedDeadline?.[0] ?? "N/A"}
+                    {proposal.estimatedDeadline?.[0]?.split("T")[0] ?? "N/A"}
                   </p>
 
                   <p className={styles.cell}>{proposal.amount || "—"} $</p>
