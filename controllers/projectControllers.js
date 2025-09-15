@@ -289,7 +289,8 @@ export const sendProjectTicket = async (req, res) => {
 export const requestProjectMeeting = async (req, res) => {
   try {
     const id = req.params.id;
-    const { meetingLink } = req.body;
+
+    const { title, description, meetingLink, time } = req.body;
 
     const project = await getProjectByIdService(id);
     if (!project)
@@ -308,8 +309,10 @@ export const requestProjectMeeting = async (req, res) => {
       client,
       provider,
       projectName: project.title,
-      meetingTime: new Date(),
+      meetingTime: time,
       meetingLink,
+      meetingTitle: title,
+      meetingDescription: description,
     });
 
     const emailsToSend = [client.email, provider.email];

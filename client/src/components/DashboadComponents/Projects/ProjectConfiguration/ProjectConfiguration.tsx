@@ -4,7 +4,6 @@ import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import FileDrop from "../../../../libs/common/lib-file-dropper/FileDrop";
-import dayjs from "dayjs";
 import { Project } from "../../../../interfaces/FullRequests";
 import Window from "../../../../libs/common/lib-window/Window";
 import PhasesSkeletonLoading from "../../../../shared/PhasesSkeletonLoading/PhasesSkeletonLoading";
@@ -84,6 +83,7 @@ const ProjectConfiguration = ({
     title: "",
     description: "",
     meetingLink: "",
+    time: "",
   });
 
   const [completeStageWindow, setCompleteStageWindow] =
@@ -96,6 +96,7 @@ const ProjectConfiguration = ({
     title: "",
     description: "",
     meetingLink: "",
+    time: "",
   });
 
   const [sendTicketData, setSendTicketData] = useState({
@@ -150,7 +151,7 @@ const ProjectConfiguration = ({
     try {
       const result = await createStage(projectData._id, payload);
 
-      if (result) setPhases((prev) => [...prev, result]);
+      if (result) setPhases((prev: any) => [...prev, result]);
       setTimeout(() => {
         if (contentRef.current) {
           contentRef.current.scrollTop = contentRef.current.scrollHeight;
@@ -313,11 +314,13 @@ const ProjectConfiguration = ({
       title: "",
       description: "",
       meetingLink: "",
+      time: "",
     });
     setErrorRequestMeeting({
       title: "",
       description: "",
       meetingLink: "",
+      time: "",
     });
   };
 
@@ -359,6 +362,7 @@ const ProjectConfiguration = ({
         true,
         "text"
       ),
+      time: Validate("time", requestMeetingData.time, true, "text"),
       meetingLink: Validate(
         "meetingLink",
         requestMeetingData.meetingLink,
@@ -501,7 +505,7 @@ const ProjectConfiguration = ({
                 {isLoading ? (
                   <PhasesSkeletonLoading />
                 ) : (
-                  phases.map((phase, i: number) => (
+                  phases.map((phase: any, i: number) => (
                     <div key={i} className={styles.phaseCard}>
                       <div className="d-f align-center justify-between">
                         <h4>{phase.name}</h4>
@@ -960,6 +964,16 @@ const ProjectConfiguration = ({
               required={true}
               onChange={handleChangeRequestMeeting}
               errorMessage={errorRequestMeeting.title}
+            />
+            <TextInput
+              name="time"
+              label="Meeting time"
+              type="text"
+              placeholder="dd/mm/yyyy"
+              value={requestMeetingData.time}
+              required={true}
+              onChange={handleChangeRequestMeeting}
+              errorMessage={errorRequestMeeting.time}
             />
             <TextAreaInput
               name="description"

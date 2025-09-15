@@ -464,7 +464,7 @@ export const deleteRequest = async (req, res) => {
 export const requestRequestMeeting = async (req, res) => {
   try {
     const id = req.params.id;
-    const { selectedTime } = req.body;
+
 
     //check if request exist
     const request = await getRequestByIdService(id);

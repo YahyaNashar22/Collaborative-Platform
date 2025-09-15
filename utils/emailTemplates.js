@@ -171,6 +171,8 @@ export const requestMeetingTemplate = ({
   projectName,
   meetingTime,
   meetingLink,
+  meetingTitle,
+  meetingDescription
 }) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -185,14 +187,16 @@ export const requestMeetingTemplate = ({
         <td style="padding: 10px 20px;">
           <h2>📅 Meeting Request</h2>
           <p>You have a new meeting request regarding project <strong>${projectName}</strong>.</p>
+
+          <!-- New fields -->
+          <p><strong>Meeting Title:</strong> ${meetingTitle}</p>
+          <p><strong>Description:</strong> ${meetingDescription}</p>
         </td>
       </tr>
 
       <tr>
         <td style="padding: 10px 20px;">
-          <p><strong>Meeting Time:</strong> ${new Date(
-            meetingTime
-          ).toLocaleString()}</p>
+          <p><strong>Meeting Time:</strong> ${meetingTime}</p>
           <p><strong>Meeting Link:</strong> <a href="${meetingLink}" style="color: #4FC3F7;">${meetingLink}</a></p>
         </td>
       </tr>
@@ -209,9 +213,7 @@ export const requestMeetingTemplate = ({
       <tr>
         <td style="padding: 10px 20px;">
           <h3>Provider Info</h3>
-          <p><strong>Name:</strong>${provider.firstName} ${
-  provider.lastName
-}</p>
+          <p><strong>Name:</strong> ${provider.firstName} ${provider.lastName}</p>
           <p><strong>Email:</strong> ${provider.email}</p>
           <p><strong>Phone:</strong> ${provider.phone}</p>
         </td>
@@ -286,4 +288,3 @@ export const emailTemplate = (receiverEmail, title, description) => {
 // TODO: Add files uploaded template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id.
 // TODO: Add reminder template -- should have project id or request id, reminder message.
 // TODO: Add Ticket template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id, subject and body.
-// TODO: Add Request Meeting template -- should have inside it client (name - phone - email ), provider (name - phone - email ), project id, time requested.

@@ -63,10 +63,7 @@ export interface Project {
   amount: number;
   isRequestedFiles: boolean;
   isUploadedFiles: boolean;
-  assignedStage: {
-    isProviderAssign: boolean;
-    isClientAssign: boolean;
-  };
+  assignedStage: boolean;
   isFeedbackSubmit: boolean;
   title: string;
   description: string;
