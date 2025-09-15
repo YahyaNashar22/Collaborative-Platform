@@ -5,21 +5,18 @@ import { downloadFile } from "../../../services/FileUpload";
 
 type FileDropProps = {
   phase: { [key: string]: string | File | string[] };
-  assignedStages: boolean;
   // isUploadedFiles: boolean;
   userRole: string;
   viewer: boolean;
-
   onUpload?: (file: File | null, phaseId: string) => void;
   onRequest?: () => void;
 };
 
 const FileDrop = ({
   phase,
-
   userRole,
-  assignedStages,
   onUpload,
+  viewer,
   // isUploadedFiles,
   onRequest,
 }: FileDropProps) => {
@@ -50,11 +47,7 @@ const FileDrop = ({
 
       <div
         className={`${styles.dropBox} ${
-          !assignedStages ||
-          userRole === "admin" ||
-          phase.status !== "in_progress"
-            ? styles.disabled
-            : ""
+          viewer || phase.status !== "in_progress" ? styles.disabled : ""
         }`}
         onClick={handleClick}
       >
@@ -99,15 +92,15 @@ const FileDrop = ({
               label="Upload"
               onSubmit={() => onUpload?.(selectedFile, phase._id as string)}
               backgroundColor="#825beb"
-              disabled={!assignedStages || phase.status !== "in_progress"}
+              disabled={viewer || phase.status !== "in_progress"}
               hoverColor="#6c46d9"
               padding="0 1.5rem"
             />
             <LibButton
               label="Request File"
-              onSubmit={onRequest}
+              onSubmit={onRequest as any}
               backgroundColor="#57417e"
-              disabled={!assignedStages || phase.status !== "in_progress"}
+              disabled={phase.status !== "in_progress"}
               hoverColor="#49356a"
               padding="0 1.5rem"
             />

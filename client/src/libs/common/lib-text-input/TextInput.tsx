@@ -26,6 +26,7 @@ type props = {
   hasIcon?: boolean;
   min?: number;
   max?: number;
+  minDate?: string;
   hasCurrency?: boolean;
   onBlur?: () => void;
 };
@@ -44,6 +45,7 @@ const TextInput = ({
   onBlur,
   min,
   max,
+  minDate,
   hasCurrency = false,
   hasIcon = false,
 }: props) => {
@@ -101,6 +103,7 @@ const TextInput = ({
                 minLength={minLength || 0}
                 {...(type === "number" ? { min } : {})}
                 {...(type === "number" ? { max } : {})}
+                {...(minDate ? { min: minDate } : {})}
                 onChange={(e) => onChange(e.target.value, name)}
                 onBlur={onBlur}
               />

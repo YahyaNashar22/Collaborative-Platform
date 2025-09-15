@@ -15,7 +15,7 @@ import { Project } from "../../../interfaces/FullRequests";
 
 const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<any>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
   const [openPoject, setOpenProject] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -109,16 +109,23 @@ const Projects = () => {
       toast.error((error as any)?.data?.message || "Error Occured!");
     }
   };
+  const handleSaveStages = () => {
+    console.log(projects);
+    setOpenProject(null);
+    fetchProjects();
+  };
 
   return (
     <>
       {openPoject !== null ? (
         <div className={`w-100 ${styles.projectContainer}`}>
           <ProjectConfiguration
+            key={projects[openPoject]?._id}
             // onClickNode={toggleView}
             projectData={projects[openPoject]}
             // updateStage={handleUpdateStage}
             userData={user}
+            emitStagesSave={handleSaveStages}
             onBack={() => setOpenProject(null)}
           />
         </div>

@@ -10,7 +10,6 @@ interface planTypes {
   query: BoxesDataKey | null;
   onSelect: (label: string) => void;
 }
-
 const PlanBoxes = ({ step, selected, onSelect, query }: planTypes) => (
   <div className={`${styles.avatarContainer} d-f align-center`}>
     {query ? (
@@ -21,17 +20,20 @@ const PlanBoxes = ({ step, selected, onSelect, query }: planTypes) => (
         description={boxesData[query].description}
       />
     ) : (
-      Object.values(boxesData).map(({ key, icon, label, description }) => (
-        <PlanBox
-          key={key}
-          icon={icon}
-          label={label}
-          isSelected={selected === key}
-          step={step}
-          onClick={() => onSelect(key)}
-          description={description}
-        />
-      ))
+      Object.values(boxesData).map(
+        ({ key, icon, label, description, hint }) => (
+          <PlanBox
+            key={key}
+            icon={icon}
+            label={label}
+            isSelected={selected === key}
+            step={step}
+            hint={hint}
+            onClick={() => onSelect(key)}
+            description={description}
+          />
+        )
+      )
     )}
   </div>
 );

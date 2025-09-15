@@ -6,11 +6,13 @@ export const boxesData = {
     icon: faUser,
     label: "Individual",
     description: "Freelancers, personal users, \nor solo professionals.",
+    hint: "in 2 easy steps",
   },
   "BOX-2": {
     key: "BOX-2",
     icon: faUsers,
     label: "Company",
     description: "For businesses, teams, \nor organizations.",
+    hint: "in 3 easy steps",
   },
 };
