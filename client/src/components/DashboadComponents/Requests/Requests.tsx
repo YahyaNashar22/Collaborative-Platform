@@ -110,7 +110,7 @@ const Requests = () => {
 
     if (debounceRef.current) clearTimeout(debounceRef.current);
 
-    debounceRef.current = setTimeout(() => {
+    (debounceRef as any).current = setTimeout(() => {
       const search = searchValue.toLowerCase();
 
       const filtered = requests.filter((req) =>
@@ -185,7 +185,7 @@ const Requests = () => {
     try {
       const result = await approveRequest(requestId, ids);
       // add the quotations to the selected quotations manualy on the front end
-      const selectedRequest = proposalsData[0].requestId;
+      const selectedRequest = (proposalsData?.[0] as any).requestId;
       for (let i = 0; i <= result.length; i++) {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
@@ -232,7 +232,7 @@ const Requests = () => {
       if (result) {
         // update manualy the providerIds to disabel the buttton
         setIsCreateProposalStep(false);
-        requestsMap[assignedRequest ?? ""].providerIds.push(user?._id);
+        requestsMap[assignedRequest ?? ""].providerIds.push(user?._id as any);
       }
     } catch (error) {
       setCreateProposalError(
@@ -316,7 +316,9 @@ const Requests = () => {
   if (isCreateProposalStep) {
     return (
       <CreateProposal
-        requestBudget={assignedRequest && requestsMap[assignedRequest].budget}
+        requestBudget={
+          (assignedRequest && requestsMap[assignedRequest].budget) as any
+        }
         onCreateProposal={handleCreateProposal}
         onBack={() => setIsCreateProposalStep(false)}
         requestIndentifier={requestsMap[assignedRequest as string].title}
@@ -412,7 +414,7 @@ const Requests = () => {
         <Window
           title={requestsMap[assignedRequest].title}
           visible={isWindowOpen}
-          onClose={assignProvidersToRequest}
+          onClose={() => setIsWindowOpen(false)}
         >
           {loadingProviders ? (
             <span className="loader"></span>
@@ -421,7 +423,7 @@ const Requests = () => {
               label="Assign to"
               name="assignTo"
               placeholder="Select Provider"
-              options={providers}
+              options={providers as any}
               onReady={(getterFn) => {
                 assignedProvidersRef.current = getterFn;
               }}
@@ -429,6 +431,18 @@ const Requests = () => {
               required
             />
           )}
+          <div className={`${styles.btns} d-f align-center justify-between`}>
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setIsWindowOpen(false)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+            />
+            <LibButton label="Assign" onSubmit={assignProvidersToRequest} />
+          </div>
         </Window>
       )}
 

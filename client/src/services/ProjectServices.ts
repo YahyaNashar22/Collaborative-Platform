@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const AuthBaseURL = "/projects";
 
-export const getAllProjects = async (user) => {
+export const getAllProjects = async (user: any) => {
   let url;
   if (user.role === "provider") {
     url = `${AuthBaseURL}/get-all-for-provider`;
@@ -96,16 +96,20 @@ export const requestFiles = async (
   return result.data;
 };
 
-export const requestMeeting = async (projectId: string, payload: string) => {
+export const requestMeeting = async (
+  projectId: string,
+  payload: { [key: string]: string }
+) => {
   const url = `${AuthBaseURL}/request-meeting/${projectId}`;
 
-  const result = await axiosInstance.post(url, { meetingLink: payload });
+  const result = await axiosInstance.post(url, payload);
   return result.data;
 };
 
-export const sendTicket = async (payload) => {
+export const sendTicket = async (
+  payload: Partial<{ [key: string]: string }>
+) => {
   const url = `${AuthBaseURL}/send-ticket`;
-
   const result = await axiosInstance.post(url, payload);
   return result.data;
 };

@@ -26,11 +26,7 @@ const TextAreaInput = ({
   onBlur,
 }: TextAreaInputProps) => {
   return (
-    <div
-      className={`${styles.inputContainer} ${
-        errorMessage ? styles.error : ""
-      }  d-f f-dir-col`}
-    >
+    <div className="d-f f-dir-col">
       <label htmlFor={name} className="bold">
         <span>
           {label} {required && <span className={styles.required}>*</span>}

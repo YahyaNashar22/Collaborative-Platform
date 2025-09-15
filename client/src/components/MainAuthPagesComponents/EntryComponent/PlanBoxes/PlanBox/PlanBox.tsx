@@ -7,6 +7,7 @@ const PlanBox = ({
   icon,
   label,
   isSelected,
+  hint,
   step,
   onClick,
   description,
@@ -15,6 +16,7 @@ const PlanBox = ({
   label: string;
   isSelected?: boolean;
   step: number;
+  hint?: string;
   onClick?: () => void;
   description: string;
 }) => (
@@ -29,15 +31,18 @@ const PlanBox = ({
     </div>
     <div className={styles.avatarTitle}>{label}</div>
     {step === 0 && (
-      <small className="text-align-center">
-        {" "}
-        {description.split("\n").map((line, index) => (
-          <React.Fragment key={index}>
-            {line}
-            <br />
-          </React.Fragment>
-        ))}
-      </small>
+      <>
+        <small className="text-align-center">
+          {" "}
+          {description.split("\n").map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </small>
+        <small>{hint}</small>
+      </>
     )}
   </div>
 );

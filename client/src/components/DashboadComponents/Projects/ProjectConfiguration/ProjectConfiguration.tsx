@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./ProjectConfiguration.module.css";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
@@ -19,12 +19,21 @@ import {
   uploadFile,
 } from "../../../../services/ProjectServices";
 import { User } from "../../../../interfaces/User";
+import {
+  faArrowLeft,
+  faClock,
+  faFile,
+  faQuoteRight,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { FieldError, Validate } from "../../../../utils/Validate";
 
 type ProjectConfigurationProps = {
   // onClickNode: (id: string) => void;
   projectData: Project;
   userData: User | null;
   onBack: () => void;
+  emitStagesSave: (projectId: string) => void;
   // updateStage: (
   //   stageId: string,
   //   projectId: string,
@@ -38,34 +47,70 @@ const ProjectConfiguration = ({
   // onClickNode,
   projectData,
   onBack,
-  // updateStage,
+  emitStagesSave,
   userData,
 }: ProjectConfigurationProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const nodes = [
-    { id: "quotation", title: "Project Quotation" },
-    { id: "timeline", title: "Project Timeline" },
-    { id: "files", title: "Project Files" },
+    {
+      id: "quotation",
+      title: "Project Quotation",
+      icon: <FontAwesomeIcon icon={faQuoteRight} />,
+    },
+    {
+      id: "timeline",
+      title: "Project Timeline",
+      icon: <FontAwesomeIcon icon={faClock} />,
+    },
+    {
+      id: "files",
+      title: "Project Files",
+      icon: <FontAwesomeIcon icon={faFile} />,
+    },
   ] as const;
 
-  const [selected, setSelected] = useState<NodeId>("timeline");
-  const [message, setMessage] = useState<string>("");
+  const [selected, setSelected] = useState<NodeId>("quotation");
   const [selectedStage, setSelectedStage] = useState<number>();
   const [deleteWindow, setDeleteWindow] = useState(false);
   const [saveWindow, setSaveWindow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorSendTicket, setErrorSendTicket] = useState("");
   const [requestFileWindow, setRequestFileWindow] = useState<boolean>(false);
   const [sendTicketWindow, setSendTicketWindow] = useState<boolean>(false);
   const [requestMeetingWindow, setRequestMeetingWindow] =
     useState<boolean>(false);
-  const [requestMeetingData, setRequestMeetingData] = useState("");
+  const [requestMeetingData, setRequestMeetingData] = useState({
+    title: "",
+    description: "",
+    meetingLink: "",
+  });
+
+  const [completeStageWindow, setCompleteStageWindow] =
+    useState<boolean>(false);
+  const [currentCompletedStage, setCurrentCompletedStage] = useState<
+    number | null
+  >(null);
+
+  const [errorRequestMeeting, setErrorRequestMeeting] = useState<FieldError>({
+    title: "",
+    description: "",
+    meetingLink: "",
+  });
+
+  const [sendTicketData, setSendTicketData] = useState({
+    title: "",
+    description: "",
+  });
+
+  const [errorSendTicket, setErrorSendTicket] = useState<FieldError>({
+    title: "",
+    description: "",
+  });
   const [requestFileData, setRequestFileData] = useState<{
     title: string;
     description: string;
   }>({ title: "", description: "" });
-  const [phases, setPhases] = useState(
+  const [phases, setPhases] = useState<{ [key: string]: any }>(
     projectData.stages.map((stage) => ({
       _id: stage._id,
       name: stage.name || "",
@@ -75,8 +120,13 @@ const ProjectConfiguration = ({
       status: stage.status,
       projectFiles: stage.projectFiles,
       isUploadedFiles: stage.isUploadedFiles,
+      hasError: false,
     }))
   );
+
+  useEffect(() => {
+    console.log(phases);
+  }, [phases]);
 
   const handleSelect = (id: NodeId) => {
     setSelected(id);
@@ -93,6 +143,7 @@ const ProjectConfiguration = ({
       start: new Date(),
       end: new Date(Date.now() + 24 * 60 * 60 * 1000),
       status: "not_started",
+      hasError: false,
     };
 
     try {
@@ -116,23 +167,58 @@ const ProjectConfiguration = ({
     name: keyof (typeof phases)[number],
     index: number
   ) => {
-    setPhases((prev) =>
-      prev.map((phase, i) =>
-        i === index ? { ...phase, [name]: value } : phase
-      )
-    );
-    // to prevant calling this service if provider confirm the stage when assign stages
+    // setPhases((prev) =>
+    //   prev.map((phase: any, i: number) => {
+    //     if (i === index) {
+    //       const updatedPhase = { ...phase, [name]: value };
+
+    //       let hasError = false;
+    //       if (updatedPhase.start && updatedPhase.end) {
+    //         const startDate = new Date(updatedPhase.start);
+    //         const endDate = new Date(updatedPhase.end);
+    //         if (endDate < startDate) {
+    //           hasError = true;
+    //         }
+    //       }
+
+    //       return { ...updatedPhase, hasError };
+    //     }
+    //     return phase;
+    //   })
+    // );
+
     if (projectData.assignedStage === true) {
-      handleCompleteStage(index);
+      setCompleteStageWindow(true);
+      setCurrentCompletedStage(index);
     }
   };
 
-  const handleCompleteStage = async (index: number) => {
+  const validateDate = (phases: any) => {
+    const hasAnyError = phases.some((phase: any) => phase.hasError);
+    if (hasAnyError) return { hasError: true, cleanPhases: [] };
+
+    // Remove hasError field before submitting
+    const cleanPhases = phases.map(({ hasError, ...rest }) => rest);
+    return { hasError: false, cleanPhases };
+  };
+
+  const handleCompleteStage = async (index: number | null) => {
+    if (!currentCompletedStage) {
+      toast.error("No stage found");
+      return;
+    }
+    const { hasError } = validateDate(phases);
+    if (hasError) {
+      toast.error("Cannot complete stage while there are date errors.");
+      return;
+    }
     setIsLoading(true);
     try {
       const result = await setStageComplete(projectData._id, phases[index]._id);
       // add it manually on the front end
       setPhases(result);
+      setCompleteStageWindow(false);
+      setCurrentCompletedStage(null);
     } catch (error) {
       toast.error((error as any)?.data?.message || "Error Occured!");
     } finally {
@@ -141,15 +227,24 @@ const ProjectConfiguration = ({
   };
 
   const handleSavePhases = async () => {
+    const { hasError, cleanPhases } = validateDate(phases);
+    console.log(cleanPhases);
+    console.log(hasError);
+    if (hasError) {
+      toast.error("Please fix all date errors before saving.");
+      return;
+    }
     setIsLoading(true);
     try {
-      const result = await updateStages(projectData._id, phases);
+      const result = await updateStages(projectData._id, cleanPhases as any);
       // update manualy
       setPhases(result);
-      projectData.assignedStage = true;
+      emitStagesSave(projectData._id);
       setSaveWindow(false);
     } catch (error) {
-      toast.error("Error With update!");
+      toast.error(
+        (error as any)?.response?.data.message || "Error With update!"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -164,8 +259,7 @@ const ProjectConfiguration = ({
     }, 300);
   };
 
-  const viewer =
-    userData?.role !== "provider" || projectData.assignedStage === true;
+  const viewer = userData?.role !== "provider";
 
   const handleUploadFile = async (file: File, stageId: string) => {
     if (!file) return;
@@ -209,35 +303,113 @@ const ProjectConfiguration = ({
     }
   };
 
+  const resetRequestMeetingFields = () => {
+    setRequestMeetingData({
+      title: "",
+      description: "",
+      meetingLink: "",
+    });
+    setErrorRequestMeeting({
+      title: "",
+      description: "",
+      meetingLink: "",
+    });
+  };
+
+  const resetSendTicket = () => {
+    setSendTicketData({
+      title: "",
+      description: "",
+    });
+    setErrorSendTicket({
+      title: "",
+      description: "",
+    });
+  };
+
+  const handleChangeRequestMeeting = (value: string, name: string) => {
+    setRequestMeetingData((prev) => ({ ...prev, [name]: value }));
+    const fieldError = Validate(name, value, true, "text");
+    setErrorRequestMeeting((prev) => ({
+      ...prev,
+      [name]: fieldError,
+    }));
+  };
+
+  const handleChangeSendTicket = (value: string, name: string) => {
+    setSendTicketData((prev) => ({ ...prev, [name]: value }));
+    const fieldError = Validate(name, value, true, "text");
+    setErrorSendTicket((prev) => ({
+      ...prev,
+      [name]: fieldError,
+    }));
+  };
+
   const handleRequestMeeting = async () => {
-    if (!requestMeetingData.trim()) {
-      toast.error("Meeting url is required to send a meeting request.");
+    const newErrors: FieldError = {
+      title: Validate("title", requestMeetingData.title, true, "text"),
+      description: Validate(
+        "description",
+        requestMeetingData.description,
+        true,
+        "text"
+      ),
+      meetingLink: Validate(
+        "meetingLink",
+        requestMeetingData.meetingLink,
+        true,
+        "text"
+      ),
+    };
+
+    setErrorRequestMeeting(newErrors);
+
+    const hasError = Object.values(newErrors).some(Boolean);
+    if (hasError) {
       return;
     }
-
     try {
       await requestMeeting(projectData._id, requestMeetingData);
       toast.success("Meeting request sent successfully.");
+      resetRequestMeetingFields();
       setRequestMeetingWindow(false);
-      setRequestMeetingData("");
     } catch (error) {
-      toast.error("Failed to send Meeting request.");
+      toast.error(
+        (error as any)?.response?.data?.message ||
+          "Failed to send Meeting request."
+      );
     }
   };
 
   const handleSendTicket = async () => {
-    if (message.length === 0) {
-      setErrorSendTicket("Message is required to send a ticket.");
+    const newErrors: FieldError = {
+      title: Validate("title", sendTicketData.title, true, "text"),
+      description: Validate(
+        "description",
+        sendTicketData.description,
+        true,
+        "text"
+      ),
+    };
+
+    setErrorSendTicket(newErrors);
+
+    const hasError = Object.values(newErrors).some(Boolean);
+    if (hasError) {
       return;
     }
-    const payload = {
+    const payload: Partial<{ [key: string]: string }> = {
       senderId: userData?._id,
       projectId: projectData._id,
       clientId: projectData.clientId,
       providerId: projectData.providerId,
+      title: sendTicketData.title,
+      description: sendTicketData.description,
     };
     try {
       await sendTicket(payload);
+      resetSendTicket();
+      setSendTicketWindow(false);
       toast.success("Ticket request sent successfully.");
     } catch (error) {
       toast.error((error as any)?.data?.message || "Failed to send ticket.");
@@ -251,14 +423,13 @@ const ProjectConfiguration = ({
           className={`${styles.backWrapper} d-f align-center pointer`}
           onClick={onBack}
         >
-          <span className={styles.backArrow}>←</span>
+          <FontAwesomeIcon icon={faArrowLeft} />
           <span className={styles.backText}>Back</span>
         </div>
         <header className={`${styles.subNavbar} d-f `}>
-          {nodes.map(({ id, title }, index: number) => (
-            <>
+          {nodes.map(({ id, title, icon }, index: number) => (
+            <React.Fragment key={id}>
               <div
-                key={index}
                 className={`${styles.node} ${
                   selected === id ? styles.selected : ""
                 } d-f f-dir-col align-center justify-center pointer`}
@@ -267,14 +438,14 @@ const ProjectConfiguration = ({
                 <div
                   className={`${styles.step}  d-f align-center justify-center`}
                 >
-                  {index + 1}
+                  {icon}
                 </div>
                 <div className={styles.title}>{title}</div>
               </div>
               {index + 1 !== nodes.length && (
                 <div className={styles.line}></div>
               )}
-            </>
+            </React.Fragment>
           ))}
         </header>
         {/* timeline view */}
@@ -282,7 +453,10 @@ const ProjectConfiguration = ({
           <div className="buttons d-f align-end justify-end gap-05 my-1 mr-1">
             <LibButton
               label="Request Meeting"
-              onSubmit={() => setRequestMeetingWindow(true)}
+              onSubmit={() => {
+                resetRequestMeetingFields();
+                setRequestMeetingWindow(true);
+              }}
               backgroundColor="#57417e"
               hoverColor="#49356a"
               padding="0 20px"
@@ -290,8 +464,7 @@ const ProjectConfiguration = ({
             <LibButton
               label="Send ticket"
               onSubmit={() => {
-                setErrorSendTicket("");
-                setMessage("");
+                resetSendTicket();
                 setSendTicketWindow(true);
               }}
               backgroundColor="#57417e"
@@ -303,7 +476,7 @@ const ProjectConfiguration = ({
         <main className={styles.content}>
           {selected === "timeline" && (
             <div className={`${styles.timelineContainer} d-f f-dir-col`}>
-              {!viewer && (
+              {!viewer && !projectData.assignedStage && (
                 <div className={styles.addBtn}>
                   <LibButton
                     label="+ Add Phase"
@@ -324,7 +497,7 @@ const ProjectConfiguration = ({
                   <PhasesSkeletonLoading />
                 ) : (
                   phases.map((phase, i: number) => (
-                    <div key={phase._id} className={styles.phaseCard}>
+                    <div key={i} className={styles.phaseCard}>
                       <div className="d-f align-center justify-between">
                         <h4>{phase.name}</h4>
                         <div
@@ -334,7 +507,7 @@ const ProjectConfiguration = ({
                         >
                           {phase.status
                             .replace("_", " ")
-                            .replace(/\b\w/g, (c) => c.toUpperCase())}
+                            .replace(/\b\w/g, (c: any) => c.toUpperCase())}
                         </div>
                       </div>
 
@@ -345,7 +518,9 @@ const ProjectConfiguration = ({
                         placeholder="Phase Name"
                         required={false}
                         value={phase.name}
-                        disabled={viewer}
+                        disabled={
+                          (viewer || projectData.assignedStage) as boolean
+                        }
                         onChange={(value: string) =>
                           handleChange(value, "name", i)
                         }
@@ -355,7 +530,9 @@ const ProjectConfiguration = ({
                         name="description"
                         label="Description"
                         placeholder="Enter description"
-                        disabled={viewer}
+                        disabled={
+                          (viewer || projectData.assignedStage) as boolean
+                        }
                         required={false}
                         value={phase.description}
                         onChange={(value: string) =>
@@ -369,7 +546,10 @@ const ProjectConfiguration = ({
                           label="Start Date"
                           placeholder="Pick a date"
                           type="date"
-                          disabled={viewer}
+                          disabled={
+                            (viewer || projectData.assignedStage) as boolean
+                          }
+                          minDate={new Date().toISOString().split("T")[0]}
                           value={
                             new Date(phase.start).toISOString().split("T")[0]
                           }
@@ -383,7 +563,10 @@ const ProjectConfiguration = ({
                           label="End Date"
                           placeholder="Pick a date"
                           type="date"
-                          disabled={viewer}
+                          disabled={
+                            (viewer || projectData.assignedStage) as boolean
+                          }
+                          minDate={new Date().toISOString().split("T")[0]}
                           value={
                             new Date(phase.end).toISOString().split("T")[0]
                           }
@@ -394,28 +577,37 @@ const ProjectConfiguration = ({
                         />
                       </div>
 
-                      {phase.start &&
-                        phase.end &&
-                        dayjs(phase.start).isAfter(dayjs(phase.end)) && (
-                          <small className="error">
-                            * Start date must be before end date
-                          </small>
-                        )}
+                      {phase.hasError && (
+                        <small className="error">
+                          * End date must come before end date
+                        </small>
+                      )}
 
                       <div className="d-f align-center justify-between">
                         {userData?.role === "provider" && (
                           <label
                             className={`d-f align-center ${
-                              phase.status !== "in_progress" ? "" : "pointer"
+                              !projectData.assignedStage ||
+                              phase.status !== "in_progress"
+                                ? ""
+                                : "pointer"
                             }
                              `}
                           >
                             <input
                               name="status"
-                              className="pointer"
+                              className={`${
+                                !projectData.assignedStage ||
+                                phase.status !== "in_progress"
+                                  ? ""
+                                  : "pointer"
+                              } `}
                               type="checkbox"
                               checked={phase.status === "completed"}
-                              disabled={phase.status !== "in_progress"}
+                              disabled={
+                                !projectData.assignedStage ||
+                                phase.status !== "in_progress"
+                              }
                               onChange={(e) =>
                                 handleChange(
                                   e.target.checked
@@ -430,20 +622,20 @@ const ProjectConfiguration = ({
                           </label>
                         )}
 
-                        {!viewer && (
-                          <LibButton
-                            label="Delete"
-                            disabled={viewer}
-                            onSubmit={() => {
-                              setSelectedStage(i);
-                              setDeleteWindow(true);
-                            }}
-                            bold={true}
-                            padding="0"
-                            backgroundColor="#e53935"
-                            hoverColor="#c62828"
-                          />
-                        )}
+                        {userData?.role === "provider" &&
+                          !projectData.assignedStage && (
+                            <LibButton
+                              label="Delete"
+                              onSubmit={() => {
+                                setSelectedStage(i);
+                                setDeleteWindow(true);
+                              }}
+                              bold={true}
+                              padding="0"
+                              backgroundColor="#e53935"
+                              hoverColor="#c62828"
+                            />
+                          )}
                       </div>
                     </div>
                   ))
@@ -451,10 +643,10 @@ const ProjectConfiguration = ({
               </div>
 
               <div className={`${styles.buttons} d-f align-center justify-end`}>
-                {!viewer && (
+                {userData?.role === "client" && !projectData.assignedStage && (
                   <LibButton
-                    label="Save"
-                    disabled={viewer}
+                    label="Accept"
+                    disabled={userData?.role !== "client"}
                     onSubmit={() => {
                       setSaveWindow(true);
                     }}
@@ -472,12 +664,14 @@ const ProjectConfiguration = ({
               {phases.map((phase, index: number) => (
                 <FileDrop
                   key={index}
-                  phase={phase}
+                  phase={phase as any}
                   userRole={userData?.role as string}
                   assignedStages={projectData.assignedStage}
                   // isUploadedFiles={phase.isUploadedFiles}
-
-                  onUpload={(file, stageId) => handleUploadFile(file, stageId)}
+                  viewer={viewer}
+                  onUpload={(file, stageId) =>
+                    handleUploadFile(file as any, stageId)
+                  }
                   onRequest={() => setRequestFileWindow(true)}
                 />
               ))}
@@ -574,12 +768,14 @@ const ProjectConfiguration = ({
         )}
         {saveWindow && (
           <Window
-            title="Save Stage"
+            title="Save Stages"
             visible={saveWindow}
             onClose={() => setSaveWindow(false)}
             isErrorWindow="true"
           >
             <small className="mb-1 d-b f-12">
+              ⚠️ this action is irreversible
+              <br />
               are you sure do you want to Save these stages ?
             </small>
             <div className={`${styles.btns} d-f align-center justify-between`}>
@@ -595,6 +791,43 @@ const ProjectConfiguration = ({
               <LibButton
                 label="Confirm"
                 onSubmit={handleSavePhases}
+                bold={true}
+                padding="0"
+              />
+            </div>
+          </Window>
+        )}
+        {completeStageWindow && (
+          <Window
+            title="Complete Stage"
+            visible={completeStageWindow !== null}
+            onClose={() => {
+              setCurrentCompletedStage(null);
+              setCompleteStageWindow(false);
+            }}
+            isErrorWindow="true"
+          >
+            <small className="mb-1 d-b f-12">
+              ⚠️ this action is irreversible
+              <br />
+              are you sure do you want to Complete this stage ?
+            </small>
+            <div className={`${styles.btns} d-f align-center justify-between`}>
+              <LibButton
+                label="Cancel"
+                onSubmit={() => {
+                  setCurrentCompletedStage(null);
+                  setCompleteStageWindow(false);
+                }}
+                bold={true}
+                padding="0"
+                outlined
+                color="var(--deep-purple)"
+                hoverColor="#8563c326"
+              />
+              <LibButton
+                label="Confirm"
+                onSubmit={() => handleCompleteStage(currentCompletedStage)}
                 bold={true}
                 padding="0"
               />
@@ -658,18 +891,30 @@ const ProjectConfiguration = ({
         <Window
           title="Send Ticket"
           visible={sendTicketWindow}
-          onClose={() => setSendTicketWindow(false)}
+          onClose={() => {
+            resetSendTicket();
+            setSendTicketWindow(false);
+          }}
         >
           <div className="d-f f-dir-col gap-1">
             <TextInput
-              name="message"
-              label="Message"
+              name="title"
+              label="Ticket title"
               type="text"
-              placeholder="Enter your message"
-              value={message}
-              errorMessage={errorSendTicket}
+              placeholder="Enter your title"
+              value={sendTicketData.title}
+              errorMessage={errorSendTicket.title}
               required={true}
-              onChange={(value: string) => setMessage(value)}
+              onChange={handleChangeSendTicket}
+            />
+            <TextAreaInput
+              name="description"
+              label="Ticket description"
+              placeholder="Enter your description"
+              value={sendTicketData.description}
+              errorMessage={errorSendTicket.description}
+              required={true}
+              onChange={handleChangeSendTicket}
             />
 
             <div className="d-f align-center justify-between mt-1">
@@ -701,13 +946,33 @@ const ProjectConfiguration = ({
         >
           <div className="d-f f-dir-col gap-1">
             <TextInput
-              name="meeting"
+              name="title"
+              label="Meeting title"
+              type="text"
+              placeholder="Enter meeting title"
+              value={requestMeetingData.title}
+              required={true}
+              onChange={handleChangeRequestMeeting}
+              errorMessage={errorRequestMeeting.title}
+            />
+            <TextAreaInput
+              name="description"
+              label="Meeting Description"
+              placeholder="Enter meeting description"
+              value={requestMeetingData.description}
+              required={true}
+              onChange={handleChangeRequestMeeting}
+              errorMessage={errorRequestMeeting.description}
+            />
+            <TextInput
+              name="meetingLink"
               label="Meeting Link"
               type="url"
               placeholder="Enter meeting link"
-              value={requestMeetingData}
+              value={requestMeetingData.meetingLink}
               required={true}
-              onChange={(value: string) => setRequestMeetingData(value)}
+              onChange={handleChangeRequestMeeting}
+              errorMessage={errorRequestMeeting.meetingLink}
             />
 
             <div className="d-f align-center justify-between mt-1">
