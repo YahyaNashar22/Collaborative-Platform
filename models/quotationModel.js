@@ -32,6 +32,11 @@ const quotationSchema = new Schema(
       type: String,
       required: false,
     },
+    isRejected: {
+      type: Boolean,
+      required: true,
+      default: false
+    }
   },
   { timestamps: true }
 );
