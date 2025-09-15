@@ -2,7 +2,6 @@ import { useState } from "react";
 import AuthFooterLink from "../../../../shared/AuthFooterLink/AuthFooterLink";
 import LogInComponent from "../LogInComponent";
 import styles from "./LogInPartner.module.css";
-import ForgetPasswordComponent from "../forgetPassword/ForgetPasswordComponent";
 import { logIn, resetPassword } from "../../../../services/UserServices";
 import authStore from "../../../../store/AuthStore";
 import { useNavigate } from "react-router-dom";
@@ -28,9 +27,9 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await logIn(payload);
 
-      setUser(response.payload);
-
+      
       if (response.success === true) {
+        setUser(response.payload);
         navigate("/dashboard");
         toast.success("Welcome back");
       }
