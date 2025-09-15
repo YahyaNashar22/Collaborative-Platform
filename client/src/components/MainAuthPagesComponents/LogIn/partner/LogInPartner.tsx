@@ -27,11 +27,12 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await logIn(payload);
 
-      
       if (response.success === true) {
-        setUser(response.payload);
-        navigate("/dashboard");
-        toast.success("Welcome back");
+        setTimeout(() => {
+          setUser(response.payload);
+          navigate("/dashboard");
+          toast.success("Welcome back");
+        }, 150);
       }
     } catch (error: any) {
       if ((error as any)?.data?.message)

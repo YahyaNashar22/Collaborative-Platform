@@ -30,9 +30,11 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await logIn(payload);
       if (response.success === true) {
-        setUser(response.payload);
-        navigate("/dashboard", { replace: true });
-        toast.success("Welcome back");
+        setTimeout(() => {
+          setUser(response.payload);
+          navigate("/dashboard", { replace: true });
+          toast.success("Welcome back");
+        }, 150);
       }
     } catch (error: any) {
       setError((error as any)?.data?.message || "Login failed");
