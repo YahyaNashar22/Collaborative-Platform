@@ -416,7 +416,7 @@ const ProjectConfiguration = ({
       description: sendTicketData.description,
     };
     try {
-      await sendTicket(payload);
+      await sendTicket(projectData._id, payload);
       resetSendTicket();
       setSendTicketWindow(false);
       toast.success("Ticket request sent successfully.");

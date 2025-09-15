@@ -13,6 +13,7 @@ import removeFile from "../utils/removeFile.js";
 import {
   sendFilesRequestedEmail,
   requestMeetingTemplate,
+  sendTicketTemplate,
 } from "../utils/emailTemplates.js";
 import User from "../models/userModel.js";
 import transporter from "../utils/nodemailerTransporter.js";
@@ -268,14 +269,38 @@ export const deleteFiles = async (req, res) => {
 export const sendProjectTicket = async (req, res) => {
   try {
     const id = req.params.id;
-    const { subject, body } = req.body;
+    const { title, description } = req.body;
+
 
     // get project
     const project = await getProjectByIdService(id);
     if (!project)
       return res.status(404).json({ message: "Project Not Found!" });
 
-    // TODO: Add Ticket Template Here ( email )
+    const client = project.clientId;
+    const provider = project.providerId;
+
+    if (!client || !provider)
+      return res
+        .status(400)
+        .json({ message: "Missing client or provider information." });
+
+    // Format email content
+    const emailHtml = sendTicketTemplate({
+      client,
+      provider,
+      projectName: project.title,
+      title,
+      description,
+    });
+
+    const emailsToSend = [process.env.ADMIN_EMAIL];
+    await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: emailsToSend,
+      subject: "📂 New Ticket – Takatuf Platform",
+      html: emailHtml,
+    });
 
     res.status(200).json({ message: "Ticket Sent Successfully " });
   } catch (error) {
@@ -315,12 +340,11 @@ export const requestProjectMeeting = async (req, res) => {
       meetingDescription: description,
     });
 
-    // const emailsToSend = [client.email, provider.email];
-    const emailsToSend = ['yahyanashar22@gmail.com'];
+    const emailsToSend = [client.email, provider.email];
     await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: emailsToSend,
-      subject: "📅 New Meeting Request – Takatouf Platform",
+      subject: "📅 New Meeting Request – Takatuf Platform",
       html: emailHtml,
     });
 
@@ -602,7 +626,5 @@ export const markProjectAsCompleted = async (req, res) => {
     });
   }
 };
-
-// TODO: Add Payment Integration -- pay button for client ( pays admin ) -- pay button for admin ( pays provider )
 
 // TODO: Add reminder logic

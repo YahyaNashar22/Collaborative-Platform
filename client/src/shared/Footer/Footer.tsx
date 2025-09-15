@@ -88,7 +88,7 @@ const Footer = () => {
       </div>
 
       <div className={styles.lower}>
-        <p>&copy; 2025 Takatouf Platform. All rights reserved.</p>
+        <p>&copy; 2025 Takatuf Platform. All rights reserved.</p>
         <ul className={styles.links}>
           <li className={styles.link}>
             <a href="https://x.com/">

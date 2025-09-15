@@ -461,6 +461,7 @@ export const deleteRequest = async (req, res) => {
 };
 
 // request meeting
+// TODO: DELETE THIS CONTROLLER
 export const requestRequestMeeting = async (req, res) => {
   try {
     const id = req.params.id;
@@ -470,8 +471,6 @@ export const requestRequestMeeting = async (req, res) => {
     const request = await getRequestByIdService(id);
     if (!request)
       return res.status(404).json({ message: "Request Does Not Exist" });
-
-    // TODO: Add Request Meeting Template Here ( email )
 
     res.status(200).json({ message: "Meeting Requested Successfully" });
   } catch (error) {

@@ -12,8 +12,6 @@ import removeFile from "../utils/removeFile.js";
 import { emailTemplate, otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
-// TODO: Find a way to store files on a cloud storage ( Recommended files.fm )
-
 // Register New Super
 export const registerSuper = async (req, res) => {
   try {

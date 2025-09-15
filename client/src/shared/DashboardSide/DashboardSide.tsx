@@ -69,7 +69,7 @@ const DashboardSide = () => {
         className={`${styles.wrapper} d-f f-dir-col align-start justify-between`}
       >
         <p>
-          TAKATOUF IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH
+          TAKATUF IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH
           CONSULTANCY SERVICE PROVIDERS
         </p>
         <div className="d-f f-dir-col align-start">

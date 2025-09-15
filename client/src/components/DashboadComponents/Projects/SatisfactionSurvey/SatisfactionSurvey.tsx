@@ -303,7 +303,7 @@ const SatisfactionSurvey: React.FC<SatisfactionSurveyProps> = ({
           setRating={(rating) =>
             handleRatingChange("satisfactionAsPartnerCCC", rating)
           }
-          question="Overall, How satisfied are you with Takatouf Platform as a consulting partner?"
+          question="Overall, How satisfied are you with Takatuf Platform as a consulting partner?"
         />
 
         <SatisfactionTable

@@ -15,11 +15,11 @@ const About = () => {
           ASPECTS OF OUR WORK
         </h2>
         <p className={`align-text ${styles.bio}`}>
-          Takatouf is an AI-driven platform that connects clients with
+          Takatuf is an AI-driven platform that connects clients with
           consultancy service providers across financial, managerial, marketing,
           IT, and digital domains. Using Artificial Intelligence, we precisely
           match customer needs with the right partners, delivering tailored and
-          efficient solutions. Powered by Blockchain technology, Takatouf
+          efficient solutions. Powered by Blockchain technology, Takatuf
           ensures secure, transparent, and reliable data management, building
           trust between clients and partners while, we offer innovative
           solutions that assist businesses and individuals in Saudi Arabia to

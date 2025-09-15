@@ -107,9 +107,10 @@ export const requestMeeting = async (
 };
 
 export const sendTicket = async (
+  projectId: string,
   payload: Partial<{ [key: string]: string }>
 ) => {
-  const url = `${AuthBaseURL}/send-ticket`;
+  const url = `${AuthBaseURL}/send-ticket/${projectId}`;
   const result = await axiosInstance.post(url, payload);
   return result.data;
 };

@@ -8,7 +8,7 @@ export const otpTemplate = (receiverEmail, otp) => {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Takatouf Platform</title>
+    <title>Takatuf Platform</title>
   </head>
   <body style="background-color: black; color: white">
     <table
@@ -44,7 +44,7 @@ export const otpTemplate = (receiverEmail, otp) => {
       <tr>
         <td style="padding: 10px 20px">
           <p>Best wishes,</p>
-          <p style="font-weight: bold">Takatouf Platform</p>
+          <p style="font-weight: bold">Takatuf Platform</p>
         </td>
       </tr>
     </table>
@@ -56,7 +56,7 @@ export const otpTemplate = (receiverEmail, otp) => {
     {
       from: process.env.SENDER_EMAIL,
       to: receiverEmail, // Recipient's email address
-      subject: "Takatouf Platform OTP", // Subject line
+      subject: "Takatuf Platform OTP", // Subject line
       html: htmlBody, // HTML body
     },
     (error, info) => {
@@ -122,7 +122,7 @@ export const filesRequestedTemplate = ({
       <tr>
         <td style="padding: 10px 20px;">
           <p>Best wishes,</p>
-          <p style="font-weight: bold;">Takatouf Platform</p>
+          <p style="font-weight: bold;">Takatuf Platform</p>
         </td>
       </tr>
     </table>
@@ -150,7 +150,7 @@ export const sendFilesRequestedEmail = async ({
     {
       from: process.env.SENDER_EMAIL,
       to: receiverEmail,
-      subject: "File Request – Takatouf Platform",
+      subject: "File Request – Takatuf Platform",
       html,
     },
     (error, info) => {
@@ -164,6 +164,62 @@ export const sendFilesRequestedEmail = async ({
     }
   );
 };
+
+export const sendTicketTemplate = ({
+  client,
+  provider,
+  projectName,
+  title,
+  description
+}) => `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ticket Request</title>
+  </head>
+  <body style="background-color: black; color: white; font-family: sans-serif;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1rem; padding: 10px 20px;">
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h2>📂 Ticket Request</h2>
+          <p>You have a new ticket request regarding project <strong>${projectName}</strong>.</p>
+
+          <!-- New fields -->
+          <p><strong>Ticket Title:</strong> ${title}</p>
+          <p><strong>Description:</strong> ${description}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h3>Client Info</h3>
+          <p><strong>Name:</strong> ${client.firstName} ${client.lastName} </p>
+          <p><strong>Email:</strong> ${client.email}</p>
+          <p><strong>Phone:</strong> ${client.phone}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h3>Provider Info</h3>
+          <p><strong>Name:</strong> ${provider.firstName} ${provider.lastName}</p>
+          <p><strong>Email:</strong> ${provider.email}</p>
+          <p><strong>Phone:</strong> ${provider.phone}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <p>Looking forward to your presence!</p>
+          <p style="font-weight: bold;">Takatuf Platform</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+`;
 
 export const requestMeetingTemplate = ({
   client,
@@ -222,7 +278,7 @@ export const requestMeetingTemplate = ({
       <tr>
         <td style="padding: 10px 20px;">
           <p>Looking forward to your presence!</p>
-          <p style="font-weight: bold;">Takatouf Platform</p>
+          <p style="font-weight: bold;">Takatuf Platform</p>
         </td>
       </tr>
     </table>
@@ -285,6 +341,4 @@ export const emailTemplate = (receiverEmail, title, description) => {
   );
 };
 
-// TODO: Add files uploaded template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id.
 // TODO: Add reminder template -- should have project id or request id, reminder message.
-// TODO: Add Ticket template -- should have inside it client (name - phone - email ), provider(name - phone - email ), project id, subject and body.
