@@ -8,6 +8,7 @@ type FileDropProps = {
   // isUploadedFiles: boolean;
   userRole: string;
   viewer: boolean;
+  isUploadLoading: boolean;
   onUpload?: (file: File | null, phaseId: string) => void;
   onRequest?: () => void;
 };
@@ -17,6 +18,7 @@ const FileDrop = ({
   userRole,
   onUpload,
   viewer,
+  isUploadLoading,
   // isUploadedFiles,
   onRequest,
 }: FileDropProps) => {
@@ -89,10 +91,12 @@ const FileDrop = ({
         {userRole !== "admin" && (
           <>
             <LibButton
-              label="Upload"
+              label={isUploadLoading ? "Upload" : "Uploading"}
               onSubmit={() => onUpload?.(selectedFile, phase._id as string)}
               backgroundColor="#825beb"
-              disabled={viewer || phase.status !== "in_progress"}
+              disabled={
+                viewer || phase.status !== "in_progress" || isUploadLoading
+              }
               hoverColor="#6c46d9"
               padding="0 1.5rem"
             />

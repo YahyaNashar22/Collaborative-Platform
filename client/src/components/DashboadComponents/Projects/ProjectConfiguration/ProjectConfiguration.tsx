@@ -75,6 +75,7 @@ const ProjectConfiguration = ({
   const [deleteWindow, setDeleteWindow] = useState(false);
   const [saveWindow, setSaveWindow] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploadLoading, setIsUploadLoading] = useState(false);
   const [requestFileWindow, setRequestFileWindow] = useState<boolean>(false);
   const [sendTicketWindow, setSendTicketWindow] = useState<boolean>(false);
   const [requestMeetingWindow, setRequestMeetingWindow] =
@@ -263,6 +264,8 @@ const ProjectConfiguration = ({
 
   const handleUploadFile = async (file: File, stageId: string) => {
     if (!file) return;
+
+    setIsUploadLoading(true);
     try {
       const result = await uploadFile(projectData._id, stageId, file);
 
@@ -282,6 +285,8 @@ const ProjectConfiguration = ({
       toast.success("File uploaded successfully.");
     } catch (error) {
       toast.error((error as any)?.data?.message || "Error Occured!");
+    } finally {
+      setIsUploadLoading(false);
     }
   };
 
@@ -669,6 +674,7 @@ const ProjectConfiguration = ({
                   assignedStages={projectData.assignedStage}
                   // isUploadedFiles={phase.isUploadedFiles}
                   viewer={viewer}
+                  isUploadLoading={isUploadLoading}
                   onUpload={(file, stageId) =>
                     handleUploadFile(file as any, stageId)
                   }
