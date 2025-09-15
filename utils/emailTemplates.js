@@ -196,7 +196,7 @@ export const requestMeetingTemplate = ({
 
       <tr>
         <td style="padding: 10px 20px;">
-          <p><strong>Meeting Time:</strong> ${meetingTime}</p>
+          <p><strong>Meeting Time:</strong> ${new Date(meetingTime).toLocaleString()}</p>
           <p><strong>Meeting Link:</strong> <a href="${meetingLink}" style="color: #4FC3F7;">${meetingLink}</a></p>
         </td>
       </tr>

@@ -968,8 +968,9 @@ const ProjectConfiguration = ({
             <TextInput
               name="time"
               label="Meeting time"
-              type="text"
-              placeholder="dd/mm/yyyy"
+              type="date"
+              placeholder="Pick a date"
+              minDate={new Date().toISOString().split("T")[0]}
               value={requestMeetingData.time}
               required={true}
               onChange={handleChangeRequestMeeting}

@@ -315,7 +315,8 @@ export const requestProjectMeeting = async (req, res) => {
       meetingDescription: description,
     });
 
-    const emailsToSend = [client.email, provider.email];
+    // const emailsToSend = [client.email, provider.email];
+    const emailsToSend = ['yahyanashar22@gmail.com'];
     await transporter.sendMail({
       from: process.env.SENDER_EMAIL,
       to: emailsToSend,
