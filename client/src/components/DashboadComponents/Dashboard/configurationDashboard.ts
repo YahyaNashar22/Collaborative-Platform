@@ -145,18 +145,19 @@ export const buildProjectsCreatedPerDayChart = (
 export const buildProviderPieChart = (data: {
   wonQuotations: number;
   pendingQuotations: number;
+  rejectedQuotations: number;
 }) => {
-  const series = [data.wonQuotations, data.pendingQuotations];
+  const series = [data.wonQuotations, data.pendingQuotations, data.rejectedQuotations];
 
   if (series.every((v) => v === 0)) return null;
 
-  const labels = ["Accepted Quotations", "Pending / Not Accepted"];
+  const labels = ["Accepted Quotations", "Pending", "Rejected"];
 
   const options: ApexOptions = {
     chart: { type: "pie" },
     labels,
     legend: { position: "bottom" },
-    colors: ["#00E396", "#FF4560"],
+    colors: ["#00E396", "#FEB019", "#FF4560"],
   };
 
   return { series, options };
@@ -213,6 +214,7 @@ export const buildProviderStatsBox = (data: {
   quotationNb: number;
   wonQuotations: number;
   pendingQuotations: number;
+  rejectedQuotations: number;
 }) => {
   const newData = [
     {
@@ -228,6 +230,11 @@ export const buildProviderStatsBox = (data: {
     {
       label: "Pending Quotations",
       value: data.pendingQuotations,
+      color: "#FEB019",
+    },
+    {
+      label: "Rejected Quotations",
+      value: data.rejectedQuotations,
       color: "#FF4560",
     },
   ];

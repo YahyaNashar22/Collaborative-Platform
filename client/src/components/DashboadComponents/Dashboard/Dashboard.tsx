@@ -47,6 +47,7 @@ const Dashboard = () => {
         pieChart = buildProviderPieChart({
           wonQuotations: result.wonQuotations,
           pendingQuotations: result.pendingQuotations,
+          rejectedQuotations: result.rejectedQuotations
         });
 
         lineChart = buildProviderLineChart(result.quotationsByDay);
@@ -55,6 +56,7 @@ const Dashboard = () => {
           quotationNb: result.quotationNb,
           wonQuotations: result.wonQuotations,
           pendingQuotations: result.pendingQuotations,
+          rejectedQuotations: result.rejectedQuotations
         });
       } else {
         boxChart = buildBoxChart(result);
