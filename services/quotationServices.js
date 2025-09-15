@@ -97,3 +97,21 @@ export const deleteAllRequestQuotations = async (requestId) => {
     console.error(error);
   }
 };
+
+
+// Get all quotations for a specific request
+export const getAllRequestQuotations = async (requestId) => {
+  try {
+    // Find all quotations for the given requestId
+    const quotations = await Quotation.find({ requestId });
+
+    console.log(
+      chalk.green.bold(`Quotations returned for request ${requestId}: ${quotations}`)
+    );
+
+    return quotations;
+  } catch (error) {
+    console.log(chalk.red.bold("Failed To Delete Quotations!"));
+    console.error(error);
+  }
+};

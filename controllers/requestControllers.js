@@ -5,6 +5,7 @@ import {
   deleteAllRequestQuotations,
   getSingleQuotationService,
   getMultipleQuotationsService,
+  getAllRequestQuotations,
 } from "../services/quotationServices.js";
 import {
   changeRequestStageService,
@@ -18,6 +19,7 @@ import {
   getRequestsForDashboardService,
   interestBy,
 } from "../services/requestServices.js";
+import Quotation from "../models/quotationModel.js";
 
 // Create request
 // * When Client requests a service ( Stage 1)
@@ -222,6 +224,17 @@ export const selectQuotationAndStartProject = async (req, res) => {
     if (!quotation) {
       return res.status(404).json({ message: "Quotation Does Not Exist" });
     }
+
+    // mark all other quotations linked to this request as rejected
+    const remainingQuotations = await getAllRequestQuotations(requestId);
+
+    await Promise.all(
+      remainingQuotations
+        .filter(q => String(q._id) !== String(quotation._id))
+        .map(q =>
+          Quotation.findByIdAndUpdate(q._id, { $set: { isRejected: true } })
+        )
+    );
 
     await changeRequestStageService(requestId, 4, "accepted");
 

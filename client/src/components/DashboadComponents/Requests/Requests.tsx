@@ -60,7 +60,7 @@ const Requests = () => {
   );
   const [filteredRequests, setFilteredRequests] = useState<RequestData[]>([]);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
-  const debounceRef = useRef(null);
+  const debounceRef = useRef<number | null>(null);
 
   const { user } = authStore();
 
@@ -232,7 +232,7 @@ const Requests = () => {
       if (result) {
         // update manualy the providerIds to disabel the buttton
         setIsCreateProposalStep(false);
-        requestsMap[assignedRequest ?? ""].providerIds.push(user?._id);
+        requestsMap[assignedRequest ?? ""].providerIds.push(user!._id);
       }
     } catch (error) {
       setCreateProposalError(
