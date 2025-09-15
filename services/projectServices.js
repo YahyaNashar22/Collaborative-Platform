@@ -253,7 +253,7 @@ export const getAllProviderProjectsService = async ({
   }
 };
 
-export const updateProjectStages = async (projectId, updatedStages) => {
+export const updateProjectStages = async (projectId, updatedStages, role) => {
   if (!Array.isArray(updatedStages)) {
     throw new Error("Invalid stages format. Must be an array.");
   }
@@ -263,10 +263,10 @@ export const updateProjectStages = async (projectId, updatedStages) => {
     throw new Error("Project not found");
   }
 
-  // this to check if during configuration he set stage as confirm
-  if (updatedStages.length > 1 && updatedStages[0].status === "completed") {
-    updatedStages[1].status = "in_progress";
-  }
+  // // this to check if during configuration he set stage as confirm
+  // if (updatedStages.length > 1 && updatedStages[0].status === "completed") {
+  //   updatedStages[1].status = "in_progress";
+  // }
 
   updatedStages.forEach((updatedStage) => {
     const stage = project.stages.id(updatedStage._id);
@@ -275,14 +275,24 @@ export const updateProjectStages = async (projectId, updatedStages) => {
     }
   });
 
-  project.assignedStage = true;
+  // only if client role update the assignedStage
+  if (role === "client") {
+    console.log(updatedStages[0]);
+    updatedStages[0].status = "in_progress";
+    project.assignedStage = true;
+  }
   project.stages = updatedStages;
+
   await project.save();
 
   return project.stages;
 };
 
-export const markProjectAsCompletedService = async (projectId, stageId) => {
+export const markProjectAsCompletedService = async (
+  projectId,
+  stageId,
+  role
+) => {
   const project = await Project.findById(projectId);
   if (!project) {
     throw new Error("Project Not Found");
@@ -292,16 +302,28 @@ export const markProjectAsCompletedService = async (projectId, stageId) => {
   const stageIndex = stages.findIndex(
     (stage) => stage._id.toString() === stageId
   );
-
   if (stageIndex === -1) {
     throw new Error("Stage Not Found");
   }
 
-  stages[stageIndex].status = "completed";
+  if (role === "provider") {
+    stages[stageIndex].isProviderCompleted = true;
+  } else if (role === "client") {
+    stages[stageIndex].isClientCompleted = true;
+  } else {
+    throw new Error("Invalid credentials!");
+  }
 
-  const nextStage = stages[stageIndex + 1];
-  if (nextStage && nextStage.status === "not_started") {
-    nextStage.status = "in_progress";
+  if (
+    stages[stageIndex].isClientCompleted &&
+    stages[stageIndex].isProviderCompleted
+  ) {
+    stages[stageIndex].status = "completed";
+
+    const nextStage = stages[stageIndex + 1];
+    if (nextStage && nextStage.status === "not_started") {
+      nextStage.status = "in_progress";
+    }
   }
 
   await project.save();

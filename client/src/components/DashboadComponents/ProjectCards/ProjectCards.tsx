@@ -12,7 +12,7 @@ import { Feedback } from "../../../interfaces/Project";
 type ProjectCardsProps = {
   data: Project[];
   userRole: string;
-  onCardClick: (index: number) => void;
+  onCardClick: (id: string) => void;
   onAddFeedback: (index: number) => void;
 };
 
@@ -91,7 +91,7 @@ const ProjectCards = ({
 
                     <LibButton
                       label="Configure"
-                      onSubmit={() => onCardClick(index)}
+                      onSubmit={() => onCardClick(id)}
                       bold
                     />
 

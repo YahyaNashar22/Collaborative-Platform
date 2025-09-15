@@ -121,6 +121,8 @@ const ProjectConfiguration = ({
       projectFiles: stage.projectFiles,
       isUploadedFiles: stage.isUploadedFiles,
       hasError: false,
+      isProviderCompleted: stage.isProviderCompleted,
+      isClientCompleted: stage.isClientCompleted,
     }))
   );
 
@@ -167,30 +169,31 @@ const ProjectConfiguration = ({
     name: keyof (typeof phases)[number],
     index: number
   ) => {
-    // setPhases((prev) =>
-    //   prev.map((phase: any, i: number) => {
-    //     if (i === index) {
-    //       const updatedPhase = { ...phase, [name]: value };
-
-    //       let hasError = false;
-    //       if (updatedPhase.start && updatedPhase.end) {
-    //         const startDate = new Date(updatedPhase.start);
-    //         const endDate = new Date(updatedPhase.end);
-    //         if (endDate < startDate) {
-    //           hasError = true;
-    //         }
-    //       }
-
-    //       return { ...updatedPhase, hasError };
-    //     }
-    //     return phase;
-    //   })
-    // );
-
-    if (projectData.assignedStage === true) {
-      setCompleteStageWindow(true);
+    if (projectData.assignedStage) {
       setCurrentCompletedStage(index);
+      setCompleteStageWindow(true);
+      return;
     }
+
+    setPhases((prev) =>
+      prev.map((phase: any, i: number) => {
+        if (i === index) {
+          const updatedPhase = { ...phase, [name]: value };
+
+          let hasError = false;
+          if (updatedPhase.start && updatedPhase.end) {
+            const startDate = new Date(updatedPhase.start);
+            const endDate = new Date(updatedPhase.end);
+            if (endDate < startDate) {
+              hasError = true;
+            }
+          }
+
+          return { ...updatedPhase, hasError };
+        }
+        return phase;
+      })
+    );
   };
 
   const validateDate = (phases: any) => {
@@ -202,8 +205,8 @@ const ProjectConfiguration = ({
     return { hasError: false, cleanPhases };
   };
 
-  const handleCompleteStage = async (index: number | null) => {
-    if (!currentCompletedStage) {
+  const handleCompleteStage = async () => {
+    if (currentCompletedStage === null) {
       toast.error("No stage found");
       return;
     }
@@ -214,7 +217,10 @@ const ProjectConfiguration = ({
     }
     setIsLoading(true);
     try {
-      const result = await setStageComplete(projectData._id, phases[index]._id);
+      const result = await setStageComplete(
+        projectData._id,
+        phases[currentCompletedStage]._id
+      );
       // add it manually on the front end
       setPhases(result);
       setCompleteStageWindow(false);
@@ -228,8 +234,6 @@ const ProjectConfiguration = ({
 
   const handleSavePhases = async () => {
     const { hasError, cleanPhases } = validateDate(phases);
-    console.log(cleanPhases);
-    console.log(hasError);
     if (hasError) {
       toast.error("Please fix all date errors before saving.");
       return;
@@ -239,7 +243,8 @@ const ProjectConfiguration = ({
       const result = await updateStages(projectData._id, cleanPhases as any);
       // update manualy
       setPhases(result);
-      emitStagesSave(projectData._id);
+      // only update stage based on the role if client else update the stages
+      if (userData?.role === "client") emitStagesSave(projectData._id);
       setSaveWindow(false);
     } catch (error) {
       toast.error(
@@ -584,42 +589,91 @@ const ProjectConfiguration = ({
                       )}
 
                       <div className="d-f align-center justify-between">
-                        {userData?.role === "provider" && (
-                          <label
-                            className={`d-f align-center ${
-                              !projectData.assignedStage ||
-                              phase.status !== "in_progress"
-                                ? ""
-                                : "pointer"
-                            }
-                             `}
-                          >
-                            <input
-                              name="status"
-                              className={`${
-                                !projectData.assignedStage ||
+                        {userData?.role !== "admin" && (
+                          <div className="d-f justify-between w-100">
+                            <label
+                              className={`d-f align-center ${
+                                phase.isProviderCompleted ||
+                                userData?.role === "client" ||
                                 phase.status !== "in_progress"
                                   ? ""
                                   : "pointer"
-                              } `}
-                              type="checkbox"
-                              checked={phase.status === "completed"}
-                              disabled={
-                                !projectData.assignedStage ||
-                                phase.status !== "in_progress"
                               }
-                              onChange={(e) =>
-                                handleChange(
-                                  e.target.checked
-                                    ? "completed"
-                                    : "in_progress",
-                                  "status",
-                                  i
-                                )
+                             `}
+                            >
+                              <input
+                                name="status"
+                                className={`${
+                                  phase.isProviderCompleted ||
+                                  userData?.role === "client" ||
+                                  phase.status !== "in_progress"
+                                    ? ""
+                                    : "pointer"
+                                } `}
+                                type="checkbox"
+                                checked={
+                                  phase.isProviderCompleted ||
+                                  phase.status === "completed"
+                                }
+                                disabled={
+                                  phase.isProviderCompleted ||
+                                  phase.status !== "in_progress" ||
+                                  userData?.role === "client"
+                                }
+                                onChange={(e) =>
+                                  handleChange(
+                                    e.target.checked
+                                      ? "completed"
+                                      : "in_progress",
+                                    "status",
+                                    i
+                                  )
+                                }
+                              />
+                              Partner Completed
+                            </label>
+                            <label
+                              className={`d-f align-center ml-1 ${
+                                phase.isClientCompleted ||
+                                phase.status !== "in_progress" ||
+                                userData?.role === "provider"
+                                  ? ""
+                                  : "pointer"
                               }
-                            />
-                            Completed
-                          </label>
+                             `}
+                            >
+                              <input
+                                name="status"
+                                className={`${
+                                  phase.isClientCompleted ||
+                                  phase.status !== "in_progress" ||
+                                  userData?.role === "provider"
+                                    ? ""
+                                    : "pointer"
+                                } `}
+                                type="checkbox"
+                                checked={
+                                  phase.isClientCompleted ||
+                                  phase.status === "completed"
+                                }
+                                disabled={
+                                  phase.isClientCompleted ||
+                                  phase.status !== "in_progress" ||
+                                  userData?.role === "provider"
+                                }
+                                onChange={(e) =>
+                                  handleChange(
+                                    e.target.checked
+                                      ? "completed"
+                                      : "in_progress",
+                                    "status",
+                                    i
+                                  )
+                                }
+                              />
+                              Client Completed
+                            </label>
+                          </div>
                         )}
 
                         {userData?.role === "provider" &&
@@ -643,13 +697,13 @@ const ProjectConfiguration = ({
               </div>
 
               <div className={`${styles.buttons} d-f align-center justify-end`}>
-                {userData?.role === "client" && !projectData.assignedStage && (
+                {!projectData.assignedStage && (
                   <LibButton
-                    label="Accept"
-                    disabled={userData?.role !== "client"}
+                    label={`${userData?.role === "client" ? "Accept" : "Save"}`}
                     onSubmit={() => {
                       setSaveWindow(true);
                     }}
+                    disabled={phases.length === 0}
                     backgroundColor="#825beb"
                     hoverColor="#6c46d9"
                     padding="0"
@@ -712,24 +766,13 @@ const ProjectConfiguration = ({
                     }
                   </div>
                 </div>
-                {/* <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Service</span>
-                <div className={styles.dataValue}>UI/UX Design</div>
-              </div> */}
+
                 <div className={styles.dataItem}>
                   <span className={styles.dataLabel}>Project Cost</span>
                   <div className={styles.dataValue}>
                     {projectData?.amount} $
                   </div>
                 </div>
-                {/* <div className={styles.dataItem}>
-                <span className={styles.dataLabel}>Attached File</span>
-                <div className={styles.dataValue}>
-                  <a href="#" className={styles.fileLink}>
-                    proposal.pdf
-                  </a>
-                </div>
-              </div> */}
               </div>
             </div>
           )}
@@ -827,7 +870,7 @@ const ProjectConfiguration = ({
               />
               <LibButton
                 label="Confirm"
-                onSubmit={() => handleCompleteStage(currentCompletedStage)}
+                onSubmit={handleCompleteStage}
                 bold={true}
                 padding="0"
               />

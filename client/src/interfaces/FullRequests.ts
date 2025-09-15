@@ -53,6 +53,8 @@ export interface Stage {
   projectFiles: File | "";
   end: string;
   status: "not_started" | "in_progress" | "completed";
+  isClientCompleted: boolean;
+  isProviderCompleted: boolean;
 }
 
 export interface Project {
