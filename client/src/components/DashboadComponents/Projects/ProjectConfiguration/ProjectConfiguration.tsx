@@ -44,9 +44,9 @@ const ProjectConfiguration = ({
   const contentRef = useRef<HTMLDivElement>(null);
 
   const nodes = [
+    { id: "quotation", title: "Project Quotation" },
     { id: "timeline", title: "Project Timeline" },
     { id: "files", title: "Project Files" },
-    { id: "quotation", title: "Project Quotation" },
   ] as const;
 
   const [selected, setSelected] = useState<NodeId>("timeline");
@@ -278,6 +278,28 @@ const ProjectConfiguration = ({
           ))}
         </header>
         {/* timeline view */}
+        {userData?.role !== "admin" && (
+          <div className="buttons d-f align-end justify-end gap-05 my-1 mr-1">
+            <LibButton
+              label="Request Meeting"
+              onSubmit={() => setRequestMeetingWindow(true)}
+              backgroundColor="#57417e"
+              hoverColor="#49356a"
+              padding="0 20px"
+            />
+            <LibButton
+              label="Send ticket"
+              onSubmit={() => {
+                setErrorSendTicket("");
+                setMessage("");
+                setSendTicketWindow(true);
+              }}
+              backgroundColor="#57417e"
+              hoverColor="#49356a"
+              padding="0 20px"
+            />
+          </div>
+        )}
         <main className={styles.content}>
           {selected === "timeline" && (
             <div className={`${styles.timelineContainer} d-f f-dir-col`}>
@@ -440,28 +462,6 @@ const ProjectConfiguration = ({
                     hoverColor="#6c46d9"
                     padding="0"
                   />
-                )}
-                {userData?.role !== "admin" && (
-                  <div className="buttons d-f align-center gap-05">
-                    <LibButton
-                      label="Request Meeting"
-                      onSubmit={() => setRequestMeetingWindow(true)}
-                      backgroundColor="#57417e"
-                      hoverColor="#49356a"
-                      padding="0 20px"
-                    />
-                    <LibButton
-                      label="Send ticket"
-                      onSubmit={() => {
-                        setErrorSendTicket("");
-                        setMessage("");
-                        setSendTicketWindow(true);
-                      }}
-                      backgroundColor="#57417e"
-                      hoverColor="#49356a"
-                      padding="0 20px"
-                    />
-                  </div>
                 )}
               </div>
             </div>

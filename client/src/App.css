@@ -188,6 +188,14 @@ textarea {
   padding: 0 100px;
 }
 
+.my-1 {
+  margin: 0.5rem 0;
+}
+
+.mr-1 {
+  margin-right: 0.5rem;
+}
+
 @media (max-width: 728px) {
   .container {
     padding: 0 50px;
