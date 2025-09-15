@@ -81,6 +81,16 @@ const projectSchema = new Schema(
             default: [],
           },
           start: { type: Date, required: true },
+          isClientCompleted: {
+            type: Boolean,
+            required: true,
+            default: false,
+          },
+          isProviderCompleted: {
+            type: Boolean,
+            required: true,
+            default: false,
+          },
           end: { type: Date, required: true },
           status: {
             type: String,
@@ -91,35 +101,12 @@ const projectSchema = new Schema(
       ],
       required: true,
     },
-    // timelines: {
-    //   type: [String],
-    //   validate: {
-    //     validator: function (value) {
-    //       return value.length === this.stages.length;
-    //     },
-    //     message: "Timelines array length must match stages array length.",
-    //   },
-    // },
-    // currentTimeLine: {
-    //   type: String,
-    //   required: true,
-    //   default: function () {
-    //     return this.timelines[0];
-    //   },
-    // },
     assignedStage: {
       type: Boolean,
       required: true,
       default: false,
     },
-    // stage: {
-    //   type: String,
-    //   required: true,
-    //   default: function () {
-    //     return this.stages[0];
-    //   },
-    // },
-    // meeting hours
+
     availableHours: [
       {
         type: String,

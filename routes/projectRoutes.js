@@ -44,9 +44,10 @@ projectRoutes.patch("/delete-files/:id", deleteFiles);
 projectRoutes.post("/create-stage/:projectId", createStage);
 projectRoutes.patch(
   "/complete-stage/:projectId/:stageId",
+  authMiddleware,
   markProjectAsCompleted
 );
-projectRoutes.patch("/update-stage/:projectId", updateStages);
+projectRoutes.patch("/update-stage/:projectId", authMiddleware, updateStages);
 projectRoutes.delete("/delete-stage/:projectId/:stageId", deleteStage);
 
 projectRoutes.get("/get-single/:id", getProjectById);

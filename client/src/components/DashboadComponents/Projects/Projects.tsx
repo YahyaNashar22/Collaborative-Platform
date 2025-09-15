@@ -17,7 +17,7 @@ const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
   const [projects, setProjects] = useState<any>([]);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
-  const [openPoject, setOpenProject] = useState<number | null>(null);
+  const [openPoject, setOpenProject] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const [feedbackWindow, setFeedbackWindow] = useState<number | null>(null);
@@ -27,8 +27,10 @@ const Projects = () => {
     setSearchValue(value);
   };
 
-  const onStartProjectConfiguration = (index: number) => {
-    setOpenProject(index);
+  const onStartProjectConfiguration = (index: string) => {
+    const currentProject = projects.filter((pro: any) => pro._id === index)[0];
+    console.log(index, currentProject, projects);
+    setOpenProject(currentProject);
   };
 
   const fetchProjects = async () => {
@@ -110,19 +112,16 @@ const Projects = () => {
     }
   };
   const handleSaveStages = () => {
-    console.log(projects);
-    setOpenProject(null);
-    fetchProjects();
+    setOpenProject((prev: any) => ({ ...prev, assignedStage: true }));
   };
 
   return (
     <>
-      {openPoject !== null ? (
+      {openPoject ? (
         <div className={`w-100 ${styles.projectContainer}`}>
           <ProjectConfiguration
-            key={projects[openPoject]?._id}
             // onClickNode={toggleView}
-            projectData={projects[openPoject]}
+            projectData={openPoject}
             // updateStage={handleUpdateStage}
             userData={user}
             emitStagesSave={handleSaveStages}
@@ -152,7 +151,7 @@ const Projects = () => {
                   <ProjectCards
                     data={filteredProjects}
                     onCardClick={onStartProjectConfiguration}
-                    userRole={user.role}
+                    userRole={user?.role as string}
                     onAddFeedback={handleAddFeedback}
                   />
                 </div>

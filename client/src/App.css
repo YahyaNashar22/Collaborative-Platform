@@ -191,6 +191,9 @@ textarea {
 .my-1 {
   margin: 0.5rem 0;
 }
+.ml-1 {
+  margin: 0 0.5rem;
+}
 
 .mr-1 {
   margin-right: 0.5rem;

@@ -81,7 +81,8 @@ export const addQuotationToRequestService = async (
 
     console.log(
       chalk.green.bold(
-        `Quotation ${quotationId} added to Request ${requestId} successfully${isFromMarketPlace ? ` (with provider ${providerId})` : ""
+        `Quotation ${quotationId} added to Request ${requestId} successfully${
+          isFromMarketPlace ? ` (with provider ${providerId})` : ""
         }`
       )
     );
@@ -491,7 +492,7 @@ export const generateStagesAndTimelines = (estimatedDeadline) => {
         isUploadedFiles: false,
         projectFiles: "",
         end: new Date(),
-        status: i === 0 ? "in_progress" : "not_started",
+        status: "not_started",
       });
       timelines.push(`Stage ${i + 1}`);
     }
@@ -514,7 +515,7 @@ export const generateStagesAndTimelines = (estimatedDeadline) => {
       name: stageNames[i],
       start: stageStart,
       end: stageEnd,
-      status: i === 0 ? "in_progress" : "not_started",
+      status: "not_started",
     });
 
     timelines.push(
@@ -852,8 +853,9 @@ export const getRequestsForDashboardService = async (userData) => {
     response.quotationNb = allQuotations.length;
 
     // number of rejected ones
-    response.rejectedQuotations = allQuotations.filter(q => q.isRejected).length
-
+    response.rejectedQuotations = allQuotations.filter(
+      (q) => q.isRejected
+    ).length;
 
     const quotationRequestIds = allQuotations.map((q) => q.requestId);
     const relatedRequests = await Request.find({
@@ -881,7 +883,10 @@ export const getRequestsForDashboardService = async (userData) => {
       wonQuotationIds.includes(q._id.toString())
     ).length;
 
-    response.pendingQuotations = response.quotationNb - response.wonQuotations - response.rejectedQuotations;
+    response.pendingQuotations =
+      response.quotationNb -
+      response.wonQuotations -
+      response.rejectedQuotations;
 
     const quotationsByDay = await Quotation.aggregate([
       { $match: { providerId: new mongoose.Types.ObjectId(providerId) } },

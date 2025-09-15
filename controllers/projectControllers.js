@@ -552,10 +552,15 @@ export const createStage = async (req, res) => {
 
 export const updateStages = async (req, res) => {
   try {
+    const user = req.user;
     const { projectId } = req.params;
     const updatedStages = req.body;
 
-    const updated = await updateProjectStages(projectId, updatedStages);
+    const updated = await updateProjectStages(
+      projectId,
+      updatedStages,
+      user?.role
+    );
 
     return res.status(200).json({
       message: "All stages updated successfully",
@@ -609,11 +614,14 @@ export const deleteStage = async (req, res) => {
 
 export const markProjectAsCompleted = async (req, res) => {
   try {
+    const currentUser = req.user;
+    console.log(currentUser);
     const { projectId, stageId } = req.params;
 
     const updatedStages = await markProjectAsCompletedService(
       projectId,
-      stageId
+      stageId,
+      currentUser?.role
     );
 
     return res.status(200).json({
