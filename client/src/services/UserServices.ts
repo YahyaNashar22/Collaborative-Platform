@@ -82,7 +82,7 @@ export const signOut = async () => {
   return response;
 };
 
-export const logIn = async (payload) => {
+export const logIn = async (payload: any) => {
   const response = await axiosInstance.post(`${AuthBaseURL}/log-in`, payload);
   return response.data.payload;
 };
