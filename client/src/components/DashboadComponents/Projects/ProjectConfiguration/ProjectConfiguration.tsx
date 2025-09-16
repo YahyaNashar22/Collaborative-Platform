@@ -950,6 +950,9 @@ const ProjectConfiguration = ({
           }}
         >
           <div className="d-f f-dir-col gap-1">
+            <p style={{ color: "var(--dark-grey)", fontStyle: "italic" }}>
+              Email will be sent directly to admin
+            </p>
             <TextInput
               name="title"
               label="Ticket title"
@@ -998,6 +1001,9 @@ const ProjectConfiguration = ({
           onClose={() => setRequestMeetingWindow(false)}
         >
           <div className="d-f f-dir-col gap-1">
+            <p style={{ color: "var(--dark-grey)", fontStyle: "italic" }}>
+              Email will be sent to both parties ( client and provider )
+            </p>
             <TextInput
               name="title"
               label="Meeting title"
