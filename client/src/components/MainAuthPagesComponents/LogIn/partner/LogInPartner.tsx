@@ -32,7 +32,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
           setUser(response.payload);
           navigate("/dashboard");
           toast.success("Welcome back");
-        }, 150);
+        }, 1000);
       }
     } catch (error: any) {
       if ((error as any)?.data?.message)

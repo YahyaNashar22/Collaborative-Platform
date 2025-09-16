@@ -34,7 +34,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
           setUser(response.payload);
           navigate("/dashboard", { replace: true });
           toast.success("Welcome back");
-        }, 150);
+        }, 1000);
       }
     } catch (error: any) {
       setError((error as any)?.data?.message || "Login failed");
