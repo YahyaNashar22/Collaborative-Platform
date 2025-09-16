@@ -14,6 +14,7 @@ import {
   sendFilesRequestedEmail,
   requestMeetingTemplate,
   sendTicketTemplate,
+  markStageCompletedTemplate,
 } from "../utils/emailTemplates.js";
 import User from "../models/userModel.js";
 import transporter from "../utils/nodemailerTransporter.js";
@@ -615,7 +616,7 @@ export const deleteStage = async (req, res) => {
 export const markProjectAsCompleted = async (req, res) => {
   try {
     const currentUser = req.user;
-    console.log(currentUser);
+    console.log({ currentUser });
     const { projectId, stageId } = req.params;
 
     const updatedStages = await markProjectAsCompletedService(
@@ -623,6 +624,36 @@ export const markProjectAsCompleted = async (req, res) => {
       stageId,
       currentUser?.role
     );
+
+    // send email here
+    const project = await getProjectByIdService(projectId);
+    if (!project)
+      return res.status(404).json({ message: "Project Not Found!" });
+
+    const client = project.clientId;
+    const provider = project.providerId;
+
+    if (!client || !provider)
+      return res
+        .status(400)
+        .json({ message: "Missing client or provider information." });
+
+    const receiver = currentUser._id === client._id ? provider : client;
+
+    const emailHtml = markStageCompletedTemplate({
+      currentUser,
+      client,
+      provider,
+      projectName: project.title,
+    });
+
+    const emailsToSend = [receiver.email];
+    await transporter.sendMail({
+      from: process.env.SENDER_EMAIL,
+      to: emailsToSend,
+      subject: "🟢 Project Update – Takatuf Platform",
+      html: emailHtml,
+    });
 
     return res.status(200).json({
       message: "Stage updated successfully",

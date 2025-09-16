@@ -286,6 +286,61 @@ export const requestMeetingTemplate = ({
 </html>
 `;
 
+export const markStageCompletedTemplate = ({
+  currentUser,
+  client,
+  provider,
+  projectName,
+}) => `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meeting Request</title>
+  </head>
+  <body style="background-color: black; color: white; font-family: sans-serif;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1rem; padding: 10px 20px;">
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h2>🟢 Project Update</h2>
+          <p>You have a new update regarding project <strong>${projectName}</strong>.</p>
+
+          <!-- New fields -->
+          <p>${currentUser.firstName} ${currentUser.lastName} marked a stage as completed</p>
+          <p>Please review the action on the project page and confirm it</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h3>Client Info</h3>
+          <p><strong>Name:</strong> ${client.firstName} ${client.lastName} </p>
+          <p><strong>Email:</strong> ${client.email}</p>
+          <p><strong>Phone:</strong> ${client.phone}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h3>Provider Info</h3>
+          <p><strong>Name:</strong> ${provider.firstName} ${provider.lastName}</p>
+          <p><strong>Email:</strong> ${provider.email}</p>
+          <p><strong>Phone:</strong> ${provider.phone}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <p>Looking forward to your presence!</p>
+          <p style="font-weight: bold;">Takatuf Platform</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+`;
+
 export const emailTemplate = (receiverEmail, title, description) => {
   const htmlBody = `
   <!DOCTYPE html>
