@@ -6,7 +6,7 @@ dotenv.config();
 // TODO: Add the correct nodeMailer credentials
 
 const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
+    host: "mail-server.h2mdns.net",
     port: 465,
     secure: true,
     auth: {
