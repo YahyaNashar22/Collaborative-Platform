@@ -58,9 +58,22 @@ const PhoneTextInput = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
+
+    // If user starts typing with '+' followed by digits, detect country
+    if (newValue.startsWith("+")) {
+      const match = countries.find((c) => newValue.startsWith(c.dialCode));
+
+      if (match) {
+        setSelectedCountry(match);
+        // Strip country code and keep only remaining number
+        const strippedNumber = newValue.replace(match.dialCode, "").trim();
+        onChange(strippedNumber, name);
+        return; // stop here to avoid double updates
+      }
+    }
+
+    // Default behavior
     onChange(newValue, name);
-    const match = countries.find((c) => newValue.startsWith(c.dialCode));
-    if (match) setSelectedCountry(match);
   };
 
   useEffect(() => {
