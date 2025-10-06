@@ -83,7 +83,7 @@ const CreateProposal = ({
         <div className="d-f" style={{ gap: "1rem" }}>
           <TextInput
             name="estimatedDeadline"
-            label="Estimated deadline"
+            label="Expired Proposal Date"
             type="date"
             placeholder="Ex: 3 weeks, 1 month ..."
             required={false}
