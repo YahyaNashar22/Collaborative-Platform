@@ -5,4 +5,5 @@
 .placeholder {
   font-size: 24px;
   color: var(--light-grey);
+  font-weight: bold;
 }
