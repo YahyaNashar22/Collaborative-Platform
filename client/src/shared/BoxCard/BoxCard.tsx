@@ -33,16 +33,17 @@ const BoxCard = ({
   size = "default",
 }: BoxCardProps) => {
   const formattedDate = createdAt ? formatDate(createdAt) : "N/A";
-
   return (
     <div className={`${styles.box} ${styles[size]}`}>
-      <img
+      <p className={styles.fakeImageBox}>{image}</p>
+
+      {/* <img
         src={image}
         width={size === "small" ? 300 : 350}
         height={size === "small" ? 300 : 350}
         className={styles.cardImg}
         alt={alt}
-      />
+      /> */}
       <div className={styles.subBox}>
         <div className={`${styles.createdAt} d-f justify-between`}>
           <div>{formattedDate}</div>

@@ -80,3 +80,91 @@
 .small .subBox p {
   font-size: 1.3rem;
 }
+
+.imageBox {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.1) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    ),
+    url("/path/to/placeholder.jpg") center/cover no-repeat;
+  font-weight: 500;
+  font-size: 1rem;
+  color: #fff;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  transition: transform 0.3s ease;
+}
+
+.imageBox:hover {
+  transform: scale(1.02);
+}
+
+/* Small variant support */
+.small .imageBox {
+  height: 250px;
+}
+
+/* Optional: add a subtle text background overlay for readability */
+.imageBox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+}
+.imageBox span {
+  position: relative;
+  z-index: 2;
+}
+
+.fakeImageBox {
+  width: 100%;
+  height: 300px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #b29aff, #825beb);
+  color: #fff;
+  font-weight: 600;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-transform: capitalize;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+/* add a soft overlay for depth */
+.fakeImageBox::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 255, 255, 0.1),
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* hover effect */
+.fakeImageBox:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+
+/* smaller variant if needed */
+.small .fakeImageBox {
+  height: 250px;
+  font-size: 1.2rem;
+}

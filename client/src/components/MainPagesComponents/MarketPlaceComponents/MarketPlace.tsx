@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./MarketPlace.module.css";
 import BoxCard from "../../../shared/BoxCard/BoxCard";
-import box_1 from "../../../assets/images/box_1.png";
 import Window from "../../../libs/common/lib-window/Window";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import { toast } from "react-toastify";
@@ -158,7 +157,7 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
 
   return (
     <>
-    <h1 className={`${styles.header} container`}>Market Place</h1>
+      <h1 className={`${styles.header} container`}>Market Place</h1>
       <div className={`${styles.wrapper} container d-f`}>
         {step === 0 && (
           <>
@@ -210,27 +209,30 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
                         </p>
                       </div>
                     ) : (
-                      filteredRequests.map((request) => (
-                        <div
-                          key={request._id}
-                          className={`${styles.requestItem} pointer`}
-                          onClick={() => {
-                            handleBoxClick(request._id);
-                            setRequestData(request);
-                          }}
-                        >
-                          <BoxCard
-                            size="small"
-                            image={box_1}
-                            status={request.status}
-                            alt={request.title}
-                            title={request.title}
-                            duration={`${request.budget} $`}
-                            description={request.description}
-                            createdAt={request.createdAt}
-                          />
-                        </div>
-                      ))
+                      filteredRequests.map((request) => {
+                        console.log(request);
+                        return (
+                          <div
+                            key={request._id}
+                            className={`${styles.requestItem} pointer`}
+                            onClick={() => {
+                              handleBoxClick(request._id);
+                              setRequestData(request);
+                            }}
+                          >
+                            <BoxCard
+                              size="small"
+                              image={request.serviceDetails[0]?.name}
+                              status={request.status}
+                              alt={request.title}
+                              title={request.title}
+                              duration={`${request.budget} $`}
+                              description={request.description}
+                              createdAt={request.createdAt}
+                            />
+                          </div>
+                        );
+                      })
                     )}
                   </div>
                 </div>
