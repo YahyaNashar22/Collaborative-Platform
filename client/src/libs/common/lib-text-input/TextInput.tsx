@@ -37,7 +37,6 @@ const TextInput = ({
   name,
   value,
   required,
-  maxLength,
   minLength,
   onChange,
   disabled = false,
@@ -99,7 +98,6 @@ const TextInput = ({
                   type === "number" ? Number(value) : getStringValue(value)
                 }
                 required={required}
-                maxLength={maxLength}
                 minLength={minLength || 0}
                 {...(type === "number" ? { min } : {})}
                 {...(type === "number" ? { max } : {})}

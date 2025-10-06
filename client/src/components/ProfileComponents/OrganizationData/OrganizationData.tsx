@@ -99,7 +99,6 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                     ""
                   }
                   required={field.required || false}
-                  maxLength={Number(field.maxLength)}
                   minLength={Number(field.minLength)}
                   min={Number(field.minLength)}
                   onChange={(value, name) =>

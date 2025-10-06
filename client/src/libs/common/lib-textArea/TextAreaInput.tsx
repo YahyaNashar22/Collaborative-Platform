@@ -22,7 +22,6 @@ const TextAreaInput = ({
   disabled = false,
   onChange,
   errorMessage,
-  maxLength = 1000,
   onBlur,
 }: TextAreaInputProps) => {
   return (
@@ -46,13 +45,9 @@ const TextAreaInput = ({
           placeholder={placeholder}
           rows={4}
           cols={50}
-          maxLength={maxLength}
           onChange={(e) => onChange(e.target.value, name)}
           onBlur={onBlur}
         />
-        <div className={styles.length}>
-          {value?.length} / {maxLength}
-        </div>
       </div>
       {errorMessage && <small className="error">{errorMessage}</small>}
     </div>

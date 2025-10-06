@@ -17,7 +17,6 @@ export const FormData: FormField[] = [
     placeholder: "Request Title",
     name: "title",
     required: true,
-    maxLength: 100,
     minLength: 3,
   },
   {
@@ -26,7 +25,6 @@ export const FormData: FormField[] = [
     placeholder: "Service Name",
     name: "serviceName",
     required: true,
-    maxLength: 50,
     minLength: 0,
   },
   {
@@ -36,7 +34,6 @@ export const FormData: FormField[] = [
     name: "description",
 
     required: false,
-    maxLength: 1000,
     minLength: 10,
   },
   {
@@ -69,7 +66,6 @@ export const FormData: FormField[] = [
     name: "budget",
 
     required: true,
-    maxLength: 20,
     minLength: 1,
 
     hasCurrency: true,

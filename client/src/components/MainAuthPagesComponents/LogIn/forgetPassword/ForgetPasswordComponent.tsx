@@ -62,7 +62,6 @@ const ForgetPasswordComponent = ({
                 name="email"
                 value={formValues.email}
                 required={true}
-                maxLength={30}
                 minLength={10}
                 onChange={(value, name) => handleChange(name, value, true)}
                 errorMessage={errors}

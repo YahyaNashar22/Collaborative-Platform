@@ -73,7 +73,6 @@ const OrgInformationForm = ({
                   name={field.name}
                   value={getStringValue(fieldValues[field.name])}
                   required={field.required || false}
-                  maxLength={Number(field.maxLength)}
                   minLength={Number(field.minLength)}
                   onChange={(value, name) =>
                     handleChange(name, value, field.required || false)

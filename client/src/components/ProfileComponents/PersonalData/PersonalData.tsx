@@ -20,7 +20,6 @@ interface InputField {
   type: string;
   required: boolean;
   minLength?: number;
-  maxLength?: number;
   errorMsg: string;
 }
 
@@ -31,7 +30,6 @@ const fields: InputField[] = [
 
     placeholder: "First Name",
     type: "text",
-    maxLength: 15,
     required: true,
     errorMsg: "* This Field is Required",
   },
@@ -40,7 +38,6 @@ const fields: InputField[] = [
     label: "Last Name",
     placeholder: "Last Name",
     type: "text",
-    maxLength: 15,
     required: true,
     errorMsg: "* This Field is Required",
   },
@@ -50,7 +47,6 @@ const fields: InputField[] = [
 
     placeholder: "Email",
     type: "email",
-    maxLength: 30,
     required: true,
     errorMsg: "* This Field is Required",
   },
@@ -59,7 +55,6 @@ const fields: InputField[] = [
     label: "Recovery email",
     placeholder: "Recovery email",
     type: "email",
-    maxLength: 30,
     required: false,
     errorMsg: "* This Field is Required",
   },
@@ -68,7 +63,6 @@ const fields: InputField[] = [
     label: "Phone number",
     placeholder: "Phone number",
     type: "text",
-    maxLength: 20,
     required: true,
     errorMsg: "* This Field is Required",
   },
@@ -78,7 +72,6 @@ const fields: InputField[] = [
 
     placeholder: "Job title",
     type: "text",
-    maxLength: 20,
     required: false,
     errorMsg: "* This Field is Required",
   },
@@ -271,7 +264,6 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
                           ""
                         }
                         required={field.required}
-                        maxLength={field.maxLength}
                         minLength={field.minLength}
                         onChange={(value, name) =>
                           handleChange(

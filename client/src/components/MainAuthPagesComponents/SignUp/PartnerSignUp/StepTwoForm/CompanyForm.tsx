@@ -100,7 +100,6 @@ const CompanyForm = ({
                     name={field.name}
                     value={getStringValue((fieldValues as any)[field.name])}
                     required={field.required || false}
-                    maxLength={Number(field.maxLength)}
                     minLength={Number(field.minLength)}
                     min={Number(field.minLength)}
                     onChange={(value, name) =>

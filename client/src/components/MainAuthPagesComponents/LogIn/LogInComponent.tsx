@@ -11,7 +11,7 @@ interface dataType {
   value: "";
   placeholder: string;
   type: string;
-  maxLength: number;
+  maxLength?: number;
   minLength?: number;
   required: boolean;
   errorMsg: string;
@@ -41,7 +41,6 @@ const LogInComponent = ({
       value: "",
       placeholder: "Email",
       type: "email",
-      maxLength: 30,
       required: true,
       errorMsg: "* This Field is Required",
     },
@@ -51,7 +50,6 @@ const LogInComponent = ({
       value: "",
       placeholder: "password",
       type: "password",
-      maxLength: 30,
       minLength: 5,
       required: true,
       errorMsg: "* This Field is Required",
@@ -131,7 +129,6 @@ const LogInComponent = ({
                     name={field.name}
                     value={formValues[field.name] || ""}
                     required={field.required}
-                    maxLength={field.maxLength}
                     minLength={field.minLength}
                     onChange={(value, name) =>
                       handleChange(name, value, field.required)
