@@ -18,7 +18,6 @@ const CreateProposal = ({
   onCreateProposal,
   requestIndentifier,
   createProposalError,
-  requestBudget,
   onBack,
 }: CreateProposalType) => {
   const [proposalForm, setProposalForm] = useState<proposalFormType>({
@@ -34,10 +33,6 @@ const CreateProposal = ({
 
   const handleSubmitProposal = () => {
     const errors: { amount?: string; estimatedDeadline?: string } = {};
-
-    if (proposalForm.amount < (requestBudget || 0)) {
-      errors.amount = `* Amount should be greater than ${requestBudget}$`;
-    }
 
     const deadlineDate = new Date(proposalForm.estimatedDeadline);
     const today = new Date();
