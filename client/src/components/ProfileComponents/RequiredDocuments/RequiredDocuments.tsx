@@ -60,6 +60,7 @@ const RequiredDocuments = ({
       else delete (newErrors as any)[name];
       return newErrors;
     });
+    
   };
 
   const handleSave = () => {

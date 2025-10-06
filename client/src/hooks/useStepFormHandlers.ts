@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Validate } from "../utils/Validate";
 import useFormStore from "../store/FormsStore";
 import { FormField, multiSelectType } from "../interfaces/registerSignup";
+import { toast } from "react-toastify";
 
 type Errors = { [key: string]: string };
 type Touched = { [key: string]: boolean };
@@ -15,7 +16,7 @@ export const useStepFormHandlers = (role: string, type: string) => {
   const handleChange = (
     name: string,
     value: string | multiSelectType[],
-    required: boolean
+    required: boolean,
   ) => {
     updateFieldValue(role, type, name, value);
 
@@ -68,6 +69,11 @@ export const useStepFormHandlers = (role: string, type: string) => {
           : "";
 
       setErrors((prev) => ({ ...prev, recoveryEmail: recoveryError }));
+    }
+
+    // ✅ Show toast when a file is successfully uploaded
+    if (name === "companyProfile" || name === "crDocument" || name === "establishmentContract" || name === "certificate" || name === "otherDocuments"  ) {
+      toast.success(`File uploaded successfully!`);
     }
   };
 
