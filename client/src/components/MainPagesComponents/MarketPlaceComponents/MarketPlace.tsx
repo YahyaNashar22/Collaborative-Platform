@@ -158,6 +158,7 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
 
   return (
     <>
+    <h1 className={`${styles.header} container`}>Market Place</h1>
       <div className={`${styles.wrapper} container d-f`}>
         {step === 0 && (
           <>
