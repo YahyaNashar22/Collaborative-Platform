@@ -8,6 +8,7 @@ import { useStepFormHandlers } from "../../../../hooks/useStepFormHandlers";
 import { getStringValue } from "../../../../utils/CastToString";
 import { verifyEmailRegister } from "../../../../services/UserServices";
 import { useState } from "react";
+import Terms from "../../../MainPagesComponents/TermsComponents/Terms/Terms";
 
 type SimpleFormViewProps = {
   data: FormStepData;
@@ -29,6 +30,11 @@ const SimpleFormView = ({
   const [localError, setLocalError] = useState("");
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [otpError, setOtpError] = useState("");
+  const [showTerms, setShowTerms] = useState(false);
+
+  const handleShowTerms = () => {
+    setShowTerms(true);
+  };
 
   const onNext = async () => {
     const hasError = validateStep(data.form);
@@ -131,7 +137,7 @@ const SimpleFormView = ({
           />
           <label htmlFor="terms" className="pointer">
             I agree to the{" "}
-            <span className="purple pointer bold">
+            <span onClick={handleShowTerms} className="purple pointer bold">
               Takatuf Subscription Agreement
             </span>
           </label>
@@ -146,6 +152,20 @@ const SimpleFormView = ({
         />
       </div>
       {otpError && <small className="d-b error">{otpError}</small>}
+
+      {showTerms && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setShowTerms(false)}
+            >
+              ×
+            </button>
+            <Terms />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
