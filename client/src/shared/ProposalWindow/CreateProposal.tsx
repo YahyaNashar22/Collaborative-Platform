@@ -5,6 +5,7 @@ import TextInput from "../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../libs/common/lib-textArea/TextAreaInput";
 import styles from "./CreateProposal.module.css";
 import { proposalFormType } from "../../interfaces/Proposal";
+import { toast } from "react-toastify";
 
 interface CreateProposalType {
   requestIndentifier: string;
@@ -27,12 +28,19 @@ const CreateProposal = ({
     description: "",
   });
   const [formErrors, setFormErrors] = useState<{
-    amount?: string;
     estimatedDeadline?: string;
+    amount?: string;
+    file?: string;
+    description?: string;
   }>({});
 
   const handleSubmitProposal = () => {
-    const errors: { amount?: string; estimatedDeadline?: string } = {};
+    const errors: {
+      estimatedDeadline?: string;
+      amount?: string;
+      file?: string;
+      description?: string;
+    } = {};
 
     const deadlineDate = new Date(proposalForm.estimatedDeadline);
     const today = new Date();
@@ -42,15 +50,33 @@ const CreateProposal = ({
       errors.estimatedDeadline = "* Deadline cannot be in the past.";
     }
 
+    // Amount validation
+    if (!proposalForm.amount || proposalForm.amount <= 0) {
+      errors.amount = "* Amount must be greater than 0.";
+    }
+
+    // File validation
+    if (!proposalForm.file || proposalForm.file.name === "") {
+      errors.file = "* Please attach a file.";
+    }
+
+    // Description validation
+    if (!proposalForm.description.trim()) {
+      errors.description = "* Description is required.";
+    }
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
+      toast.error("Please fill in all fields.");
       return;
     }
 
     // No errors
     setFormErrors({});
     onCreateProposal(proposalForm);
+    toast.success("Proposal Submitted Successfully");
     resetStates();
+    onBack();
   };
 
   const resetStates = () => {
@@ -117,12 +143,13 @@ const CreateProposal = ({
           placeholder="Attach your file"
           required={false}
           value={proposalForm["file"]}
-          onChange={(file: File) =>
+          onChange={(file: File) => {
             setProposalForm((prev) => ({
               ...prev,
               file: file,
-            }))
-          }
+            }));
+            toast.success("File uploaded");
+          }}
         />
 
         <TextAreaInput
