@@ -62,6 +62,9 @@ const Requests = () => {
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
   const debounceRef = useRef<number | null>(null);
 
+  const [statusFilter, setStatusFilter] = useState<string>("All");
+  const [timeFilter, setTimeFilter] = useState<string>("All");
+
   const { user } = authStore();
 
   const requestsMap = useMemo(() => {
@@ -101,26 +104,39 @@ const Requests = () => {
   }, []);
 
   useEffect(() => {
-    if (!searchValue) {
-      setFilteredRequests(requests);
-      return;
-    }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
 
     setIsFiltering(true);
 
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-
     (debounceRef as any).current = setTimeout(() => {
       const search = searchValue.toLowerCase();
+      const now = new Date();
 
-      const filtered = requests.filter((req) =>
-        req.title?.toLowerCase().includes(search)
-      );
+      const filtered = requests.filter((req) => {
+        // 🔍 Text search
+        const matchesSearch = req.title?.toLowerCase().includes(search);
+
+        // ⏰ Time filter
+        let matchesTime = true;
+        if (timeFilter !== "All") {
+          const createdDate = new Date(req.createdAt);
+          const days = parseInt(timeFilter);
+          const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+          matchesTime = createdDate >= cutoff;
+        }
+
+        // 📋 Status filter
+        const matchesStatus =
+          statusFilter === "All" ||
+          req.status?.toLowerCase() === statusFilter.toLowerCase();
+
+        return matchesSearch && matchesTime && matchesStatus;
+      });
 
       setFilteredRequests(filtered);
       setIsFiltering(false);
     }, 300);
-  }, [searchValue, requests]);
+  }, [searchValue, requests, statusFilter, timeFilter]);
 
   //*********** Admin section Function ************//
 
@@ -339,21 +355,57 @@ const Requests = () => {
     );
   }
 
+  console.log(filteredRequests);
+
   return (
     <>
       <main className={`${styles.wrapper} w-100`}>
         {view === "LIST" && (
           <>
-            <div className={`${styles.header} d-f justify-between`}>
-              <TextInput
-                placeholder="Search"
-                type="text"
-                value={searchValue}
-                name="search_projects"
-                required={false}
-                hasIcon={true}
-                onChange={handleSearch}
-              />
+            <div
+              className={`${styles.header} d-f justify-between align-center`}
+            >
+              <div className="d-f gap-1 align-center">
+                <TextInput
+                  placeholder="Search"
+                  type="text"
+                  value={searchValue}
+                  name="search_projects"
+                  required={false}
+                  hasIcon={true}
+                  onChange={handleSearch}
+                />
+                <select
+                  value={statusFilter}
+                  onChange={(e) => setStatusFilter(e.target.value)}
+                  className={styles.filterSelect}
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="canceled">Canceled</option>
+                  <option value="⏳awaiting client to choose quotation">
+                    Waiting Client Confirmation
+                  </option>
+                  <option value="⏳awaiting admin approval">
+                    Waiting Approval
+                  </option>
+                  <option value="⏳awaiting providers quotations">
+                    Waiting Quotations
+                  </option>
+                </select>
+
+                <select
+                  value={timeFilter}
+                  onChange={(e) => setTimeFilter(e.target.value)}
+                  className={styles.filterSelect}
+                >
+                  <option value="All">All Time</option>
+                  <option value="7">Last 7 Days</option>
+                  <option value="30">Last 30 Days</option>
+                  <option value="365">This Year</option>
+                </select>
+              </div>
+
               {user?.role === "client" && (
                 <LibButton
                   label="+ Add New"
@@ -365,6 +417,7 @@ const Requests = () => {
                 />
               )}
             </div>
+
             {loading || isFiltering ? (
               <ServiceCardSkeletonGrid />
             ) : (

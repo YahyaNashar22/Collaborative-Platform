@@ -65,6 +65,14 @@ small {
   margin-top: 1rem;
 }
 
+.filterSelect {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: white;
+  font-size: 14px;
+}
+
 @media (max-width: 428px) {
   .wrapper {
     padding: 0;
