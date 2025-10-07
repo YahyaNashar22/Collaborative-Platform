@@ -9,7 +9,7 @@ import {
   getUserByIdService,
 } from "../services/userServices.js";
 import removeFile from "../utils/removeFile.js";
-import { emailTemplate, otpTemplate } from "../utils/emailTemplates.js";
+import { emailTemplate, getInTouchTemplate, otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
 
 // Register New Super
@@ -1186,6 +1186,19 @@ export const checkEmailForReset = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+export const getInTouch = (req, res) => {
+  try {
+    const { firstName, lastName, email, phoneNumber, title, description } = req.body;
+
+    getInTouchTemplate({ firstName, lastName, email, phoneNumber, title, description });
+    res.status(201).json({ success: true, message: "Email Sent Successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Something Went Wrong" });
   }
 };
 

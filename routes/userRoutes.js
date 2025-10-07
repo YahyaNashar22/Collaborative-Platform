@@ -23,6 +23,7 @@ import {
   editSuperProfile,
   getAllUsers,
   getCurrentUser,
+  getInTouch,
   getUserById,
   login,
   logout,
@@ -99,6 +100,8 @@ userRoutes.delete("/delete/:id", deleteUser);
 
 userRoutes.post("/send-email", sendEmail);
 userRoutes.post("/test-sms", sendSMS);
+
+userRoutes.post("/get-in-touch", getInTouch);
 
 userRoutes.get("/me", authMiddleware, getCurrentUser);
 

@@ -341,6 +341,67 @@ export const markStageCompletedTemplate = ({
 </html>
 `;
 
+
+export const getInTouchTemplate = ({
+  firstName, lastName, email, phoneNumber, title, description
+}) => {
+
+  const htmlBody = `
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get In Touch Request</title>
+  </head>
+  <body style="background-color: black; color: white; font-family: sans-serif;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1rem; padding: 10px 20px;">
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h2>${title}</h2>
+
+          <p>${description}</p>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding: 10px 20px;">
+          <h3>Sender Info</h3>
+          <p><strong>Name:</strong> ${firstName} ${lastName} </p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Phone:</strong> ${phoneNumber}</p>
+        </td>
+      </tr>
+      
+      <tr>
+        <td style="padding: 10px 20px;">
+          <p>Looking forward to your presence!</p>
+          <p style="font-weight: bold;">Takatuf Platform</p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+`;
+
+  transporter.sendMail(
+    {
+      from: process.env.SENDER_EMAIL,
+      to: "yahyanashar22@gmail.com",
+      subject: "📞 Get In Touch Request",
+      html: htmlBody,
+    },
+    (error, info) => {
+      if (error) {
+        throw new Error("Error sending email:", error);
+      } else {
+        console.log("Email sent successfully:", info.response);
+      }
+    }
+  );
+}
+
+
 export const emailTemplate = (receiverEmail, title, description) => {
   const htmlBody = `
   <!DOCTYPE html>

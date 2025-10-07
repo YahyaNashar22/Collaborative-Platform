@@ -5,6 +5,7 @@ import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface formType {
   label: string;
@@ -20,6 +21,7 @@ type formDataSTate = {
   lastName: string;
   email: string;
   phoneNumber: string;
+  title: string;
   description: string;
 };
 const ContactForm = () => {
@@ -28,6 +30,7 @@ const ContactForm = () => {
     lastName: "",
     email: "",
     phoneNumber: "",
+    title: "",
     description: "",
   });
   const formInputs: formType[] = [
@@ -63,6 +66,14 @@ const ContactForm = () => {
       value: "",
       required: true,
     },
+    {
+      label: "Title",
+      placeholder: "Title",
+      name: "title",
+      type: "text",
+      value: "",
+      required: true,
+    },
   ];
 
   const handleChange = (name: string, value: string) => {
@@ -84,15 +95,36 @@ const ContactForm = () => {
     });
   };
 
-  const handleCLick = () => {
-    toast.success("Form submitted successfully!");
-    setFormData({
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      description: "",
-    });
+  const handleCLick = async () => {
+    if (
+      formData.firstName === "" ||
+      formData.lastName === "" ||
+      formData.email === "" ||
+      formData.phoneNumber === "" ||
+      formData.title === "" ||
+      formData.description === ""
+    ) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    try {
+      await axios.post(
+        import.meta.env.VITE_BACKEND_URL + "/users/get-in-touch",
+        formData
+      );
+
+      toast.success("Form submitted successfully!");
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        title: "",
+        description: "",
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
