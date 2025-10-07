@@ -16,8 +16,15 @@ export const useStepFormHandlers = (role: string, type: string) => {
   const handleChange = (
     name: string,
     value: string | multiSelectType[],
-    required: boolean,
+    required: boolean
   ) => {
+    // ✅ Sanitize email input before storing
+    if (name === "email" || name === "recoveryEmail") {
+      if (typeof value === "string") {
+        value = value.trim().replace(/,+$/, ""); // remove trailing commas
+      }
+    }
+
     updateFieldValue(role, type, name, value);
 
     if (touchedFields[name]) {
@@ -72,7 +79,13 @@ export const useStepFormHandlers = (role: string, type: string) => {
     }
 
     // ✅ Show toast when a file is successfully uploaded
-    if (name === "companyProfile" || name === "crDocument" || name === "establishmentContract" || name === "certificate" || name === "otherDocuments"  ) {
+    if (
+      name === "companyProfile" ||
+      name === "crDocument" ||
+      name === "establishmentContract" ||
+      name === "certificate" ||
+      name === "otherDocuments"
+    ) {
       toast.success(`File uploaded successfully!`);
     }
   };
