@@ -14,7 +14,14 @@ const EntryPage = () => {
   const { resetForm } = useFormStore();
 
   const handleSelectBox = (label: string) => {
-    if (step === 0) setSelectedPlan(label);
+    if (step === 0) {
+      setSelectedPlan(label);
+
+      if (role === "client") {
+        const planId = label === "BOX-1" ? "individual" : "company";
+        navigate(`register/${planId}`, { relative: "path" });
+      }
+    }
   };
 
   const redirectToSignUp = () => {
@@ -51,14 +58,14 @@ const EntryPage = () => {
                 onSelect={handleSelectBox}
               />
 
-              <LibButton
+              {/* <LibButton
                 label="Continue"
                 onSubmit={redirectToSignUp}
                 backgroundColor="#57417e"
                 hoverColor="#49356a"
                 disabled={selectedPlan === ""}
                 padding="0 30px"
-              />
+              /> */}
             </div>
           </>
         ) : (
