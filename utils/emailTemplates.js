@@ -387,7 +387,7 @@ export const getInTouchTemplate = ({
   transporter.sendMail(
     {
       from: process.env.SENDER_EMAIL,
-      to: "yahyanashar22@gmail.com",
+      to: process.env.ADMIN_EMAIL,
       subject: "📞 Get In Touch Request",
       html: htmlBody,
     },
