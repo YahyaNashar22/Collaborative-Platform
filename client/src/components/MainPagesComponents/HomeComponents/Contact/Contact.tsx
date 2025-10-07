@@ -3,6 +3,7 @@ import styles from "./Contact.module.css";
 import {
   faArrowRight,
   faEnvelope,
+  faX,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import {
@@ -11,6 +12,7 @@ import {
   faPinterestP,
   faTwitter,
   faWhatsapp,
+  faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { useNavigate } from "react-router-dom";
@@ -87,7 +89,7 @@ const Contact = () => {
         <li>
           <a href="https://x.com/">
             <FontAwesomeIcon
-              icon={faTwitter}
+              icon={faXTwitter}
               size="xl"
               style={{ color: "#825beb" }}
               className="pointer"
