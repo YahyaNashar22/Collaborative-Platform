@@ -32,7 +32,8 @@ const Services = () => {
       className={`${styles.wrapper} d-f w-100 justify-center align-center f-dir-col`}
       id="market_place"
     >
-      <h3 className="title">SERVICES</h3>
+      <h3 className="title">SERVICES BY PROVIDERS</h3>
+      <p className={styles.subTitle}>Connecting you with reliable SMEs and large enterprises, offering comprehensive solutions across industries to meet diverse business needs.</p>
 
       <div className={`align-text ${styles.boxsContainer} d-f align-center`}>
         {boxesContent.map((box, index) => (

@@ -15,19 +15,17 @@ const About = () => {
           ASPECTS OF OUR WORK
         </h2>
         <p className={`align-text ${styles.bio}`}>
-          Takatuf is an AI-driven platform that connects clients with
-          consultancy service providers across financial, managerial, marketing,
-          IT, and digital domains. Using Artificial Intelligence, we precisely
-          match customer needs with the right partners, delivering tailored and
-          efficient solutions. Powered by Blockchain technology, Takatuf
-          ensures secure, transparent, and reliable data management, building
-          trust between clients and partners while, we offer innovative
-          solutions that assist businesses and individuals in Saudi Arabia to
-          access high-quality global expertise at competitive prices. Our
-          platform also enables international companies to enter the Saudi
-          market and build a strong customer base that supports their expansion
-          and future investments, aligning with the Kingdom's Vision 2030 to
-          promote innovation and attract both startups and global enterprises
+          Takatuf is a smart platform powered by AI that connects people and
+          companies with the right consultants in finance, management,
+          marketing, IT, and digital services. Using artificial intelligence, we
+          match every need with the right expert to deliver fast, effective, and
+          custom solutions. Takatuf helps businesses and individuals in Saudi
+          Arabia get access to top global expertise at fair prices. At the same
+          time, it gives international companies the chance to enter the Saudi
+          market, grow their customer base, and invest in the future. Everything
+          we do supports Vision 2030, encouraging innovation, welcoming
+          startups, and opening the door for global companies to
+          succeed in the Kingdom.
         </p>
       </div>
       <img src={laptop} className={styles.aboutImage} alt="laptop" />

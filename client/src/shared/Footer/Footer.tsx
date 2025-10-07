@@ -4,7 +4,7 @@ import styles from "./Footer.module.css";
 
 import dial from "../../assets/icons/dial.png";
 import mail from "../../assets/icons/mail.png";
-import twitter from "../../assets/icons/twitter.png";
+import twitter from "../../assets/icons/x.png";
 import facebook from "../../assets/icons/facebook.png";
 import pinterest from "../../assets/icons/pinterest.png";
 import instagram from "../../assets/icons/instagram.png";
