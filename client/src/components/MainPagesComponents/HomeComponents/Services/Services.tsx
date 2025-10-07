@@ -5,9 +5,10 @@ import box_3 from "../../../../assets/images/box_3.png";
 import BoxCard from "../../../../shared/BoxCard/BoxCard";
 
 interface boxType {
-  image: string;
+  image?: string;
   title: string;
   alt: string;
+  text?: string;
 }
 const Services = () => {
   const boxesContent: boxType[] = [

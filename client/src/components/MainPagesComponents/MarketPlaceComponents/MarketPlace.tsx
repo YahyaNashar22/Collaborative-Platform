@@ -210,7 +210,6 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
                       </div>
                     ) : (
                       filteredRequests.map((request) => {
-                        console.log(request);
                         return (
                           <div
                             key={request._id}
@@ -222,7 +221,7 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
                           >
                             <BoxCard
                               size="small"
-                              image={request.serviceDetails[0]?.name}
+                              text={request.serviceDetails[0]?.name}
                               status={request.status}
                               alt={request.title}
                               title={request.title}
