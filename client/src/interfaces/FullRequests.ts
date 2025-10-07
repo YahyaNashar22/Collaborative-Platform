@@ -11,6 +11,7 @@ export interface RequestData {
   requestFiles: File[];
   offerDeadline: Date;
   projectDeadline: Date;
+  projectStartDate: Date;
   createdAt: string;
   updatedAt: string;
   interestedBy: string[];

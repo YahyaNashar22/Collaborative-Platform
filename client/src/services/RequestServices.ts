@@ -22,6 +22,10 @@ export const createRequest = async (
     "projectDeadline",
     new Date(data.projectDeadline).toISOString()
   );
+  formData.append(
+    "projectStartDate",
+    new Date(data.projectStartDate).toISOString()
+  );
 
   if (data.requestFiles && Array.isArray(data.requestFiles)) {
     data.requestFiles.forEach((file) => {

@@ -16,6 +16,7 @@ export const createRequestService = async ({
   budget,
   offerDeadline,
   projectDeadline,
+  projectStartDate,
   description,
   requestFiles,
 }) => {
@@ -27,6 +28,7 @@ export const createRequestService = async ({
       budget,
       offerDeadline: new Date(offerDeadline),
       projectDeadline: new Date(projectDeadline),
+      projectStartDate: new Date(projectStartDate),
       description,
       requestFiles,
     });

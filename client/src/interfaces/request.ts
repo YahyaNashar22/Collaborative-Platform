@@ -5,6 +5,7 @@ export interface RequestDataType {
   requestFiles: File[] | null;
   offerDeadline: string;
   projectDeadline: string;
+  projectStartDate: string;
   budget: string;
   [key: string]: string | File[] | null;
 }

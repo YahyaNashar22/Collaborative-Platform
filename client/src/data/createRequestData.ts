@@ -60,12 +60,20 @@ export const FormData: FormField[] = [
     required: true,
   },
   {
+    label: "Expected start date",
+    type: "date",
+    placeholder: "Expected start date",
+    name: "projectStartDate",
+
+    required: true,
+  },
+  {
     label: "Est Budget",
     type: "string",
     placeholder: "Est Budget",
     name: "budget",
 
-    required: true,
+    required: false,
     minLength: 1,
 
     hasCurrency: true,

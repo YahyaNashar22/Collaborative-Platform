@@ -64,6 +64,7 @@ const Cards = ({
             providerIds,
             approvedQuotations,
             offerDeadline,
+            projectStartDate,
           }) => {
             const status = statusActions[stage]?.[userData?.role ?? ""] || {};
             const message = status.msg;
@@ -71,6 +72,7 @@ const Cards = ({
             const action = status.action;
             const secondButton = status.secondButton;
             const secondAction = status.secondAction;
+
             return (
               <Card
                 key={id}
@@ -80,6 +82,7 @@ const Cards = ({
                 stage={stage}
                 requestStatus={requestStatus}
                 offerDeadline={offerDeadline}
+                projectStartDate={projectStartDate}
                 role={userData?.role}
               >
                 {stage === 4 && requestStatus === "canceled" ? (

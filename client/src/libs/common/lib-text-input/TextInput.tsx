@@ -131,7 +131,7 @@ const TextInput = ({
           <div
             className={`${styles.currencySymbol} d-f align-center justify-center intense`}
           >
-            USD
+            SAR
           </div>
         )}
       </div>

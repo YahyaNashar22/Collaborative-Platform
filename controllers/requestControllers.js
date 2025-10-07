@@ -32,6 +32,7 @@ export const createRequest = async (req, res) => {
       description,
       offerDeadline,
       projectDeadline,
+      projectStartDate,
       budget,
     } = req.body;
 
@@ -45,6 +46,7 @@ export const createRequest = async (req, res) => {
       requestFiles,
       offerDeadline,
       projectDeadline,
+      projectStartDate,
       budget,
     });
 

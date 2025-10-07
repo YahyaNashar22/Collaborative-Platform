@@ -6,6 +6,7 @@ type CardProps = {
   description: string;
   projectDeadline: Date;
   projectEstimatedDeadline?: Date;
+  projectStartDate?: Date;
   // stage: number | string;
   role?: string;
   requestStatus?: string;
@@ -53,6 +54,7 @@ const Card = ({
   description,
   projectDeadline,
   offerDeadline,
+  projectStartDate,
   children,
   projectStatus,
   requestStatus,
@@ -97,6 +99,9 @@ const Card = ({
       <div className={styles.cardBody}>
         <p className="styles.description">{description || "No Description"}</p>
 
+        <div className={styles.deadlineItem}>
+          Project Start Date: {new Date(projectStartDate).toLocaleDateString()}
+        </div>
         <div className={styles.deadlineItem}>
           Project Deadline: {new Date(projectDeadline).toLocaleDateString()}
         </div>

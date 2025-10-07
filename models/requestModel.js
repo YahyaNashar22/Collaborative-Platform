@@ -100,6 +100,10 @@ const requestSchema = new Schema(
       type: Date,
       required: true,
     },
+    projectStartDate: {
+      type: Date,
+      required: true,
+    },
     budget: {
       type: Number,
       required: true,
