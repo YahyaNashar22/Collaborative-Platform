@@ -11,6 +11,7 @@ import {
 import removeFile from "../utils/removeFile.js";
 import { emailTemplate, getInTouchTemplate, otpTemplate } from "../utils/emailTemplates.js";
 import { sendPhoneOtp } from "../utils/twilioClient.js";
+import { createNotificationService } from "../services/notificationServices.js";
 
 // Register New Super
 export const registerSuper = async (req, res) => {
@@ -220,6 +221,10 @@ export const registerClient = async (req, res) => {
       newUser.state = state;
     }
     await newUser.save();
+
+    const admins = await User.find({ role: 'admin' });
+
+    admins.map(async admin => await createNotificationService(admin._id, `new client registered: ${newUser.email}`));
 
     // sign in after registration
     const token = createToken(newUser);

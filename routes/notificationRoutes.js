@@ -1,6 +1,6 @@
 import express from "express";
 import { deleteNotification, getAllNotificationsForUser } from "../controllers/notificationController.js";
-import { deleteAllNotificationsService } from "../services/notificationServices";
+import { deleteAllNotificationsService } from "../services/notificationServices.js";
 
 const notificationRoutes = express.Router();
 
