@@ -65,6 +65,8 @@ const Requests = () => {
   const [statusFilter, setStatusFilter] = useState<string>("All");
   const [timeFilter, setTimeFilter] = useState<string>("All");
 
+  const [isConfirmAssignWindow, setIsConfirmAssignWindow] = useState(false);
+
   const { user } = authStore();
 
   const requestsMap = useMemo(() => {
@@ -494,7 +496,44 @@ const Requests = () => {
               color="var(--deep-purple)"
               hoverColor="#8563c326"
             />
-            <LibButton label="Assign" onSubmit={assignProvidersToRequest} />
+            <LibButton
+              label="Assign"
+              onSubmit={() => setIsConfirmAssignWindow(true)}
+            />
+          </div>
+        </Window>
+      )}
+
+      {isConfirmAssignWindow && (
+        <Window
+          title="Confirm Assignment"
+          visible={isConfirmAssignWindow}
+          onClose={() => setIsConfirmAssignWindow(false)}
+          isErrorWindow="true"
+        >
+          <small>
+            Assigned providers cannot be edited later. Are you sure you want to
+            proceed?
+          </small>
+          <div className={`${styles.btns} d-f align-center justify-between`}>
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setIsConfirmAssignWindow(false)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+            />
+            <LibButton
+              label="Confirm"
+              onSubmit={() => {
+                setIsConfirmAssignWindow(false);
+                assignProvidersToRequest();
+              }}
+              bold={true}
+              padding="0"
+            />
           </div>
         </Window>
       )}
