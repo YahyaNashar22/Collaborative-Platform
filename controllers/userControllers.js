@@ -387,6 +387,10 @@ export const registerProvider = async (req, res) => {
     });
     await newProvider.save();
 
+    const admins = await User.find({ role: 'admin' });
+
+    admins.map(async admin => await createNotificationService(admin._id, `new provider registered: ${newProvider.email}`));
+
     // sign in after registration
     const token = createToken(newProvider);
     const decoded = verifyToken(token);
