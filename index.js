@@ -5,6 +5,9 @@ import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import chalk from "chalk";
 
+import { fileURLToPath } from 'url';
+import path from "path";
+
 import databaseConnection from "./db/databaseConnection.js";
 import serviceRoutes from "./routes/serviceRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
@@ -13,8 +16,7 @@ import feedbackRoutes from "./routes/feedbackRoutes.js";
 import quotationRoutes from "./routes/quotationRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
 import otpRoutes from "./routes/otpRoutes.js";
-import { fileURLToPath } from 'url';
-import path from "path";
+import notificationRoutes from "./routes/notificationRoutes.js";
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -47,6 +49,7 @@ app.use("/feedbacks", feedbackRoutes);
 app.use("/quotations", quotationRoutes);
 app.use("/requests", requestRoutes);
 app.use("/otp", otpRoutes);
+app.use("/notifications", notificationRoutes);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client', 'dist')));
