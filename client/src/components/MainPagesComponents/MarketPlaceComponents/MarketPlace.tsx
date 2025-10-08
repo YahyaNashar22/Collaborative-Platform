@@ -155,6 +155,8 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
     }
   };
 
+  console.log(requestData);
+
   return (
     <>
       <h1 className={`${styles.header} container`}>Market Place</h1>
@@ -314,7 +316,6 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
                       color="#825beb"
                       hoverColor="#f3f0ff"
                       outlined
-                      disabled={requestData?.providerId.includes(user._id)}
                       padding="0 10px"
                     />
                   </div>

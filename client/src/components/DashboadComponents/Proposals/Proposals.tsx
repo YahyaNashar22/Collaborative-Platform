@@ -6,6 +6,7 @@ import LibButton from "../../../libs/common/lib-button/LibButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { downloadFile } from "../../../services/FileUpload";
+import Window from "../../../libs/common/lib-window/Window";
 
 interface Proposal {
   _id: string;
@@ -37,6 +38,7 @@ const Proposals = ({
   const [proposals] = useState(data);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [confirmedIds, setConfirmedIds] = useState<string[]>([]);
+  const [isConfirmSubmitWindow, setIsConfirmSubmitWindow] = useState(false);
 
   const isExpanded = (id: string) => expandedIds.includes(id);
   // const shouldShowToggle = (desc: string) => desc.length > 100;
@@ -216,7 +218,7 @@ const Proposals = ({
             />
             <LibButton
               label={`Submit (${confirmedIds.length})`}
-              onSubmit={emitAcceptedProposals}
+              onSubmit={() => setIsConfirmSubmitWindow(true)}
               backgroundColor="#4CAF50"
               hoverColor="#3e9d3e"
               padding="0 20px"
@@ -225,6 +227,43 @@ const Proposals = ({
           </div>
         </div>
       </div>
+
+      {isConfirmSubmitWindow && (
+        <Window
+          title="Confirm Submission"
+          visible={isConfirmSubmitWindow}
+          onClose={() => setIsConfirmSubmitWindow(false)}
+          isErrorWindow="true"
+        >
+          <small>
+            Once confirmed, proposals cannot be changed. Are you sure you want
+            to proceed?
+          </small>
+          <div
+            className="d-f align-center justify-between"
+            style={{ marginTop: "1rem" }}
+          >
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setIsConfirmSubmitWindow(false)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+            />
+            <LibButton
+              label="Confirm"
+              onSubmit={() => {
+                setIsConfirmSubmitWindow(false);
+                emitAcceptedProposals();
+              }}
+              bold={true}
+              padding="0"
+            />
+          </div>
+        </Window>
+      )}
     </main>
   );
 };
