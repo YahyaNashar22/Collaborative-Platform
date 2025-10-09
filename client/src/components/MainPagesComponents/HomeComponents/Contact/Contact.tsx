@@ -3,14 +3,12 @@ import styles from "./Contact.module.css";
 import {
   faArrowRight,
   faEnvelope,
-  faX,
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebook,
   faInstagram,
   faPinterestP,
-  faTwitter,
   faWhatsapp,
   faXTwitter,
 } from "@fortawesome/free-brands-svg-icons";

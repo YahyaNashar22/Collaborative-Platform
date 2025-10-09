@@ -10,6 +10,7 @@ import LibButton from "../../libs/common/lib-button/LibButton";
 import SidePanel from "../SidePanel/SidePanel";
 import Avatar from "../Avatar/Avatar";
 import { User } from "../../interfaces/User";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 interface cardDataType {
   icon: IconDefinition;
@@ -121,10 +122,9 @@ const Header = ({ user }: { user: User | null }) => {
         }`}
       >
         <div className={`${styles.left}`}>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <img src={logo} alt="logo" onClick={() => navigator("/")} />
-            <span className={'betaRibbon'}>BETA</span>
+            <span className={"betaRibbon"}>BETA</span>
           </div>
 
           {/* Nav Links */}
@@ -161,13 +161,16 @@ const Header = ({ user }: { user: User | null }) => {
 
         <div className={`${styles.right} ${user && styles.hasAccess}`}>
           {user ? (
-            <Avatar
-              currentUser={{
-                firstName: user?.firstName,
-                lastName: user?.lastName,
-              }}
-              onClick={() => navigate("/dashboard")}
-            />
+            <div className="d-f align-center gap-05">
+              <NotificationBell />
+              <Avatar
+                currentUser={{
+                  firstName: user?.firstName,
+                  lastName: user?.lastName,
+                }}
+                onClick={() => navigate("/dashboard")}
+              />
+            </div>
           ) : (
             <>
               <LibButton
