@@ -1,12 +1,11 @@
 import express from "express";
-import { deleteNotification, getAllNotificationsForUser } from "../controllers/notificationController.js";
-import { deleteAllNotificationsService } from "../services/notificationServices.js";
+import { deleteAllNotification, deleteNotification, getAllNotificationsForUser } from "../controllers/notificationController.js";
 
 const notificationRoutes = express.Router();
 
 
 notificationRoutes.post("/", getAllNotificationsForUser);
+notificationRoutes.delete("/all/:userId", deleteAllNotification);
 notificationRoutes.delete("/:notificationId", deleteNotification);
-notificationRoutes.delete("/all/:userId", deleteAllNotificationsService);
 
 export default notificationRoutes;

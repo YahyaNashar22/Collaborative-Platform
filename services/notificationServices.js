@@ -38,6 +38,6 @@ export const deleteAllNotificationsService = async (userId) => {
     try {
         await Notification.deleteMany({ userId });
     } catch (error) {
-        console.log(chalk.yellow.bold(error));
+        console.log(chalk.red.bold(error.message));
     }
 }

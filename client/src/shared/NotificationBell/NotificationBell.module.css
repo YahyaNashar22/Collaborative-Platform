@@ -44,6 +44,13 @@
   animation: fadeIn 0.2s ease-in-out;
 }
 
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
 .title {
   font-size: 14px;
   font-weight: 600;
@@ -51,6 +58,17 @@
   border-bottom: 1px solid #eee;
   padding-bottom: 6px;
   margin-bottom: 8px;
+}
+
+.markAllIcon {
+  font-size: 14px;
+  color: #777;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.markAllIcon:hover {
+  color: green;
 }
 
 .loading {

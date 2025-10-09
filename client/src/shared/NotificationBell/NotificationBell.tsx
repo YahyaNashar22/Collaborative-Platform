@@ -1,6 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBell, faCheck } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBell,
+  faCheck,
+  faCheckDouble,
+} from "@fortawesome/free-solid-svg-icons";
 import styles from "./NotificationBell.module.css";
 import { INotification } from "../../interfaces/INotification";
 import axiosInstance from "../../Config/axiosInstence";
@@ -54,6 +58,16 @@ const NotificationBell = () => {
     }
   };
 
+  // Mark all notifications as read
+  const markAllAsRead = async () => {
+    try {
+      await axiosInstance.delete("/notifications/all/" + user?._id);
+      setNotifications([]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className={styles.wrapper} ref={bellRef}>
       <div className={styles.iconWrapper}>
@@ -69,7 +83,17 @@ const NotificationBell = () => {
 
       {isOpen && (
         <div className={styles.dropdown}>
-          <h4 className={styles.title}>Notifications</h4>
+          <div className={styles.header}>
+            <h4 className={styles.title}>Notifications</h4>
+            {notifications.length > 0 && (
+              <FontAwesomeIcon
+                icon={faCheckDouble}
+                className={styles.markAllIcon}
+                title="Mark all as read"
+                onClick={markAllAsRead}
+              />
+            )}
+          </div>
 
           {loading ? (
             <div className={styles.loading}>Loading...</div>
