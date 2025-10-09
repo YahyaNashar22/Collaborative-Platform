@@ -98,7 +98,7 @@ const NotificationBell = () => {
           {loading ? (
             <div className={styles.loading}>Loading...</div>
           ) : notifications.length === 0 ? (
-            <p className={styles.empty}>No new notifications</p>
+            <p className={styles.empty}>No new notifications, refresh page to check for updates</p>
           ) : (
             <ul className={styles.list}>
               {notifications.map((n) => (
