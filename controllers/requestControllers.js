@@ -1,4 +1,3 @@
-import chalk from "chalk";
 import Project from "../models/projectModel.js";
 import Request from "../models/requestModel.js";
 import {
@@ -20,6 +19,9 @@ import {
   interestBy,
 } from "../services/requestServices.js";
 import Quotation from "../models/quotationModel.js";
+import { createNotificationService } from "../services/notificationServices.js";
+import { emailTemplate } from "../utils/emailTemplates.js";
+import { getUserByIdService } from "../services/userServices.js";
 
 // Create request
 // * When Client requests a service ( Stage 1)
@@ -258,6 +260,18 @@ export const selectQuotationAndStartProject = async (req, res) => {
     });
 
     await project.save();
+
+    const provider = await getUserByIdService(quotation.providerId);
+    const client = await getUserByIdService(request.clientId);
+
+    // create notification for provider
+    await createNotificationService(quotation.providerId, `Project Started for request: ${request.title}`);
+    emailTemplate(provider.email, "Project Started", `Project Started for request: ${request.title}`);
+
+    // create notification for client
+    await createNotificationService(request.clientId, `Project Started for request: ${request.title}`);
+    emailTemplate(client.email, "Project Started", `Project Started for request: ${request.title}`);
+
 
     res.status(201).json({
       message: "Quotation selected and project started successfully",

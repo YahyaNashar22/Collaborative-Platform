@@ -103,7 +103,7 @@ const NotificationBell = () => {
             <ul className={styles.list}>
               {notifications.map((n) => (
                 <li key={n._id} className={styles.notificationItem}>
-                  <span className={styles.text}>{n.text}</span>
+                  <span className={styles.NotificationText} >{n.text}</span>
                   <FontAwesomeIcon
                     icon={faCheck}
                     className={styles.readIcon}

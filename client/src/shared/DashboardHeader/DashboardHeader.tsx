@@ -16,6 +16,7 @@ import { signOut } from "../../services/UserServices";
 import authStore from "../../store/AuthStore";
 import SidePanel from "../SidePanel/SidePanel";
 import { toast } from "react-toastify";
+import NotificationBell from "../NotificationBell/NotificationBell";
 
 const DashboardHeader = () => {
   const navigate = useNavigate();
@@ -122,6 +123,7 @@ const DashboardHeader = () => {
           {!pathname.includes("auth") ? (
             <li className={`${styles.navLink} ${styles.last} pointer`}>
               <div className={`${styles.homeIconContainer} d-f align-center`}>
+                <NotificationBell />
                 <Avatar
                   currentUser={{
                     firstName: user?.firstName ?? "",
