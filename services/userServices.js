@@ -16,7 +16,6 @@ export const getUserByEmailService = async (email) => {
 export const getUserByIdService = async (id) => {
   try {
     const user = await User.findById(id).populate("services");
-    console.log(chalk.yellow.bold(`User Fetched By Id --> ${user}`));
     return user;
   } catch (error) {
     console.log(chalk.red.bold("Problem Fetching User By Id"));

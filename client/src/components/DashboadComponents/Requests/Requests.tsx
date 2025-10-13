@@ -357,8 +357,6 @@ const Requests = () => {
     );
   }
 
-  console.log(filteredRequests);
-
   return (
     <>
       <main className={`${styles.wrapper} w-100`}>

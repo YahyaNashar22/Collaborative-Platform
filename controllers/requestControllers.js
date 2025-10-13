@@ -78,7 +78,7 @@ export const passRequestToProviders = async (req, res) => {
       return res.status(400).json({ message: "providerIds must be an array" });
     }
 
-    // check if request exists
+    // Check if request exists
     const request = await getRequestByIdService(requestId);
     if (!request)
       return res.status(404).json({ message: "Request Does Not Exist" });
@@ -86,31 +86,46 @@ export const passRequestToProviders = async (req, res) => {
     const existingProviderIds = request.providerId || [];
 
     // Calculate IDs to add and remove
-    const idsToAdd = providerIds.filter(
-      (id) => !existingProviderIds.includes(id)
-    );
-    const idsToRemove = existingProviderIds.filter(
-      (id) => !providerIds.includes(id)
-    );
+    const idsToAdd = providerIds.filter(id => !existingProviderIds.includes(id));
+    const idsToRemove = existingProviderIds.filter(id => !providerIds.includes(id));
 
-    // Build bulk update operations
-    const updateOperations = {};
-    if (idsToAdd.length > 0)
-      updateOperations.$addToSet = { providerId: { $each: idsToAdd } };
-    if (idsToRemove.length > 0)
-      updateOperations.$pull = { providerId: { $in: idsToRemove } };
+    // Perform separate updates to avoid path conflict
+    if (idsToAdd.length > 0) {
+      await Request.findByIdAndUpdate(
+        requestId,
+        { $addToSet: { providerId: { $each: idsToAdd } } },
+        { new: true }
+      );
+    }
 
-    // Update only if there’s something to change
-    if (Object.keys(updateOperations).length > 0) {
-      await Request.findByIdAndUpdate(requestId, updateOperations, {
-        new: true,
-      });
+    if (idsToRemove.length > 0) {
+      await Request.findByIdAndUpdate(
+        requestId,
+        { $pull: { providerId: { $in: idsToRemove } } },
+        { new: true }
+      );
+    }
 
-      // Update stage
+    // Update stage only if something changed
+    if (idsToAdd.length > 0 || idsToRemove.length > 0) {
       await changeRequestStageService(
         requestId,
         2,
         "⏳awaiting providers quotations"
+      );
+    }
+
+    // Create notification + email for newly added providers
+    for (const p of idsToAdd) {
+      const assignedProvider = await getUserByIdService(p);
+      await createNotificationService(
+        assignedProvider._id,
+        `New Request: ${request.title}`
+      );
+      emailTemplate(
+        assignedProvider.email,
+        "New Project Request",
+        `Please check your dashboard to provide a quotation for the newly assigned request ${request.title}`
       );
     }
 
