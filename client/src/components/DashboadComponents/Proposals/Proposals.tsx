@@ -50,6 +50,8 @@ const Proposals = ({
     title: "Your proposal has been rejected",
     description: "",
     proposalId: "",
+    providerId: "",
+    requestId: "",
   });
   const [isRejecting, setIsRejecting] = useState(false);
 
@@ -87,6 +89,8 @@ const Proposals = ({
       title: "Your proposal has been rejected",
       description: "",
       proposalId: proposal._id,
+      providerId: proposal.providerId._id,
+      requestId: proposal.requestId,
     });
     setIsRejectWindowOpen(true);
   };
@@ -99,6 +103,8 @@ const Proposals = ({
         email: rejectData.email,
         title: rejectData.title,
         description: rejectData.description,
+        providerId: rejectData.proposalId,
+        requestId: rejectData.requestId,
       });
 
       // remove from list

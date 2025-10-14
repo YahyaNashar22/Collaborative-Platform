@@ -547,9 +547,11 @@ export const interestedRequest = async (req, res) => {
 // reject proposal
 export const rejectProposal = async (req, res) => {
   try {
-    const { proposalId, email, title, description } = req.body;
+    const { proposalId, email, title, description, providerId, requestId } = req.body;
+    const request = await getRequestByIdService(requestId);
     await Quotation.findByIdAndUpdate(proposalId, { $set: { isRejected: true } });
     emailTemplate(email, title, description);
+    await createNotificationService(providerId, `Your proposal for request: ${request.title} has been rejected`);
 
     return res.status(200).json({
       message: "proposal rejected successfully"
