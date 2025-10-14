@@ -17,6 +17,7 @@ import {
   sendBackToClient,
   getRequestsForDashboard,
   interestedRequest,
+  rejectProposal,
 } from "../controllers/requestControllers.js";
 import { authMiddleware } from "../middlewares/checkAuth.js";
 
@@ -47,5 +48,7 @@ requestRoutes.get(
   authMiddleware,
   getRequestsForDashboard
 );
+
+requestRoutes.post("/reject-proposal", rejectProposal);
 
 export default requestRoutes;

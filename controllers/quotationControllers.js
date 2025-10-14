@@ -61,7 +61,7 @@ export const getAllQuotations = async (req, res) => {
       });
     }
 
-    const quotations = await Quotation.find({ requestId })
+    const quotations = await Quotation.find({ requestId, isRejected: false })
       .sort({ createdAt: -1 })
       .populate("providerId", "firstName lastName email")
       .lean();

@@ -542,3 +542,23 @@ export const interestedRequest = async (req, res) => {
   });
   return result;
 };
+
+
+// reject proposal
+export const rejectProposal = async (req, res) => {
+  try {
+    const { proposalId, email, title, description } = req.body;
+    await Quotation.findByIdAndUpdate(proposalId, { $set: { isRejected: true } });
+    emailTemplate(email, title, description);
+
+    return res.status(200).json({
+      message: "proposal rejected successfully"
+    })
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: error,
+      message: "Something went wrong while rejecting proposal"
+    })
+  }
+}

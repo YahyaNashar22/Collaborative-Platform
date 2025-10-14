@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload, faCheck } from "@fortawesome/free-solid-svg-icons";
 import { downloadFile } from "../../../services/FileUpload";
 import Window from "../../../libs/common/lib-window/Window";
+import axiosInstance from "../../../Config/axiosInstence";
+import TextAreaInput from "../../../libs/common/lib-textArea/TextAreaInput";
 
 interface Proposal {
   _id: string;
@@ -35,10 +37,21 @@ const Proposals = ({
 }: ProposalsType) => {
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
-  const [proposals] = useState(data);
+  const [proposals, setProposals] = useState(data);
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [confirmedIds, setConfirmedIds] = useState<string[]>([]);
   const [isConfirmSubmitWindow, setIsConfirmSubmitWindow] = useState(false);
+
+  // reject popup state
+  const [isRejectWindowOpen, setIsRejectWindowOpen] = useState(false);
+
+  const [rejectData, setRejectData] = useState({
+    email: "",
+    title: "Your proposal has been rejected",
+    description: "",
+    proposalId: "",
+  });
+  const [isRejecting, setIsRejecting] = useState(false);
 
   const isExpanded = (id: string) => expandedIds.includes(id);
   // const shouldShowToggle = (desc: string) => desc.length > 100;
@@ -65,6 +78,40 @@ const Proposals = ({
       setConfirmedIds((prev) =>
         prev.includes(proposalId) ? [] : [proposalId]
       );
+    }
+  };
+
+  const openRejectWindow = (proposal: Proposal) => {
+    setRejectData({
+      email: proposal.providerId.email,
+      title: "Your proposal has been rejected",
+      description: "",
+      proposalId: proposal._id,
+    });
+    setIsRejectWindowOpen(true);
+  };
+
+  const handleRejectSubmit = async () => {
+    setIsRejecting(true);
+    try {
+      await axiosInstance.post("/requests/reject-proposal", {
+        proposalId: rejectData.proposalId,
+        email: rejectData.email,
+        title: rejectData.title,
+        description: rejectData.description,
+      });
+
+      // remove from list
+      setProposals((prev) =>
+        prev.filter((p) => p._id !== rejectData.proposalId)
+      );
+
+      setIsRejectWindowOpen(false);
+    } catch (err) {
+      console.error(err);
+      alert("Error rejecting proposal");
+    } finally {
+      setIsRejecting(false);
     }
   };
 
@@ -121,6 +168,7 @@ const Proposals = ({
               {isAdmin && <h4>Provider</h4>}
 
               <h4>Confirm</h4>
+              {isAdmin && <h4>Reject</h4>}
             </div>
 
             {filteredData.map((proposal, idx) => {
@@ -203,6 +251,18 @@ const Proposals = ({
                       )}
                     </button>
                   </div>
+
+                  {isAdmin && (
+                    <div className={`${styles.cell} d-f align-center`}>
+                      <button
+                        className={styles.confirmToggle}
+                        onClick={() => openRejectWindow(proposal)}
+                        type="button"
+                      >
+                        <span>Reject</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -227,6 +287,52 @@ const Proposals = ({
           </div>
         </div>
       </div>
+
+      {/* Reject Proposal Window */}
+      {isRejectWindowOpen && (
+        <Window
+          title="Reject Proposal"
+          visible={isRejectWindowOpen}
+          onClose={() => setIsRejectWindowOpen(false)}
+          isErrorWindow="true"
+        >
+          <div className="d-f f-dir-col gap-1">
+            <TextAreaInput
+              label="Message"
+              placeholder="Explain briefly why the proposal was rejected..."
+              name="description"
+              required={true}
+              value={rejectData.description}
+              onChange={(value) =>
+                setRejectData((prev) => ({ ...prev, description: value }))
+              }
+            />
+          </div>
+
+          <div
+            className="d-f align-center justify-between"
+            style={{ marginTop: "1rem" }}
+          >
+            <LibButton
+              label="Cancel"
+              onSubmit={() => setIsRejectWindowOpen(false)}
+              bold={true}
+              padding="0"
+              outlined
+              color="var(--deep-purple)"
+              hoverColor="#8563c326"
+              disabled={isRejecting}
+            />
+            <LibButton
+              label="Send"
+              onSubmit={handleRejectSubmit}
+              bold={true}
+              padding="0"
+              disabled={isRejecting}
+            />
+          </div>
+        </Window>
+      )}
 
       {isConfirmSubmitWindow && (
         <Window
