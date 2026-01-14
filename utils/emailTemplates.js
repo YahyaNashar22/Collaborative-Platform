@@ -432,7 +432,7 @@ export const emailTemplate = (receiverEmail, title, description) => {
      
         <tr>
           <td style="padding-top: 20px; font-size: 14px; color: #888888; border-top: 1px solid #eee; text-align: center;">
-            &copy; ${new Date().getFullYear()} Collaborative Platform CCC
+            &copy; ${new Date().getFullYear()} Takatuf
           </td>
         </tr>
       </table>
