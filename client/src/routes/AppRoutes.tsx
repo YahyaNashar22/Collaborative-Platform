@@ -28,6 +28,9 @@ const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ProjectsPage = lazy(
   () => import("../pages/Dashboard/ProjectsPage/ProjectsPage.tsx"),
 );
+const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
+
+//! //////////////// //////////////
 const RequestsPage = lazy(
   () => import("../pages/Dashboard/RequestsPage/RequestsPage.tsx"),
 );
@@ -50,7 +53,6 @@ const LoginPage = lazy(
 const ServicesPagePage = lazy(
   () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx"),
 );
-const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();

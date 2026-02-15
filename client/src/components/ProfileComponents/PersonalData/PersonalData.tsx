@@ -185,7 +185,7 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
         setSendEmailWindow(false);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setSendEmailLoading(false);
     }

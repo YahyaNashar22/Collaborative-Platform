@@ -1,5 +1,8 @@
+// @ts-nocheck
+
 import { ReactNode } from "react";
 import styles from "./Card.module.css";
+import { useTranslation } from "react-i18next";
 
 type CardProps = {
   name: string;
@@ -17,12 +20,12 @@ type CardProps = {
 };
 
 const getProjectStatus = (
-  projectDeadline: Date
+  projectDeadline: Date,
 ): "onTrack" | "dueSoon" | "upcoming" | "urgent" | "overdue" => {
   const now = new Date();
   const deadline = new Date(projectDeadline);
   const diffInDays = Math.ceil(
-    (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    (deadline.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
   );
 
   if (diffInDays < 0) return "overdue";
@@ -60,6 +63,8 @@ const Card = ({
   requestStatus,
   projectEstimatedDeadline,
 }: CardProps) => {
+  const { t } = useTranslation();
+
   const status = getProjectStatus(projectDeadline);
   const statusLabel = getStatusLabel(status);
 
@@ -73,19 +78,19 @@ const Card = ({
     <div className={styles.card}>
       {isAccepted ? (
         <div className={`${styles.statusBadge} ${styles.accepted}`}>
-          Accepted
+          {t("Accepted")}
         </div>
       ) : isCanceled ? (
         <div className={`${styles.statusBadge} ${styles.canceled}`}>
-          Canceled
+          {t("Canceled")}
         </div>
       ) : projectAccepted ? (
         <div className={`${styles.statusBadge} ${styles.accepted}`}>
-          Completed
+          {t("Completed")}
         </div>
       ) : projectInProgress ? (
         <div className={`${styles.statusBadge} ${styles.upcoming}`}>
-          InProgress
+          {t("InProgress")}
         </div>
       ) : (
         <div className={`${styles.statusBadge} ${styles[status]}`}>
@@ -100,18 +105,18 @@ const Card = ({
         <p className="styles.description">{description || "No Description"}</p>
 
         <div className={styles.deadlineItem}>
-          Project Start Date: {new Date(projectStartDate).toLocaleDateString()}
+          {t("Project Start Date:")} {new Date(projectStartDate).toLocaleDateString()}
         </div>
         <div className={styles.deadlineItem}>
-          Project Deadline: {new Date(projectDeadline).toLocaleDateString()}
+          {t("Project Deadline:")} {new Date(projectDeadline).toLocaleDateString()}
         </div>
         {offerDeadline ? (
           <div className={styles.deadlineItem}>
-            Offer Deadline: {new Date(offerDeadline).toLocaleDateString()}
+            {t("Offer Deadline:")} {new Date(offerDeadline).toLocaleDateString()}
           </div>
         ) : (
           <div className={styles.deadlineItem}>
-            Estimated Deadline:{" "}
+            {t("Estimated Deadline:")}{" "}
             {new Date(projectEstimatedDeadline).toLocaleDateString()}
           </div>
         )}

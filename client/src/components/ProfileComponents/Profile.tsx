@@ -72,7 +72,7 @@ const Profile = ({
     } catch (error) {
       if (error?.response?.statusText === "Payload Too Large") {
         toast.error("Picture is too Large! Please upload a smaller image.");
-      } else toast.error(error?.response?.data?.message || "Error Occured!");
+      } else toast.error(error?.response?.data?.message || "Error Occurred!");
     }
   };
 

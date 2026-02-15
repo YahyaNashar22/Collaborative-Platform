@@ -8,6 +8,7 @@ import SatisfactionSurvey from "../Projects/SatisfactionSurvey/SatisfactionSurve
 import { toast } from "react-toastify";
 import { getSingleFeedback } from "../../../services/Feedback";
 import { Feedback } from "../../../interfaces/Project";
+import { useTranslation } from "react-i18next";
 
 type ProjectCardsProps = {
   data: Project[];
@@ -22,6 +23,9 @@ const ProjectCards = ({
   onCardClick,
   onAddFeedback,
 }: ProjectCardsProps) => {
+
+  const { t } = useTranslation();
+
   const [feedbackWindow, setFeedbackWindow] = useState<string | null>(null);
   const [feedbackData, setFeedbackData] = useState<Feedback | null>(null);
 
@@ -35,7 +39,7 @@ const ProjectCards = ({
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to fetch feedback data");
+      toast.error(t("Failed to fetch feedback data"));
     }
   };
 

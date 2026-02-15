@@ -17,8 +17,11 @@ import authStore from "../../store/AuthStore";
 import SidePanel from "../SidePanel/SidePanel";
 import { toast } from "react-toastify";
 import NotificationBell from "../NotificationBell/NotificationBell";
+import { useTranslation } from "react-i18next";
 
 const DashboardHeader = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
@@ -86,7 +89,7 @@ const DashboardHeader = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     }
   };
 
@@ -115,7 +118,7 @@ const DashboardHeader = () => {
                 } pointer`}
               >
                 <Link to={path} className="d-f align-center gap-2">
-                  <span>{label}</span>
+                  <span>{t(label)}</span>
                 </Link>
               </li>
             ))}
@@ -150,14 +153,14 @@ const DashboardHeader = () => {
                       icon={faUser}
                       className={styles.profileIcon}
                     />
-                    <Link to="profile">View Profile</Link>
+                    <Link to="profile">{t("View Profile")}</Link>
                   </div>
                   <div
                     className={`${styles.menuItem} ${styles.home} d-f align-center`}
                     onClick={() => setToggleDropDown(false)}
                   >
                     <FontAwesomeIcon icon={faHouse} className={styles.icon} />
-                    <Link to="/">Go Home</Link>
+                    <Link to="/">{t("Go Home")}</Link>
                   </div>
                   <div
                     className={`${styles.menuItem} ${styles.signOutItem} d-f align-center`}
@@ -170,7 +173,7 @@ const DashboardHeader = () => {
                       icon={faRightFromBracket}
                       className={styles.icon}
                     />
-                    <span>Sign Out</span>
+                    <span>{t("Sign Out")}</span>
                   </div>
                 </div>
               )}
@@ -184,7 +187,7 @@ const DashboardHeader = () => {
                 } d-f align-baseline pointer`}
               >
                 <FontAwesomeIcon icon={faHouse} className={styles.icon} />
-                <span>Home</span>
+                <span>{t("Home")}</span>
               </Link>
             </div>
           )}
@@ -218,11 +221,11 @@ const DashboardHeader = () => {
       {/* Sign Out Confirmation Modal */}
       {toggleWindow && (
         <Window
-          title="Sign Out"
+          title={t("Sign Out")}
           onClose={() => setToggleWindow(false)}
           visible={toggleWindow}
         >
-          <p>Are you sure you want to sign out?</p>
+          <p>{t("Are you sure you want to sign out?")}</p>
           <div className={`${styles.buttons} d-f align-center justify-end`}>
             <LibButton
               label="Sign Out"

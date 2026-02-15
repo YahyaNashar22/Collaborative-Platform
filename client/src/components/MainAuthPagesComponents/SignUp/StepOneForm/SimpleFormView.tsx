@@ -64,7 +64,7 @@ const SimpleFormView = ({
 
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
-      <h1 className="purple">{title}</h1>
+      <h1 className="purple">{t(title)}</h1>
       <form className={`${styles.form} d-f f-dir-col `}>
         {/* Group First Name and Last Name */}
         <div className={`${styles.firstRow} d-f w-100`} style={{ gap: "20px" }}>

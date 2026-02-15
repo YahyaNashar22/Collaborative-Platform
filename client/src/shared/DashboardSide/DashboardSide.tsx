@@ -6,8 +6,11 @@ import LibButton from "../../libs/common/lib-button/LibButton";
 import authStore from "../../store/AuthStore";
 import { signOut } from "../../services/UserServices";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const DashboardSide = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const [openSignOutWindow, setOpenSignOutWindow] = useState(false);
   const { pathname } = useLocation();
@@ -24,7 +27,7 @@ const DashboardSide = () => {
         navigate("/");
       }
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     }
   };
 
@@ -35,7 +38,7 @@ const DashboardSide = () => {
           onClick={() => setOpenSignOutWindow(true)}
           className={`${styles.redirectBtn} pointer`}
         >
-          Sign Out
+          {t("Sign Out")}
         </div>
       );
     } else if (pathname.includes("register")) {
@@ -45,7 +48,7 @@ const DashboardSide = () => {
           relative="path"
           className={`${styles.redirectBtn} pointer`}
         >
-          Log in
+          {t("Log in")}
         </Link>
       );
     } else if (pathname.includes("login")) {
@@ -55,7 +58,7 @@ const DashboardSide = () => {
           relative="path"
           className={`${styles.redirectBtn} pointer`}
         >
-          Sign up
+          {t("Sign up")}
         </Link>
       );
     } else {
@@ -69,17 +72,15 @@ const DashboardSide = () => {
         className={`${styles.wrapper} d-f f-dir-col align-start justify-between`}
       >
         <p>
-          TAKATUF IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH
-          CONSULTANCY SERVICE PROVIDERS
+          {t(
+            "TAKATUF IS A PLATFORM DEDICATED TO CONNECTING CLIENTS WITH CONSULTANCY SERVICE PROVIDERS",
+          )}
         </p>
         <div className="d-f f-dir-col align-start">
           {getLinkTo()}
           <Link to={"/contact"} className={`${styles.redirectBtn} pointer`}>
-            Having troubles? Get Help
+            {t("Having troubles? Get Help")}
           </Link>
-          <span className={"betaRibbon"} style={{ marginTop: "12px" }}>
-            BETA
-          </span>
         </div>
       </div>
       <Window
@@ -87,7 +88,7 @@ const DashboardSide = () => {
         onClose={() => setOpenSignOutWindow(false)}
         visible={openSignOutWindow}
       >
-        <p>Are you sure you want to sign out?</p>
+        <p>{t("Are you sure you want to sign out?")}</p>
 
         <div className={`${styles.buttons} d-f align-center justify-end`}>
           <LibButton

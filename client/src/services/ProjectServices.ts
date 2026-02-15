@@ -80,7 +80,7 @@ export const uploadFile = async (
 
     return response.data.stage;
   } catch (error) {
-    toast.error((error as any)?.data?.message || "Error Occured!");
+    toast.error((error as any)?.data?.message || "Error Occurred!");
 
     throw error;
   }

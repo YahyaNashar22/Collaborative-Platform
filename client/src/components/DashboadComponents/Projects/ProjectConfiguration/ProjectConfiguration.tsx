@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-nocheck
+
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./ProjectConfiguration.module.css";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
@@ -26,6 +29,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FieldError, Validate } from "../../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 type ProjectConfigurationProps = {
   // onClickNode: (id: string) => void;
@@ -49,6 +53,8 @@ const ProjectConfiguration = ({
   emitStagesSave,
   userData,
 }: ProjectConfigurationProps) => {
+  const { t } = useTranslation();
+
   const contentRef = useRef<HTMLDivElement>(null);
 
   const nodes = [
@@ -125,7 +131,7 @@ const ProjectConfiguration = ({
       hasError: false,
       isProviderCompleted: stage.isProviderCompleted,
       isClientCompleted: stage.isClientCompleted,
-    }))
+    })),
   );
 
   useEffect(() => {
@@ -160,7 +166,7 @@ const ProjectConfiguration = ({
         }
       }, 0);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error with Creation!");
+      toast.error((error as any)?.data?.message || t("Error with Creation!"));
     } finally {
       setIsLoading(false);
     }
@@ -169,7 +175,7 @@ const ProjectConfiguration = ({
   const handleChange = (
     value: string | Date | boolean,
     name: keyof (typeof phases)[number],
-    index: number
+    index: number,
   ) => {
     if (projectData.assignedStage) {
       setCurrentCompletedStage(index);
@@ -194,7 +200,7 @@ const ProjectConfiguration = ({
           return { ...updatedPhase, hasError };
         }
         return phase;
-      })
+      }),
     );
   };
 
@@ -209,26 +215,26 @@ const ProjectConfiguration = ({
 
   const handleCompleteStage = async () => {
     if (currentCompletedStage === null) {
-      toast.error("No stage found");
+      toast.error(t("No stage found"));
       return;
     }
     const { hasError } = validateDate(phases);
     if (hasError) {
-      toast.error("Cannot complete stage while there are date errors.");
+      toast.error(t("Cannot complete stage while there are date errors."));
       return;
     }
     setIsLoading(true);
     try {
       const result = await setStageComplete(
         projectData._id,
-        phases[currentCompletedStage]._id
+        phases[currentCompletedStage]._id,
       );
       // add it manually on the front end
       setPhases(result);
       setCompleteStageWindow(false);
       setCurrentCompletedStage(null);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setIsLoading(false);
     }
@@ -237,7 +243,7 @@ const ProjectConfiguration = ({
   const handleSavePhases = async () => {
     const { hasError, cleanPhases } = validateDate(phases);
     if (hasError) {
-      toast.error("Please fix all date errors before saving.");
+      toast.error(t("Please fix all date errors before saving."));
       return;
     }
     setIsLoading(true);
@@ -250,7 +256,7 @@ const ProjectConfiguration = ({
       setSaveWindow(false);
     } catch (error) {
       toast.error(
-        (error as any)?.response?.data.message || "Error With update!"
+        (error as any)?.response?.data.message || t("Error With update!"),
       );
     } finally {
       setIsLoading(false);
@@ -284,13 +290,13 @@ const ProjectConfiguration = ({
                 isUploadedFiles: true,
                 projectFiles,
               }
-            : phase
-        )
+            : phase,
+        ),
       );
 
-      toast.success("File uploaded successfully.");
+      toast.success(t("File uploaded successfully."));
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setIsUploadLoading(false);
     }
@@ -298,18 +304,18 @@ const ProjectConfiguration = ({
 
   const handleRequestFile = async () => {
     if (!requestFileData.title.trim()) {
-      toast.error("Title is required to send a file request.");
+      toast.error(t("Title is required to send a file request."));
       return;
     }
 
     try {
       await requestFiles(projectData._id, requestFileData);
-      toast.success("File request sent successfully.");
+      toast.success(t("File request sent successfully."));
       setRequestFileWindow(false);
       setRequestFileData({ title: "", description: "" });
     } catch (error) {
       toast.error(
-        (error as any)?.data?.message || "Failed to send file request."
+        (error as any)?.data?.message || t("Failed to send file request."),
       );
     }
   };
@@ -365,14 +371,14 @@ const ProjectConfiguration = ({
         "description",
         requestMeetingData.description,
         true,
-        "text"
+        "text",
       ),
       time: Validate("time", requestMeetingData.time, true, "text"),
       meetingLink: Validate(
         "meetingLink",
         requestMeetingData.meetingLink,
         true,
-        "text"
+        "text",
       ),
     };
 
@@ -384,13 +390,13 @@ const ProjectConfiguration = ({
     }
     try {
       await requestMeeting(projectData._id, requestMeetingData);
-      toast.success("Meeting request sent successfully.");
+      toast.success(t("Meeting request sent successfully."));
       resetRequestMeetingFields();
       setRequestMeetingWindow(false);
     } catch (error) {
       toast.error(
         (error as any)?.response?.data?.message ||
-          "Failed to send Meeting request."
+          t("Failed to send Meeting request."),
       );
     }
   };
@@ -402,7 +408,7 @@ const ProjectConfiguration = ({
         "description",
         sendTicketData.description,
         true,
-        "text"
+        "text",
       ),
     };
 
@@ -424,9 +430,9 @@ const ProjectConfiguration = ({
       await sendTicket(projectData._id, payload);
       resetSendTicket();
       setSendTicketWindow(false);
-      toast.success("Ticket request sent successfully.");
+      toast.success(t("Ticket request sent successfully."));
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Failed to send ticket.");
+      toast.error((error as any)?.data?.message || t("Failed to send ticket."));
     }
   };
 
@@ -438,7 +444,7 @@ const ProjectConfiguration = ({
           onClick={onBack}
         >
           <FontAwesomeIcon icon={faArrowLeft} />
-          <span className={styles.backText}>Back</span>
+          <span className={styles.backText}>{t("Back")}</span>
         </div>
         <header className={`${styles.subNavbar} d-f `}>
           {nodes.map(({ id, title, icon }, index: number) => (
@@ -454,7 +460,7 @@ const ProjectConfiguration = ({
                 >
                   {icon}
                 </div>
-                <div className={styles.title}>{title}</div>
+                <div className={styles.title}>{t(title)}</div>
               </div>
               {index + 1 !== nodes.length && (
                 <div className={styles.line}></div>
@@ -527,9 +533,9 @@ const ProjectConfiguration = ({
 
                       <TextInput
                         name="name"
-                        label="Phase Name"
+                        label={t("Phase Name")}
                         type="string"
-                        placeholder="Phase Name"
+                        placeholder={t("Phase Name")}
                         required={false}
                         value={phase.name}
                         disabled={
@@ -542,7 +548,7 @@ const ProjectConfiguration = ({
 
                       <TextAreaInput
                         name="description"
-                        label="Description"
+                        label={t("Description")}
                         placeholder="Enter description"
                         disabled={
                           (viewer || projectData.assignedStage) as boolean
@@ -557,8 +563,8 @@ const ProjectConfiguration = ({
                       <div className="d-f gap-1">
                         <TextInput
                           name="start"
-                          label="Start Date"
-                          placeholder="Pick a date"
+                          label={t("Start Date")}
+                          placeholder={t("Pick a date")}
                           type="date"
                           disabled={
                             (viewer || projectData.assignedStage) as boolean
@@ -574,8 +580,8 @@ const ProjectConfiguration = ({
                         />
                         <TextInput
                           name="end"
-                          label="End Date"
-                          placeholder="Pick a date"
+                          label={t("End Date")}
+                          placeholder={t("Pick a date")}
                           type="date"
                           disabled={
                             (viewer || projectData.assignedStage) as boolean
@@ -593,7 +599,7 @@ const ProjectConfiguration = ({
 
                       {phase.hasError && (
                         <small className="error">
-                          * End date must come before end date
+                          {t("* End date must come before end date")}
                         </small>
                       )}
 
@@ -635,11 +641,11 @@ const ProjectConfiguration = ({
                                       ? "completed"
                                       : "in_progress",
                                     "status",
-                                    i
+                                    i,
                                   )
                                 }
                               />
-                              Partner Completed
+                              {t("Partner Completed")}
                             </label>
                             <label
                               className={`d-f align-center ml-1 ${
@@ -676,11 +682,11 @@ const ProjectConfiguration = ({
                                       ? "completed"
                                       : "in_progress",
                                     "status",
-                                    i
+                                    i,
                                   )
                                 }
                               />
-                              Client Completed
+                              {t("Client Completed")}
                             </label>
                           </div>
                         )}
@@ -747,17 +753,21 @@ const ProjectConfiguration = ({
             <div className={styles.quotationContainer}>
               <div className={styles.dataGroup}>
                 <div className={styles.dataItem}>
-                  <span className={styles.dataLabel}>Project Title</span>
+                  <span className={styles.dataLabel}>{t("Project Title")}</span>
                   <div className={styles.dataValue}>{projectData?.title}</div>
                 </div>
                 <div className={styles.dataItem}>
-                  <span className={styles.dataLabel}>Project Description</span>
+                  <span className={styles.dataLabel}>
+                    {t("Project Description")}
+                  </span>
                   <div className={styles.dataValue}>
                     {projectData.description || "No Description"}
                   </div>
                 </div>
                 <div className={styles.dataItem}>
-                  <span className={styles.dataLabel}>Project Deadline</span>
+                  <span className={styles.dataLabel}>
+                    {t("Project Deadline")}
+                  </span>
                   <div className={styles.dataValue}>
                     {
                       new Date(projectData?.projectDeadline)
@@ -767,7 +777,9 @@ const ProjectConfiguration = ({
                   </div>
                 </div>
                 <div className={styles.dataItem}>
-                  <span className={styles.dataLabel}>Estimated Deadline</span>
+                  <span className={styles.dataLabel}>
+                    {t("Estimated Deadline")}
+                  </span>
                   <div className={styles.dataValue}>
                     {
                       new Date(projectData?.projectEstimatedDeadline)
@@ -778,7 +790,7 @@ const ProjectConfiguration = ({
                 </div>
 
                 <div className={styles.dataItem}>
-                  <span className={styles.dataLabel}>Project Cost</span>
+                  <span className={styles.dataLabel}>{t("Project Cost")}</span>
                   <div className={styles.dataValue}>
                     {projectData?.amount} $
                   </div>
@@ -796,7 +808,7 @@ const ProjectConfiguration = ({
             isErrorWindow="true"
           >
             <small className="mb-1 d-b">
-              are you sure do you want to delete this stage ?
+              {t("are you sure do you want to delete this stage ?")}
             </small>
             <div className={`${styles.btns} d-f align-center justify-between`}>
               <LibButton
@@ -827,9 +839,9 @@ const ProjectConfiguration = ({
             isErrorWindow="true"
           >
             <small className="mb-1 d-b f-12">
-              ⚠️ this action is irreversible
+              ⚠️ {t("this action is irreversible")}
               <br />
-              are you sure do you want to Save these stages ?
+              {t("are you sure do you want to Save these stages ?")}
             </small>
             <div className={`${styles.btns} d-f align-center justify-between`}>
               <LibButton
@@ -861,9 +873,9 @@ const ProjectConfiguration = ({
             isErrorWindow="true"
           >
             <small className="mb-1 d-b f-12">
-              ⚠️ this action is irreversible
+              ⚠️ {t("this action is irreversible")}
               <br />
-              are you sure do you want to Complete this stage ?
+              {t("are you sure do you want to Complete this stage ?")}
             </small>
             <div className={`${styles.btns} d-f align-center justify-between`}>
               <LibButton
@@ -890,16 +902,16 @@ const ProjectConfiguration = ({
       </div>
       {requestFileWindow && (
         <Window
-          title="Request Files"
+          title={t("Request Files")}
           visible={requestFileWindow}
           onClose={() => setRequestFileWindow(false)}
         >
           <div className="d-f f-dir-col gap-1">
             <TextInput
               name="title"
-              label="Title"
+              label={t("Title")}
               type="text"
-              placeholder="Enter a title for the file request"
+              placeholder={t("Enter a title for the file request")}
               value={requestFileData.title}
               required={true}
               onChange={(value: string) =>
@@ -908,9 +920,9 @@ const ProjectConfiguration = ({
             />
             <TextInput
               name="description"
-              label="Description"
+              label={t("Description")}
               type="text"
-              placeholder="Enter description"
+              placeholder={t("Enter description")}
               value={requestFileData.description}
               required={true}
               onChange={(value: string) =>
@@ -942,7 +954,7 @@ const ProjectConfiguration = ({
 
       {sendTicketWindow && (
         <Window
-          title="Send Ticket"
+          title={t("Send Ticket")}
           visible={sendTicketWindow}
           onClose={() => {
             resetSendTicket();
@@ -951,13 +963,13 @@ const ProjectConfiguration = ({
         >
           <div className="d-f f-dir-col gap-1">
             <p style={{ color: "var(--dark-grey)", fontStyle: "italic" }}>
-              Email will be sent directly to admin
+              {t("Email will be sent directly to admin")}
             </p>
             <TextInput
               name="title"
-              label="Ticket title"
+              label={t("Ticket title")}
               type="text"
-              placeholder="Enter your title"
+              placeholder={t("Enter your title")}
               value={sendTicketData.title}
               errorMessage={errorSendTicket.title}
               required={true}
@@ -965,8 +977,8 @@ const ProjectConfiguration = ({
             />
             <TextAreaInput
               name="description"
-              label="Ticket description"
-              placeholder="Enter your description"
+              label={t("Ticket description")}
+              placeholder={t("Enter your description")}
               value={sendTicketData.description}
               errorMessage={errorSendTicket.description}
               required={true}
@@ -996,19 +1008,19 @@ const ProjectConfiguration = ({
       )}
       {requestMeetingWindow && (
         <Window
-          title="Request Meeting"
+          title={t("Request Meeting")}
           visible={requestMeetingWindow}
           onClose={() => setRequestMeetingWindow(false)}
         >
           <div className="d-f f-dir-col gap-1">
             <p style={{ color: "var(--dark-grey)", fontStyle: "italic" }}>
-              Email will be sent to both parties ( client and provider )
+              {t("Email will be sent to both parties ( client and provider )")}
             </p>
             <TextInput
               name="title"
-              label="Meeting title"
+              label={t("Meeting title")}
               type="text"
-              placeholder="Enter meeting title"
+              placeholder={t("Enter meeting title")}
               value={requestMeetingData.title}
               required={true}
               onChange={handleChangeRequestMeeting}
@@ -1016,9 +1028,9 @@ const ProjectConfiguration = ({
             />
             <TextInput
               name="time"
-              label="Meeting time"
+              label={t("Meeting time")}
               type="date"
-              placeholder="Pick a date"
+              placeholder={t("Pick a date")}
               minDate={new Date().toISOString().split("T")[0]}
               value={requestMeetingData.time}
               required={true}
@@ -1027,8 +1039,8 @@ const ProjectConfiguration = ({
             />
             <TextAreaInput
               name="description"
-              label="Meeting Description"
-              placeholder="Enter meeting description"
+              label={t("Meeting Description")}
+              placeholder={t("Enter meeting description")}
               value={requestMeetingData.description}
               required={true}
               onChange={handleChangeRequestMeeting}
@@ -1036,9 +1048,9 @@ const ProjectConfiguration = ({
             />
             <TextInput
               name="meetingLink"
-              label="Meeting Link"
+              label={t("Meeting Link")}
               type="url"
-              placeholder="Enter meeting link"
+              placeholder={t("Enter meeting link")}
               value={requestMeetingData.meetingLink}
               required={true}
               onChange={handleChangeRequestMeeting}

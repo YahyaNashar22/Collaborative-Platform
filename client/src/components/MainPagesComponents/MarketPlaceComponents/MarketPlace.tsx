@@ -103,7 +103,7 @@ const MarketPlace = ({ user }: MarketPlaceProps) => {
       const response = await interestBy(requestId, user?._id ?? "");
       setOpenWindow(null);
     } catch (error) {
-      toast.error("Error Occured!");
+      toast.error("Error Occurred!");
     }
   };
 

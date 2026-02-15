@@ -9,8 +9,11 @@ import styles from "./NotificationBell.module.css";
 import { INotification } from "../../interfaces/INotification";
 import axiosInstance from "../../Config/axiosInstence";
 import { useAuth } from "../../hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 const NotificationBell = () => {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
@@ -84,31 +87,33 @@ const NotificationBell = () => {
       {isOpen && (
         <div className={styles.dropdown}>
           <div className={styles.header}>
-            <h4 className={styles.title}>Notifications</h4>
+            <h4 className={styles.title}>{t("Notifications")}</h4>
             {notifications.length > 0 && (
               <FontAwesomeIcon
                 icon={faCheckDouble}
                 className={styles.markAllIcon}
-                title="Mark all as read"
+                title={t("Mark all as read")}
                 onClick={markAllAsRead}
               />
             )}
           </div>
 
           {loading ? (
-            <div className={styles.loading}>Loading...</div>
+            <div className={styles.loading}>{t("Loading...")}</div>
           ) : notifications.length === 0 ? (
-            <p className={styles.empty}>No new notifications, refresh page to check for updates</p>
+            <p className={styles.empty}>
+              {t("No new notifications, refresh page to check for updates")}
+            </p>
           ) : (
             <ul className={styles.list}>
               {notifications.map((n) => (
                 <li key={n._id} className={styles.notificationItem}>
-                  <span className={styles.NotificationText} >{n.text}</span>
+                  <span className={styles.NotificationText}>{n.text}</span>
                   <FontAwesomeIcon
                     icon={faCheck}
                     className={styles.readIcon}
                     onClick={() => markAsRead(n._id)}
-                    title="Mark as read"
+                    title={t("Mark as read")}
                   />
                 </li>
               ))}

@@ -90,7 +90,7 @@ const Requests = () => {
       );
       setRequests(result);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
@@ -153,7 +153,7 @@ const Requests = () => {
 
       setProviders(result);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoadingProviders(false);
     }
@@ -182,7 +182,7 @@ const Requests = () => {
         );
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
@@ -208,7 +208,7 @@ const Requests = () => {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
@@ -223,7 +223,7 @@ const Requests = () => {
       if ((error as any)?.data?.message) {
         setIsShowAllProposals(false);
       }
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     }
   };
 
@@ -285,7 +285,7 @@ const Requests = () => {
 
       setRequests((prev) => [...prev, configureResult]);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
@@ -308,7 +308,7 @@ const Requests = () => {
       requestsMap[requestId].selectedQuotation = quotationId;
       requestsMap[requestId].status = "accepted";
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
@@ -325,7 +325,7 @@ const Requests = () => {
       requestsMap[canceldRequestId].stage = 4;
       requestsMap[canceldRequestId].status = "canceled";
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setIsCancelRequestWindow(false);
     }

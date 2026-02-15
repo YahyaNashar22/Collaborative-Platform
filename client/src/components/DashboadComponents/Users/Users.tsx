@@ -71,7 +71,7 @@ const Users = ({
     try {
       await changeUserBannedStatus(id, newBannedStatus);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
 
       setUsers((prevUsers) =>
         prevUsers?.map((user) =>
@@ -165,7 +165,7 @@ const Users = ({
         setSendEmailWindow(null);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occured!");
+      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
     } finally {
       setSendEmailLoading(false);
     }

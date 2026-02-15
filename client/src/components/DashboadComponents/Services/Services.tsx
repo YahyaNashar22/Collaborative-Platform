@@ -70,7 +70,7 @@ const Services = () => {
       const result = await getAllServices();
       setServices(result);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }

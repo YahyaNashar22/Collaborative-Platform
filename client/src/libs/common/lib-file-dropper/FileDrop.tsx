@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import styles from "./FileDrop.module.css";
 import LibButton from "../lib-button/LibButton";
 import { downloadFile } from "../../../services/FileUpload";
+import { useTranslation } from "react-i18next";
 
 type FileDropProps = {
   phase: { [key: string]: string | File | string[] };
@@ -22,6 +23,8 @@ const FileDrop = ({
   // isUploadedFiles,
   onRequest,
 }: FileDropProps) => {
+  const { t } = useTranslation();
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -38,7 +41,9 @@ const FileDrop = ({
 
   return (
     <div className={styles.card}>
-      <h4>Phase {phase?.name as string}</h4>
+      <h4>
+        {t("Phase")} {phase?.name as string}
+      </h4>
 
       <input
         type="file"
@@ -54,9 +59,11 @@ const FileDrop = ({
         onClick={handleClick}
       >
         <span>+</span>
-        <p>Drop your file here or click to upload</p>
+        <p>{t("Drop your file here or click to upload")}</p>
         {selectedFile && (
-          <div className={styles.fileName}>Selected: {selectedFile.name}</div>
+          <div className={styles.fileName}>
+            {t("Selected:")} {selectedFile.name}
+          </div>
         )}
       </div>
 
@@ -64,7 +71,7 @@ const FileDrop = ({
         Array.isArray(phase.projectFiles) &&
         phase.projectFiles?.length > 0 && (
           <div className={styles.uploadedSection}>
-            <h5 className={styles.uploadedTitle}>Uploaded Files</h5>
+            <h5 className={styles.uploadedTitle}>{t("Uploaded Files")}</h5>
             <ul className={styles.uploadedList}>
               {phase.projectFiles.map((file, i) => (
                 <li key={i} className={styles.uploadedItem}>
@@ -79,7 +86,7 @@ const FileDrop = ({
                       downloadFile(file);
                     }}
                   >
-                    ⬇ Download
+                    ⬇ {t("Download")}
                   </div>
                 </li>
               ))}

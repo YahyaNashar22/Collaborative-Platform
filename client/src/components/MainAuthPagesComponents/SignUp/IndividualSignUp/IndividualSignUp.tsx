@@ -131,10 +131,10 @@ const IndividualSignUp = ({
   return (
     <div className={styles.wrapper}>
       <div className="d-f gap-05 f-wrap">
-        <h1>{title}</h1>
+        <h1>{t(title)}</h1>
         <ProgressBar currentNode={step} nodes={formData.steps} />
       </div>
-      <p className={styles.placeholder}>{placeholder}</p>
+      <p className={styles.placeholder}>{t(placeholder)}</p>
       {content}
       <span className="line"></span>
       <AuthFooterLink

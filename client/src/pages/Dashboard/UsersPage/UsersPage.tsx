@@ -13,7 +13,7 @@ const UsersPage = ({ currentUsersRole }: { currentUsersRole: string }) => {
       const result = await getALlUsers(currentUsersRole);
       setUsers(result);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occurred!");
     } finally {
       setIsLoading(false);
     }

@@ -74,7 +74,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
       }));
       setServiceOptions(options);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occured!");
+      toast.error((error as any)?.data?.message || "Error Occurred!");
     } finally {
       setLoading(false);
     }
