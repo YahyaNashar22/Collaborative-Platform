@@ -14,6 +14,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ContactItem {
   icon: IconDefinition;
@@ -23,18 +24,20 @@ interface ContactItem {
 }
 
 const Contact = () => {
+  const { t } = useTranslation();
+
   const navigate = useNavigate();
   const articles: ContactItem[] = [
     {
       icon: faEnvelope,
       label:
-        "Feel free to contact us via email or phone during our business hours.",
+        t("Feel free to contact us via email or phone during our business hours."),
       path: "Info@Takatuf .com",
       href: "mailto:info@Takatuf.com",
     },
     {
       icon: faWhatsapp,
-      label: "Our team will get back to you as soon as possible.",
+      label: t("Our team will get back to you as soon as possible."),
       path: "+966 54 104 1901",
       href: "https://wa.me/+966541041901",
     },
@@ -44,9 +47,9 @@ const Contact = () => {
       className={`${styles.wrapper} container d-f align-center f-dir-col`}
     >
       <div className={styles.headerContainer}>
-        <h1 className={styles.title}>CONTACT US</h1>
+        <h1 className={styles.title}>{t("CONTACT US")}</h1>
         <small className={styles.subTitle}>
-          Have a question or need support?{" "}
+          {t("Have a question or need support?")}{" "}
         </small>
       </div>
 
@@ -70,7 +73,7 @@ const Contact = () => {
       </div>
       <div className={`d-f align-center pointer ${styles.contactUsBtn}`}>
         <LibButton
-          label="Contact Us"
+          label={t("Contact Us")}
           onSubmit={() => navigate("/contact")}
           bold={true}
           styleClass="rounded"

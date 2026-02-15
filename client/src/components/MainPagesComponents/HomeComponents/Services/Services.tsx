@@ -1,8 +1,11 @@
+// @ts-nocheck
+
 import styles from "./Services.module.css";
 import box_1 from "../../../../assets/images/box_1.png";
 import box_2 from "../../../../assets/images/box_2.png";
 import box_3 from "../../../../assets/images/box_3.png";
 import BoxCard from "../../../../shared/BoxCard/BoxCard";
+import { useTranslation } from "react-i18next";
 
 interface boxType {
   image?: string;
@@ -11,21 +14,22 @@ interface boxType {
   text?: string;
 }
 const Services = () => {
+  const { t } = useTranslation();
   const boxesContent: boxType[] = [
     {
       image: box_1,
-      title: "MARKETING SERVICE",
-      alt: "MARKETING SERVICE",
+      title: t("MARKETING SERVICE"),
+      alt: t("MARKETING SERVICE"),
     },
     {
       image: box_2,
-      title: "FINANCIAL SERVICE",
-      alt: "FINANCIAL SERVICE",
+      title: t("FINANCIAL SERVICE"),
+      alt: t("FINANCIAL SERVICE"),
     },
     {
       image: box_3,
-      title: "DIGITAL CONSULTING",
-      alt: "DIGITAL CONSULTING",
+      title: t("DIGITAL CONSULTING"),
+      alt: t("DIGITAL CONSULTING"),
     },
   ];
   return (
@@ -33,8 +37,8 @@ const Services = () => {
       className={`${styles.wrapper} d-f w-100 justify-center align-center f-dir-col`}
       id="market_place"
     >
-      <h3 className="title">SERVICES BY PROVIDERS</h3>
-      <p className={styles.subTitle}>Connecting you with reliable SMEs and large enterprises, offering comprehensive solutions across industries to meet diverse business needs.</p>
+      <h3 className="title">{t("SERVICES BY PROVIDERS")}</h3>
+      <p className={styles.subTitle}>{t("Services By Providers text")}</p>
 
       <div className={`align-text ${styles.boxsContainer} d-f align-center`}>
         {boxesContent.map((box, index) => (

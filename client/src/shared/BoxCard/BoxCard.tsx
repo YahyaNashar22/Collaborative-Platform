@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./BoxCard.module.css";
 
 type BoxCardProps = {
@@ -29,11 +30,12 @@ const BoxCard = ({
   alt,
   title,
   createdAt = "",
-  description = "Description",
+  description = "",
   duration,
   status,
   size = "default",
 }: BoxCardProps) => {
+  const { t } = useTranslation();
   const formattedDate = createdAt ? formatDate(createdAt) : "N/A";
   return (
     <div className={`${styles.box} ${styles[size]}`}>
@@ -56,7 +58,7 @@ const BoxCard = ({
               status === "accepted" ? styles.accepted : ""
             }`}
           >
-            {status === "accepted" ? "Completed" : "Pending"}
+            {status === "accepted" ? t("Completed") : t("Pending")}
           </div>
         </div>
         <h1 className={styles.boxTitle}>{title}</h1>

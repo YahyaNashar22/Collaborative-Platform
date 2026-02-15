@@ -7,6 +7,7 @@ import {
   IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
+import { useTranslation } from "react-i18next";
 
 interface statistic {
   icon: IconDefinition;
@@ -14,21 +15,23 @@ interface statistic {
   number: string;
 }
 const Statistic = () => {
+  const { t } = useTranslation();
+
   const statisticContent: statistic[] = [
     {
       icon: faPeopleGroup,
       number: "+1000",
-      label: "Satisfied Clients",
+      label: t("Satisfied Clients"),
     },
     {
       icon: faMapLocationDot,
       number: "+3500",
-      label: "Website Visits",
+      label: t("Website Visits"),
     },
     {
       icon: faFileCode,
       number: "+1000",
-      label: "Projects Done",
+      label: t("Projects Done"),
     },
   ];
   return (

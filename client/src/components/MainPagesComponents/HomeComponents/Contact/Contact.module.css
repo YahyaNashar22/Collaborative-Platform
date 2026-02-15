@@ -36,6 +36,10 @@
   margin-bottom: 20px;
 }
 
+.articleContainer {
+  gap: 24px;
+}
+
 @media (max-width: 500px) {
   .wrapper {
     margin-top: 20px;

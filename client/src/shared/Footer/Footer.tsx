@@ -10,8 +10,10 @@ import pinterest from "../../assets/icons/pinterest.png";
 import instagram from "../../assets/icons/instagram.png";
 import logo from "../../assets/icons/logo_fullWhite.png";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>();
 
   function handleEmail(e: ChangeEvent<HTMLInputElement>) {
@@ -37,7 +39,7 @@ const Footer = () => {
             className={styles.logo}
           />
           <div className={styles.details}>
-            <p className={styles.logoText}>Welcome to Takatuf!</p>
+            <p className={styles.logoText}>{t("Welcome to Takatuf!")}</p>
             <ul className={styles.infoContainer}>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={dial} width={16} height={16} alt="dial" />
@@ -45,29 +47,27 @@ const Footer = () => {
               </li>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={mail} width={16} height={16} alt="mail" />
-                <a href="mailto:info@takatouf.com">
-                  info@takatouf.com
-                </a>
+                <a href="mailto:info@takatouf.com">info@takatouf.com</a>
               </li>
             </ul>
           </div>
         </div>
         <div className={styles.middle}>
-          <p className={styles.blockHeader}>Explore</p>
+          <p className={styles.blockHeader}>{t("Explore")}</p>
           <ul className={styles.supportContainer}>
             <li className={styles.supportItem}>
-              <Link to="/faq">FAQ</Link>
+              <Link to="/faq">{t("FAQ")}</Link>
             </li>
             <li className={styles.supportItem}>
-              <a href="mailto:info@takatouf.com">Contact</a>
+              <a href="mailto:info@takatouf.com">{t("Contact")}</a>
             </li>
           </ul>
         </div>
         <div className={styles.right}>
-          <p className={styles.blockHeader}>NEWSLETTER</p>
+          <p className={styles.blockHeader}>{t("NEWSLETTER")}</p>
           <form className={styles.newsLetterForm} onSubmit={handleSubmit}>
             <label className={styles.newsletterLabel}>
-              Subscribe to our latest articles and resources
+              {t("Subscribe to our latest articles and resources")}
               <input
                 type="email"
                 name="email"
@@ -80,7 +80,7 @@ const Footer = () => {
                 className={`${styles.newsletterSubmit} pointer`}
                 type="submit"
               >
-                REGISTER
+                {t("REGISTER")}
               </button>
             </label>
           </form>
@@ -88,7 +88,7 @@ const Footer = () => {
       </div>
 
       <div className={styles.lower}>
-        <p>&copy; 2025 Takatuf Platform. All rights reserved.</p>
+        <p>&copy; {t("2025 Takatuf Platform. All rights reserved.")}</p>
         <ul className={styles.links}>
           <li className={styles.link}>
             <a href="https://x.com/">

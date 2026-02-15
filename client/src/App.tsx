@@ -19,9 +19,11 @@ function App() {
     const root = document.documentElement;
 
     if (language === "ar") {
-      root.style.fontSize = "120%"; // 1.2x
+      root.style.fontSize = "120%";
+      root.style.textAlign = "right";
     } else {
       root.style.fontSize = "100%";
+      root.style.textAlign = "left";
     }
   }, [language]);
 

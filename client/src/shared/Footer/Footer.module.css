@@ -131,9 +131,15 @@
   column-gap: 10px;
 }
 
+.emailInput {
+  text-align: left!;
+  direction: ltr;
+}
+
 .emailInput::placeholder {
   font-weight: 600;
   font-size: 10px;
+  text-align: left;
 }
 
 /* Existing styles kept intact above... Add this below */
