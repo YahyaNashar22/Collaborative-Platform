@@ -24,6 +24,7 @@ const ContactPage = lazy(
 const EntryPage = lazy(
   () => import("../pages/MainAuthPages/Entry/EntryPage.tsx"),
 );
+const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const ProjectsPage = lazy(
   () => import("../pages/Dashboard/ProjectsPage/ProjectsPage.tsx"),
 );
@@ -43,7 +44,6 @@ const MarketPlacePage = lazy(
   () => import("../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx"),
 );
 const ProfilePage = lazy(() => import("../pages/ProfilePage/ProfilePage.tsx"));
-const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
 const LoginPage = lazy(
   () => import("../pages/MainAuthPages/Login/LoginPage.tsx"),
 );

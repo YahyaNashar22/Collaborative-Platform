@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import authStore from "../../../../store/AuthStore";
+import { useTranslation } from "react-i18next";
 
 interface individualProps {
   title: string;
@@ -26,6 +27,8 @@ const IndividualSignUp = ({
   placeholder,
   formData,
 }: individualProps) => {
+  const { t } = useTranslation();
+
   const { setUser, setLoading } = authStore();
   const { increaseStep, decreaseStep, getFormValues, type, role } =
     useFormStore();
@@ -45,7 +48,7 @@ const IndividualSignUp = ({
     const email = payload?.email;
 
     if (!email) {
-      setError("Email is required to proceed.");
+      setError(t("Email is required to proceed."));
       return;
     }
 
@@ -56,7 +59,7 @@ const IndividualSignUp = ({
       setOtpError("");
       increaseStep();
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to send OTP.");
+      setError(err?.response?.data?.message || t("Failed to send OTP."));
     }
   };
 
@@ -68,20 +71,20 @@ const IndividualSignUp = ({
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
       if (!isVerified.success) {
-        setOtpError("Invalid or expired OTP.");
+        setOtpError(t("Invalid or expired OTP."));
         return;
       }
       const result = await signUpIndividualClient(payload);
       setUser(result.payload);
       setLoading(false);
-      toast.success("Signed up successfully!");
+      toast.success(t("Signed up successfully!"));
       setOtpError("");
       navigate("/dashboard");
     } catch (error: any) {
       if (error?.response?.data?.message === "Invalid or expired email OTP") {
-        setOtpError("Invalid or expired OTP.");
+        setOtpError(t("Invalid or expired OTP."));
       } else {
-        setOtpError(error?.response?.data?.message || "Sign-up failed");
+        setOtpError(error?.response?.data?.message || t("Sign-up failed"));
       }
     } finally {
       setIsLoading(false);
@@ -135,8 +138,8 @@ const IndividualSignUp = ({
       {content}
       <span className="line"></span>
       <AuthFooterLink
-        text="Already have an account?"
-        link="Sign In"
+        text={"Already have an account?"}
+        link={"Sign In"}
         redirectTo={`/auth/${role}/login`}
       />
     </div>

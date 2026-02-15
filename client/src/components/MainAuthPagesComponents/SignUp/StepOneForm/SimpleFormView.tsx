@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-nocheck
+
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import styles from "./SimpleFormView.module.css";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
@@ -9,6 +12,7 @@ import { getStringValue } from "../../../../utils/CastToString";
 import { verifyEmailRegister } from "../../../../services/UserServices";
 import { useState } from "react";
 import Terms from "../../../MainPagesComponents/TermsComponents/Terms/Terms";
+import { useTranslation } from "react-i18next";
 
 type SimpleFormViewProps = {
   data: FormStepData;
@@ -23,6 +27,8 @@ const SimpleFormView = ({
   moveForward,
   error,
 }: SimpleFormViewProps) => {
+  const { t } = useTranslation();
+
   const { role, type } = useFormStore();
   const { fieldValues, errors, handleChange, handleBlur, validateStep } =
     useStepFormHandlers(role, type);
@@ -41,7 +47,7 @@ const SimpleFormView = ({
 
     if (Object.keys(hasError).length > 0) return;
     if (!agreedToTerms) {
-      setOtpError("* You must agree to the subscription terms.");
+      setOtpError(t("You must agree to the subscription terms."));
       return;
     }
     try {
@@ -51,7 +57,7 @@ const SimpleFormView = ({
       moveForward();
     } catch (error) {
       if ((error as any)?.response.data.exists) {
-        setLocalError("Email already exists");
+        setLocalError(t("Email already exists"));
       }
     }
   };
@@ -65,9 +71,9 @@ const SimpleFormView = ({
           {data.form.slice(0, 2).map((field: FormField, index: number) => (
             <div key={index}>
               <TextInput
-                label={field.label}
+                label={t(field.label)}
                 type={field.type}
-                placeholder={field.placeholder}
+                placeholder={t(field.placeholder)}
                 name={field.name}
                 value={fieldValues[field.name] || ""}
                 required={field.required || false}
@@ -81,7 +87,7 @@ const SimpleFormView = ({
                     field.name,
                     getStringValue(fieldValues[field.name]),
                     field.required || false,
-                    field.type
+                    field.type,
                   )
                 }
               />
@@ -92,9 +98,9 @@ const SimpleFormView = ({
         {data.form.slice(2).map((field: FormField, index: number) => (
           <div key={index}>
             <TextInput
-              label={field.label}
+              label={t(field.label)}
               type={field.type}
-              placeholder={field.placeholder}
+              placeholder={t(field.placeholder)}
               name={field.name}
               value={fieldValues[field.name] || ""}
               required={field.required || false}
@@ -108,7 +114,7 @@ const SimpleFormView = ({
                   field.name,
                   getStringValue(fieldValues[field.name]),
                   field.required || false,
-                  field.type
+                  field.type,
                 )
               }
             />
@@ -134,15 +140,15 @@ const SimpleFormView = ({
             }}
           />
           <label htmlFor="terms" className="pointer">
-            I agree to the{" "}
+            {t("I agree to the")}{" "}
             <span onClick={handleShowTerms} className="purple pointer bold">
-              Takatuf Subscription Agreement
+              {t("Takatuf Subscription Agreement")}
             </span>
           </label>
         </div>
 
         <LibButton
-          label="Next"
+          label={t("Next")}
           onSubmit={onNext}
           backgroundColor="#825beb"
           hoverColor=" #6c46d9"

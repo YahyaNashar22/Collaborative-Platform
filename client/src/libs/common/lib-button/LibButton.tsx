@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import styles from "./LibButton.module.css";
 
 type LibButtonType = {
@@ -25,6 +26,7 @@ const LibButton = ({
   color,
   bold,
 }: LibButtonType) => {
+  const { t } = useTranslation();
   return (
     <div
       className={`${styles.buttonWrapper} d-f justify-end align-center ${
@@ -40,8 +42,8 @@ const LibButton = ({
           backgroundColor: backgroundColor
             ? backgroundColor
             : outlined
-            ? "transparent"
-            : "#6550b4",
+              ? "transparent"
+              : "#6550b4",
           ["--hover-bg" as string]: hoverColor ? hoverColor : "#563db1",
           padding: padding ? padding : "0 10px",
           color: color ? color : "white",
@@ -49,7 +51,7 @@ const LibButton = ({
         onClick={onSubmit}
         disabled={disabled}
       >
-        {label}
+        {t(label)}
       </button>
     </div>
   );

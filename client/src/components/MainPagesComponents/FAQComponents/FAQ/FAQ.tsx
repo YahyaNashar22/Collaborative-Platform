@@ -1,43 +1,40 @@
+import { useTranslation } from "react-i18next";
 import Menu from "../../../../shared/Menu/Menu";
 import styles from "./FAQ.module.css";
 
 const FAQ = () => {
+  const { t } = useTranslation();
+
   const faqData: { label: string; content: string }[] = [
     {
-      label: "What industries do you specialize in?",
-      content:
-        "We specialize in a variety of fields including finance, accounting, IT, design, marketing, and more. Our goal is to match clients with the most suitable consultants.",
+      label: t("faq-1-q"),
+      content: t("faq-1-a"),
     },
     {
-      label: "How do I find a consultant on your platform?",
-      content:
-        "Simply submit a service request with your needs. Our platform will connect you with qualified consultants who will provide quotes and proposals.",
+      label: t("faq-2-q"),
+      content: t("faq-2-a"),
     },
     {
-      label: "Do you cater to international businesses?",
-      content:
-        "Yes, Takatuf connects consultants and clients locally and internationally. We serve clients and providers both inside and outside the Kingdom.",
+      label: t("faq-3-q"),
+      content: t("faq-3-a"),
     },
     {
-      label: "Are your consultancy services affordable?",
-      content:
-        "Takatuf allows you to receive multiple offers, helping you choose based on quality and budget. Pricing depends on the nature and complexity of the service.",
+      label: t("faq-4-q"),
+      content: t("faq-4-a"),
     },
     {
-      label: "What often will results be reported?",
-      content:
-        "Progress and results depend on the project type. However, you can monitor service execution directly through your dashboard or communicate with the provider at any time.",
+      label: t("faq-5-q"),
+      content: t("faq-5-a"),
     },
     {
-      label: "What types of consulting services do you offer?",
-      content:
-        "We support a wide range of consulting services such as business development, IT solutions, marketing strategies, graphic design, and financial advisory.",
+      label: t("faq-6-q"),
+      content: t("faq-6-a"),
     },
   ];
   return (
     <div className={`${styles.wrapper} d-f `}>
       <div className={`${styles.left} d-f f-dir-col align-start`}>
-        <h1 className="title">Frequently Asked Questions</h1>
+        <h1 className="title">{t("Frequently Asked Questions")}</h1>
       </div>
       <div className="w-100">
         <Menu data={faqData} />

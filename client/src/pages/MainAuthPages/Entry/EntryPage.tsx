@@ -5,8 +5,11 @@ import styles from "./EntryPage.module.css";
 import PlanSelected from "../../../components/MainAuthPagesComponents/EntryComponent/PlanSelected/PlanSelected";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import useFormStore from "../../../store/FormsStore";
+import { useTranslation } from "react-i18next";
 
 const EntryPage = () => {
+  const { t } = useTranslation();
+
   const [selectedPlan, setSelectedPlan] = useState("");
   const [step] = useState(0);
   const navigate = useNavigate();
@@ -31,8 +34,8 @@ const EntryPage = () => {
           ? "individual"
           : "company"
         : role === "provider"
-        ? "default"
-        : "";
+          ? "default"
+          : "";
     if (role) resetForm(role, planId);
     if (role === "provider") {
       navigate("register");
@@ -49,7 +52,7 @@ const EntryPage = () => {
       >
         {role === "client" ? (
           <>
-            <h1>Sign up</h1>
+            <h1>{t("Sign up")}</h1>
             <div className="d-f f-dir-col align-center gap-5">
               <PlanBoxes
                 query={step === 1 ? (selectedPlan as "BOX-1" | "BOX-2") : null}
@@ -72,7 +75,7 @@ const EntryPage = () => {
           <div className="d-f f-dir-col align-center gap-5">
             <PlanSelected step={1} authSteps={6} role={role || "provider"} />
             <LibButton
-              label="Continue"
+              label={t("Continue")}
               onSubmit={redirectToSignUp}
               backgroundColor="#57417e"
               hoverColor="#49356a"

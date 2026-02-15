@@ -30,7 +30,7 @@ const Menu = ({ data }: { data: { label: string; content: string }[] }) => {
           <div
             className={`${styles.collapsesContent} ${
               collapsesItems.includes(index) ? styles.show : ""
-            } align-text`}
+            } `}
           >
             {term.content}
           </div>

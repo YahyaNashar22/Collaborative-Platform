@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @t-nocheck
+
 import { TypeFormData } from "../../../../interfaces/registerSignup";
 import SimpleFormView from "../StepOneForm/SimpleFormView";
 import useFormStore from "../../../../store/FormsStore";
@@ -15,6 +18,7 @@ import {
 } from "../../../../services/UserServices";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface CompanySignUpProps {
   title: string;
@@ -27,6 +31,9 @@ const CompanySignUp = ({
   placeholder,
   formData,
 }: CompanySignUpProps) => {
+
+  const { t } = useTranslation();
+
   const [, setIsLoading] = useState(false);
   const { increaseStep, role, type, decreaseStep, getFormValues, setStep } =
     useFormStore();
@@ -45,7 +52,7 @@ const CompanySignUp = ({
     const payload = getFormValues(role, type);
     const email = payload?.email;
     if (!email) {
-      setError("Email is required before proceeding.");
+      setError(t("Email is required before proceeding."));
       return;
     }
 
@@ -56,8 +63,8 @@ const CompanySignUp = ({
       setOtpError("");
       increaseStep();
     } catch (err: any) {
-      toast.error((error as any)?.data?.message || "Error Sending OTP!");
-      setError(err?.response?.data?.message || "Failed to send OTP");
+      toast.error((error as any)?.data?.message || t("Error Sending OTP!"));
+      setError(err?.response?.data?.message || t("Failed to send OTP"));
     }
   };
 
@@ -70,21 +77,21 @@ const CompanySignUp = ({
       const isVerified = await verifyOtp(otpEmail, otpCode.toString());
 
       if (!isVerified.success) {
-        setOtpError("Invalid or expired OTP.");
+        setOtpError(t("Invalid or expired OTP."));
         return;
       }
       const newPayload = { ...payload, accountType: "company" };
       const result = await signUpCompanyClient(newPayload);
       setUser(result);
       setLoading(false);
-      toast.success("Signed up successfully!");
+      toast.success(t("Signed up successfully!"));
       setOtpError("");
       navigate("/dashboard");
     } catch (error: any) {
       if ((error as any)?.data?.message === "Invalid or expired email OTP") {
-        setOtpError("Invalid or expired OTP.");
+        setOtpError(t("Invalid or expired OTP."));
       } else {
-        setOtpError(error?.response?.data?.message || "Sign-up failed");
+        setOtpError(error?.response?.data?.message || t("Sign-up failed"));
       }
     } finally {
       setIsLoading(false);

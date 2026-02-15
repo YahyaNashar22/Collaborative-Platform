@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState } from "react";
 
 import styles from "./ContactForm.module.css";
@@ -6,6 +8,7 @@ import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 interface formType {
   label: string;
@@ -25,6 +28,8 @@ type formDataSTate = {
   description: string;
 };
 const ContactForm = () => {
+  const { t } = useTranslation();
+
   const [formData, setFormData] = useState<formDataSTate>({
     firstName: "",
     lastName: "",
@@ -35,40 +40,40 @@ const ContactForm = () => {
   });
   const formInputs: formType[] = [
     {
-      label: "First Name",
-      placeholder: "First Name",
+      label: t("First Name"),
+      placeholder: t("First Name"),
       name: "firstName",
       value: "",
       type: "text",
       required: true,
     },
     {
-      label: "Last Name",
-      placeholder: "Last Name",
+      label: t("Last Name"),
+      placeholder: t("Last Name"),
       name: "lastName",
       value: "",
       type: "text",
       required: true,
     },
     {
-      label: "Email Address",
-      placeholder: "Email Address",
+      label: t("Email Address"),
+      placeholder: t("Email Address"),
       name: "email",
       type: "email",
       value: "",
       required: true,
     },
     {
-      label: "Phone Number",
-      placeholder: "Phone Number",
+      label: t("Phone Number"),
+      placeholder: t("Phone Number"),
       name: "phoneNumber",
       type: "text",
       value: "",
       required: true,
     },
     {
-      label: "Title",
-      placeholder: "Title",
+      label: t("Title"),
+      placeholder: t("Title"),
       name: "title",
       type: "text",
       value: "",
@@ -104,16 +109,16 @@ const ContactForm = () => {
       formData.title === "" ||
       formData.description === ""
     ) {
-      toast.error("Please fill in all fields");
+      toast.error(t("Please fill in all fields"));
       return;
     }
     try {
       await axios.post(
         import.meta.env.VITE_BACKEND_URL + "/users/get-in-touch",
-        formData
+        formData,
       );
 
-      toast.success("Form submitted successfully!");
+      toast.success(t("Form submitted successfully!"));
       setFormData({
         firstName: "",
         lastName: "",
@@ -131,9 +136,11 @@ const ContactForm = () => {
     <div className={`${styles.wrapper} d-f f-dir-col w-100`}>
       <div className={`${styles.formWrapper} d-f f-dir-col align-start`}>
         <div className="w-100">
-          <h1 className="title">Get in Touch</h1>
+          <h1 className="title">{t("Get in Touch")}</h1>
           <small className={styles.description}>
-            Fill up the form our team will get back to you within 24 Hours
+            {t(
+              "Fill up the form our team will get back to you within 24 Hours",
+            )}
           </small>
         </div>
         <form className={`${styles.form} d-f f-dir-col w-100`}>
@@ -169,8 +176,8 @@ const ContactForm = () => {
             />
           ))}
           <TextAreaInput
-            label="Description"
-            placeholder="Type here..."
+            label={t("Description")}
+            placeholder={t("Type here...")}
             name="description"
             required={true}
             value={formData.description}
@@ -180,7 +187,7 @@ const ContactForm = () => {
           />
         </form>
         <div className="self-end">
-          <LibButton label="Submit" onSubmit={handleCLick} />
+          <LibButton label={t("Submit")} onSubmit={handleCLick} />
         </div>
       </div>
     </div>

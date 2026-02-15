@@ -196,9 +196,9 @@ export const registerFormData: RegisterFormData = {
                 },
                 {
                   name: "companyWebsite",
-                  label: "Company  Website",
+                  label: "Company Website",
                   value: "",
-                  placeholder: "Company  Website",
+                  placeholder: "Company Website",
                   type: "url",
                   required: false,
                   errorMsg: "* This Field is Required",
@@ -586,9 +586,9 @@ export const registerFormData: RegisterFormData = {
                 },
                 {
                   name: "liscence",
-                  label: "Add Liscenses ",
+                  label: "Add Licenses",
                   value: "",
-                  placeholder: "Attachement ",
+                  placeholder: "Attachment",
                   type: "file",
                   required: false,
                   errorMsg: "* This Field is Required",

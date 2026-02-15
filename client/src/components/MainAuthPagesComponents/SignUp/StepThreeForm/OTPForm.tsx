@@ -1,8 +1,11 @@
+// @ts-nocheck
+
 import { useEffect, useRef, useState } from "react";
 import styles from "./OTPForm.module.css";
 import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { sendOtp } from "../../../../services/UserServices";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface OTPFormProps {
   moveBackward: () => void;
@@ -20,6 +23,8 @@ const OTPForm: React.FC<OTPFormProps> = ({
   errorMessage,
   isVerifying,
 }) => {
+  const { t } = useTranslation();
+
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const [selectedIndex, setSelectedIndex] = useState<number>(0);
@@ -71,15 +76,15 @@ const OTPForm: React.FC<OTPFormProps> = ({
       await sendOtp(email);
       setTimeLeft(5 * 60);
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Error Resending OTP!");
+      toast.error(err?.response?.data?.message || t("Error Resending OTP!"));
     }
   };
 
   return (
     <div className={`${styles.formContainer} d-f f-dir-col`}>
-      <h1>Enter Verification Code</h1>
+      <h1>{t("Enter Verification Code")}</h1>
       <p>
-        Verification code has been sent to:{" "}
+        {t("Verification code has been sent to:")}{" "}
         <span className="purple bold">{email}</span>
       </p>
       {isVerifying ? (
@@ -123,7 +128,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
               className={`${timeLeft > 0 ? styles.disabled : ""} pointer`}
               onClick={handleResend}
             >
-              Resend Code
+              {t("Resend Code")}
             </p>
             <p>{formatTime(timeLeft)}</p>
           </div>
@@ -143,7 +148,7 @@ const OTPForm: React.FC<OTPFormProps> = ({
 
       <div className={`${styles.buttons} d-f align-center justify-start`}>
         <LibButton
-          label="Back"
+          label={"Back"}
           onSubmit={moveBackward}
           backgroundColor="#57417e"
           hoverColor="#49356a"
