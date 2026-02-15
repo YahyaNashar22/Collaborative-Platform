@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-nocheck
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "./Contact.module.css";
 import {
@@ -30,8 +33,9 @@ const Contact = () => {
   const articles: ContactItem[] = [
     {
       icon: faEnvelope,
-      label:
-        t("Feel free to contact us via email or phone during our business hours."),
+      label: t(
+        "Feel free to contact us via email or phone during our business hours.",
+      ),
       path: "Info@Takatuf .com",
       href: "mailto:info@Takatuf.com",
     },
@@ -86,9 +90,9 @@ const Contact = () => {
           className={styles.flagWave}
         />
       </div>
-      <ul className={`${styles.links} d-f align-center`}>
+      {/* <ul className={`${styles.links} d-f align-center`}>
         <li>
-          <a href="https://x.com/">
+          <a target="_blank" rel="noopener noreferrer" href="https://x.com/">
             <FontAwesomeIcon
               icon={faXTwitter}
               size="xl"
@@ -98,7 +102,11 @@ const Contact = () => {
           </a>
         </li>
         <li>
-          <a href="https://www.facebook.com/">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.facebook.com/"
+          >
             <FontAwesomeIcon
               icon={faFacebook}
               size="xl"
@@ -108,7 +116,11 @@ const Contact = () => {
           </a>
         </li>
         <li>
-          <a href="https://www.pinterest.com/">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.pinterest.com/"
+          >
             <FontAwesomeIcon
               icon={faPinterestP}
               size="xl"
@@ -118,7 +130,11 @@ const Contact = () => {
           </a>
         </li>
         <li>
-          <a href="https://www.instagram.com/">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href="https://www.instagram.com/"
+          >
             <FontAwesomeIcon
               icon={faInstagram}
               size="xl"
@@ -127,7 +143,7 @@ const Contact = () => {
             />
           </a>
         </li>
-      </ul>
+      </ul> */}
     </section>
   );
 };

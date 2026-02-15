@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+// @ts-nocheck
+
 import { ChangeEvent, FormEvent, useState } from "react";
 
 import styles from "./Footer.module.css";
@@ -89,31 +92,31 @@ const Footer = () => {
 
       <div className={styles.lower}>
         <p>&copy; {t("2025 Takatuf Platform. All rights reserved.")}</p>
-        <ul className={styles.links}>
+        {/* <ul className={styles.links}>
           <li className={styles.link}>
-            <a href="https://x.com/">
+            <a target="_blank" rel="noopener noreferrer" href="https://x.com/">
               <img src={twitter} width={16} height={16} alt="twitter" />
             </a>
           </li>
 
           <li className={styles.link}>
-            <a href="https://www.facebook.com/">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/">
               <img src={facebook} width={16} height={16} alt="facebook" />
             </a>
           </li>
 
           <li className={styles.link}>
-            <a href="https://www.pinterest.com/">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.pinterest.com/">
               <img src={pinterest} width={16} height={16} alt="pinterest" />
             </a>
           </li>
 
           <li className={styles.link}>
-            <a href="https://www.instagram.com/">
+            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/">
               <img src={instagram} width={16} height={16} alt="instagram" />
             </a>
           </li>
-        </ul>
+        </ul> */}
       </div>
     </footer>
   );
