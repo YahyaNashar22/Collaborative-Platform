@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import styles from "./Subscribe.module.css";
 
 import { ChangeEvent, FormEvent, useState } from "react";
 
 const Subscribe = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState<string>();
 
   function handleEmail(e: ChangeEvent<HTMLInputElement>) {
@@ -20,19 +22,19 @@ const Subscribe = () => {
       id="terms"
     >
       <h2 className={styles.title}>
-        WE'RE DELIVERING THE BEST <br /> CUSTOMER EXPERIENCE
+        {t("WE'RE DELIVERING THE BEST")} <br /> {t("CUSTOMER EXPERIENCE")}
       </h2>
       <form className={styles.subscribeContainer} onSubmit={handleSubmit}>
         <input
           type="email"
           className={styles.subscribeInput}
-          placeholder="Enter your email"
+          placeholder={t("Enter your email")}
           value={email}
           onChange={handleEmail}
         />
 
         <button type="submit" className={`${styles.subscribeBtn} pointer`}>
-          Subscribe
+          {t("Subscribe")}
         </button>
       </form>
     </section>

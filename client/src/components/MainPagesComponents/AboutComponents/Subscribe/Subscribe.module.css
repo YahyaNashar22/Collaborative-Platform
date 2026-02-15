@@ -34,6 +34,7 @@
   caret-color: var(--shade-black);
   color: var(--shade-black);
   font-weight: 600;
+  direction: ltr;
 }
 
 .subscribeInput::placeholder {

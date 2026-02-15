@@ -1,38 +1,55 @@
 import { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth.ts";
 
 import Loading from "../shared/Loading/Loading.tsx";
-
-import FAQPage from "../pages/MainPages/FAQPage/FAQPage.tsx";
-
-import SignUpPage from "../pages/MainAuthPages/Signup/SignUpPage.tsx";
-import AboutPage from "../pages/MainPages/AboutPage/AboutPage.tsx";
-import TermsPage from "../pages/MainPages/TermsPage/TermsPage.tsx";
-import ContactPage from "../pages/MainPages/ContactPage/ContactPage.tsx";
 import MainLayout from "../Layouts/MainLayout/MainLayout.tsx";
-import EntryPage from "../pages/MainAuthPages/Entry/EntryPage.tsx";
 import DashboardEntryLayout from "../Layouts/DashboardEntryLayout.tsx";
 import DashboardSideLayout from "../Layouts/DashboardSideLayout.tsx";
-import ProjectsPage from "../pages/Dashboard/ProjectsPage/ProjectsPage.tsx";
-import RequestsPage from "../pages/Dashboard/RequestsPage/RequestsPage.tsx";
-import ServicesPage from "../pages/Dashboard/ServicesPage/ServicesPage.tsx";
-import DashboardPage from "../pages/Dashboard/DashboardPage/DashboardPage.tsx";
-import UsersPage from "../pages/Dashboard/UsersPage/UsersPage.tsx";
-import MarketPlacePage from "../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx";
-import ProfilePage from "../pages/ProfilePage/ProfilePage.tsx";
-import { useAuth } from "../hooks/useAuth.ts";
 import PrivateRoute from "./PrivateRoute.tsx";
 
+const FAQPage = lazy(() => import("../pages/MainPages/FAQPage/FAQPage.tsx"));
+const SignUpPage = lazy(
+  () => import("../pages/MainAuthPages/Signup/SignUpPage.tsx"),
+);
+const AboutPage = lazy(
+  () => import("../pages/MainPages/AboutPage/AboutPage.tsx"),
+);
+const TermsPage = lazy(
+  () => import("../pages/MainPages/TermsPage/TermsPage.tsx"),
+);
+const ContactPage = lazy(
+  () => import("../pages/MainPages/ContactPage/ContactPage.tsx"),
+);
+const EntryPage = lazy(
+  () => import("../pages/MainAuthPages/Entry/EntryPage.tsx"),
+);
+const ProjectsPage = lazy(
+  () => import("../pages/Dashboard/ProjectsPage/ProjectsPage.tsx"),
+);
+const RequestsPage = lazy(
+  () => import("../pages/Dashboard/RequestsPage/RequestsPage.tsx"),
+);
+const ServicesPage = lazy(
+  () => import("../pages/Dashboard/ServicesPage/ServicesPage.tsx"),
+);
+const DashboardPage = lazy(
+  () => import("../pages/Dashboard/DashboardPage/DashboardPage.tsx"),
+);
+const UsersPage = lazy(
+  () => import("../pages/Dashboard/UsersPage/UsersPage.tsx"),
+);
+const MarketPlacePage = lazy(
+  () => import("../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx"),
+);
+const ProfilePage = lazy(() => import("../pages/ProfilePage/ProfilePage.tsx"));
 const HomePage = lazy(() => import("../pages/MainPages/HomePage/HomePage.tsx"));
-
 const LoginPage = lazy(
-  () => import("../pages/MainAuthPages/Login/LoginPage.tsx")
+  () => import("../pages/MainAuthPages/Login/LoginPage.tsx"),
 );
-
 const ServicesPagePage = lazy(
-  () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx")
+  () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx"),
 );
-
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
 
 const AppRoutes = () => {

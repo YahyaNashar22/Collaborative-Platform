@@ -4,8 +4,10 @@ import logo from "../../../../assets/icons/logo_white.png";
 import vision from "../../../../assets/icons/vision_ico.png";
 import mission from "../../../../assets/icons/mission_ico.png";
 import expertise from "../../../../assets/icons/project_management_ico.png";
+import { useTranslation } from "react-i18next";
 
 const Vision = () => {
+  const { t } = useTranslation();
   return (
     <section
       className={`${styles.wrapper} d-f align-center justify-center`}
@@ -22,13 +24,13 @@ const Vision = () => {
           />
         </div>
         <div className={styles.leftText}>
-          YOUR GATEWAY <br />
+          {t("YOUR GATEWAY")} <br />
           <div>
-            TO <span className="purple"> SAUDI</span>
+            {t("TO")} <span className="purple"> {t("SAUDI")}</span>
           </div>
-          <div className="purple">ARABIA'S</div>
-          <div>BUSINESS</div>
-          <div className={`circled ${styles.landscape}`}>LANDSCAPE</div>
+          <div className="purple">{t("ARABIA'S")}</div>
+          <div>{t("BUSINESS")}</div>
+          <div className={`circled ${styles.landscape}`}>{t("LANDSCAPE")}</div>
           <br />
           <div className={styles.dots}>
             <span></span>
@@ -44,16 +46,20 @@ const Vision = () => {
             <span className={styles.blockIcon}>
               <img src={vision} alt="vision" width={40} height={40} />
             </span>
-            VISION
+            {t("VISION")}
           </h3>
           <div className={styles.blockText}>
-            To be the premier destination for specialized consulting in
-            <span className="purple"> Saudi Arabia </span> by providing an
-            integrated platform that allows individuals and companies to access
-            a select group of experts, thereby fostering
-            <span className="purple"> innovation </span>, supporting economic
-            growth, and contributing to the achievement of
-            <span className="purple"> Vision 2030's </span> objectives.
+            {t("To be the premier destination for specialized consulting in")}
+            <span className="purple"> {t("Saudi Arabia")} </span>{" "}
+            {t(
+              "by providing an integrated platform that allows individuals and companies to access a select group of experts, thereby fostering",
+            )}
+            <span className="purple"> {t("innovation")} </span>,{" "}
+            {t(
+              "supporting economic growth, and contributing to the achievement of",
+            )}
+            <span className="purple"> {t("Vision 2030's")} </span>{" "}
+            {t("objectives.")}
           </div>
         </div>
         {/* mission block */}
@@ -62,16 +68,24 @@ const Vision = () => {
             <span className={styles.blockIcon}>
               <img src={mission} alt="mission" width={40} height={40} />
             </span>
-            MISSION
+            {t("MISSION")}
           </h3>
           <div className={styles.blockText}>
-            We are committed to empowering individuals and companies by offering{" "}
-            <span className="purple">high-quality consulting solutions</span>{" "}
-            and connecting them with the best experts locally and
-            internationally, ensuring{" "}
-            <span className="purple">professionalism and competitiveness.</span>{" "}
-            We strive to facilitate strategic decision-making, enhance business
-            success, and support their expansion in local and global markets.
+            {t(
+              "We are committed to empowering individuals and companies by offering",
+            )}{" "}
+            <span className="purple">
+              {t("high-quality consulting solutions")}
+            </span>{" "}
+            {t(
+              "and connecting them with the best experts locally and internationally, ensuring",
+            )}{" "}
+            <span className="purple">
+              {t("professionalism and competitiveness.")}
+            </span>{" "}
+            {t(
+              "We strive to facilitate strategic decision-making, enhance business success, and support their expansion in local and global markets.",
+            )}
           </div>
         </div>
         {/* expertise block  */}
@@ -80,20 +94,19 @@ const Vision = () => {
             <span className={styles.blockIcon}>
               <img src={expertise} alt="expertise" width={40} height={40} />
             </span>
-            EXPERTISE
+            {t("EXPERTISE")}
           </h3>
           <div className={styles.blockText}>
-            Our team consists of{" "}
-            <span className="purple">top professionals</span> and industry
-            experts dedicated to providing strategic solutions tailored to your
-            business needs. With diverse expertise across multiple sectors, we
-            ensure that our clients receive the best consultancy services to
-            drive success and{" "}
-            <span className="purple">sustainable growth.</span>
+            {t("Our team consists of")}{" "}
+            <span className="purple">{t("top professionals")}</span>{" "}
+            {t(
+              "and industry experts dedicated to providing strategic solutions tailored to your business needs. With diverse expertise across multiple sectors, we ensure that our clients receive the best consultancy services to drive success and",
+            )}{" "}
+            <span className="purple">{t("sustainable growth.")}</span>
           </div>
         </div>
       </div>
-      <p className={styles.consultingText}>CONSULTING</p>
+      <p className={styles.consultingText}>{t("CONSULTING")}</p>
     </section>
   );
 };
