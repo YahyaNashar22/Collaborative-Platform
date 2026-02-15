@@ -1,0 +1,29 @@
+{
+  "header-home": "الرئيسية",
+  "header-about": "من نحن",
+  "header-faq": "الأسئلة الشائعة",
+  "header-terms": "الشروط والأحكام",
+  "header-contact": "اتصل بنا",
+  "header-marketplace": "المتجر",
+  "header-login": "تسجيل الدخول",
+  "header-signup": "إنشاء حساب",
+
+  "lets-get-started": "لنبدأ",
+  "choose-how-to-join": "اختر الطريقة التي تفضلها للانضمام إلينا",
+  "Log In As Partner": "تسجيل الدخول كشريك",
+  "Log In As Client": "تسجيل الدخول كعميل",
+  "JOIN US": "انضم إلينا",
+  "SIGN IN": "تسجيل الدخول",
+  "Become A Partner": "انضم كشريك",
+  "a provider to deliver services through our platform": "شريك لتقديم الخدمات من خلال منصتنا",
+  "Become A Client": "انضم إلى قائمة عملائنا",
+  "a client to benefit from our expert services": "عميل يستفيد من خدماتنا المتخصصة",
+
+  "hero-text-1": "مرحبًا بكم في منصة ",
+  "hero-text-2": "تكاتف",
+  "hero-text-3": "",
+  "become-partner": "انضم إلينا كشريك",
+  "become-partner-desc": "كن شريكًا في 6 خطوات لتنمية أعمالك",
+  "become-client": "انضم إلينا كعميل",
+  "become-client-desc": "كن عميلاً في 3 خطوات لإنجاز مشروعك"
+}

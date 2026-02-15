@@ -40,7 +40,9 @@
 
 html,
 body {
-  font-family: DM Sans, Inter;
+  font-family:
+    DM Sans,
+    Inter;
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
@@ -393,4 +395,23 @@ li {
   top: -2px;
   border: 2px solid var(--button-purple);
   z-index: 1;
+}
+
+.language-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 24px;
+  height: 10px;
+  padding: 24px;
+  background-color: var(--deep-shade-black);
+}
+
+.language-btn-container button {
+  background-color: transparent;
+  color: var(--darker-white);
+}
+
+.language-btn-container button:hover {
+  color: var(--white);
 }

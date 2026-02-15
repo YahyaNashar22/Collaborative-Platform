@@ -1,0 +1,29 @@
+{
+  "header-home": "home",
+  "header-about": "about us",
+  "header-faq": "faq",
+  "header-terms": "terms",
+  "header-contact": "contact us",
+  "header-marketplace": "marketplace",
+  "header-login": "login",
+  "header-signup": "signup",
+
+  "lets-get-started": "LET'S GET STARTED",
+  "choose-how-to-join": "Choose how you like to join us",
+  "Log In As Partner": "Log In As Partner",
+  "Log In As Client": "Log In As Client",
+  "JOIN US": "JOIN US",
+  "SIGN IN": "SIGN IN",
+  "Become A Partner": "Become A Partner",
+  "a provider to deliver services through our platform": "a provider to deliver services through our platform",
+  "Become A Client": "Become A Client",
+  "a client to benefit from our expert services": "a client to benefit from our expert services",
+
+  "hero-text-1": "WELCOME TO",
+  "hero-text-2": "TAKATUF",
+  "hero-text-3": "PLATFORM",
+  "become-partner": "BECOME A PARTNER",
+  "become-partner-desc": "Become a Partner In 6 Steps to grow your business",
+  "become-client": "BECOME A CLIENT",
+  "become-client-desc": "Become a client In 3 Steps to Settle your project"
+}

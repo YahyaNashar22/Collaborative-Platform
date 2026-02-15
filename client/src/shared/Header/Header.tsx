@@ -1,5 +1,8 @@
+// @ts-nocheck
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 import styles from "./Header.module.css";
 import logo from "../../assets/icons/Logo.png";
 import Window from "../../libs/common/lib-window/Window";
@@ -20,6 +23,7 @@ interface cardDataType {
 }
 
 const Header = ({ user }: { user: User | null }) => {
+  const { t } = useTranslation();
   const navigator = useNavigate();
   const { pathname } = useLocation();
   const [onWindowOpen, setOnWindowOpen] = useState<boolean>(false);
@@ -30,14 +34,14 @@ const Header = ({ user }: { user: User | null }) => {
   const cardData: cardDataType[] = [
     {
       icon: faBriefcase,
-      title: "Become A Partner",
-      description: "a provider to deliver services through our platform",
+      title: t("Become A Partner"),
+      description: t("a provider to deliver services through our platform"),
       type: "provider",
     },
     {
       icon: faCircleUser,
-      title: "Become A Client",
-      description: "a client to benefit from our expert services",
+      title: t("Become A Client"),
+      description: t("a client to benefit from our expert services"),
       type: "client",
     },
   ];
@@ -95,11 +99,11 @@ const Header = ({ user }: { user: User | null }) => {
   const toggleSidePanel = () => setIsSidePanelOpen((prev) => !prev);
   const closeSidePanel = () => setIsSidePanelOpen(false);
   const navItems = [
-    { path: "/", label: "HOME" },
-    { path: "/about", label: "ABOUT US" },
-    { path: "/FAQ", label: "FAQ" },
-    { path: "/terms", label: "TERMS" },
-    { path: "/contact", label: "CONTACT US" },
+    { path: "/", label: t("header-home") },
+    { path: "/about", label: t("header-about") },
+    { path: "/FAQ", label: t("header-faq") },
+    { path: "/terms", label: t("header-terms") },
+    { path: "/contact", label: t("header-contact") },
   ];
 
   return (
@@ -134,16 +138,16 @@ const Header = ({ user }: { user: User | null }) => {
             }`}
           >
             {[
-              { path: "/", label: "HOME" },
-              { path: "/about", label: "ABOUT US" },
+              { path: "/", label: t("header-home") },
+              { path: "/about", label: t("header-about") },
               user &&
                 user?.role !== "client" && {
                   path: "/market_place",
                   label: "MARKET PLACE",
                 },
-              { path: "/FAQ", label: "FAQ" },
-              { path: "/terms", label: "TERMS" },
-              { path: "/contact", label: "CONTACT US" },
+              { path: "/FAQ", label: t("header-faq") },
+              { path: "/terms", label: t("header-terms") },
+              { path: "/contact", label: t("header-contact") },
             ]
               .filter(Boolean)
               .map(({ path, label }) => (
@@ -174,14 +178,14 @@ const Header = ({ user }: { user: User | null }) => {
           ) : (
             <>
               <LibButton
-                label="LOG IN"
+                label={t("header-login")}
                 backgroundColor="#868788"
                 hoverColor="#6f7071"
                 onSubmit={() => openAuthWindow("login")}
                 styleClass="rounded"
               ></LibButton>
               <LibButton
-                label="SIGN UP"
+                label={t("header-signup")}
                 onSubmit={() => openAuthWindow("register")}
                 styleClass="rounded"
               ></LibButton>
@@ -206,9 +210,11 @@ const Header = ({ user }: { user: User | null }) => {
             className={`${styles.windowContainer} d-f f-dir-col align-center justify-center`}
           >
             <div className={`${styles.header} d-f f-dir-col align-center`}>
-              <h1 className={`${styles.title} purple`}>LET'S GET STARTED</h1>
+              <h1 className={`${styles.title} purple`}>
+                {t("lets-get-started")}
+              </h1>
               <p className={`${styles.description} bold`}>
-                Choose how you like to join us
+                {t("choose-how-to-join")}
               </p>
             </div>
             <main className={`${styles.boxContainer} d-f w-100`}>
@@ -227,17 +233,17 @@ const Header = ({ user }: { user: User | null }) => {
 
                   <h1>
                     {nextRoute === "login" && card.type === "provider"
-                      ? "Log In As Partner"
+                      ? t("Log In As Partner")
                       : nextRoute === "login" && card.type === "client"
-                      ? "Log In As Client"
-                      : card.title}
+                        ? t("Log In As Client")
+                        : card.title}
                   </h1>
                   <p>{card.description}</p>
 
                   <div className={styles.btn}>
                     <LibButton
                       label={`${
-                        nextRoute === "register" ? "JOIN US" : "SIGN IN"
+                        nextRoute === "register" ? t("JOIN US") : t("SIGN IN")
                       }`}
                       outlined={true}
                       onSubmit={() => handleClick(card.type)}
