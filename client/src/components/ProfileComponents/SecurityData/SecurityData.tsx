@@ -55,11 +55,11 @@ const SecurityData = ({
     const { oldPassword, newPassword, confirmPassword } = passwordData;
 
     const passwordValidationErrors = {
-      oldPassword: Validate("oldPassword", oldPassword, true),
-      newPassword: Validate("newPassword", newPassword, true),
+      oldPassword: t(Validate("oldPassword", oldPassword, true)),
+      newPassword: t(Validate("newPassword", newPassword, true)),
       confirmPassword:
-        Validate("confirmPassword", confirmPassword, true) ||
-        (newPassword !== confirmPassword ? t("Passwords do not match") : ""),
+        t(Validate("confirmPassword", confirmPassword, true) ||
+        (newPassword !== confirmPassword ? t("Passwords do not match") : "")),
     };
 
     if (Object.values(passwordValidationErrors).some((error) => error)) {
@@ -131,7 +131,7 @@ const SecurityData = ({
 
     setTargetState((prev: any) => ({ ...prev, [name]: value }));
 
-    let error = Validate(name, value, true, "text");
+    let error = t(Validate(name, value, true, "text"));
 
     if (name === "confirmPassword" && value !== targetState.newPassword) {
       error = t("Passwords do not match");
@@ -144,10 +144,10 @@ const SecurityData = ({
     const { newPassword, confirmPassword } = securityData;
 
     const securityValidationErrors = {
-      newPassword: Validate("newPassword", newPassword, true),
+      newPassword: t(Validate("newPassword", newPassword, true)),
       confirmPassword:
-        Validate("confirmPassword", confirmPassword, true) ||
-        (newPassword !== confirmPassword ? t("Passwords do not match") : ""),
+        t(Validate("confirmPassword", confirmPassword, true) ||
+        (newPassword !== confirmPassword ? t("Passwords do not match") : "")),
     };
 
     if (Object.values(securityValidationErrors).some((error) => error)) {

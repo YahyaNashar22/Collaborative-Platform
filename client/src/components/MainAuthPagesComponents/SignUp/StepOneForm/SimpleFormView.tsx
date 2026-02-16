@@ -81,7 +81,7 @@ const SimpleFormView = ({
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false)
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={t(errors[field.name])}
                 onBlur={() =>
                   handleBlur(
                     field.name,
@@ -108,7 +108,7 @@ const SimpleFormView = ({
               onChange={(value, name) =>
                 handleChange(name, value, field.required || false)
               }
-              errorMessage={errors[field.name]}
+              errorMessage={t(errors[field.name])}
               onBlur={() =>
                 handleBlur(
                   field.name,

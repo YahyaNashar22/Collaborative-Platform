@@ -10,6 +10,7 @@ import LibButton from "../../../../libs/common/lib-button/LibButton";
 import { RequestDataType } from "../../../../interfaces/request";
 import RequestDropdown from "./components/RequestDropdown";
 import { downloadFile } from "../../../../services/FileUpload";
+import { useTranslation } from "react-i18next";
 
 type FormField = {
   label: string;
@@ -41,6 +42,7 @@ interface RequestFormType {
 }
 
 const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
+  const { t } = useTranslation();
   const [formValues, setFormValues] = useState<RequestDataType>({
     title: "",
     serviceId: "",
@@ -108,13 +110,13 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
       }
     }
 
-    const validationError = Validate(
+    const validationError = t(Validate(
       name,
       value,
       isRequired,
       type,
       type === "date",
-    );
+    ));
 
     setErrors((prev) => ({
       ...prev,
@@ -140,13 +142,13 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
 
     data.forEach((field: FormField) => {
       const value = formValues[field.name];
-      const error = Validate(
+      const error = t(Validate(
         field.name,
         value as any,
         field.required ?? false,
         field.type,
         field.type === "date",
-      );
+      ));
 
       newErrors[field.name] = error;
       if (error) isValid = false;
@@ -248,7 +250,9 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
                   <RequestDropdown emitSelectedService={handleSelectService} />
                 </div>
                 {errors.serviceId && (
-                  <small className="error">{t("* This field is required")}</small>
+                  <small className="error">
+                    {t("* This field is required")}
+                  </small>
                 )}
               </div>
             );

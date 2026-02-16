@@ -27,7 +27,7 @@ const ForgetPasswordComponent = ({
   const handleChange = (name: string, value: string, required: boolean) => {
     setFormValues((prev) => ({ ...prev, [name]: value }));
     if (touchedFields[name]) {
-      const error = Validate(name, value, required, "email");
+      const error = t(Validate(name, value, required, "email"));
       setErrors(error);
     }
   };
@@ -39,12 +39,12 @@ const ForgetPasswordComponent = ({
     type: string
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type);
+    const error = t(Validate(name, value, required, type));
     setErrors(error);
   };
 
   const emitEmail = () => {
-    const error = Validate("email", formValues.email, true, "email");
+    const error = t(Validate("email", formValues.email, true, "email"));
 
     if (error) {
       setErrors(error);

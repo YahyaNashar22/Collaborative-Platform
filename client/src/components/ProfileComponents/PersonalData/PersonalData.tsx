@@ -140,7 +140,7 @@ const PersonalDataTab: React.FC<PersonalDataTabProps> = ({
 
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    let error = Validate(name, value, required, type);
+    let error = t(Validate(name, value, required, type));
     const email =
       name === "email" ? value : (updatedData?.email ?? userData.email);
     const recoveryEmail =

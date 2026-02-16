@@ -82,7 +82,7 @@ const OrgInformationForm = ({
                   onChange={(value, name) =>
                     handleChange(name, value, field.required || false)
                   }
-                  errorMessage={errors[field.name]}
+                  errorMessage={t(errors[field.name])}
                   onBlur={() =>
                     handleBlur(
                       field.name,
@@ -114,7 +114,7 @@ const OrgInformationForm = ({
                 onChange={(value) =>
                   handleChange(field.name, value, field.required || false)
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={t(errors[field.name])}
                 disabled={
                   field.name === "state" && (!fieldValues["country"] as any)
                 }
@@ -135,7 +135,7 @@ const OrgInformationForm = ({
               onChange={(value) =>
                 handleChange(field.name, value, field.required || false)
               }
-              errorMessage={errors[field.name]}
+              errorMessage={t(errors[field.name])}
             />
           );
         })}
@@ -152,7 +152,7 @@ const OrgInformationForm = ({
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false)
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={t(errors[field.name])}
               />
             </div>
           );

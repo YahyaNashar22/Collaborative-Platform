@@ -45,7 +45,6 @@
 .dropdown {
   position: absolute;
   top: 105%;
-  left: 0;
   width: 260px;
   background: white;
   border: 1px solid #ced4da;

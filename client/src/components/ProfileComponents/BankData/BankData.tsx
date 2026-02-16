@@ -8,6 +8,7 @@ import LibButton from "../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./BankData.module.css";
 import { Validate } from "../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 const BankData = ({
   userData,
@@ -15,6 +16,7 @@ const BankData = ({
   onSave,
   isViewer = false,
 }: BankDataProps) => {
+  const { t } = useTranslation();
   const [updatedData, setUpdatedData] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -25,7 +27,7 @@ const BankData = ({
     name: string,
     value: string | string[],
     required: boolean,
-    type: string
+    type: string,
   ) => {
     if (value === userData[name]) {
       setUpdatedData((prev) => {
@@ -42,7 +44,7 @@ const BankData = ({
     }
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value, required, type);
+    const error = t(Validate(name, value, required, type));
     setErrors((prev) => {
       const newErrors = { ...prev };
       if (error) newErrors[name] = error;
@@ -71,7 +73,7 @@ const BankData = ({
                 onChange={(value, name) =>
                   handleChange(name, value, field.required || false, field.type)
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={t(errors[field.name])}
                 disabled={isViewer}
               />
             </div>
@@ -91,7 +93,7 @@ const BankData = ({
               onChange={(value, name) =>
                 handleChange(name, value, field.required || false, field.type)
               }
-              errorMessage={errors[field.name]}
+              errorMessage={t(errors[field.name])}
               disabled={isViewer}
             />
           </div>

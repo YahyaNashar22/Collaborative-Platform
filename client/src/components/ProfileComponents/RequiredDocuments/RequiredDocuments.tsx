@@ -57,7 +57,7 @@ const RequiredDocuments = ({
     }
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value as any, required, type);
+    const error = t(Validate(name, value as any, required, type));
     setErrors((prev) => {
       const newErrors = { ...prev };
       if (error) (newErrors as any)[name] = error;

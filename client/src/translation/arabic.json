@@ -752,5 +752,13 @@
   "Due Soon": "مستحق قريبًا",
   "Upcoming": "قادم",
   "Urgent": "عاجل",
-  "Overdue": "متأخر"
+  "Overdue": "متأخر",
+
+  "* Please enter a valid email": "* يرجى إدخال بريد إلكتروني صحيح",
+  "* This file is required": "* هذا الملف مطلوب",
+  "* Date must be after today": "* يجب أن يكون التاريخ بعد اليوم",
+  "* Phone number cannot contain more than one '+' sign": "* لا يمكن أن يحتوي رقم الهاتف على أكثر من علامة '+' واحدة",
+  "* Please enter a valid phone number": "* يرجى إدخال رقم هاتف صالح",
+  "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل، وتحتوي على حرف كبير، وحرف صغير، ورقم، ورمز خاص.",
+  "* Budget must be a valid number with no letters or symbols.": "* يجب أن تكون الميزانية رقمًا صالحًا بدون حروف أو رموز."
 }

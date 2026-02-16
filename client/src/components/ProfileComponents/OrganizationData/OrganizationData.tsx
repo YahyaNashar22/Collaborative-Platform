@@ -12,6 +12,7 @@ import { OrganizationDataProps } from "../../../interfaces/Profile";
 import { Validate } from "../../../utils/Validate";
 import { downloadFile } from "../../../services/FileUpload";
 import { getStatesForCountry } from "../../../utils/getStateByCountry";
+import { useTranslation } from "react-i18next";
 
 const fields: FormField[] =
   registerFormData.roles.client.types.company.formData[1].form;
@@ -22,6 +23,8 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
   onSave,
   isViewer = false,
 }) => {
+  const { t } = useTranslation();
+
   const [updatedData, setUpdatedData] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -29,7 +32,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
     name: string,
     value: string | string[],
     required: boolean,
-    type: string
+    type: string,
   ) => {
     if (value === (userData as any)[name]) {
       setUpdatedData((prev) => {
@@ -47,7 +50,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
 
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value as any, required, type);
+    const error = t(Validate(name, value as any, required, type));
     setErrors((prev) => {
       const newErrors = { ...prev };
       if (error) (newErrors as any)[name] = error;
@@ -82,7 +85,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                       name,
                       value,
                       field.required || false,
-                      field.type
+                      field.type,
                     )
                   }
                   disabled={isViewer}
@@ -106,7 +109,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                       name,
                       value,
                       field.required || false,
-                      field.type
+                      field.type,
                     )
                   }
                   errorMessage={(errors as any)[field.name]}
@@ -135,7 +138,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                     ? (field.options as any)
                     : getStatesForCountry(
                         (updatedData as any)["country"] ||
-                          (userData as any)["country"]
+                          (userData as any)["country"],
                       )
                 }
                 onChange={(value) =>
@@ -143,7 +146,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                     field.name,
                     value as any,
                     field.required || false,
-                    field.type
+                    field.type,
                   )
                 }
                 errorMessage={(errors as any)[field.name]}
@@ -171,7 +174,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                 field.name,
                 value as any,
                 field.required || false,
-                field.type
+                field.type,
               )
             }
             errorMessage={(errors as any)[field.name]}
@@ -196,7 +199,7 @@ const OrganizationData: React.FC<OrganizationDataProps> = ({
                     field.name,
                     value as any,
                     field.required || false,
-                    field.type
+                    field.type,
                   )
                 }
                 errorMessage={(errors as any)[field.name]}

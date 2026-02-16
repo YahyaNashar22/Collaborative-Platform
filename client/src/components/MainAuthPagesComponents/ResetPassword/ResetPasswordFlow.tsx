@@ -108,7 +108,7 @@ const ResetPasswordFlow = ({
     setNewPassword((prev) => ({ ...prev, [name]: value }));
 
     setPasswordError((prev) => ({ ...prev, [name]: "" }));
-    const err = Validate(name, value, true, "text");
+    const err = t(Validate(name, value, true, "text"));
 
     if (err) {
       setPasswordError((prev) => ({ ...prev, [name]: err }));

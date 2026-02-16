@@ -218,7 +218,7 @@ const ProjectConfiguration = ({
       toast.error(t("No stage found"));
       return;
     }
-    const { hasError } = validateDate(phases);
+    const { hasError } = t(validateDate(phases));
     if (hasError) {
       toast.error(t("Cannot complete stage while there are date errors."));
       return;
@@ -241,7 +241,7 @@ const ProjectConfiguration = ({
   };
 
   const handleSavePhases = async () => {
-    const { hasError, cleanPhases } = validateDate(phases);
+    const { hasError, cleanPhases } = t(validateDate(phases));
     if (hasError) {
       toast.error(t("Please fix all date errors before saving."));
       return;
@@ -348,7 +348,7 @@ const ProjectConfiguration = ({
 
   const handleChangeRequestMeeting = (value: string, name: string) => {
     setRequestMeetingData((prev) => ({ ...prev, [name]: value }));
-    const fieldError = Validate(name, value, true, "text");
+    const fieldError = t(Validate(name, value, true, "text"));
     setErrorRequestMeeting((prev) => ({
       ...prev,
       [name]: fieldError,
@@ -357,7 +357,7 @@ const ProjectConfiguration = ({
 
   const handleChangeSendTicket = (value: string, name: string) => {
     setSendTicketData((prev) => ({ ...prev, [name]: value }));
-    const fieldError = Validate(name, value, true, "text");
+    const fieldError = t(Validate(name, value, true, "text"));
     setErrorSendTicket((prev) => ({
       ...prev,
       [name]: fieldError,
@@ -366,20 +366,20 @@ const ProjectConfiguration = ({
 
   const handleRequestMeeting = async () => {
     const newErrors: FieldError = {
-      title: Validate("title", requestMeetingData.title, true, "text"),
-      description: Validate(
+      title: t(Validate("title", requestMeetingData.title, true, "text")),
+      description: t(Validate(
         "description",
         requestMeetingData.description,
         true,
         "text",
-      ),
-      time: Validate("time", requestMeetingData.time, true, "text"),
-      meetingLink: Validate(
+      )),
+      time: t(Validate("time", requestMeetingData.time, true, "text")),
+      meetingLink: t(Validate(
         "meetingLink",
         requestMeetingData.meetingLink,
         true,
         "text",
-      ),
+      )),
     };
 
     setErrorRequestMeeting(newErrors);
@@ -403,13 +403,13 @@ const ProjectConfiguration = ({
 
   const handleSendTicket = async () => {
     const newErrors: FieldError = {
-      title: Validate("title", sendTicketData.title, true, "text"),
-      description: Validate(
+      title: t(Validate("title", sendTicketData.title, true, "text")),
+      description: t(Validate(
         "description",
         sendTicketData.description,
         true,
         "text",
-      ),
+      )),
     };
 
     setErrorSendTicket(newErrors);

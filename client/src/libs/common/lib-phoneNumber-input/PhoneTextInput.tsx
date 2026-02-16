@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./PhoneTextInput.module.css";
 import { countries } from "../../../data/Countries";
+import { useLanguageStore } from "../../../translation/langStore";
 
 type CountryOption = {
   name: string;
@@ -27,6 +28,10 @@ const PhoneTextInput = ({
   defaultCountry = "lb",
   onBlur,
 }: PhoneTextInputProps) => {
+  const { language } = useLanguageStore();
+
+  const isArabic = language === "ar";
+
   const initialCountry =
     countries.find((c) => c.code === defaultCountry) || countries[0];
 
@@ -84,15 +89,19 @@ const PhoneTextInput = ({
   const filteredCountries = countries.filter(
     (c) =>
       c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.dialCode.includes(searchTerm)
+      c.dialCode.includes(searchTerm),
   );
 
   return (
     <div
       className={`${styles.phoneContainer} d-f align-center`}
       ref={dropdownRef}
+      style={{ flexDirection: isArabic ? "row-reverse" : "row" }}
     >
-      <div className={styles.dropdownWrapper}>
+      <div
+        className={styles.dropdownWrapper}
+        style={{ ...(isArabic ? { left: 0 } : { right: 0 }) }}
+      >
         <div
           className={`${styles.flagSelector} pointer`}
           onClick={toggleDropdown}

@@ -753,9 +753,17 @@
   "✅ You've accepted an offer": "✅ You've accepted an offer",
   "✅ Your offer was accepted": "✅ Your offer was accepted",
 
-"On Track": "On Track",
+  "On Track": "On Track",
   "Due Soon": "Due Soon",
   "Upcoming": "Upcoming",
   "Urgent": "Urgent",
-  "Overdue": "Overdue"
+  "Overdue": "Overdue",
+
+  "* Please enter a valid email": "* Please enter a valid email",
+  "* This file is required": "* This file is required",
+  "* Date must be after today": "* Date must be after today",
+  "* Phone number cannot contain more than one '+' sign": "* Phone number cannot contain more than one '+' sign",
+  "* Please enter a valid phone number": "* Please enter a valid phone number",
+  "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.": "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.",
+  "* Budget must be a valid number with no letters or symbols.": "* Budget must be a valid number with no letters or symbols."
 }

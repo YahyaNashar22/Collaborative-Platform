@@ -16,7 +16,7 @@ export const useStepFormHandlers = (role: string, type: string) => {
   const handleChange = (
     name: string,
     value: string | multiSelectType[],
-    required: boolean
+    required: boolean,
   ) => {
     // ✅ Sanitize email input before storing
     if (name === "email" || name === "recoveryEmail") {
@@ -31,8 +31,8 @@ export const useStepFormHandlers = (role: string, type: string) => {
       const fieldType = Array.isArray(value)
         ? "multiSelect"
         : typeof value === "string"
-        ? "text"
-        : "";
+          ? "text"
+          : "";
       const error = Validate(name, value, required, fieldType);
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
@@ -94,7 +94,7 @@ export const useStepFormHandlers = (role: string, type: string) => {
     name: string,
     value: string,
     required: boolean,
-    type: string
+    type: string,
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
     let error = Validate(name, value ?? "", required, type);
@@ -121,7 +121,7 @@ export const useStepFormHandlers = (role: string, type: string) => {
         field.name,
         value,
         field.required || false,
-        field.type
+        field.type,
       );
 
       if (field.name === "recoveryEmail") {

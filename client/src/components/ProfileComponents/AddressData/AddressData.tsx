@@ -8,6 +8,7 @@ import LibButton from "../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./AddressData.module.css";
 import { Validate } from "../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 const AddressData = ({
   userData,
@@ -15,6 +16,7 @@ const AddressData = ({
   onSave,
   isViewer = false,
 }: AddressDataProps) => {
+  const { t } = useTranslation();
   const [updatedData, setUpdatedData] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -42,7 +44,7 @@ const AddressData = ({
     }
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value, required, type);
+    const error = t(Validate(name, value, required, type));
     setErrors((prev) => {
       const newErrors = { ...prev };
       if (error) newErrors[name] = error;
@@ -71,7 +73,7 @@ const AddressData = ({
               onChange={(value, name) =>
                 handleChange(name, value, field.required || false, field.type)
               }
-              errorMessage={errors[field.name]}
+              errorMessage={t(errors[field.name])}
               disabled={isViewer}
             />
           </div>

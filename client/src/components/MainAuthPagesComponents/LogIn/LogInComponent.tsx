@@ -45,7 +45,7 @@ const LogInComponent = ({
       placeholder: "Email",
       type: "email",
       required: true,
-      errorMsg: "* This Field is Required",
+      errorMsg: t("* This Field is Required"),
     },
     {
       name: "password",
@@ -55,7 +55,7 @@ const LogInComponent = ({
       type: "password",
       minLength: 5,
       required: true,
-      errorMsg: "* This Field is Required",
+      errorMsg: t("* This Field is Required"),
     },
   ];
 
@@ -71,13 +71,8 @@ const LogInComponent = ({
 
     data.forEach((field) => {
       const value = formValues[field.name] || "";
-      const error = Validate(
-        field.name,
-        value,
-        field.required,
-        field.type,
-        false,
-        true,
+      const error = t(
+        Validate(field.name, value, field.required, field.type, false, true),
       );
       if (error) {
         newErrors[field.name] = error;
@@ -94,13 +89,15 @@ const LogInComponent = ({
     setFormValues((prev) => ({ ...prev, [name]: value }));
 
     if (touchedFields[name]) {
-      const error = Validate(
-        name,
-        value,
-        required,
-        data.find((f) => f.name === name)?.type || "",
-        false,
-        true,
+      const error = t(
+        Validate(
+          name,
+          value,
+          required,
+          data.find((f) => f.name === name)?.type || "",
+          false,
+          true,
+        ),
       );
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
@@ -113,7 +110,7 @@ const LogInComponent = ({
     type: string,
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
-    const error = Validate(name, value, required, type, false, true);
+    const error = t(Validate(name, value, required, type, false, true));
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
@@ -136,7 +133,7 @@ const LogInComponent = ({
                     onChange={(value, name) =>
                       handleChange(name, value, field.required)
                     }
-                    errorMessage={errors[field.name]}
+                    errorMessage={t(errors[field.name])}
                     onBlur={() =>
                       handleBlur(
                         field.name,

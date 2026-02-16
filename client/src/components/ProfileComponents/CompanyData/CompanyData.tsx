@@ -87,7 +87,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
 
     setUpdatedData((prev) => ({ ...prev, [name]: value }));
 
-    const error = Validate(name, value, required, type);
+    const error = t(Validate(name, value, required, type));
     setErrors((prev) => {
       const newErrors = { ...prev };
       if (error) newErrors[name] = error;
@@ -147,7 +147,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                       field.type,
                     )
                   }
-                  errorMessage={errors[field.name]}
+                  errorMessage={t(errors[field.name])}
                   disabled={isViewer}
                 />
               )}
@@ -173,7 +173,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                     field.type,
                   )
                 }
-                errorMessage={errors[field.name]}
+                errorMessage={t(errors[field.name])}
                 disabled={isViewer}
               />
             </div>
