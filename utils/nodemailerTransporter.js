@@ -6,7 +6,7 @@ dotenv.config();
 // TODO: Add the correct nodeMailer credentials
 
 const transporter = nodemailer.createTransport({
-    host: "mail-server.h2mdns.net",
+    host: process.env.HOST_SMTP,
     port: 465,
     secure: true,
     auth: {
