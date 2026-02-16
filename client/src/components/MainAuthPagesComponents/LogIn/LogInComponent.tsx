@@ -4,6 +4,7 @@ import { Validate } from "../../../utils/Validate";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import { ReactNode } from "react";
+import { useTranslation } from "react-i18next";
 
 interface dataType {
   name: string;
@@ -28,6 +29,8 @@ const LogInComponent = ({
   onForgetPassword,
   children,
 }: loginComponentType) => {
+  const { t } = useTranslation();
+
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({});
   const [touchedFields, setTouchedFields] = useState<{
     [key: string]: boolean;
@@ -74,7 +77,7 @@ const LogInComponent = ({
         field.required,
         field.type,
         false,
-        true
+        true,
       );
       if (error) {
         newErrors[field.name] = error;
@@ -97,7 +100,7 @@ const LogInComponent = ({
         required,
         data.find((f) => f.name === name)?.type || "",
         false,
-        true
+        true,
       );
       setErrors((prev) => ({ ...prev, [name]: error }));
     }
@@ -107,7 +110,7 @@ const LogInComponent = ({
     name: string,
     value: string,
     required: boolean,
-    type: string
+    type: string,
   ) => {
     setTouchedFields((prev) => ({ ...prev, [name]: true }));
     const error = Validate(name, value, required, type, false, true);
@@ -123,9 +126,9 @@ const LogInComponent = ({
               return (
                 <div key={index}>
                   <TextInput
-                    label={field.label}
+                    label={t(field.label)}
                     type={field.type}
-                    placeholder={field.placeholder}
+                    placeholder={t(field.placeholder)}
                     name={field.name}
                     value={formValues[field.name] || ""}
                     required={field.required}
@@ -139,7 +142,7 @@ const LogInComponent = ({
                         field.name,
                         formValues[field.name] || "",
                         field.required,
-                        field.type
+                        field.type,
                       )
                     }
                   />
@@ -150,7 +153,7 @@ const LogInComponent = ({
           {children}
           <div className={`${styles.buttons} d-f align-center justify-between`}>
             <small className="purple pointer bold" onClick={onForgetPassword}>
-              Forgot password?
+              {t("Forgot password?")}
             </small>
             <LibButton
               label="Sign In"

@@ -7,6 +7,7 @@ import authStore from "../../../../store/AuthStore";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ResetPasswordFlow from "../../ResetPassword/ResetPasswordFlow";
+import { useTranslation } from "react-i18next";
 
 type LogInClientProps = {
   role: string;
@@ -14,6 +15,8 @@ type LogInClientProps = {
 };
 
 const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
+  const { t } = useTranslation();
+
   const [step, setStep] = useState<number>(0);
   const [error, setError] = useState("");
   const { setUser, setLoading } = authStore();
@@ -31,7 +34,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
         setTimeout(() => {
           setUser(response.payload);
           navigate("/dashboard");
-          toast.success("Welcome back");
+          toast.success(t("Welcome back"));
         }, 1000);
       }
     } catch (error: any) {
@@ -51,13 +54,13 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await resetPassword(payload);
       if (response?.success) {
-        toast.success("password reset successfuly");
+        toast.success(t("password reset successfully"));
         setStep(0);
       } else {
-        toast.error("Password reset failed");
+        toast.error(t("Password reset failed"));
       }
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Something went wrong");
+      toast.error(err?.response?.data?.message || t("Something went wrong"));
     } finally {
       setLoading(false);
     }
@@ -67,7 +70,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
     <div className={styles.wrapper}>
       <div className="d-f f-dir-col">
         <div>
-          <h1>Sign in to Takatuf</h1>
+          <h1>{t("Sign in to Takatuf")}</h1>
           <p className={styles.placeholder}>{placeholder}</p>
         </div>
         {authStore.getState().loading ? (
@@ -100,8 +103,8 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
             <span className="line"></span>
 
             <AuthFooterLink
-              text="Don't have an account?"
-              link="Sign Up"
+              text={t("Don't have an account?")}
+              link={t("Sign Up")}
               redirectTo={`/auth/${role}/register`}
             />
           </div>

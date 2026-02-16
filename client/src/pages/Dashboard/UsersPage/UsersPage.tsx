@@ -3,8 +3,11 @@ import Users from "../../../components/DashboadComponents/Users/Users";
 import styles from "./UsersPage.module.css";
 import { toast } from "react-toastify";
 import { getALlUsers } from "../../../services/UserServices";
+import { useTranslation } from "react-i18next";
 
 const UsersPage = ({ currentUsersRole }: { currentUsersRole: string }) => {
+  const { t } = useTranslation();
+
   const [users, setUsers] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const fetchUsers = async () => {
@@ -13,7 +16,7 @@ const UsersPage = ({ currentUsersRole }: { currentUsersRole: string }) => {
       const result = await getALlUsers(currentUsersRole);
       setUsers(result);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occurred!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setIsLoading(false);
     }

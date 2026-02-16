@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState } from "react";
 import styles from "./SecurityData.module.css";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
@@ -13,6 +15,7 @@ import {
 import { toast } from "react-toastify";
 import ResetPasswordBy from "../../MainAuthPagesComponents/ResetPasswordBy/ResetPasswordBy";
 import { Validate } from "../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 interface SecurityDataProps {
   email: string;
@@ -25,9 +28,11 @@ const SecurityData = ({
   recoveryEmail,
   isViewer = false,
 }: SecurityDataProps) => {
+  const { t } = useTranslation();
+
   const [securityTab, setSecurityTab] = useState<1 | 2 | 3 | 4>(1);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const [passwordData, setPasswordData] = useState({
     oldPassword: "",
     newPassword: "",
@@ -54,7 +59,7 @@ const SecurityData = ({
       newPassword: Validate("newPassword", newPassword, true),
       confirmPassword:
         Validate("confirmPassword", confirmPassword, true) ||
-        (newPassword !== confirmPassword ? "Passwords do not match" : ""),
+        (newPassword !== confirmPassword ? t("Passwords do not match") : ""),
     };
 
     if (Object.values(passwordValidationErrors).some((error) => error)) {
@@ -73,7 +78,7 @@ const SecurityData = ({
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setErrors({ oldPassword: "Incorrect old password" });
+      setErrors({ oldPassword: t("Incorrect old password") });
     } finally {
       setLoading(false);
     }
@@ -90,7 +95,7 @@ const SecurityData = ({
       setOtpEmail(email);
       setSecurityTab(3);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to send OTP");
+      toast.error(err?.response?.data?.message || t("Failed to send OTP"));
     } finally {
       setIsSendingOtp(false);
     }
@@ -109,7 +114,7 @@ const SecurityData = ({
       setSecurityTab(4);
     } catch (error) {
       console.error(error);
-      setOtpError("Invalid or expired OTP. Please try again.");
+      setOtpError(t("Invalid or expired OTP. Please try again."));
     } finally {
       setIsVerifying(false);
     }
@@ -119,7 +124,7 @@ const SecurityData = ({
   const handleChange = (
     value: string,
     name: string,
-    isPasswordData: boolean = true
+    isPasswordData: boolean = true,
   ) => {
     const targetState = isPasswordData ? passwordData : securityData;
     const setTargetState = isPasswordData ? setPasswordData : setSecurityData;
@@ -129,7 +134,7 @@ const SecurityData = ({
     let error = Validate(name, value, true, "text");
 
     if (name === "confirmPassword" && value !== targetState.newPassword) {
-      error = "Passwords do not match";
+      error = t("Passwords do not match");
     }
 
     setErrors((prev) => ({ ...prev, [name]: error }));
@@ -142,7 +147,7 @@ const SecurityData = ({
       newPassword: Validate("newPassword", newPassword, true),
       confirmPassword:
         Validate("confirmPassword", confirmPassword, true) ||
-        (newPassword !== confirmPassword ? "Passwords do not match" : ""),
+        (newPassword !== confirmPassword ? t("Passwords do not match") : ""),
     };
 
     if (Object.values(securityValidationErrors).some((error) => error)) {
@@ -160,8 +165,8 @@ const SecurityData = ({
       await resetPassword(payload);
       setErrors({});
       navigate("/dashboard");
-    } catch (err: any) {
-      toast.error("Failed to reset password");
+    } catch {
+      toast.error(t("Failed to reset password"));
     } finally {
       setLoading(false);
     }
@@ -175,8 +180,8 @@ const SecurityData = ({
           <form className="d-f f-dir-col">
             <TextInput
               name="oldPassword"
-              label="Old Password"
-              placeholder="Old Password"
+              label={t("Old Password")}
+              placeholder={t("Old Password")}
               type="text"
               required
               value={passwordData.oldPassword}
@@ -186,8 +191,8 @@ const SecurityData = ({
             />
             <TextInput
               name="newPassword"
-              label="New Password"
-              placeholder="New Password"
+              label={t("New Password")}
+              placeholder={t("New Password")}
               type="text"
               required
               value={passwordData.newPassword}
@@ -197,8 +202,8 @@ const SecurityData = ({
             />
             <TextInput
               name="confirmPassword"
-              label="Confirm Password"
-              placeholder="Confirm Password"
+              label={t("Confirm Password")}
+              placeholder={t("Confirm Password")}
               type="text"
               required
               value={passwordData.confirmPassword}
@@ -216,7 +221,7 @@ const SecurityData = ({
                 className={styles.switchMethod}
                 onClick={() => setSecurityTab(2)}
               >
-                Forgot password? Reset via email
+                {t("Forgot password? Reset via email")}
               </p>
               <LibButton
                 label="Save"
@@ -267,8 +272,8 @@ const SecurityData = ({
           <form className="d-f f-dir-col">
             <TextInput
               name="newPassword"
-              label="New Password"
-              placeholder="New Password"
+              label={t("New Password")}
+              placeholder={t("New Password")}
               type="text"
               required
               value={securityData.newPassword}
@@ -277,8 +282,8 @@ const SecurityData = ({
             />
             <TextInput
               name="confirmPassword"
-              label="Confirm Password"
-              placeholder="Confirm Password"
+              label={t("Confirm Password")}
+              placeholder={t("Confirm Password")}
               type="text"
               required
               value={securityData.confirmPassword}

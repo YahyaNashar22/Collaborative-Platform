@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./ResetPasswordBy.module.css";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { useTranslation } from "react-i18next";
 
 interface ResetPasswordByProps {
   moveBackward: () => void;
@@ -15,8 +16,10 @@ const ResetPasswordBy = ({
   userEmail,
   recoveryEmail: userRecoveryEmail,
 }: ResetPasswordByProps) => {
+  const { t } = useTranslation();
+
   const [selectedOption, setSelectedOption] = useState<"email" | "recovery">(
-    userEmail ? "email" : "recovery"
+    userEmail ? "email" : "recovery",
   );
 
   const maskEmail = (email: string) => {
@@ -31,12 +34,12 @@ const ResetPasswordBy = ({
 
     const visibleChars = Math.min(2, Math.floor(localPart.length / 3));
     const maskedPart = "*".repeat(
-      Math.max(4, localPart.length - visibleChars - 1)
+      Math.max(4, localPart.length - visibleChars - 1),
     );
 
     return `${localPart.substring(
       0,
-      visibleChars
+      visibleChars,
     )}${maskedPart}${localPart.slice(-1)}@${domain}`;
   };
 
@@ -64,9 +67,9 @@ const ResetPasswordBy = ({
             <path d="m7 11V7a5 5 0 0 1 10 0v4" />
           </svg>
         </div>
-        <h2 className={styles.cardTitle}>Reset Password</h2>
+        <h2 className={styles.cardTitle}>{t("Reset Password")}</h2>
         <p className={styles.cardSubtitle}>
-          Choose how you'd like to reset your password
+          {t("Choose how you'd like to reset your password")}
         </p>
       </div>
 
@@ -108,11 +111,13 @@ const ResetPasswordBy = ({
                   </svg>
                 </div>
                 <div className={styles.radioContent}>
-                  <span className={styles.radioTitle}>Primary Email</span>
+                  <span className={styles.radioTitle}>
+                    {t("Primary Email")}
+                  </span>
                   <span className={styles.radioDesc}>
                     {userEmail
                       ? maskEmail(userEmail)
-                      : "No primary email available"}
+                      : t("No primary email available")}
                   </span>
                 </div>
               </div>
@@ -174,11 +179,13 @@ const ResetPasswordBy = ({
                   </svg>
                 </div>
                 <div className={styles.radioContent}>
-                  <span className={styles.radioTitle}>Recovery Email</span>
+                  <span className={styles.radioTitle}>
+                    {t("Recovery Email")}
+                  </span>
                   <span className={styles.radioDesc}>
                     {userRecoveryEmail
                       ? maskEmail(userRecoveryEmail)
-                      : "No recovery email available"}
+                      : t("No recovery email available")}
                   </span>
                 </div>
               </div>
@@ -212,7 +219,7 @@ const ResetPasswordBy = ({
           />
 
           <LibButton
-            label="Next →"
+            label="Next"
             onSubmit={handleNext}
             backgroundColor="#825beb"
             hoverColor="#6c46d9"

@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import styles from "./ServiceCards.module.css";
+import { useTranslation } from "react-i18next";
 
 interface ServiceCardData {
   _id: string;
@@ -14,10 +15,12 @@ interface ServiceCardsProps {
 }
 
 const ServiceCards = ({ data, onDelete }: ServiceCardsProps) => {
+  const { t } = useTranslation();
+
   return (
     <div className={styles.compactCardsContainer}>
       {data.length === 0 ? (
-        <div className={styles.emptyState}>No services available.</div>
+        <div className={styles.emptyState}>{t("No services available")}.</div>
       ) : (
         data.map(({ _id, name, description }) => (
           <div

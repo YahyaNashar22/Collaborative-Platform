@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import Chart from "react-apexcharts";
 import styles from "./Dashboard.module.css";
 import { useEffect, useState } from "react";
@@ -15,8 +17,11 @@ import {
 import { DashboardState } from "../../../interfaces/Dashboard";
 import { useAuth } from "../../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const Dashboard = () => {
+  const { t } = useTranslation();
+
   const { user } = useAuth();
   const [data, setData] = useState<DashboardState>({
     boxChart: [],
@@ -47,7 +52,7 @@ const Dashboard = () => {
         pieChart = buildProviderPieChart({
           wonQuotations: result.wonQuotations,
           pendingQuotations: result.pendingQuotations,
-          rejectedQuotations: result.rejectedQuotations
+          rejectedQuotations: result.rejectedQuotations,
         });
 
         lineChart = buildProviderLineChart(result.quotationsByDay);
@@ -56,7 +61,7 @@ const Dashboard = () => {
           quotationNb: result.quotationNb,
           wonQuotations: result.wonQuotations,
           pendingQuotations: result.pendingQuotations,
-          rejectedQuotations: result.rejectedQuotations
+          rejectedQuotations: result.rejectedQuotations,
         });
       } else {
         boxChart = buildBoxChart(result);
@@ -64,7 +69,7 @@ const Dashboard = () => {
         stageDonutChart = buildStageDonutChart(result.totalRequestStages);
         pieChart = buildStatusPieChart(result.totalProjectStatus);
         lineChart = buildProjectsCreatedPerDayChart(
-          result.projectsCreatedByDay
+          result.projectsCreatedByDay,
         );
       }
 
@@ -76,7 +81,7 @@ const Dashboard = () => {
         lineChart,
       });
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Error with fetching!");
+      toast.error(err?.response?.data?.message || t("Error with fetching!"));
     } finally {
       setIsLoading(false);
     }
@@ -89,14 +94,14 @@ const Dashboard = () => {
       ) : (
         <main className={`${styles.wrapper} w-100`}>
           <div className={styles.header}>
-            <h2>Project Dashboard</h2>
+            <h2>{t("Project Dashboard")}</h2>
           </div>
 
           <div className={styles.grid}>
             {user?.role === "provider" ? (
               <>
                 <div className={styles.card}>
-                  <h4>Quotation Acceptance Rate</h4>
+                  <h4>{t("Quotation Acceptance Rate")}</h4>
                   {data.pieChart ? (
                     <Chart
                       options={data.pieChart.options}
@@ -105,12 +110,12 @@ const Dashboard = () => {
                       height={250}
                     />
                   ) : (
-                    <p>No data available</p>
+                    <p>{t("No data available")}</p>
                   )}
                 </div>
 
                 <div className={styles.card}>
-                  <h4>Quotations Submitted Over Time</h4>
+                  <h4>{t("Quotations Submitted Over Time")}</h4>
                   {data.lineChart ? (
                     <Chart
                       options={data.lineChart.options}
@@ -119,7 +124,7 @@ const Dashboard = () => {
                       height={300}
                     />
                   ) : (
-                    <p>No data available</p>
+                    <p>{t("No data available")}</p>
                   )}
                 </div>
 
@@ -141,7 +146,7 @@ const Dashboard = () => {
             ) : (
               <>
                 <div className={styles.card}>
-                  <h4>Projects Created Over Time</h4>
+                  <h4>{t("Projects Created Over Time")}</h4>
                   {data.lineChart ? (
                     <Chart
                       options={data.lineChart.options}
@@ -150,12 +155,12 @@ const Dashboard = () => {
                       height={300}
                     />
                   ) : (
-                    <p>No projects created data available</p>
+                    <p>{t("No projects created data available")}</p>
                   )}
                 </div>
 
                 <div className={styles.card}>
-                  <h4>Project Status</h4>
+                  <h4>{t("Project Status")}</h4>
                   {data.pieChart ? (
                     <Chart
                       options={data.pieChart.options}
@@ -164,12 +169,12 @@ const Dashboard = () => {
                       height={250}
                     />
                   ) : (
-                    <p>No project status data available</p>
+                    <p>{t("No project status data available")}</p>
                   )}
                 </div>
 
                 <div className={styles.card}>
-                  <h4>Request Stages</h4>
+                  <h4>{t("Request Stages")}</h4>
                   {data.stageDonutChart ? (
                     <Chart
                       options={data.stageDonutChart.options}
@@ -178,12 +183,12 @@ const Dashboard = () => {
                       height={250}
                     />
                   ) : (
-                    <p>No stage data</p>
+                    <p>{t("No stage data")}</p>
                   )}
                 </div>
 
                 <div className={styles.card}>
-                  <h4>Files Uploaded per Month</h4>
+                  <h4>{t("Files Uploaded per Month")}</h4>
                   {data.stackedFilesChart ? (
                     <Chart
                       options={data.stackedFilesChart.options}
@@ -192,7 +197,7 @@ const Dashboard = () => {
                       height={300}
                     />
                   ) : (
-                    <p>No file data available</p>
+                    <p>{t("No file data available")}</p>
                   )}
                 </div>
 

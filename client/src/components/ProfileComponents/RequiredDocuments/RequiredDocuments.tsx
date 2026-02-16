@@ -7,6 +7,7 @@ import { downloadFile } from "../../../services/FileUpload";
 import { Validate } from "../../../utils/Validate";
 import { useState } from "react";
 import LibButton from "../../../libs/common/lib-button/LibButton";
+import { useTranslation } from "react-i18next";
 
 interface Props extends RequiredDocumentsProps {
   formFields: FormField[];
@@ -26,6 +27,9 @@ const RequiredDocuments = ({
   onCancel,
   onSave,
 }: Props) => {
+
+  const { t } = useTranslation();
+
   const [updatedData, setUpdatedData] = useState({});
   const [errors, setErrors] = useState({});
 
@@ -96,7 +100,7 @@ const RequiredDocuments = ({
             <li className={styles.uploadedItem}>
               <div className={styles.fileDetails}>
                 <span className={styles.fileName}>
-                  {(userData as any)[field.name] || "No File Uploaded"}
+                  {(userData as any)[field.name] || t("No File Uploaded")}
                 </span>
               </div>
               <div
@@ -107,7 +111,7 @@ const RequiredDocuments = ({
                   downloadFile((userData as any)[field.name]);
                 }}
               >
-                ⬇ Download
+                ⬇ {t("Download")}
               </div>
             </li>
           </div>

@@ -9,6 +9,7 @@ import { downloadFile } from "../../../services/FileUpload";
 import Window from "../../../libs/common/lib-window/Window";
 import axiosInstance from "../../../Config/axiosInstence";
 import TextAreaInput from "../../../libs/common/lib-textArea/TextAreaInput";
+import { useTranslation } from "react-i18next";
 
 interface Proposal {
   _id: string;
@@ -35,6 +36,8 @@ const Proposals = ({
   onAcceptProposalByAdmin,
   onAcceptProposalByClient,
 }: ProposalsType) => {
+  const { t } = useTranslation();
+
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounceSearch(searchValue, 300);
   const [proposals, setProposals] = useState(data);
@@ -47,7 +50,7 @@ const Proposals = ({
 
   const [rejectData, setRejectData] = useState({
     email: "",
-    title: "Your proposal has been rejected",
+    title: t("Your proposal has been rejected"),
     description: "",
     proposalId: "",
     providerId: "",
@@ -61,7 +64,7 @@ const Proposals = ({
   const toggleDescription = (e: React.MouseEvent, id: string) => {
     e.stopPropagation();
     setExpandedIds((prev) =>
-      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
     );
   };
 
@@ -74,11 +77,11 @@ const Proposals = ({
       setConfirmedIds((prev) =>
         prev.includes(proposalId)
           ? prev.filter((id) => id !== proposalId)
-          : [...prev, proposalId]
+          : [...prev, proposalId],
       );
     } else {
       setConfirmedIds((prev) =>
-        prev.includes(proposalId) ? [] : [proposalId]
+        prev.includes(proposalId) ? [] : [proposalId],
       );
     }
   };
@@ -86,7 +89,7 @@ const Proposals = ({
   const openRejectWindow = (proposal: Proposal) => {
     setRejectData({
       email: proposal.providerId.email,
-      title: "Your proposal has been rejected",
+      title: t("Your proposal has been rejected"),
       description: "",
       proposalId: proposal._id,
       providerId: proposal.providerId._id,
@@ -109,13 +112,13 @@ const Proposals = ({
 
       // remove from list
       setProposals((prev) =>
-        prev.filter((p) => p._id !== rejectData.proposalId)
+        prev.filter((p) => p._id !== rejectData.proposalId),
       );
 
       setIsRejectWindowOpen(false);
     } catch (err) {
       console.error(err);
-      alert("Error rejecting proposal");
+      alert(t("Error rejecting proposal"));
     } finally {
       setIsRejecting(false);
     }
@@ -136,14 +139,14 @@ const Proposals = ({
   const filteredData = proposals.filter((proposal) =>
     proposal.description
       .toLowerCase()
-      .includes(debouncedSearchValue.toLowerCase())
+      .includes(debouncedSearchValue.toLowerCase()),
   );
 
   return (
     <main className={`${styles.wrapper} w-100`}>
       <div className={`${styles.header} d-f justify-between`}>
         <TextInput
-          placeholder="Search by description..."
+          placeholder={t("Search by description...")}
           type="text"
           value={searchValue}
           name="search_proposals"
@@ -154,7 +157,7 @@ const Proposals = ({
       </div>
 
       <h4 className={styles.title}>
-        Proposals{" "}
+        {t("Proposals")}{" "}
         <span style={{ color: "var(--light-grey)" }}>({data.length})</span>
       </h4>
 
@@ -167,14 +170,14 @@ const Proposals = ({
               } d-f`}
             >
               {/* <h4>Title</h4> */}
-              <h4>Description</h4>
-              <h4>Deadline</h4>
-              <h4>Amount</h4>
-              <h4>File</h4>
-              {isAdmin && <h4>Provider</h4>}
+              <h4>{t("Description")}</h4>
+              <h4>{t("Deadline")}</h4>
+              <h4>{t("Amount")}</h4>
+              <h4>{t("File")}</h4>
+              {isAdmin && <h4>{t("Provider")}</h4>}
 
-              <h4>Confirm</h4>
-              {isAdmin && <h4>Reject</h4>}
+              <h4>{t("Confirm")}</h4>
+              {isAdmin && <h4>{t("Reject")}</h4>}
             </div>
 
             {filteredData.map((proposal, idx) => {
@@ -250,10 +253,10 @@ const Proposals = ({
                       {confirmed ? (
                         <>
                           <FontAwesomeIcon icon={faCheck} />
-                          <span>Confirmed</span>
+                          <span>{t("Confirmed")}</span>
                         </>
                       ) : (
-                        <span>Confirm</span>
+                        <span>{t("Confirm")}</span>
                       )}
                     </button>
                   </div>
@@ -265,7 +268,7 @@ const Proposals = ({
                         onClick={() => openRejectWindow(proposal)}
                         type="button"
                       >
-                        <span>Reject</span>
+                        <span>{t("Reject")}</span>
                       </button>
                     </div>
                   )}
@@ -283,7 +286,7 @@ const Proposals = ({
               padding="0 20px"
             />
             <LibButton
-              label={`Submit (${confirmedIds.length})`}
+              label={`${t("Submit")} (${confirmedIds.length})`}
               onSubmit={() => setIsConfirmSubmitWindow(true)}
               backgroundColor="#4CAF50"
               hoverColor="#3e9d3e"
@@ -297,15 +300,17 @@ const Proposals = ({
       {/* Reject Proposal Window */}
       {isRejectWindowOpen && (
         <Window
-          title="Reject Proposal"
+          title={t("Reject Proposal")}
           visible={isRejectWindowOpen}
           onClose={() => setIsRejectWindowOpen(false)}
           isErrorWindow="true"
         >
           <div className="d-f f-dir-col gap-1">
             <TextAreaInput
-              label="Message"
-              placeholder="Explain briefly why the proposal was rejected..."
+              label={t("Message")}
+              placeholder={t(
+                "Explain briefly why the proposal was rejected...",
+              )}
               name="description"
               required={true}
               value={rejectData.description}
@@ -342,14 +347,15 @@ const Proposals = ({
 
       {isConfirmSubmitWindow && (
         <Window
-          title="Confirm Submission"
+          title={t("Confirm Submission")}
           visible={isConfirmSubmitWindow}
           onClose={() => setIsConfirmSubmitWindow(false)}
           isErrorWindow="true"
         >
           <small>
-            Once confirmed, proposals cannot be changed. Are you sure you want
-            to proceed?
+            {t(
+              "Once confirmed, proposals cannot be changed. Are you sure you want to proceed?",
+            )}
           </small>
           <div
             className="d-f align-center justify-between"

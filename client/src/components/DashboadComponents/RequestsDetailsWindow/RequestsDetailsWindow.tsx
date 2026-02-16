@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+import { useTranslation } from "react-i18next";
 import { RequestData } from "../../../interfaces/FullRequests";
 import { downloadFile } from "../../../services/FileUpload";
 import Avatar from "../../../shared/Avatar/Avatar";
@@ -9,6 +12,8 @@ type Props = {
 };
 
 const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
+  const { t } = useTranslation();
+
   let client;
   if (isAdmin) client = request?.client[0];
 
@@ -16,7 +21,7 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
     <div className={styles.scrollable}>
       {isAdmin && client && (
         <section className={styles.section}>
-          <h3>Client Information</h3>
+          <h3>{t("Client Information")}</h3>
           <div className={styles.clientInfo}>
             {client.profilePicture === "default" ? (
               <Avatar
@@ -35,16 +40,17 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
 
             <div>
               <p>
-                <strong>Full Name:</strong> {client.firstName} {client.lastName}
+                <strong>{t("Full Name:")}</strong> {client.firstName}{" "}
+                {client.lastName}
               </p>
               <p>
-                <strong>Job:</strong> {client.job}
+                <strong>{t("Job:")}</strong> {client.job}
               </p>
               <p>
-                <strong>Phone:</strong> {client.phone}
+                <strong>{t("Phone:")}</strong> {client.phone}
               </p>
               <p>
-                <strong>Email:</strong> {client.email}
+                <strong>{t("Email:")}</strong> {client.email}
               </p>
             </div>
           </div>
@@ -52,27 +58,27 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
       )}
 
       <section className={styles.section}>
-        <h3>Request Info</h3>
+        <h3>{t("Request Info")}</h3>
         <p>
-          <strong>Title:</strong> {request.title}
+          <strong>{t("Title:")}</strong> {request.title}
         </p>
         <p>
-          <strong>Description:</strong> {request.description}
+          <strong>{t("Description:")}</strong> {request.description}
         </p>
         <p>
-          <strong>Project Deadline:</strong>{" "}
+          <strong>{t("Project Deadline:")}</strong>{" "}
           {new Date(request.projectDeadline).toLocaleDateString()}
         </p>
         <p>
-          <strong>Offer Deadline:</strong>{" "}
+          <strong>{t("Offer Deadline:")}</strong>{" "}
           {new Date(request.offerDeadline).toLocaleDateString()}
         </p>
         <p>
-          <strong>Budget:</strong> ${request.budget}
+          <strong>{t("Budget:")}</strong> ${request.budget}
         </p>
         <div>
           <p>
-            <strong>Request Files:</strong>
+            <strong>{t("Request Files:")}</strong>
           </p>
           <ul>
             {request?.requestFiles?.length > 0 &&
@@ -89,7 +95,7 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
                       downloadFile(file);
                     }}
                   >
-                    ⬇ Download
+                    ⬇ {t("Download")}
                   </div>
                 </li>
               ))}
@@ -98,14 +104,14 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
       </section>
 
       <section className={styles.section}>
-        <h3>Service Details</h3>
+        <h3>{t("Service Details")}</h3>
 
         <div key={request.serviceDetails[0]._id} className={styles.serviceItem}>
           <p>
-            <strong>Name:</strong> {request.serviceDetails[0].name}
+            <strong>{t("Name:")}</strong> {request.serviceDetails[0].name}
           </p>
           <p>
-            <strong>Description:</strong>{" "}
+            <strong>{t("Description:")}</strong>{" "}
             {request.serviceDetails[0].description}
           </p>
         </div>

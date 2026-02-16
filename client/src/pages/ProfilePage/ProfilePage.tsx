@@ -4,6 +4,7 @@ import styles from "./ProfilePage.module.css";
 import { getUserData } from "../../services/UserServices";
 import { toast } from "react-toastify";
 import { UserData } from "../../interfaces/Profile";
+import { useTranslation } from "react-i18next";
 
 interface profileType {
   userId: string;
@@ -11,6 +12,8 @@ interface profileType {
 }
 
 const ProfilePage = ({ userId, isViewer = false }: profileType) => {
+  const { t } = useTranslation();
+
   const [userData, setUserData] = useState<UserData>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -22,7 +25,7 @@ const ProfilePage = ({ userId, isViewer = false }: profileType) => {
         if (response) configureUserData(response);
       }
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occurred!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setIsLoading(false);
     }

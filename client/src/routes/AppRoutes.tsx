@@ -29,16 +29,17 @@ const ProjectsPage = lazy(
   () => import("../pages/Dashboard/ProjectsPage/ProjectsPage.tsx"),
 );
 const NotFound = lazy(() => import("../pages/NotFound/NotFound.tsx"));
-
-//! //////////////// //////////////
+const LoginPage = lazy(
+  () => import("../pages/MainAuthPages/Login/LoginPage.tsx"),
+);
+const DashboardPage = lazy(
+  () => import("../pages/Dashboard/DashboardPage/DashboardPage.tsx"),
+);
 const RequestsPage = lazy(
   () => import("../pages/Dashboard/RequestsPage/RequestsPage.tsx"),
 );
 const ServicesPage = lazy(
   () => import("../pages/Dashboard/ServicesPage/ServicesPage.tsx"),
-);
-const DashboardPage = lazy(
-  () => import("../pages/Dashboard/DashboardPage/DashboardPage.tsx"),
 );
 const UsersPage = lazy(
   () => import("../pages/Dashboard/UsersPage/UsersPage.tsx"),
@@ -47,12 +48,6 @@ const MarketPlacePage = lazy(
   () => import("../pages/MainPages/MarketPlacePage/MarketPlacePage.tsx"),
 );
 const ProfilePage = lazy(() => import("../pages/ProfilePage/ProfilePage.tsx"));
-const LoginPage = lazy(
-  () => import("../pages/MainAuthPages/Login/LoginPage.tsx"),
-);
-const ServicesPagePage = lazy(
-  () => import("../pages/MainPages/ServicesPage/ServicesPage.tsx"),
-);
 
 const AppRoutes = () => {
   const { user, loading } = useAuth();
@@ -108,8 +103,6 @@ const AppRoutes = () => {
               path="profile"
               element={<ProfilePage userId={user?._id as string} />}
             />
-
-            <Route path="/dashboard/services" element={<ServicesPagePage />} />
           </Route>
         </Route>
         {/* Not Found Route */}

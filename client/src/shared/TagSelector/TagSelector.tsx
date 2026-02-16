@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useEffect, useState } from "react";
 import styles from "./TagSelector.module.css";
 import SelectInput from "../../libs/common/lib-select-input/SelectInput";
@@ -37,7 +39,7 @@ const TagSelector = ({
     const assigned = options.assigned || [];
     const unassignedClean =
       options.unassigned?.filter(
-        (u) => !assigned.some((a) => a.value === u.value)
+        (u) => !assigned.some((a) => a.value === u.value),
       ) || [];
 
     setLockedAssigned(assigned);

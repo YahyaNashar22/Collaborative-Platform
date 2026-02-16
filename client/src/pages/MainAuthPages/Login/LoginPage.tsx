@@ -9,7 +9,7 @@ const LoginPage = () => {
   let content;
   switch (role) {
     case "clients":
-      content = <LogInClient role={role} placeholder="as a client" />;
+      content = <LogInClient role={role} placeholder={"as a client"} />;
       break;
     case "provider":
       content = <LogInPartner role={role} placeholder="as a provider" />;

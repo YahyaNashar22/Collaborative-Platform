@@ -3,6 +3,7 @@ import LibButton from "../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import styles from "./ForgetPasswordComponent.module.css";
 import { Validate } from "../../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 interface ForgetPasswordComponentType {
   moveBackward: () => void;
@@ -12,6 +13,9 @@ const ForgetPasswordComponent = ({
   moveBackward,
   onReset,
 }: ForgetPasswordComponentType) => {
+
+  const { t } = useTranslation();
+
   const [formValues, setFormValues] = useState<{ [key: string]: string }>({
     email: "",
   });
@@ -56,9 +60,9 @@ const ForgetPasswordComponent = ({
           <form className={`${styles.form} d-f f-dir-col`}>
             <div>
               <TextInput
-                label="Email Address"
+                label={t("Email Address")}
                 type="email"
-                placeholder="Email Address"
+                placeholder={t("Email Address")}
                 name="email"
                 value={formValues.email}
                 required={true}

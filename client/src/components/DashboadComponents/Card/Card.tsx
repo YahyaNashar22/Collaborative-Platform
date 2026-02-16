@@ -94,7 +94,7 @@ const Card = ({
         </div>
       ) : (
         <div className={`${styles.statusBadge} ${styles[status]}`}>
-          {statusLabel}
+          {t(statusLabel)}
         </div>
       )}
       <header className={styles.cardHeader}>

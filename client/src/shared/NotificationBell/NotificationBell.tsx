@@ -10,9 +10,13 @@ import { INotification } from "../../interfaces/INotification";
 import axiosInstance from "../../Config/axiosInstence";
 import { useAuth } from "../../hooks/useAuth";
 import { useTranslation } from "react-i18next";
+import { useLanguageStore } from "../../translation/langStore";
 
 const NotificationBell = () => {
   const { t } = useTranslation();
+  const { language } = useLanguageStore();
+
+  const isArabic = language === "ar";
 
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -85,7 +89,13 @@ const NotificationBell = () => {
       </div>
 
       {isOpen && (
-        <div className={styles.dropdown}>
+        <div
+          className={styles.dropdown}
+          style={{
+            left: isArabic ? 0 : undefined,
+            right: isArabic ? undefined : 0,
+          }}
+        >
           <div className={styles.header}>
             <h4 className={styles.title}>{t("Notifications")}</h4>
             {notifications.length > 0 && (

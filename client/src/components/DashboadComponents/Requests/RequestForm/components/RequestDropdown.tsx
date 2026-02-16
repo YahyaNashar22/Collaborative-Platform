@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import styles from "./RequestDropdown.module.css";
 import { getAllServices } from "../../../../../services/ServiceServices";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface SelectOption {
   value: string;
@@ -13,9 +15,11 @@ interface RequestDropdownType {
 }
 
 const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
+  const { t } = useTranslation();
+
   const [serviceOptions, setServiceOptions] = useState<SelectOption[]>([]);
   const [selectedRequest, setSelectedRequest] = useState<SelectOption | null>(
-    null
+    null,
   );
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -44,8 +48,8 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
       backgroundColor: state.isSelected
         ? "#825beb"
         : state.isFocused
-        ? "#f0f0f0"
-        : "#fff",
+          ? "#f0f0f0"
+          : "#fff",
       color: state.isSelected ? "#fff" : "#333",
       "&:active": {
         backgroundColor: "#6c46d9",
@@ -74,7 +78,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
       }));
       setServiceOptions(options);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occurred!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setLoading(false);
     }
@@ -100,7 +104,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
         options={serviceOptions}
         onChange={handleChange}
         isSearchable={true}
-        placeholder={loading ? "Loading..." : "Select a request..."}
+        placeholder={loading ? t("Loading...") : t("Select a request...")}
         value={selectedRequest}
         styles={customStyles}
         isLoading={loading}

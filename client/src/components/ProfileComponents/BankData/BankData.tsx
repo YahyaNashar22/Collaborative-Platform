@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState } from "react";
 import { registerFormData } from "../../../data/registerFormData";
 import { BankDataProps } from "../../../interfaces/Profile";

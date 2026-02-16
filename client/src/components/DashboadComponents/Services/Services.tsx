@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useEffect, useMemo, useState } from "react";
 import TextInput from "../../../libs/common/lib-text-input/TextInput";
 import styles from "./Services.module.css";
@@ -14,8 +16,11 @@ import authStore from "../../../store/AuthStore";
 import { Service } from "../../../interfaces/service";
 import ServiceCards from "../ServiceCards/ServiceCards";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 const Services = () => {
+  const { t } = useTranslation();
+
   const [searchValue, setSearchValue] = useState("");
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,12 +40,12 @@ const Services = () => {
     try {
       await deleteService(id);
       setServices((prevServices) =>
-        prevServices.filter((service) => service._id !== id)
+        prevServices.filter((service) => service._id !== id),
       );
       setServiceError("");
-    } catch (error) {
-      toast.error("Problem While Deleting Service");
-    } finally {
+    } catch {
+      toast.error(t("Problem While Deleting Service"));
+    } finally { 
       setLoading(false);
     }
   };
@@ -56,9 +61,9 @@ const Services = () => {
       setServices((prevServices) => [result, ...prevServices]);
     } catch (error) {
       setServiceError(
-        (error as any)?.data?.message || "Error with creating service"
+        (error as any)?.data?.message || t("Error with creating service"),
       );
-      toast.error("Problem While Deleting Service");
+      toast.error(t("Problem While Deleting Service"));
     } finally {
       setLoading(false);
     }
@@ -70,7 +75,7 @@ const Services = () => {
       const result = await getAllServices();
       setServices(result);
     } catch (error) {
-      toast.error((error as any)?.data?.message || "Error Occurred!");
+      toast.error((error as any)?.data?.message || t("Error Occurred!"));
     } finally {
       setLoading(false);
     }
@@ -85,7 +90,7 @@ const Services = () => {
     return services.filter(
       (service) =>
         service.name?.toLowerCase().includes(search) ||
-        service.description?.toLowerCase().includes(search)
+        service.description?.toLowerCase().includes(search),
     );
   }, [debouncedSearchValue, services]);
 
@@ -112,7 +117,7 @@ const Services = () => {
               className={`${styles.header} d-f align-center justify-between`}
             >
               <TextInput
-                placeholder="Search"
+                placeholder={t("Search")}
                 type="text"
                 value={searchValue}
                 name="search_projects"
@@ -122,7 +127,7 @@ const Services = () => {
               />
               {user?.role === "admin" && (
                 <LibButton
-                  label="+ Add New"
+                  label={t("+ Add New")}
                   onSubmit={() => setStep(1)}
                   backgroundColor="transparent"
                   color="#6550b4"

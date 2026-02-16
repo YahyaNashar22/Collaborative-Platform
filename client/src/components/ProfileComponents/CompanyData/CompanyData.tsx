@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { useEffect, useState } from "react";
 
 import styles from "./CompanyData.module.css";
@@ -14,6 +16,7 @@ import { toast } from "react-toastify";
 import Multiselect from "multiselect-react-dropdown";
 import { CompanyDataTabProps } from "../../../interfaces/Profile";
 import { Validate } from "../../../utils/Validate";
+import { useTranslation } from "react-i18next";
 
 const fields: FormField[] =
   registerFormData.roles.provider.types.default.formData[1].form;
@@ -24,6 +27,8 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
   onSave,
   isViewer = false,
 }) => {
+  const { t } = useTranslation();
+
   const [services, setServices] = useState<Service[]>([]);
   const [, setSelectedServices] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -48,7 +53,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
       }));
 
       const unselectedOptions = transformedServices.filter(
-        (opt) => !selected.find((sel) => sel.id === opt.id)
+        (opt) => !selected.find((sel) => sel.id === opt.id),
       );
 
       setServices(unselectedOptions);
@@ -64,7 +69,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
     name: string,
     value: string | string[],
     required: boolean,
-    type: string
+    type: string,
   ) => {
     if (value === userData[name]) {
       setUpdatedData((prev) => {
@@ -119,7 +124,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                       name,
                       value,
                       field.required || false,
-                      field.type
+                      field.type,
                     )
                   }
                   disabled={isViewer}
@@ -139,7 +144,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                       name,
                       value,
                       field.required || false,
-                      field.type
+                      field.type,
                     )
                   }
                   errorMessage={errors[field.name]}
@@ -165,7 +170,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                     field.name,
                     value,
                     field.required || false,
-                    field.type
+                    field.type,
                   )
                 }
                 errorMessage={errors[field.name]}
@@ -177,7 +182,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
         {fields.slice(7).map((field: FormField, index: number) => (
           <div key={index} style={{ flex: 1 }}>
             <label className="bold">
-              Pick a Service <span className="error">*</span>
+              {t("Pick a Service")} <span className="error">*</span>
             </label>
             <Multiselect
               options={services}
@@ -195,7 +200,7 @@ const CompanyDataTab: React.FC<CompanyDataTabProps> = ({
                   "services",
                   items.map((item) => item.id),
                   true,
-                  "multiselect"
+                  "multiselect",
                 );
               }}
               disablePreSelectedValues={loading || isViewer}

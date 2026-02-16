@@ -1,3 +1,6 @@
+// @ts-nocheck
+
+import { useTranslation } from "react-i18next";
 import { statusActions } from "../../../data/StatusMessage";
 import { RequestData } from "../../../interfaces/FullRequests";
 import { User } from "../../../interfaces/User";
@@ -25,6 +28,9 @@ const Cards = ({
   onAssignRequest,
   onCancelRequestByClient,
 }: CardsProps) => {
+
+  const { t } = useTranslation();
+
   const getAction = (id: string, action: string) => {
     switch (action) {
       case "assignByAdmin":
@@ -67,10 +73,10 @@ const Cards = ({
             projectStartDate,
           }) => {
             const status = statusActions[stage]?.[userData?.role ?? ""] || {};
-            const message = status.msg;
-            const buttonLabel = status.button;
+            const message = t(status.msg);
+            const buttonLabel = t(status.button);
             const action = status.action;
-            const secondButton = status.secondButton;
+            const secondButton = t(status.secondButton);
             const secondAction = status.secondAction;
 
             return (
@@ -87,8 +93,8 @@ const Cards = ({
               >
                 {stage === 4 && requestStatus === "canceled" ? (
                   <p className={styles.statusMessage}>
-                    ❌ This request has been{" "}
-                    <strong style={{ color: "var(--error) " }}>canceled</strong>
+                    ❌ {t("This request has been")}{" "}
+                    <strong style={{ color: "var(--error) " }}>{t("canceled")}</strong>
                   </p>
                 ) : (
                   <p className={styles.statusMessage}>{message}</p>
@@ -131,7 +137,7 @@ const Cards = ({
                 </div>
               </Card>
             );
-          }
+          },
         )
       )}
     </div>

@@ -9,6 +9,7 @@ import { logIn, resetPassword } from "../../../../services/UserServices";
 import authStore from "../../../../store/AuthStore";
 import ResetPasswordFlow from "../../ResetPassword/ResetPasswordFlow";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
 interface LogInClientProps {
   role: string;
@@ -16,6 +17,8 @@ interface LogInClientProps {
 }
 
 const LogInClient = ({ role, placeholder }: LogInClientProps) => {
+  const { t } = useTranslation();
+
   const [step, setStep] = useState<number>(0);
   const [error, setError] = useState("");
 
@@ -38,7 +41,7 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
       }
     } catch (error: any) {
       setError((error as any)?.data?.message || "Login failed");
-      toast.error("Login failed");
+      toast.error(t("Login failed"));
     } finally {
       setLoading(false);
     }
@@ -53,13 +56,13 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await resetPassword(payload);
       if (response?.success) {
-        toast.success("password reset successfuly");
+        toast.success(t("password reset successfully"));
         setStep(0);
       } else {
-        toast.error("Password reset failed");
+        toast.error(t("Password reset failed"));
       }
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Something went wrong");
+      toast.error(err?.response?.data?.message || t("Something went wrong"));
     } finally {
       setLoading(false);
     }
@@ -69,8 +72,8 @@ const LogInClient = ({ role, placeholder }: LogInClientProps) => {
     <div className={styles.wrapper}>
       <div className="d-f f-dir-col">
         <div>
-          <h1>Sign in to Takatuf</h1>
-          <p className={styles.placeholder}>{placeholder}</p>
+          <h1>{t("Sign in to Takatuf")}</h1>
+          <p className={styles.placeholder}>{t(placeholder)}</p>
         </div>
 
         {authStore.getState().loading && step !== 0 ? (

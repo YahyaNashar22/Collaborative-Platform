@@ -128,7 +128,6 @@ const Header = ({ user }: { user: User | null }) => {
         <div className={`${styles.left}`}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <img src={logo} alt="logo" onClick={() => navigator("/")} />
-            <span className={"betaRibbon"}>BETA</span>
           </div>
 
           {/* Nav Links */}
@@ -143,7 +142,7 @@ const Header = ({ user }: { user: User | null }) => {
               user &&
                 user?.role !== "client" && {
                   path: "/market_place",
-                  label: "MARKET PLACE",
+                  label: t("header-marketplace"),
                 },
               { path: "/FAQ", label: t("header-faq") },
               { path: "/terms", label: t("header-terms") },

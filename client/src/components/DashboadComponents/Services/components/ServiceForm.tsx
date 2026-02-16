@@ -3,6 +3,7 @@ import LibButton from "../../../../libs/common/lib-button/LibButton";
 import TextInput from "../../../../libs/common/lib-text-input/TextInput";
 import TextAreaInput from "../../../../libs/common/lib-textArea/TextAreaInput";
 import styles from "./ServiceForm.module.css";
+import { useTranslation } from "react-i18next";
 
 interface ServiceFormProps {
   onBack: () => void;
@@ -15,6 +16,9 @@ const ServiceForm = ({
   emitCreateService,
   error,
 }: ServiceFormProps) => {
+
+  const { t } = useTranslation();
+
   const [requestForm, setRequestForm] = useState<{
     name: string;
     description: string;
@@ -31,14 +35,14 @@ const ServiceForm = ({
   return (
     <>
       <div className={styles.header}>
-        <h1>Create New Service</h1>
+        <h1>{t("Create New Service")}</h1>
       </div>
       <form>
         <TextInput
           name="name"
-          label="Title"
+          label={t("Title")}
           type="string"
-          placeholder="Enter title"
+          placeholder={t("Enter title")}
           required={false}
           value={requestForm["name"]}
           onChange={(value: string) =>
@@ -50,8 +54,8 @@ const ServiceForm = ({
         />
         <TextAreaInput
           name="description"
-          label="Description"
-          placeholder="Enter description"
+          label={t("Description")}
+          placeholder={t("Enter description")}
           required={false}
           value={requestForm["description"]}
           onChange={(value: string) =>

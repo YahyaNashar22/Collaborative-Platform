@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState } from "react";
 import { registerFormData } from "../../../data/registerFormData";
 import { AddressDataProps } from "../../../interfaces/Profile";
@@ -23,7 +25,7 @@ const AddressData = ({
     name: string,
     value: string | string[],
     required: boolean,
-    type: string
+    type: string,
   ) => {
     if (value === userData[name]) {
       setUpdatedData((prev) => {

@@ -14,6 +14,7 @@ import LibButton from "../../../libs/common/lib-button/LibButton";
 import Window from "../../../libs/common/lib-window/Window";
 import TextAreaInput from "../../../libs/common/lib-textArea/TextAreaInput";
 import { useUserContext } from "../../../context/UserContext";
+import { useTranslation } from "react-i18next";
 
 type User = {
   _id: string;
@@ -34,6 +35,8 @@ const Users = ({
   isLoading: boolean;
   users: User[];
 }) => {
+  const { t } = useTranslation();
+
   const [searchValue, setSearchValue] = useState<string>("");
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -64,19 +67,21 @@ const Users = ({
     setIsLoading(true);
     setUsers((prevUsers) =>
       prevUsers?.map((user) =>
-        user._id === id ? { ...user, banned: newBannedStatus } : user
-      )
+        user._id === id ? { ...user, banned: newBannedStatus } : user,
+      ),
     );
 
     try {
       await changeUserBannedStatus(id, newBannedStatus);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
 
       setUsers((prevUsers) =>
         prevUsers?.map((user) =>
-          user._id === id ? { ...user, banned: !newBannedStatus } : user
-        )
+          user._id === id ? { ...user, banned: !newBannedStatus } : user,
+        ),
       );
     } finally {
       setIsLoading(false);
@@ -101,7 +106,7 @@ const Users = ({
     (user) =>
       user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
       user.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchValue.toLowerCase())
+      user.email.toLowerCase().includes(searchValue.toLowerCase()),
   );
 
   const handleRowClick = (user: User) => {
@@ -149,7 +154,7 @@ const Users = ({
   const handleSendEmail = async () => {
     setSendEmailLoading(true);
     if (emailData.title.trim() === "" || emailData.description.trim() === "") {
-      setError("This field is required.");
+      setError(t("This field is required."));
       return;
     }
 
@@ -160,12 +165,12 @@ const Users = ({
         description: emailData.description,
       });
       if (response.success) {
-        toast.success("Email sent successfully!");
+        toast.success(t("Email sent successfully!"));
         setError("");
         setSendEmailWindow(null);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error((error as any)?.response?.data?.message || t("Error Occurred!"));
     } finally {
       setSendEmailLoading(false);
     }
@@ -178,7 +183,7 @@ const Users = ({
         <main className={`${styles.wrapper} w-100`}>
           <div className={`${styles.header} d-f justify-between`}>
             <TextInput
-              placeholder="Search"
+              placeholder={t("Search")}
               type="text"
               value={searchValue}
               name="search_projects"
@@ -202,11 +207,11 @@ const Users = ({
             <table className={`${styles.table} w-100`}>
               <thead>
                 <tr>
-                  <th>Full Name</th>
-                  <th>Email</th>
-                  <th>Phone Number</th>
-                  <th>Status</th>
-                  <th>Send Email</th>
+                  <th>{t("Full Name")}</th>
+                  <th>{t("Email")}</th>
+                  <th>{t("Phone Number")}</th>
+                  <th>{t("Status")}</th>
+                  <th>{t("Send Email")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -232,7 +237,7 @@ const Users = ({
                             user.banned ? styles.blocked : styles.active
                           }`}
                         >
-                          {user.banned ? "Blocked" : "Active"}
+                          {user.banned ? t("Blocked") : t("Active")}
                         </span>
                       </td>
                       <td>
@@ -248,7 +253,7 @@ const Users = ({
                           }}
                           className={`${styles.sendEmailBtn}`}
                         >
-                          Send
+                          {t("Send")}
                         </span>
                       </td>
                     </tr>
@@ -257,7 +262,7 @@ const Users = ({
                   <tr>
                     <td colSpan={3} className={styles.noData}>
                       <div className={styles.noDataContent}>
-                        🙁 No users found
+                        🙁 {t("No users found")}
                       </div>
                     </td>
                   </tr>
@@ -275,9 +280,9 @@ const Users = ({
         <div className="d-f f-dir-col gap-1">
           <TextInput
             name="title"
-            label="Title"
+            label={t("Title")}
             type="text"
-            placeholder="Enter a title for the email"
+            placeholder={t("Enter a title for the email")}
             value={emailData.title}
             required={true}
             onChange={(value: string) =>
@@ -287,8 +292,8 @@ const Users = ({
           />
           <TextAreaInput
             name="description"
-            label="Description"
-            placeholder="Enter description"
+            label={t("Description")}
+            placeholder={t("Enter description")}
             value={emailData.description}
             required={true}
             onChange={(value: string) =>

@@ -29,10 +29,13 @@ import {
 } from "../../../services/ProposalServices";
 import { toast } from "react-toastify";
 import TagSelector from "../../../shared/TagSelector/TagSelector";
+import { useTranslation } from "react-i18next";
 
 type ViewState = "LIST" | "CREATE" | "SELECT";
 
 const Requests = () => {
+  const { t } = useTranslation();
+
   const [view, setView] = useState<ViewState>("LIST");
   const [searchValue, setSearchValue] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,7 +59,7 @@ const Requests = () => {
   const [detailsWindow, setDetailsWindow] = useState<RequestData | null>(null);
 
   const assignedProvidersRef = useRef<() => { [key: string]: string }[]>(
-    () => []
+    () => [],
   );
   const [filteredRequests, setFilteredRequests] = useState<RequestData[]>([]);
   const [isFiltering, setIsFiltering] = useState<boolean>(false);
@@ -70,10 +73,13 @@ const Requests = () => {
   const { user } = authStore();
 
   const requestsMap = useMemo(() => {
-    return requests.reduce((map, req) => {
-      map[req._id] = req;
-      return map;
-    }, {} as { [key: string]: RequestData });
+    return requests.reduce(
+      (map, req) => {
+        map[req._id] = req;
+        return map;
+      },
+      {} as { [key: string]: RequestData },
+    );
   }, [requests]);
 
   const handleSearch = (value: string) => {
@@ -86,11 +92,13 @@ const Requests = () => {
     try {
       const result = await getAllRequestsBy(
         user?.role as string,
-        user?._id as string
+        user?._id as string,
       );
       setRequests(result);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoading(false);
     }
@@ -148,12 +156,14 @@ const Requests = () => {
     try {
       const result = await getAllUnassignedProvider(
         requestId,
-        requestsMap[requestId].serviceId
+        requestsMap[requestId].serviceId,
       );
 
       setProviders(result);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoadingProviders(false);
     }
@@ -177,12 +187,14 @@ const Requests = () => {
       if (result && assignedRequest) {
         setRequests((prev) =>
           prev.map((req) =>
-            req._id === assignedRequest ? { ...req, stage: 2 } : req
-          )
+            req._id === assignedRequest ? { ...req, stage: 2 } : req,
+          ),
         );
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoading(false);
     }
@@ -196,7 +208,7 @@ const Requests = () => {
 
   const handleAcceptProposalByAdmin = async (
     ids: string[],
-    requestId: string
+    requestId: string,
   ) => {
     setIsShowAllProposals(false);
     setLoading(true);
@@ -208,7 +220,9 @@ const Requests = () => {
         requestsMap[selectedRequest ?? ""].approvedQuotations.push(result[i]);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoading(false);
     }
@@ -223,7 +237,9 @@ const Requests = () => {
       if ((error as any)?.data?.message) {
         setIsShowAllProposals(false);
       }
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     }
   };
 
@@ -254,7 +270,7 @@ const Requests = () => {
       }
     } catch (error) {
       setCreateProposalError(
-        (error as any)?.data.message || "create Proposal failed!"
+        (error as any)?.data.message || t("create Proposal failed!"),
       );
     } finally {
       setLoading(false);
@@ -285,7 +301,9 @@ const Requests = () => {
 
       setRequests((prev) => [...prev, configureResult]);
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoading(false);
     }
@@ -297,7 +315,7 @@ const Requests = () => {
 
   const handleAcceptProposalByClient = async (
     quotationId: string,
-    requestId: string
+    requestId: string,
   ) => {
     setIsShowAllProposals(false);
     setLoading(true);
@@ -308,7 +326,9 @@ const Requests = () => {
       requestsMap[requestId].selectedQuotation = quotationId;
       requestsMap[requestId].status = "accepted";
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setLoading(false);
     }
@@ -325,7 +345,9 @@ const Requests = () => {
       requestsMap[canceldRequestId].stage = 4;
       requestsMap[canceldRequestId].status = "canceled";
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || "Error Occurred!");
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!"),
+      );
     } finally {
       setIsCancelRequestWindow(false);
     }
@@ -367,7 +389,7 @@ const Requests = () => {
             >
               <div className="d-f gap-1 align-center">
                 <TextInput
-                  placeholder="Search"
+                  placeholder={t("Search")}
                   type="text"
                   value={searchValue}
                   name="search_projects"
@@ -380,17 +402,17 @@ const Requests = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className={styles.filterSelect}
                 >
-                  <option value="All">All Statuses</option>
-                  <option value="accepted">Accepted</option>
-                  <option value="canceled">Canceled</option>
+                  <option value="All">{t("All Statuses")}</option>
+                  <option value="accepted">{t("Accepted")}</option>
+                  <option value="canceled">{t("Canceled")}</option>
                   <option value="⏳awaiting client to choose quotation">
-                    Waiting Client Confirmation
+                    {t("Waiting Client Confirmation")}
                   </option>
                   <option value="⏳awaiting admin approval">
-                    Waiting Approval
+                    {t("Waiting Approval")}
                   </option>
                   <option value="⏳awaiting providers quotations">
-                    Waiting Quotations
+                    {t("Waiting Quotations")}
                   </option>
                 </select>
 
@@ -399,10 +421,10 @@ const Requests = () => {
                   onChange={(e) => setTimeFilter(e.target.value)}
                   className={styles.filterSelect}
                 >
-                  <option value="All">All Time</option>
-                  <option value="7">Last 7 Days</option>
-                  <option value="30">Last 30 Days</option>
-                  <option value="365">This Year</option>
+                  <option value="All">{t("All Time")}</option>
+                  <option value="7">{t("Last 7 Days")}</option>
+                  <option value="30">{t("Last 30 Days")}</option>
+                  <option value="365">{t("This Year")}</option>
                 </select>
               </div>
 
@@ -433,7 +455,7 @@ const Requests = () => {
                     onCancelRequestByClient={handleClickCancelRequestButton}
                   />
                 ) : (
-                  <div className="empty-data">No Data!</div>
+                  <div className="empty-data">{t("No Data!")}</div>
                 )}
               </div>
             )}
@@ -451,7 +473,7 @@ const Requests = () => {
 
       {detailsWindow && (
         <Window
-          title={"Request Details"}
+          title={t("Request Details")}
           visible={detailsWindow !== null}
           onClose={() => setDetailsWindow(null)}
           size="large"
@@ -473,9 +495,9 @@ const Requests = () => {
             <span className="loader"></span>
           ) : (
             <TagSelector
-              label="Assign to"
+              label={t("Assign to")}
               name="assignTo"
-              placeholder="Select Provider"
+              placeholder={t("Select Provider")}
               options={providers as any}
               onReady={(getterFn) => {
                 assignedProvidersRef.current = getterFn;
@@ -504,14 +526,13 @@ const Requests = () => {
 
       {isConfirmAssignWindow && (
         <Window
-          title="Confirm Assignment"
+          title={t("Confirm Assignment")}
           visible={isConfirmAssignWindow}
           onClose={() => setIsConfirmAssignWindow(false)}
           isErrorWindow="true"
         >
           <small>
-            Assigned providers cannot be edited later. Are you sure you want to
-            proceed?
+            {t("Assigned providers cannot be edited later. Are you sure you want to proceed?")}
           </small>
           <div className={`${styles.btns} d-f align-center justify-between`}>
             <LibButton
@@ -538,13 +559,13 @@ const Requests = () => {
 
       {isCancelRequestWindow && (
         <Window
-          title="Cancel Request"
+          title={t("Cancel Request")}
           visible={isCancelRequestWindow}
           onClose={() => setIsCancelRequestWindow(false)}
           isErrorWindow="true"
         >
           <small>
-            are you sure do you want to delete {""}
+            {t("are you sure do you want to delete")} {""}
             {requestsMap[canceldRequestId].title} ?
           </small>
           <div className={`${styles.btns} d-f align-center justify-between`}>

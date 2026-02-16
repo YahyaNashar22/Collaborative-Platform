@@ -14,6 +14,7 @@ import LibButton from "../../../libs/common/lib-button/LibButton";
 import { toast } from "react-toastify";
 import ResetPasswordBy from "../ResetPasswordBy/ResetPasswordBy";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ResetPasswordFlowProps {
   onSubmit: (data: {
@@ -30,6 +31,8 @@ const ResetPasswordFlow = ({
   onCancel,
   isSubmitting = false,
 }: ResetPasswordFlowProps) => {
+  const { t } = useTranslation();
+
   const [step, setStep] = useState(1);
   const [otpEmail, setOtpEmail] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -58,13 +61,13 @@ const ResetPasswordFlow = ({
     try {
       const response = await verifyEmailReset(email, role);
       if (!response.exists) {
-        toast.error("Email does not exist");
+        toast.error(t("Email does not exist"));
         return false;
       }
       setResetEmailsData(response.data);
       setStep(2);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to check email");
+      toast.error(err?.response?.data?.message || t("Failed to check email"));
       return false;
     }
   };
@@ -80,7 +83,7 @@ const ResetPasswordFlow = ({
       setOtpEmail(email);
       setStep(3);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to send OTP");
+      toast.error(err?.response?.data?.message || t("Failed to send OTP"));
     } finally {
       setIsSendingOtp(false);
     }
@@ -95,7 +98,7 @@ const ResetPasswordFlow = ({
       }
       setStep(4);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed to verify OTP");
+      toast.error(err?.response?.data?.message || t("Failed to verify OTP"));
     } finally {
       setIsVerifying(false);
     }
@@ -119,14 +122,14 @@ const ResetPasswordFlow = ({
     if (!password) {
       setPasswordError((prev) => ({
         ...prev,
-        password: "Password is required",
+        password: t("Password is required"),
       }));
       hasError = true;
     }
     if (!confirmPassword) {
       setPasswordError((prev) => ({
         ...prev,
-        confirmPassword: "Confirm password is required",
+        confirmPassword: t("Confirm password is required"),
       }));
       hasError = true;
     }
@@ -134,7 +137,7 @@ const ResetPasswordFlow = ({
     if (password && confirmPassword && password !== confirmPassword) {
       setPasswordError((prev) => ({
         ...prev,
-        confirmPassword: "Passwords do not match",
+        confirmPassword: t("Passwords do not match"),
       }));
       hasError = true;
     }
@@ -183,8 +186,8 @@ const ResetPasswordFlow = ({
         <>
           <TextInput
             name="password"
-            label="New Password"
-            placeholder="New Password"
+            label={t("New Password")}
+            placeholder={t("New Password")}
             type="text"
             required
             value={newPassword.password}
@@ -193,8 +196,8 @@ const ResetPasswordFlow = ({
           />
           <TextInput
             name="confirmPassword"
-            label="Confirm New Password"
-            placeholder="Confirm New Password"
+            label={t("Confirm New Password")}
+            placeholder={t("Confirm New Password")}
             type="text"
             required
             value={newPassword.confirmPassword}
@@ -213,7 +216,7 @@ const ResetPasswordFlow = ({
               hoverColor="#8563c326"
             />
             <LibButton
-              label={isSubmitting ? "Resetting..." : "Reset Password"}
+              label={isSubmitting ? t("Resetting...") : t("Reset Password")}
               onSubmit={handleSubmit}
               backgroundColor="#825beb"
               hoverColor="#6c46d9"
