@@ -18,9 +18,13 @@ import SidePanel from "../SidePanel/SidePanel";
 import { toast } from "react-toastify";
 import NotificationBell from "../NotificationBell/NotificationBell";
 import { useTranslation } from "react-i18next";
+import { useLanguageStore } from "../../translation/langStore";
 
 const DashboardHeader = () => {
   const { t } = useTranslation();
+  const { language } = useLanguageStore();
+
+  const isArabic = language === "ar";
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -144,7 +148,11 @@ const DashboardHeader = () => {
                 <div className={`${styles.line} ${styles.bottom}`}></div>
               </div>
               {toggleDropDown && (
-                <div className={styles.dropdownMenu} ref={dropdownRef}>
+                <div
+                  className={styles.dropdownMenu}
+                  ref={dropdownRef}
+                  style={{ ...(isArabic ? { left: 0 } : { right: 0 }) }}
+                >
                   <div
                     className={`${styles.menuItem} ${styles.profile} d-f align-center`}
                     onClick={() => setToggleDropDown(false)}

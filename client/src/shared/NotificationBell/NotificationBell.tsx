@@ -92,8 +92,7 @@ const NotificationBell = () => {
         <div
           className={styles.dropdown}
           style={{
-            left: isArabic ? 0 : undefined,
-            right: isArabic ? undefined : 0,
+            ...(isArabic ? { left: 0 } : { right: 0 }),
           }}
         >
           <div className={styles.header}>
