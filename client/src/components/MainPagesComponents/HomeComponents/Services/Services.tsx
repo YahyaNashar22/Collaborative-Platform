@@ -38,7 +38,7 @@ const Services = () => {
       id="market_place"
     >
       <h3 className="title">{t("SERVICES BY PROVIDERS")}</h3>
-      <p className={styles.subTitle}>{t("Services By Providers text")}</p>
+      <p className={`${styles.subTitle}`}>{t("Services By Providers text")}</p>
 
       <div className={`align-text ${styles.boxsContainer} d-f align-center`}>
         {boxesContent.map((box, index) => (

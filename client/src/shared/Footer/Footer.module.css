@@ -118,8 +118,8 @@
 .lower {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 73%;
+  justify-content: center;
+  width: 100%;
   border-top: 1px solid #373737;
   padding-top: 20px;
 }

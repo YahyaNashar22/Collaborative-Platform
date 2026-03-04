@@ -40,6 +40,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
     } catch (error: any) {
       if ((error as any)?.data?.message)
         setError((error as any)?.data?.message);
+      toast.error(t("Login failed")); 
     } finally {
       setLoading(false);
     }
@@ -71,7 +72,7 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       <div className="d-f f-dir-col">
         <div>
           <h1>{t("Sign in to Takatuf")}</h1>
-          <p className={styles.placeholder}>{placeholder}</p>
+          <p className={styles.placeholder}>{t(placeholder)}</p>
         </div>
         {authStore.getState().loading ? (
           <span className="loader"></span>

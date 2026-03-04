@@ -44,7 +44,7 @@ const Statistic = () => {
           <FontAwesomeIcon
             size="2xl"
             icon={elem.icon}
-            style={{ color: "#000000" }}
+            style={{ color: "#fff" }}
             className={styles.icon}
           />
           <div className={`${styles.elementText} d-f align-start f-dir-col`}>

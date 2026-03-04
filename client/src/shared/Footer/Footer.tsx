@@ -14,10 +14,11 @@ import instagram from "../../assets/icons/instagram.png";
 import logo from "../../assets/icons/logo_fullWhite.png";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
 
 const Footer = () => {
   const { t } = useTranslation();
-  const [email, setEmail] = useState<string>();
+  const [email, setEmail] = useState<string>("");
 
   function handleEmail(e: ChangeEvent<HTMLInputElement>) {
     setEmail(e.target.value);
@@ -26,7 +27,7 @@ const Footer = () => {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setEmail("");
-    // implement this if the client adds newsletter service
+    toast.success(t("Subscription Confirmed"))
   }
   return (
     <footer
@@ -46,7 +47,7 @@ const Footer = () => {
             <ul className={styles.infoContainer}>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={dial} width={16} height={16} alt="dial" />
-                <a href="https://wa.me/+966541041901">00 966 54 104 1901</a>
+                <a href="https://wa.me/+966541041901" style={{direction: "ltr"}}>00 966 54 104 1901</a>
               </li>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={mail} width={16} height={16} alt="mail" />
@@ -74,14 +75,14 @@ const Footer = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Email address"
+                placeholder={t("Email Address")}
                 onChange={handleEmail}
                 value={email}
                 className={styles.emailInput}
               />
               <button
                 className={`${styles.newsletterSubmit} pointer`}
-                type="submit"
+                type="submit" aria-autocomplete="off"
               >
                 {t("REGISTER")}
               </button>

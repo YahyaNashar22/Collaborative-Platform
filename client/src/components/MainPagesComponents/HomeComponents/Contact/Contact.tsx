@@ -69,7 +69,11 @@ const Contact = () => {
               style={{ color: "#825beb" }}
             />
             <p>{elem.label}</p>
-            <a href={elem.href} className="intense pointer">
+            <a
+              href={elem.href}
+              className="intense pointer"
+              style={{ direction: index === 1 && "ltr" }}
+            >
               {elem.path}
             </a>
           </article>

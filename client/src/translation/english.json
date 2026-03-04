@@ -765,5 +765,13 @@
   "* Phone number cannot contain more than one '+' sign": "* Phone number cannot contain more than one '+' sign",
   "* Please enter a valid phone number": "* Please enter a valid phone number",
   "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.": "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.",
-  "* Budget must be a valid number with no letters or symbols.": "* Budget must be a valid number with no letters or symbols."
+  "* Budget must be a valid number with no letters or symbols.": "* Budget must be a valid number with no letters or symbols.",
+  "Subscription Confirmed": "Subscription Confirmed",
+
+  "Company": "Company",
+  "For businesses, teams, \nor organizations.": "For businesses, teams, \nor organizations.",
+  "in 3 easy steps": "in 3 easy steps",
+  "Individual": "Individual",
+  "Freelancers, personal users, \nor solo professionals.": "Freelancers, personal users, \nor solo professionals.",
+  "in 2 easy steps": "in 2 easy steps"
 }

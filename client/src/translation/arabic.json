@@ -760,5 +760,13 @@
   "* Phone number cannot contain more than one '+' sign": "* لا يمكن أن يحتوي رقم الهاتف على أكثر من علامة '+' واحدة",
   "* Please enter a valid phone number": "* يرجى إدخال رقم هاتف صالح",
   "Password must be at least 8 characters, include uppercase, lowercase, number, and special character.": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل، وتحتوي على حرف كبير، وحرف صغير، ورقم، ورمز خاص.",
-  "* Budget must be a valid number with no letters or symbols.": "* يجب أن تكون الميزانية رقمًا صالحًا بدون حروف أو رموز."
+  "* Budget must be a valid number with no letters or symbols.": "* يجب أن تكون الميزانية رقمًا صالحًا بدون حروف أو رموز.",
+  "Subscription Confirmed": "شكرا لاشتراكك",
+
+  "Company": "شركة",
+  "For businesses, teams, \nor organizations.": "للشركات والفرق\nأو المؤسسات.",
+  "in 3 easy steps": "في 3 خطوات سهلة",
+  "Individual": "فرد",
+  "Freelancers, personal users, \nor solo professionals.": "للمستقلين والمستخدمين الأفراد\nأو المهنيين المستقلين.",
+  "in 2 easy steps": "في خطوتين سهلتين"
 }
