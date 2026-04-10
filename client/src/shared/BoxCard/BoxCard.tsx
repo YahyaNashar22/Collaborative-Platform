@@ -11,6 +11,7 @@ type BoxCardProps = {
   description?: string;
   duration?: string;
   size?: "small" | "default";
+  meta?: string;
 };
 
 const formatDate = (dateString: string): string => {
@@ -34,6 +35,7 @@ const BoxCard = ({
   duration,
   status,
   size = "default",
+  meta = "",
 }: BoxCardProps) => {
   const { t } = useTranslation();
   const formattedDate = createdAt ? formatDate(createdAt) : "N/A";
@@ -55,15 +57,19 @@ const BoxCard = ({
           <div>{formattedDate}</div>
           <div
             className={`${styles.status} ${
-              status === "accepted" ? styles.accepted : ""
+              status === "accepted" || status === "active" ? styles.accepted : ""
             }`}
           >
-            {status === "accepted" ? t("Completed") : t("Pending")}
+            {status === "accepted"
+              ? t("Completed")
+              : status === "active"
+                ? t("Active")
+                : t("Pending")}
           </div>
         </div>
         <h1 className={styles.boxTitle}>{title}</h1>
         <div className={styles.subTitle}>{description}</div>
-        <p className="purple intense">{duration}</p>
+        <p className="purple intense">{meta || duration}</p>
       </div>
     </div>
   );

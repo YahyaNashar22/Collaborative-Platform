@@ -7,6 +7,12 @@
   margin-bottom: 0.7rem;
 }
 
+.addButtonRow {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
 .header h1 {
   margin-bottom: 1rem;
   color: var(--deep-purple);

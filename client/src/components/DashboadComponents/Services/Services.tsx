@@ -113,9 +113,20 @@ const Services = () => {
       <main className={`${styles.wrapper} w-100`}>
         {step === 0 && (
           <>
-            <div
-              className={`${styles.header} d-f align-center justify-between`}
-            >
+            <div className={styles.header}>
+              {user?.role === "admin" && (
+                <div className={styles.addButtonRow}>
+                  <LibButton
+                    label={t("+ Add New")}
+                    onSubmit={() => setStep(1)}
+                    backgroundColor="transparent"
+                    color="#6550b4"
+                    bold={true}
+                    hoverColor="#563db11c"
+                  />
+                </div>
+              )}
+              <div className="d-f align-center justify-between">
               <TextInput
                 placeholder={t("Search")}
                 type="text"
@@ -125,16 +136,7 @@ const Services = () => {
                 hasIcon={true}
                 onChange={handleSearch}
               />
-              {user?.role === "admin" && (
-                <LibButton
-                  label={t("+ Add New")}
-                  onSubmit={() => setStep(1)}
-                  backgroundColor="transparent"
-                  color="#6550b4"
-                  bold={true}
-                  hoverColor="#563db11c"
-                />
-              )}
+              </div>
             </div>
             <div className={styles.content}>
               {loading || (searchLoading && searchValue.trim() !== "") ? (

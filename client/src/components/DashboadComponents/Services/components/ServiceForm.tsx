@@ -26,8 +26,14 @@ const ServiceForm = ({
     name: "",
     description: "",
   });
+  const [formError, setFormError] = useState("");
 
   const handleCreateService = () => {
+    if (!requestForm.name.trim() || !requestForm.description.trim()) {
+      setFormError(t("This field is required."));
+      return;
+    }
+    setFormError("");
     emitCreateService(requestForm);
     setRequestForm({ name: "", description: "" });
   };
@@ -43,7 +49,7 @@ const ServiceForm = ({
           label={t("Title")}
           type="string"
           placeholder={t("Enter title")}
-          required={false}
+          required={true}
           value={requestForm["name"]}
           onChange={(value: string) =>
             setRequestForm((prev) => ({
@@ -56,7 +62,7 @@ const ServiceForm = ({
           name="description"
           label={t("Description")}
           placeholder={t("Enter description")}
-          required={false}
+          required={true}
           value={requestForm["description"]}
           onChange={(value: string) =>
             setRequestForm((prev) => ({
@@ -66,8 +72,10 @@ const ServiceForm = ({
           }
         />
       </form>
-      {error && (
-        <small className="errorMsg d-f align-center error">{error}</small>
+      {(error || formError) && (
+        <small className="errorMsg d-f align-center error">
+          {error || formError}
+        </small>
       )}
       <div className={`${styles.buttons} d-f align-center justify-end`}>
         <LibButton

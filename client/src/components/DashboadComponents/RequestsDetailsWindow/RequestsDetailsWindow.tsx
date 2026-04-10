@@ -13,6 +13,7 @@ type Props = {
 
 const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
   const { t } = useTranslation();
+  const service = request.serviceDetails?.[0];
 
   let client;
   if (isAdmin) client = request?.client[0];
@@ -85,7 +86,9 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
               request.requestFiles.map((file, i) => (
                 <li key={i} className={styles.uploadedItem}>
                   <div className={styles.fileDetails}>
-                    <span className={styles.fileName}>{file}</span>
+                    <span className={styles.fileName}>
+                      {file.split(/[\\/]/).pop()}
+                    </span>
                   </div>
                   <div
                     className={`${styles.downloadLink} pointer`}
@@ -106,13 +109,13 @@ const RequestDetailsWindow = ({ request, isAdmin }: Props) => {
       <section className={styles.section}>
         <h3>{t("Service Details")}</h3>
 
-        <div key={request.serviceDetails[0]._id} className={styles.serviceItem}>
+        <div key={service?._id ?? "missing-service"} className={styles.serviceItem}>
           <p>
-            <strong>{t("Name:")}</strong> {request.serviceDetails[0].name}
+            <strong>{t("Name:")}</strong> {service?.name || t("Service no longer available")}
           </p>
           <p>
             <strong>{t("Description:")}</strong>{" "}
-            {request.serviceDetails[0].description}
+            {service?.description || t("Service details are no longer available")}
           </p>
         </div>
       </section>

@@ -3,9 +3,9 @@
 }
 
 .boxTitle {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow: visible;
+  text-overflow: initial;
+  white-space: normal;
   width: 100%;
 }
 
@@ -19,15 +19,15 @@
   z-index: 1;
   padding: 25px;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-overflow: initial;
+  white-space: normal;
   width: 90%;
 }
 
 .status,
 .subTitle {
   font-size: 13px;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -55,7 +55,7 @@
   margin-bottom: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
   width: 100%;
 }
 
@@ -94,8 +94,7 @@
       180deg,
       rgba(0, 0, 0, 0.1) 0%,
       rgba(0, 0, 0, 0.6) 100%
-    ),
-    url("/path/to/placeholder.jpg") center/cover no-repeat;
+    );
   font-weight: 500;
   font-size: 1rem;
   color: #fff;

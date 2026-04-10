@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import styles from "./ResetPasswordBy.module.css";
 import LibButton from "../../../libs/common/lib-button/LibButton";
 import { useTranslation } from "react-i18next";

@@ -606,30 +606,28 @@ export const getRequestsForDashboardService = async (userData) => {
       },
       {
         $project: {
-          extension: {
-            $let: {
-              vars: { dotIndex: { $indexOfBytes: ["$requestFiles", "."] } },
-              in: {
-                $cond: [
-                  { $gte: ["$$dotIndex", 0] },
+          fileName: {
+            $arrayElemAt: [
+              {
+                $split: [
                   {
-                    $substrBytes: [
-                      "$requestFiles",
-                      { $add: ["$$dotIndex", 1] },
+                    $arrayElemAt: [
+                      { $split: ["$requestFiles", "\\\\"] },
                       -1,
                     ],
                   },
-                  "",
+                  "/",
                 ],
               },
-            },
+              -1,
+            ],
           },
         },
       },
-      { $match: { extension: { $ne: "" } } },
+      { $match: { fileName: { $ne: "" } } },
       {
         $group: {
-          _id: "$extension",
+          _id: "$fileName",
           count: { $sum: 1 },
         },
       },
@@ -761,30 +759,28 @@ export const getRequestsForDashboardService = async (userData) => {
       },
       {
         $project: {
-          extension: {
-            $let: {
-              vars: { dotIndex: { $indexOfBytes: ["$requestFiles", "."] } },
-              in: {
-                $cond: [
-                  { $gte: ["$$dotIndex", 0] },
+          fileName: {
+            $arrayElemAt: [
+              {
+                $split: [
                   {
-                    $substrBytes: [
-                      "$requestFiles",
-                      { $add: ["$$dotIndex", 1] },
+                    $arrayElemAt: [
+                      { $split: ["$requestFiles", "\\\\"] },
                       -1,
                     ],
                   },
-                  "",
+                  "/",
                 ],
               },
-            },
+              -1,
+            ],
           },
         },
       },
-      { $match: { extension: { $ne: "" } } },
+      { $match: { fileName: { $ne: "" } } },
       {
         $group: {
-          _id: "$extension",
+          _id: "$fileName",
           count: { $sum: 1 },
         },
       },

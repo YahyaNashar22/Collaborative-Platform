@@ -2,26 +2,31 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const otpSchema = new Schema({
+const otpSchema = new Schema(
+  {
     email: {
-        type: String,
+      type: String,
     },
     phone: {
-        type: String,
+      type: String,
     },
     emailOtp: {
-        type: String
+      type: String,
     },
     phoneOtp: {
-        type: String
+      type: String,
     },
     emailOtpExpiresAt: {
-        type: Date
+      type: Date,
     },
     phoneOtpExpiresAt: {
-        type: Date
+      type: Date,
     },
-});
+  },
+  {
+    timestamps: true,
+  }
+);
 
 
 const Otp = model("Otp", otpSchema);

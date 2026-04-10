@@ -48,7 +48,7 @@ export const buildStackedFilesChart = (
     options: {
       chart: { type: "bar", stacked: true },
       xaxis: {
-        categories: filtered.map((f) => f.type.toUpperCase()),
+        categories: filtered.map((f) => f.type),
       },
       legend: { position: "bottom" },
       colors: ["#825beb"],
@@ -76,7 +76,14 @@ export const buildStatusPieChart = (data: StatusCount[]) => {
 };
 
 // --- STATS BOX CHART (CLIENT) ---
-export const buildBoxChart = (result) => {
+export const buildBoxChart = (
+  result: {
+    requestNb: number;
+    completedRequest: number;
+    pendingRequest: number;
+    canceledRequest: number;
+  }
+) => {
   const newData = [
     {
       label: "Total Request",

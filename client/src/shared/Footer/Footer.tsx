@@ -26,8 +26,12 @@ const Footer = () => {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!email.trim()) {
+      toast.error(t("Please enter a valid email"));
+      return;
+    }
     setEmail("");
-    toast.success(t("Subscription Confirmed"))
+    toast.success(t("Subscription Confirmed"));
   }
   return (
     <footer
@@ -47,11 +51,13 @@ const Footer = () => {
             <ul className={styles.infoContainer}>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={dial} width={16} height={16} alt="dial" />
-                <a href="https://wa.me/+966541041901" style={{direction: "ltr"}}>00 966 54 104 1901</a>
+                <a href="https://wa.me/966541041901" style={{ direction: "ltr" }}>
+                  +966 54 104 1901
+                </a>
               </li>
               <li className={`${styles.infoItem} pointer`}>
                 <img src={mail} width={16} height={16} alt="mail" />
-                <a href="mailto:info@takatouf.com">info@takatouf.com</a>
+                <a href="mailto:info@takatuf.com">info@takatuf.com</a>
               </li>
             </ul>
           </div>
@@ -63,7 +69,7 @@ const Footer = () => {
               <Link to="/faq">{t("FAQ")}</Link>
             </li>
             <li className={styles.supportItem}>
-              <a href="mailto:info@takatouf.com">{t("Contact")}</a>
+              <a href="mailto:info@takatuf.com">{t("Contact")}</a>
             </li>
           </ul>
         </div>

@@ -39,9 +39,9 @@
 }
 
 .trash {
-  color: var(--light-grey);
+  color: #c0392b;
 }
 
 .trash:hover {
-  color: #49505782;
+  color: #922b21;
 }

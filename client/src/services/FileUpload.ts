@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 
 export const downloadFile = async (fileName: string): Promise<void> => {
   try {
-    const fileUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${fileName}`;
+    const normalizedFileName = fileName.split(/[\\/]/).pop() || fileName;
+    const fileUrl = `${import.meta.env.VITE_BACKEND_URL}/uploads/${normalizedFileName}`;
 
     const res = await fetch(fileUrl, {
       method: "GET",
@@ -18,7 +19,7 @@ export const downloadFile = async (fileName: string): Promise<void> => {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = fileName;
+    a.download = normalizedFileName;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

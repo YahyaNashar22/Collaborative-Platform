@@ -1216,7 +1216,12 @@ export const getInTouch = (req, res) => {
 // ----------------------------------------------------------------------
 export const sendEmail = (req, res) => {
   try {
-    emailTemplate(req.body.receiverEmail, req.body.title, req.body.description);
+    emailTemplate(
+      req.body.receiverEmail,
+      req.body.title,
+      req.body.description,
+      req.body.receiverName
+    );
     res.status(201).json({ success: true, message: "Email Sent Successfully" });
   } catch (error) {
     console.error(error);

@@ -14,6 +14,20 @@ import { sendPhoneOtp } from "../utils/twilioClient.js";
 export const createAndSendEmailOtp = async (req, res) => {
   try {
     const { email } = req.body;
+    const existingOtp = await findOtpByEmailService(email);
+
+    if (existingOtp?.updatedAt) {
+      const cooldownEndsAt =
+        new Date(existingOtp.updatedAt).getTime() + 60 * 1000;
+      const retryAfterSeconds = Math.ceil((cooldownEndsAt - Date.now()) / 1000);
+
+      if (retryAfterSeconds > 0) {
+        return res.status(429).json({
+          message: "Please wait before requesting another OTP",
+          retryAfter: retryAfterSeconds,
+        });
+      }
+    }
 
     // Generate OTP
     const emailOtp = generateOtp();

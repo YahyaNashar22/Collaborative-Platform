@@ -84,7 +84,7 @@ export const signOut = async () => {
 
 export const logIn = async (payload: any) => {
   const response = await axiosInstance.post(`${AuthBaseURL}/log-in`, payload);
-  return response.data.payload;
+  return response.data;
 };
 
 export const getUserData = async (userId: string) => {
@@ -184,6 +184,7 @@ export const verifyEmailReset = async (email: string, role?: string) => {
 
 export const sendEmail = async (payload: {
   receiverEmail: string;
+  receiverName?: string;
   title: string;
   description: string;
 }) => {

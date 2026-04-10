@@ -30,12 +30,11 @@ const LogInPartner = ({ role, placeholder }: LogInClientProps) => {
       setLoading(true);
       const response = await logIn(payload);
 
-      if (response.success === true) {
-        setTimeout(() => {
-          setUser(response.payload);
-          navigate("/dashboard");
-          toast.success(t("Welcome back"));
-        }, 1000);
+      if (response?.payload) {
+        setUser(response.payload);
+        setLoading(false);
+        navigate("/dashboard", { replace: true });
+        toast.success(t("Welcome back"));
       }
     } catch (error: any) {
       if ((error as any)?.data?.message)

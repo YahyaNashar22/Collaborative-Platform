@@ -7,7 +7,7 @@ type AssignModalProps = {
   onClose: () => void;
 };
 
-const AssignModal = ({ requestId, onClose }: AssignModalProps) => {
+const AssignModal = ({ requestId: _requestId, onClose }: AssignModalProps) => {
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
 
   // Replace with actual provider list

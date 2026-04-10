@@ -74,7 +74,9 @@ const OTPForm: React.FC<OTPFormProps> = ({
 
     try {
       await sendOtp(email);
+      setNumber(["", "", "", ""]);
       setTimeLeft(5 * 60);
+      inputRefs.current[0]?.focus();
     } catch (err) {
       toast.error(err?.response?.data?.message || t("Error Resending OTP!"));
     }
@@ -124,13 +126,12 @@ const OTPForm: React.FC<OTPFormProps> = ({
             ))}
           </form>
           <div className={`${styles.otpActionBtn} d-f purple bold`}>
-            <p
-              className={`${timeLeft > 0 ? styles.disabled : ""} pointer`}
-              onClick={handleResend}
-            >
-              {t("Resend Code")}
-            </p>
             <p>{formatTime(timeLeft)}</p>
+            {timeLeft <= 0 && (
+              <p className="pointer" onClick={handleResend}>
+                {t("Resend Code")}
+              </p>
+            )}
           </div>
         </>
       )}

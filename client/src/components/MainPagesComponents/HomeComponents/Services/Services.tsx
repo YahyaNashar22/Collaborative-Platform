@@ -1,37 +1,34 @@
-// @ts-nocheck
-
+import { useEffect, useState } from "react";
 import styles from "./Services.module.css";
-import box_1 from "../../../../assets/images/box_1.png";
-import box_2 from "../../../../assets/images/box_2.png";
-import box_3 from "../../../../assets/images/box_3.png";
 import BoxCard from "../../../../shared/BoxCard/BoxCard";
 import { useTranslation } from "react-i18next";
+import { getAllServices } from "../../../../services/ServiceServices";
 
-interface boxType {
-  image?: string;
-  title: string;
-  alt: string;
-  text?: string;
+interface ServiceCardData {
+  _id: string;
+  name: string;
+  description?: string;
+  hasActiveProviders?: boolean;
+  providerCount?: number;
 }
+
 const Services = () => {
   const { t } = useTranslation();
-  const boxesContent: boxType[] = [
-    {
-      image: box_1,
-      title: t("MARKETING SERVICE"),
-      alt: t("MARKETING SERVICE"),
-    },
-    {
-      image: box_2,
-      title: t("FINANCIAL SERVICE"),
-      alt: t("FINANCIAL SERVICE"),
-    },
-    {
-      image: box_3,
-      title: t("DIGITAL CONSULTING"),
-      alt: t("DIGITAL CONSULTING"),
-    },
-  ];
+  const [services, setServices] = useState<ServiceCardData[]>([]);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const result = await getAllServices();
+        setServices(result.slice(0, 3));
+      } catch {
+        setServices([]);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
   return (
     <section
       className={`${styles.wrapper} d-f w-100 justify-center align-center f-dir-col`}
@@ -41,14 +38,23 @@ const Services = () => {
       <p className={`${styles.subTitle}`}>{t("Services By Providers text")}</p>
 
       <div className={`align-text ${styles.boxsContainer} d-f align-center`}>
-        {boxesContent.map((box, index) => (
+        {services.map((service) => (
           <BoxCard
-            key={index}
-            image={box.image}
-            alt={box.alt}
-            title={box.title}
-            status="OPEN"
-            providerName="Provider name"
+            key={service._id}
+            text={service.name
+              .split(" ")
+              .map((part) => part[0])
+              .join("")
+              .slice(0, 3)}
+            alt={service.name}
+            title={service.name}
+            description={service.description || t("No description provided")}
+            status={service.hasActiveProviders ? "active" : "pending"}
+            meta={
+              service.providerCount
+                ? `${service.providerCount} ${t("Providers")}`
+                : t("No active providers")
+            }
           />
         ))}
       </div>

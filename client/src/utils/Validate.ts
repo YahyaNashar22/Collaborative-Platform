@@ -35,10 +35,25 @@ export const Validate = (
   }
 
   if (isFutureDate) {
-    const inputDate = new Date(value);
-    const today = new Date();
-    if (inputDate <= today) {
-      return "* Date must be after today";
+    if (typeof value === "string" || value instanceof Date) {
+      const inputDate = new Date(value);
+      const today = new Date();
+      if (inputDate <= today) {
+        return "* Date must be after today";
+      }
+    }
+  }
+
+  if (type === "file") {
+    const maxFileSize = 10 * 1024 * 1024;
+    const files = Array.isArray(value)
+      ? value.filter((item): item is File => item instanceof File)
+      : value instanceof File
+        ? [value]
+        : [];
+
+    if (files.some((file) => file.size > maxFileSize)) {
+      return "* File size must be 10 MB or less";
     }
   }
 
@@ -64,10 +79,10 @@ export const Validate = (
     }
   }
 
-  if (name === "budget") {
-    const numericRegex = /^[0-9]*$/;
-    if (!numericRegex.test(value)) {
-      return "* Budget must be a valid number with no letters or symbols.";
+  if (name === "budget" && typeof value === "string") {
+    const numericRegex = /^[0-9]+(\.[0-9]{1,2})?$/;
+    if (value.trim() && !numericRegex.test(value.trim())) {
+      return "* Budget must be a valid number.";
     }
   }
 

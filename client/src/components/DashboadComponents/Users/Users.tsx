@@ -24,7 +24,7 @@ type User = {
   phone: string;
   email: string;
   banned: boolean;
-  services: boolean;
+  services: { name: string }[];
   role: string;
 };
 
@@ -46,19 +46,26 @@ const Users = ({
   const [sendEmailWindow, setSendEmailWindow] = useState<string | null>(null);
   const [emailData, setEmailData] = useState<{
     receiverEmail: string;
+    receiverName: string;
     title: string;
     description: string;
-  }>({ receiverEmail: "", title: "", description: "" });
+  }>({
+    receiverEmail: "",
+    receiverName: "",
+    title: "",
+    description: "",
+  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setCurrentUserId(null);
     setUsers(initialUsers);
-  }, [initialUsers]);
+  }, [initialUsers, setCurrentUserId]);
 
   const handleSearch = (userData: string) => {
     setSearchValue(userData);
   };
+
   const toggleBlockStatus = async (id: string) => {
     const currentUser = users?.find((user) => user._id === id);
     if (!currentUser) return;
@@ -67,21 +74,21 @@ const Users = ({
     setIsLoading(true);
     setUsers((prevUsers) =>
       prevUsers?.map((user) =>
-        user._id === id ? { ...user, banned: newBannedStatus } : user,
-      ),
+        user._id === id ? { ...user, banned: newBannedStatus } : user
+      )
     );
 
     try {
       await changeUserBannedStatus(id, newBannedStatus);
     } catch (error) {
       toast.error(
-        (error as any)?.response?.data?.message || t("Error Occurred!"),
+        (error as any)?.response?.data?.message || t("Error Occurred!")
       );
 
       setUsers((prevUsers) =>
         prevUsers?.map((user) =>
-          user._id === id ? { ...user, banned: !newBannedStatus } : user,
-        ),
+          user._id === id ? { ...user, banned: !newBannedStatus } : user
+        )
       );
     } finally {
       setIsLoading(false);
@@ -102,12 +109,15 @@ const Users = ({
     return () => clearTimeout(timeout);
   }, [searchValue]);
 
-  const filteredUsers = users?.filter(
-    (user) =>
-      user.firstName.toLowerCase().includes(searchValue.toLowerCase()) ||
-      user.lastName.toLowerCase().includes(searchValue.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchValue.toLowerCase()),
-  );
+  const filteredUsers = users?.filter((user) => {
+    const search = searchValue.toLowerCase();
+    return (
+      user.firstName.toLowerCase().includes(search) ||
+      user.lastName.toLowerCase().includes(search) ||
+      user.email.toLowerCase().includes(search) ||
+      user.phone.toLowerCase().includes(search)
+    );
+  });
 
   const handleRowClick = (user: User) => {
     setCurrentUserId(user._id);
@@ -123,9 +133,19 @@ const Users = ({
 
   const exportToExcel = () => {
     const safeData = users?.map((row) => {
-      const newRow: any = {};
-      for (const [key, value] of Object.entries(row)) {
-        if (typeof value === "string" && value.length > 32767) {
+      const exportRow = {
+        [t("Full Name")]: `${row.firstName} ${row.lastName}`,
+        [t("Email")]: row.email,
+        [t("Phone Number")]: row.phone,
+        [t("Status")]: row.banned ? t("Blocked") : t("Active"),
+        [t("Services")]: (row.services || [])
+          .map((service) => service.name)
+          .join(", "),
+      };
+
+      const newRow: Record<string, string> = {};
+      for (const [key, value] of Object.entries(exportRow)) {
+        if (value.length > 32767) {
           const parts = splitLongText(value);
           parts.forEach((part, i) => {
             newRow[`${key}_${i + 1}`] = part;
@@ -148,19 +168,21 @@ const Users = ({
     const blob = new Blob([excelBuffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
-    saveAs(blob, `${"users"}.xlsx`);
+    saveAs(blob, "users.xlsx");
   };
 
   const handleSendEmail = async () => {
     setSendEmailLoading(true);
     if (emailData.title.trim() === "" || emailData.description.trim() === "") {
       setError(t("This field is required."));
+      setSendEmailLoading(false);
       return;
     }
 
     try {
       const response = await sendEmail({
         receiverEmail: emailData.receiverEmail,
+        receiverName: emailData.receiverName,
         title: emailData.title,
         description: emailData.description,
       });
@@ -170,11 +192,14 @@ const Users = ({
         setSendEmailWindow(null);
       }
     } catch (error) {
-      toast.error((error as any)?.response?.data?.message || t("Error Occurred!"));
+      toast.error(
+        (error as any)?.response?.data?.message || t("Error Occurred!")
+      );
     } finally {
       setSendEmailLoading(false);
     }
   };
+
   return (
     <>
       {currentUserId ? (
@@ -192,7 +217,7 @@ const Users = ({
               onChange={(e) => handleSearch(e)}
             />
             <LibButton
-              label="Export to Excel"
+              label={t("Export to Excel")}
               onSubmit={exportToExcel}
               bold={true}
               padding="0 10px"
@@ -246,6 +271,7 @@ const Users = ({
                             e.stopPropagation();
                             setEmailData({
                               receiverEmail: user.email,
+                              receiverName: `${user.firstName} ${user.lastName}`,
                               title: "",
                               description: "",
                             });
@@ -262,7 +288,7 @@ const Users = ({
                   <tr>
                     <td colSpan={3} className={styles.noData}>
                       <div className={styles.noDataContent}>
-                        🙁 {t("No users found")}
+                        {t("No users found")}
                       </div>
                     </td>
                   </tr>
@@ -273,14 +299,14 @@ const Users = ({
         </main>
       )}
       <Window
-        title="Send Email"
+        title={t("Send Email")}
         visible={sendEmailWindow !== null}
         onClose={() => setSendEmailWindow(null)}
       >
         <div className="d-f f-dir-col gap-1">
           <TextInput
             name="title"
-            label={t("Title")}
+            label={t("Email Subject")}
             type="text"
             placeholder={t("Enter a title for the email")}
             value={emailData.title}
@@ -303,7 +329,7 @@ const Users = ({
 
           <div className="d-f align-center justify-between mt-1">
             <LibButton
-              label="Cancel"
+              label={t("Cancel")}
               onSubmit={() => {
                 setError("");
                 setSendEmailWindow(null);
@@ -315,7 +341,7 @@ const Users = ({
               hoverColor="#8563c326"
             />
             <LibButton
-              label="Send Request"
+              label={t("Send")}
               onSubmit={handleSendEmail}
               bold={true}
               backgroundColor="#825beb"

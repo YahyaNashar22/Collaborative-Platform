@@ -68,12 +68,12 @@ export const FormData: FormField[] = [
     required: true,
   },
   {
-    label: "Est Budget",
+    label: "Estimated Budget",
     type: "string",
-    placeholder: "Est Budget",
+    placeholder: "Estimated Budget",
     name: "budget",
 
-    required: false,
+    required: true,
     minLength: 1,
 
     hasCurrency: true,

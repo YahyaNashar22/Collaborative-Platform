@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Select, { SingleValue } from "react-select";
 import styles from "./RequestDropdown.module.css";
-import { getAllServices } from "../../../../../services/ServiceServices";
+import { getAvailableServices } from "../../../../../services/ServiceServices";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 
@@ -71,7 +71,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
   const fetchServices = async () => {
     setLoading(true);
     try {
-      const result = await getAllServices();
+      const result = await getAvailableServices();
       const options: SelectOption[] = result.map((service: any) => ({
         value: service._id,
         label: service.name,
@@ -104,7 +104,7 @@ const RequestDropdown = ({ emitSelectedService }: RequestDropdownType) => {
         options={serviceOptions}
         onChange={handleChange}
         isSearchable={true}
-        placeholder={loading ? t("Loading...") : t("Select a request...")}
+        placeholder={loading ? t("Loading...") : t("Select a service")}
         value={selectedRequest}
         styles={customStyles}
         isLoading={loading}

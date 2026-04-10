@@ -55,11 +55,17 @@ const NotificationBell = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Mark a notification as read (removes from list)
+  // Mark a notification as read
   const markAsRead = async (id: string) => {
     try {
       await axiosInstance.delete("/notifications/" + id);
-      setNotifications((prev) => prev.filter((n) => n._id !== id));
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification._id === id
+            ? { ...notification, read: true }
+            : notification,
+        ),
+      );
     } catch (error) {
       console.log(error);
     }
@@ -69,7 +75,9 @@ const NotificationBell = () => {
   const markAllAsRead = async () => {
     try {
       await axiosInstance.delete("/notifications/all/" + user?._id);
-      setNotifications([]);
+      setNotifications((prev) =>
+        prev.map((notification) => ({ ...notification, read: true })),
+      );
     } catch (error) {
       console.log(error);
     }
@@ -83,8 +91,10 @@ const NotificationBell = () => {
           className={styles.bell}
           onClick={() => setIsOpen((prev) => !prev)}
         />
-        {notifications.length > 0 && (
-          <span className={styles.badge}>{notifications.length}</span>
+        {notifications.some((notification) => !notification.read) && (
+          <span className={styles.badge}>
+            {notifications.filter((notification) => !notification.read).length}
+          </span>
         )}
       </div>
 
@@ -97,7 +107,7 @@ const NotificationBell = () => {
         >
           <div className={styles.header}>
             <h4 className={styles.title}>{t("Notifications")}</h4>
-            {notifications.length > 0 && (
+            {notifications.some((notification) => !notification.read) && (
               <FontAwesomeIcon
                 icon={faCheckDouble}
                 className={styles.markAllIcon}
@@ -116,7 +126,11 @@ const NotificationBell = () => {
           ) : (
             <ul className={styles.list}>
               {notifications.map((n) => (
-                <li key={n._id} className={styles.notificationItem}>
+                <li
+                  key={n._id}
+                  className={styles.notificationItem}
+                  style={{ opacity: n.read ? 0.6 : 1 }}
+                >
                   <span className={styles.NotificationText}>{n.text}</span>
                   <FontAwesomeIcon
                     icon={faCheck}

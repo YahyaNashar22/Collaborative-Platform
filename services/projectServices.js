@@ -31,6 +31,30 @@ export const getAllProjectsService = async ({
   try {
     const pipeline = [
       {
+        $lookup: {
+          from: "users",
+          localField: "clientId",
+          foreignField: "_id",
+          as: "client",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "providerId",
+          foreignField: "_id",
+          as: "provider",
+        },
+      },
+      {
+        $lookup: {
+          from: "services",
+          localField: "serviceId",
+          foreignField: "_id",
+          as: "serviceDetails",
+        },
+      },
+      {
         $addFields: {
           computedStatus: {
             $cond: {

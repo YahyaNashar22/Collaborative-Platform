@@ -34,7 +34,7 @@ const CompanySignUp = ({
   const { t } = useTranslation();
 
   const [, setIsLoading] = useState(false);
-  const { increaseStep, role, type, decreaseStep, getFormValues, setStep } =
+  const { increaseStep, role, type, decreaseStep, getFormValues } =
     useFormStore();
   const { setUser, setLoading } = authStore();
   const [error, setError] = useState("");

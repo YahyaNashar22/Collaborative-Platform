@@ -402,7 +402,12 @@ export const getInTouchTemplate = ({
 }
 
 
-export const emailTemplate = (receiverEmail, title, description) => {
+export const emailTemplate = (
+  receiverEmail,
+  title,
+  description,
+  receiverName = receiverEmail
+) => {
   const htmlBody = `
   <!DOCTYPE html>
   <html lang="en">
@@ -420,7 +425,7 @@ export const emailTemplate = (receiverEmail, title, description) => {
         </tr>
         <tr>
           <td style="padding: 10px 0; font-size: 16px; line-height: 1.5;">
-            Hello ${receiverEmail},
+            Hello ${receiverName},
           </td>
         </tr>
         <tr>

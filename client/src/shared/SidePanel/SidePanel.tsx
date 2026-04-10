@@ -5,6 +5,7 @@ import LibButton from "../../libs/common/lib-button/LibButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/icons/Logo.png";
+import { useTranslation } from "react-i18next";
 interface NavItem {
   path: string;
   label: string;
@@ -27,6 +28,7 @@ const SidePanel = ({
   isMainSidePanel = true,
   onSignup,
 }: SidePanelProps) => {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const panelRef = useRef<HTMLDivElement>(null);
   const navigator = useNavigate();
@@ -81,7 +83,7 @@ const SidePanel = ({
             onClick={onClose}
           >
             <Link className="d-b w-100" to={path}>
-              {label}
+              {t(label)}
             </Link>
           </li>
         ))}
@@ -90,7 +92,7 @@ const SidePanel = ({
       {isMainSidePanel && (
         <div className={`${styles.buttons} d-f justify-between`}>
           <LibButton
-            label="LOG IN"
+            label="Log In"
             backgroundColor="#868788"
             hoverColor="#6f7071"
             padding="0 20px"
@@ -98,7 +100,7 @@ const SidePanel = ({
             styleClass="rounded"
           />
           <LibButton
-            label="SIGN UP"
+            label="Sign Up"
             padding="0 20px"
             onSubmit={onSignup}
             styleClass="rounded"

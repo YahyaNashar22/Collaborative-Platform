@@ -1,7 +1,6 @@
 import Multiselect from "multiselect-react-dropdown";
 import styles from "./SelectInput.module.css";
 import Select, { components } from "react-select";
-import { useEffect } from "react";
 
 type OptionType = { label: string; value: string };
 
@@ -128,7 +127,7 @@ const SelectInput = ({
           options={options}
           value={getSelectedOption(value, options)}
           onChange={(selectedOptions) => {
-            onChange(selectedOptions?.value, selectedOptions?.label);
+            onChange(((selectedOptions as OptionType | null)?.value || ""), name);
           }}
           isDisabled={disabled}
           isClearable={!required}
@@ -142,7 +141,7 @@ const SelectInput = ({
           menuPosition="fixed"
           menuShouldScrollIntoView={false}
           components={{ Option: CustomOption }}
-          interestedProviders={interestedProviders}
+          {...({ interestedProviders } as any)}
         />
       ) : (
         <Multiselect

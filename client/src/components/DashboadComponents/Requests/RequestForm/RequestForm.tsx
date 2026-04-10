@@ -86,7 +86,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
 
   const handleChange = (
     name: string,
-    value: string,
+    value: string | File,
     isRequired: boolean,
     type: string,
   ) => {
@@ -162,10 +162,7 @@ const RequestForm = ({ moveBackward, onSubmit, data }: RequestFormType) => {
         newErrors.offerDeadline = t(
           "Offer deadline must be before or equal to project deadline.",
         );
-
-        newErrors.projectDeadline = t(
-          "Project deadline must be after or equal to offer deadline.",
-        );
+        newErrors.projectDeadline = "";
         isValid = false;
       }
     }

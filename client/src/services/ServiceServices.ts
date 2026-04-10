@@ -14,6 +14,11 @@ export const getAllServices = async () => {
   return response.data.payload;
 };
 
+export const getAvailableServices = async () => {
+  const response = await axiosInstance.get(`${AuthBaseURL}/get-available`);
+  return response.data.payload;
+};
+
 export const deleteService = async (serviceId: string) => {
   const response = await axiosInstance.delete(
     `${AuthBaseURL}/delete/${serviceId}`
